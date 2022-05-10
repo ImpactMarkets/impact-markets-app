@@ -7,18 +7,63 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User?   @relation(fields: [authorId], references: [id])
-  authorId  Int?
+model User {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  certificates         Certificate[] @relation()
+  comments             Comment[]     @relation()
+  transactionsSent     Transaction[] @relation(name: "sender")
+  transactionsReceived Transaction[] @relation(name: "receiver")
 }
 
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+model Certificate {
+  id      Int      @id @default(autoincrement())
+  created DateTime @default(now())
+
+  issuers             User[]               @relation()
+  certificateVersions CertificateVersion[] @relation()
+  transactions        Transaction[]        @relation()
+}
+
+model CertificateVersion {
+  id                      Int      @id @default(autoincrement())
+  certificateId           Int
+  publicId                String   @unique
+  created                 DateTime @default(now())
+  title                   String
+  attributedImpactVersion String?
+  proof                   String
+  changes                 String?
+  location                String?
+  rights                  String
+  actionStart             DateTime
+  actionEnd               DateTime
+  impactStart             DateTime
+  impactEnd               DateTime
+  tags                    String
+  description             String?
+
+  certificate Certificate @relation(fields: [certificateId], references: [id])
+}
+
+model Transaction {
+  id            Int     @id @default(autoincrement())
+  size          Decimal
+  senderId      Int
+  receiverId    Int
+  certificateId Int
+
+  sender      User        @relation(name: "sender", fields: [senderId], references: [id])
+  receiver    User        @relation(name: "receiver", fields: [receiverId], references: [id])
+  certificate Certificate @relation(fields: [certificateId], references: [id])
+}
+
+model Comment {
+  id      Int      @id @default(autoincrement())
+  created DateTime @default(now())
+  text    String
+  userId  Int
+
+  user User @relation(fields: [userId], references: [id])
 }
