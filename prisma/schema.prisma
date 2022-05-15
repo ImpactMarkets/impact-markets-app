@@ -45,7 +45,8 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
@@ -85,21 +86,23 @@ model Post {
   hidden      Boolean      @default(false)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
-  author      User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId    String
   likedBy     LikedPosts[]
   comments    Comment[]
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   @@index([authorId])
   @@fulltext([title, content])
 }
 
 model LikedPosts {
-  post      Post     @relation(fields: [postId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   postId    Int
-  user      User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   userId    String
   createdAt DateTime @default(now())
+
+  post Post @relation(fields: [postId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user User @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@id([postId, userId])
   @@index([postId])
@@ -111,28 +114,36 @@ model Comment {
   content     String   @db.Text
   contentHtml String   @db.Text
   createdAt   DateTime @default(now())
-  post        Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId      Int
-  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId    String
+  postId      Int
+
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@index([authorId])
   @@index([postId])
 }
 
 model Certificate {
-  id      String   @id @default(cuid())
-  created DateTime @default(now())
+  id        String   @id @default(cuid())
+  hidden    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  issuerId  String
 
-  issuers             User[]               @relation()
+  issuer              User                 @relation(fields: [issuerId], references: [id])
   certificateVersions CertificateVersion[] @relation()
   transactions        Transaction[]        @relation()
+
+  @@index([issuerId])
+  @@index([createdAt])
+  @@index([updatedAt])
 }
 
 model CertificateVersion {
   id                      String   @id @default(cuid())
   certificateId           String
-  created                 DateTime @default(now())
+  createdAt               DateTime @default(now())
   title                   String
   attributedImpactVersion String?
   proof                   String
@@ -147,11 +158,17 @@ model CertificateVersion {
   description             String?
 
   certificate Certificate @relation(fields: [certificateId], references: [id])
+
+  @@index([certificateId])
+  @@index([createdAt])
 }
 
 model Transaction {
-  id            String  @id @default(cuid())
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
+  state         String
   size          Decimal
+  cost          Decimal
   senderId      String
   receiverId    String
   certificateId String
@@ -159,4 +176,8 @@ model Transaction {
   sender      User        @relation(name: "sender", fields: [senderId], references: [id])
   receiver    User        @relation(name: "receiver", fields: [receiverId], references: [id])
   certificate Certificate @relation(fields: [certificateId], references: [id])
+
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([certificateId])
 }
