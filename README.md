@@ -6,6 +6,8 @@ Beam is a simple tool that allows members to write posts to share across your or
 
 ## Setup
 
+Note: Node versions > 16 can currently cause this [segmentation fault](https://github.com/prisma/prisma/issues/10649).
+
 ### Install dependencies
 
 ```bash
