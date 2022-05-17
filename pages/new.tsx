@@ -17,11 +17,11 @@ const NewPostPage: NextPageWithAuthAndLayout = () => {
   return (
     <>
       <Head>
-        <title>New Post - Beam</title>
+        <title>New Certificate</title>
       </Head>
 
       <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">
-        New post
+        New certificate
       </h1>
 
       <div className="mt-6">

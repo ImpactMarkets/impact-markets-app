@@ -57,7 +57,7 @@ export function PostForm({
           rules={{ required: true }}
           render={({ field }) => (
             <MarkdownEditor
-              label="Post"
+              label="Description"
               value={field.value}
               onChange={field.onChange}
               onTriggerSubmit={handleSubmit(onSubmit)}
