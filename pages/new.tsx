@@ -35,7 +35,7 @@ const NewPostPage: NextPageWithAuthAndLayout = () => {
                 content: values.content,
                 attributedImpactVersion: values.attributedImpactVersion,
                 proof: values.proof,
-                location: values.location,
+                location: values.location || '',
                 rights: 'RETROACTIVE_FUNDING',
                 actionStart: values.actionStart,
                 actionEnd: values.actionEnd,
