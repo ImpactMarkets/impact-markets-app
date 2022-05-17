@@ -27,14 +27,17 @@ const NewPostPage: NextPageWithAuthAndLayout = () => {
       <div className="mt-6">
         <PostForm
           isSubmitting={addPostMutation.isLoading}
-          defaultValues={{
-            title: '',
-            content: '',
-          }}
           backTo="/"
           onSubmit={(values) => {
             addPostMutation.mutate(
-              { title: values.title, content: values.content },
+              {
+                title: values.title,
+                content: values.content,
+                attributedImpactVersion: values.attributedImpactVersion,
+                proof: values.proof,
+                actionStart: values.actionStart,
+                actionEnd: values.actionEnd,
+              },
               {
                 onSuccess: (data) => router.push(`/post/${data.id}`),
               }

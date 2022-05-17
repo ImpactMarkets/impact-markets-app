@@ -87,6 +87,15 @@ export const postRouter = createProtectedRouter()
           contentHtml: true,
           createdAt: true,
           hidden: true,
+          attributedImpactVersion: true,
+          proof: true,
+          location: true,
+          rights: true,
+          actionStart: true,
+          actionEnd: true,
+          impactStart: true,
+          impactEnd: true,
+          tags: true,
           author: {
             select: {
               id: true,
@@ -171,6 +180,10 @@ export const postRouter = createProtectedRouter()
     input: z.object({
       title: z.string().min(1),
       content: z.string().min(1),
+      attributedImpactVersion: z.string().min(5),
+      proof: z.string(),
+      actionStart: z.string().min(1),
+      actionEnd: z.string().min(1),
     }),
     async resolve({ ctx, input }) {
       const post = await ctx.prisma.post.create({
@@ -178,6 +191,10 @@ export const postRouter = createProtectedRouter()
           title: input.title,
           content: input.content,
           contentHtml: markdownToHtml(input.content),
+          attributedImpactVersion: input.attributedImpactVersion,
+          proof: input.proof,
+          actionStart: new Date(input.actionStart),
+          actionEnd: new Date(input.actionEnd),
           author: {
             connect: {
               id: ctx.session.user.id,

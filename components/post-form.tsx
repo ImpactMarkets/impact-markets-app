@@ -3,6 +3,7 @@ import { ButtonLink } from '@/components/button-link'
 import { MarkdownIcon } from '@/components/icons'
 import { MarkdownEditor } from '@/components/markdown-editor'
 import { TextField } from '@/components/text-field'
+import { browserEnv } from '@/env/browser'
 import { useLeaveConfirm } from '@/lib/form'
 import * as React from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
@@ -10,6 +11,15 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 type FormData = {
   title: string
   content: string
+  attributedImpactVersion: string | null
+  proof: string | null
+  location: string | null
+  rights: string
+  actionStart: Date
+  actionEnd: Date
+  impactStart: Date | null
+  impactEnd: Date | null
+  tags: string | null
 }
 
 type PostFormProps = {
@@ -49,8 +59,46 @@ export function PostForm({
         required
         className="text-lg font-semibold !py-1.5"
       />
+      <TextField
+        {...register('attributedImpactVersion', { required: true })}
+        label={
+          <span>
+            Version of{' '}
+            <a href="https://forum.effectivealtruism.org/posts/7kqL4G5badqjskYQs/toward-impact-markets-1#Attributed_Impact">
+              Attributed Impact
+            </a>
+          </span>
+        }
+        autoFocus
+        required
+        defaultValue={browserEnv.ATTRIBUTED_IMPACT_RECOMMENDED_VERSION}
+        className="text-lg font-semibold !py-1.5"
+      />
+      <TextField
+        {...register('proof', {})}
+        label="Link to your work that links back here"
+        autoFocus
+        className="text-lg font-semibold !py-1.5"
+      />
+      {/* TODO: Action period */}
+      <TextField
+        {...register('actionStart', { required: true })}
+        label="Start of the action period"
+        autoFocus
+        required
+        defaultValue="2022-05-01"
+        className="text-lg font-semibold !py-1.5"
+      />
+      <TextField
+        {...register('actionEnd', { required: true })}
+        label="End of the action period"
+        autoFocus
+        required
+        defaultValue="2022-06-30"
+        className="text-lg font-semibold !py-1.5"
+      />
 
-      <div className="mt-6">
+      <div className="my-6">
         <Controller
           name="content"
           control={control}
@@ -66,6 +114,19 @@ export function PostForm({
           )}
         />
       </div>
+
+      <p className="mb-4">
+        This certificate defines a right to retroactive funding. The impact
+        period is from the beginning to the end of time.
+      </p>
+      <p className="mb-4">By submitting I confirm that:</p>
+      <ol className="list-decimal list-inside mb-4">
+        <li>I am not and will never sell these rights more than once, and</li>
+        <li>
+          I am happy for this record to be publicly accessible forever,
+          including on a blockchain.
+        </li>
+      </ol>
 
       <div className="flex items-center justify-between gap-4 mt-8">
         <div className="flex gap-4">

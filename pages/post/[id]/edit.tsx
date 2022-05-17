@@ -41,6 +41,15 @@ const EditPostPage: NextPageWithAuthAndLayout = () => {
                 defaultValues={{
                   title: postQuery.data.title,
                   content: postQuery.data.content,
+                  attributedImpactVersion: postQuery.data.attributedImpactVersion,
+                  proof: postQuery.data.proof,
+                  location: postQuery.data.location,
+                  rights: postQuery.data.rights,
+                  actionStart: postQuery.data.actionStart,
+                  actionEnd: postQuery.data.actionEnd,
+                  impactStart: postQuery.data.impactStart,
+                  impactEnd: postQuery.data.impactEnd,
+                  tags: postQuery.data.tags,
                 }}
                 backTo={`/post/${postQuery.data.id}`}
                 onSubmit={(values) => {
