@@ -14,6 +14,13 @@ if (process.browser) {
   )
 }
 
+const googleParser = makeValidator<string>((input) => {
+  if (process.env.AUTH_PROVIDER === 'google' && input === '') {
+    throw invalidEnvError('google config', input)
+  }
+  return input
+})
+
 const githubParser = makeValidator<string>((input) => {
   if (process.env.AUTH_PROVIDER === 'github' && input === '') {
     throw invalidEnvError('github config', input)
@@ -56,8 +63,8 @@ export const serverEnv = {
     AUTH_PROVIDER: str({
       choices: ['github', 'okta', 'google'],
     }),
-    GOOGLE_CLIENT_ID: githubParser({ allowEmpty: true, default: '' }),
-    GOOGLE_CLIENT_SECRET: githubParser({ allowEmpty: true, default: '' }),
+    GOOGLE_CLIENT_ID: googleParser({ allowEmpty: true, default: '' }),
+    GOOGLE_CLIENT_SECRET: googleParser({ allowEmpty: true, default: '' }),
     GITHUB_ID: githubParser({ allowEmpty: true, default: '' }),
     GITHUB_SECRET: githubParser({ allowEmpty: true, default: '' }),
     GITHUB_ALLOWED_ORG: githubParser({ allowEmpty: true, default: '' }),
