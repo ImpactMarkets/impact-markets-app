@@ -7,7 +7,7 @@ generator client {
 }
 
 datasource db {
-  provider             = "mysql"
+  provider             = "postgresql"
   url                  = env("DATABASE_URL")
   referentialIntegrity = "prisma"
 }
@@ -112,7 +112,6 @@ model Post {
   transaction Transaction[] @relation()
 
   @@index([authorId])
-  @@fulltext([title, content])
 }
 
 model LikedPosts {
