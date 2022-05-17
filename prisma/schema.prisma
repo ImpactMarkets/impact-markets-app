@@ -17,6 +17,10 @@ enum Role {
   ADMIN
 }
 
+enum Right {
+  RETROACTIVE_FUNDING
+}
+
 model Account {
   id                       String  @id @default(cuid())
   userId                   String
@@ -65,7 +69,6 @@ model User {
   comments      Comment[]
   role          Role         @default(USER)
 
-  certificates         Certificate[] @relation()
   transactionsSent     Transaction[] @relation(name: "sender")
   transactionsReceived Transaction[] @relation(name: "receiver")
 }
@@ -78,10 +81,13 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+// TODO: Rename to Certificate
 model Post {
   id          Int          @id @default(autoincrement())
   title       String       @db.VarChar(255)
+  // TODO: Rename to something like description
   content     String       @db.Text
+  // Is it optimal to prerender the MD to HTML?
   contentHtml String       @db.Text
   hidden      Boolean      @default(false)
   createdAt   DateTime     @default(now())
@@ -90,7 +96,20 @@ model Post {
   likedBy     LikedPosts[]
   comments    Comment[]
 
-  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  // TODO: Move these to CertificateVersion to enable versioning
+  attributedImpactVersion String
+  proof                   String?
+  location                String?
+  rights                  Right     @default(RETROACTIVE_FUNDING)
+  actionStart             DateTime
+  actionEnd               DateTime
+  impactStart             DateTime?
+  impactEnd               DateTime?
+  tags                    String?
+
+  // TODO: Rename to issuer or replace with group of issuers, such as an org
+  author      User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  transaction Transaction[] @relation()
 
   @@index([authorId])
   @@fulltext([title, content])
@@ -124,60 +143,22 @@ model Comment {
   @@index([postId])
 }
 
-model Certificate {
-  id        String   @id @default(cuid())
-  hidden    Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  issuerId  String
-
-  issuer              User                 @relation(fields: [issuerId], references: [id])
-  certificateVersions CertificateVersion[] @relation()
-  transactions        Transaction[]        @relation()
-
-  @@index([issuerId])
-  @@index([createdAt])
-  @@index([updatedAt])
-}
-
-model CertificateVersion {
-  id                      String   @id @default(cuid())
-  certificateId           String
-  createdAt               DateTime @default(now())
-  title                   String
-  attributedImpactVersion String?
-  proof                   String
-  changes                 String?
-  location                String?
-  rights                  String
-  actionStart             DateTime
-  actionEnd               DateTime
-  impactStart             DateTime
-  impactEnd               DateTime
-  tags                    String
-  description             String?
-
-  certificate Certificate @relation(fields: [certificateId], references: [id])
-
-  @@index([certificateId])
-  @@index([createdAt])
-}
-
 model Transaction {
-  id            String   @id @default(cuid())
-  createdAt     DateTime @default(now())
-  state         String
-  size          Decimal
-  cost          Decimal
-  senderId      String
-  receiverId    String
-  certificateId String
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  state      String
+  size       Decimal
+  cost       Decimal
+  senderId   String
+  receiverId String
+  // TODO: Rename, really a certificate
+  postId     Int
 
-  sender      User        @relation(name: "sender", fields: [senderId], references: [id])
-  receiver    User        @relation(name: "receiver", fields: [receiverId], references: [id])
-  certificate Certificate @relation(fields: [certificateId], references: [id])
+  sender   User @relation(name: "sender", fields: [senderId], references: [id])
+  receiver User @relation(name: "receiver", fields: [receiverId], references: [id])
+  post     Post @relation(fields: [postId], references: [id])
 
   @@index([senderId])
   @@index([receiverId])
-  @@index([certificateId])
+  @@index([postId])
 }
