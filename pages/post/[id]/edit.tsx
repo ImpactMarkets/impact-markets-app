@@ -43,21 +43,31 @@ const EditPostPage: NextPageWithAuthAndLayout = () => {
                   content: postQuery.data.content,
                   attributedImpactVersion:
                     postQuery.data.attributedImpactVersion,
-                  proof: postQuery.data.proof,
-                  location: postQuery.data.location,
+                  proof: postQuery.data.proof || '',
+                  location: postQuery.data.location || '',
                   rights: postQuery.data.rights,
-                  actionStart: postQuery.data.actionStart,
-                  actionEnd: postQuery.data.actionEnd,
+                  actionStart: postQuery.data.actionStart.toISOString(),
+                  actionEnd: postQuery.data.actionEnd.toISOString(),
                   impactStart: postQuery.data.impactStart,
                   impactEnd: postQuery.data.impactEnd,
-                  tags: postQuery.data.tags,
+                  tags: postQuery.data.tags || '',
                 }}
                 backTo={`/post/${postQuery.data.id}`}
                 onSubmit={(values) => {
                   editPostMutation.mutate(
                     {
                       id: postQuery.data.id,
-                      data: { title: values.title, content: values.content },
+                      data: {
+                        title: values.title,
+                        content: values.content,
+                        attributedImpactVersion: values.attributedImpactVersion,
+                        proof: values.proof,
+                        location: values.location || '',
+                        rights: values.rights,
+                        actionStart: values.actionStart,
+                        actionEnd: values.actionEnd,
+                        tags: values.tags,
+                      },
                     },
                     {
                       onSuccess: () =>

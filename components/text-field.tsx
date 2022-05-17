@@ -2,7 +2,7 @@ import { classNames } from '@/lib/classnames'
 import * as React from 'react'
 
 export type TextFieldOwnProps = {
-  label?: string
+  label?: string | React.ReactElement
 }
 
 type TextFieldProps = TextFieldOwnProps &

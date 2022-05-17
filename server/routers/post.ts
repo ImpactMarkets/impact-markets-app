@@ -182,8 +182,11 @@ export const postRouter = createProtectedRouter()
       content: z.string().min(1),
       attributedImpactVersion: z.string().min(5),
       proof: z.string(),
+      location: z.string(),
+      rights: z.string(),
       actionStart: z.string().min(1),
       actionEnd: z.string().min(1),
+      tags: z.string(),
     }),
     async resolve({ ctx, input }) {
       const post = await ctx.prisma.post.create({
@@ -193,8 +196,11 @@ export const postRouter = createProtectedRouter()
           contentHtml: markdownToHtml(input.content),
           attributedImpactVersion: input.attributedImpactVersion,
           proof: input.proof,
+          location: input.location,
+          rights: 'RETROACTIVE_FUNDING',
           actionStart: new Date(input.actionStart),
           actionEnd: new Date(input.actionEnd),
+          tags: input.tags,
           author: {
             connect: {
               id: ctx.session.user.id,
@@ -214,6 +220,13 @@ export const postRouter = createProtectedRouter()
       data: z.object({
         title: z.string().min(1),
         content: z.string().min(1),
+        attributedImpactVersion: z.string().min(5),
+        proof: z.string(),
+        location: z.string(),
+        rights: z.string(),
+        actionStart: z.string().min(1),
+        actionEnd: z.string().min(1),
+        tags: z.string(),
       }),
     }),
     async resolve({ ctx, input }) {
@@ -242,6 +255,13 @@ export const postRouter = createProtectedRouter()
           title: data.title,
           content: data.content,
           contentHtml: markdownToHtml(data.content),
+          attributedImpactVersion: data.attributedImpactVersion,
+          proof: data.proof,
+          location: data.location,
+          rights: 'RETROACTIVE_FUNDING',
+          actionStart: new Date(data.actionStart),
+          actionEnd: new Date(data.actionEnd),
+          tags: data.tags,
         },
       })
 

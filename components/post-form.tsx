@@ -11,15 +11,15 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 type FormData = {
   title: string
   content: string
-  attributedImpactVersion: string | null
-  proof: string | null
-  location: string | null
+  attributedImpactVersion: string
+  proof: string
+  location: string
   rights: string
-  actionStart: Date
-  actionEnd: Date
+  actionStart: string
+  actionEnd: string
   impactStart: Date | null
   impactEnd: Date | null
-  tags: string | null
+  tags: string
 }
 
 type PostFormProps = {
