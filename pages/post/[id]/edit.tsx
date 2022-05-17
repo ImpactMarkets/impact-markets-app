@@ -26,7 +26,7 @@ const EditPostPage: NextPageWithAuthAndLayout = () => {
     return (
       <>
         <Head>
-          <title>Edit {postQuery.data.title} - Beam</title>
+          <title>Edit {postQuery.data.title} – Impact Markets</title>
         </Head>
 
         {postBelongsToUser ? (
@@ -41,7 +41,8 @@ const EditPostPage: NextPageWithAuthAndLayout = () => {
                 defaultValues={{
                   title: postQuery.data.title,
                   content: postQuery.data.content,
-                  attributedImpactVersion: postQuery.data.attributedImpactVersion,
+                  attributedImpactVersion:
+                    postQuery.data.attributedImpactVersion,
                   proof: postQuery.data.proof,
                   location: postQuery.data.location,
                   rights: postQuery.data.rights,
