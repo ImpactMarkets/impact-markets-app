@@ -17,6 +17,7 @@ import { signOut, useSession } from 'next-auth/react'
 import { useTheme } from 'next-themes'
 import Link from 'next/link'
 import * as React from 'react'
+import { Label } from './label'
 
 type LayoutProps = {
   children: React.ReactNode
@@ -64,9 +65,9 @@ export function Layout({ children }: LayoutProps) {
                 </MenuItemButton>
               </MenuItemsContent>
               <div className="flex items-center gap-4 px-4 py-3 rounded-b bg-secondary">
-                <label htmlFor="theme" className="text-sm">
+                <Label htmlFor="theme" className="text-sm">
                   Theme
-                </label>
+                </Label>
                 <select
                   id="theme"
                   name="theme"

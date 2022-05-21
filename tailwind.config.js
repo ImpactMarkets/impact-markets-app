@@ -98,14 +98,15 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+        sans: ['"Open Sans"', ...defaultTheme.fontFamily.sans],
+        display: ['"Barlow Condensed"', ...defaultTheme.fontFamily.sans],
       },
       fontSize: {
         base: ['16px', '24px'],
         xl: ['20px', '24px'],
         '2xl': ['24px', '28px'],
         '3xl': ['28px', '32px'],
-        '4xl': ['40px', '44px'],
+        '4xl': ['32px', '36px'],
       },
       backgroundColor: {
         primary: 'var(--bg-primary)',

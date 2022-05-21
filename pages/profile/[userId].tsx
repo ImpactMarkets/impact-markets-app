@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogTitle,
 } from '@/components/dialog'
+import { Heading1 } from '@/components/heading-1'
 import { IconButton } from '@/components/icon-button'
 import { EditIcon } from '@/components/icons'
 import { Layout } from '@/components/layout'
@@ -112,9 +113,7 @@ function ProfileInfo() {
             )}
 
             <div className="flex-1">
-              <h1 className="bg-primary text-2xl font-semibold tracking-tight md:text-3xl">
-                {profileQuery.data.name}
-              </h1>
+              <Heading1>{profileQuery.data.name}</Heading1>
               {profileQuery.data.title && (
                 <p className="text-lg tracking-tight text-secondary">
                   {profileQuery.data.title}

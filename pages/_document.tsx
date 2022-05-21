@@ -5,19 +5,11 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
           <link
-            rel="preload"
-            as="font"
-            type="font/woff2"
-            href="/fonts/inter-roman.var.woff2"
-            crossOrigin="anonymous"
-          />
-          <link
-            rel="preload"
-            as="font"
-            type="font/woff2"
-            href="/fonts/inter-italic.var.woff2"
-            crossOrigin="anonymous"
+            href="https://fonts.googleapis.com/css2?family=Barlow+Condensed&family=Open+Sans&display=swap"
+            rel="stylesheet"
           />
           <link rel="icon" href="/favicon.ico" sizes="any" />
           <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

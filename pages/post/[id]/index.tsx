@@ -11,6 +11,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from '@/components/dialog'
+import { Heading1 } from '@/components/heading-1'
 import { HtmlView } from '@/components/html-view'
 import { IconButton } from '@/components/icon-button'
 import {
@@ -148,9 +149,7 @@ const PostPage: NextPageWithAuthAndLayout = () => {
             )}
 
             <div className="flex items-center justify-between gap-4">
-              <h1 className="text-3xl font-semibold tracking-tighter md:text-4xl">
-                {postQuery.data.title}
-              </h1>
+              <Heading1>{postQuery.data.title}</Heading1>
               {(postBelongsToUser || isUserAdmin) && (
                 <>
                   <div className="flex md:hidden">

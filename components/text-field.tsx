@@ -1,5 +1,6 @@
 import { classNames } from '@/lib/classnames'
 import * as React from 'react'
+import { Label } from './label'
 
 export type TextFieldOwnProps = {
   label?: string | React.ReactElement
@@ -13,9 +14,9 @@ export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     return (
       <div className="mt-6">
         {label && (
-          <label htmlFor={id || name} className="block mb-2 font-semibold">
+          <Label htmlFor={id || name} className="block mb-2 text-s">
             {label}
-          </label>
+          </Label>
         )}
         <input
           {...rest}

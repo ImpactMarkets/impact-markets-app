@@ -19,6 +19,7 @@ import TextareaAutosize, {
 import getCaretCoordinates from 'textarea-caret'
 import TextareaMarkdown, { TextareaMarkdownRef } from 'textarea-markdown-editor'
 import { ItemOptions, useItemList } from 'use-item-list'
+import { Label } from './label'
 
 type MarkdownEditorProps = {
   label?: string
@@ -153,7 +154,7 @@ export function MarkdownEditor({
 
   return (
     <div>
-      {label && <label className="block mb-2 font-semibold">{label}</label>}
+      {label && <Label className="block mb-2">{label}</Label>}
       <div>
         <div className="flex items-center justify-between gap-4 px-4 py-px border rounded bg-primary">
           <div className="flex gap-2 -ml-2">

@@ -1,3 +1,4 @@
+import { Heading1 } from '@/components/heading-1'
 import { Layout } from '@/components/layout'
 import { PostForm } from '@/components/post-form'
 import { trpc } from '@/lib/trpc'
@@ -20,9 +21,7 @@ const NewPostPage: NextPageWithAuthAndLayout = () => {
         <title>New Certificate</title>
       </Head>
 
-      <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">
-        New certificate
-      </h1>
+      <Heading1>New certificate</Heading1>
 
       <div className="mt-6">
         <PostForm

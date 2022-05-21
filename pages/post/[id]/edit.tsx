@@ -1,3 +1,4 @@
+import { Heading1 } from '@/components/heading-1'
 import { Layout } from '@/components/layout'
 import { PostForm } from '@/components/post-form'
 import { trpc } from '@/lib/trpc'
@@ -31,9 +32,7 @@ const EditPostPage: NextPageWithAuthAndLayout = () => {
 
         {postBelongsToUser ? (
           <>
-            <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">
-              Edit &quot;{postQuery.data.title}&quot;
-            </h1>
+            <Heading1>Edit “{postQuery.data.title}”</Heading1>
 
             <div className="mt-6">
               <PostForm

@@ -1,5 +1,6 @@
 import { classNames } from '@/lib/classnames'
 import * as React from 'react'
+import { Label } from './label'
 
 export type TextareaOwnProps = {
   label?: string
@@ -13,9 +14,9 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     return (
       <div>
         {label && (
-          <label htmlFor={id || name} className="block mb-2 font-semibold">
+          <Label htmlFor={id || name} className="block mb-2">
             {label}
-          </label>
+          </Label>
         )}
         <textarea
           {...rest}

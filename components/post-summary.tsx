@@ -15,6 +15,7 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import * as React from 'react'
+import { Heading2 } from './heading-2'
 
 export type PostSummaryProps = {
   post: InferQueryOutput<'post.feed'>['posts'][number]
@@ -69,9 +70,7 @@ export function PostSummary({
       <div className={classNames(post.hidden ? 'opacity-50' : '')}>
         <Link href={`/post/${post.id}`}>
           <a>
-            <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
-              {post.title}
-            </h2>
+            <Heading2>{post.title}</Heading2>
           </a>
         </Link>
 

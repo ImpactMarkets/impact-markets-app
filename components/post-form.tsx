@@ -57,7 +57,7 @@ export function PostForm({
         label="Title"
         autoFocus
         required
-        className="text-lg font-semibold !py-1.5"
+        className="text-lg !py-1.5"
       />
       <TextField
         {...register('attributedImpactVersion', { required: true })}
@@ -72,13 +72,13 @@ export function PostForm({
         autoFocus
         required
         defaultValue={browserEnv.ATTRIBUTED_IMPACT_RECOMMENDED_VERSION}
-        className="text-lg font-semibold !py-1.5"
+        className="text-lg !py-1.5"
       />
       <TextField
         {...register('proof', {})}
         label="Link to your work that links back here"
         autoFocus
-        className="text-lg font-semibold !py-1.5"
+        className="text-lg !py-1.5"
       />
       {/* TODO: Action period */}
       <TextField
@@ -87,7 +87,7 @@ export function PostForm({
         autoFocus
         required
         defaultValue="2022-05-01"
-        className="text-lg font-semibold !py-1.5"
+        className="text-lg !py-1.5"
       />
       <TextField
         {...register('actionEnd', { required: true })}
@@ -95,7 +95,7 @@ export function PostForm({
         autoFocus
         required
         defaultValue="2022-06-30"
-        className="text-lg font-semibold !py-1.5"
+        className="text-lg !py-1.5"
       />
 
       <div className="my-6">
