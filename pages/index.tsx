@@ -95,7 +95,7 @@ const Home: NextPageWithAuthAndLayout = () => {
     return (
       <>
         <Head>
-          <title>Beam</title>
+          <title>Impact Markets</title>
         </Head>
 
         {feedQuery.data.postCount === 0 ? (
