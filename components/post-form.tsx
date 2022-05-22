@@ -55,6 +55,7 @@ export function PostForm({
       <TextField
         {...register('title', { required: true })}
         label="Title"
+        info="This can be the same as your article’s title if it is descriptive"
         autoFocus
         required
         className="text-lg !py-1.5"
@@ -69,6 +70,7 @@ export function PostForm({
             </a>
           </span>
         }
+        info="Your certificate description needs to justify the value of your impact based on a particular version of Attributed Impact."
         autoFocus
         required
         defaultValue={browserEnv.ATTRIBUTED_IMPACT_RECOMMENDED_VERSION}
@@ -77,13 +79,16 @@ export function PostForm({
       <TextField
         {...register('proof', {})}
         label="Link to your work that links back here"
+        info="You can first enter a link to your post, submit the certificate, and then edit your post to include the verification link."
         autoFocus
+        required
         className="text-lg !py-1.5"
       />
       {/* TODO: Action period */}
       <TextField
         {...register('actionStart', { required: true })}
         label="Start of the action period"
+        info="The action period is the time that you define during which you worked on the project that this certificate describes."
         autoFocus
         required
         defaultValue="2022-05-01"
@@ -92,6 +97,7 @@ export function PostForm({
       <TextField
         {...register('actionEnd', { required: true })}
         label="End of the action period"
+        info="This should for now be in the past, for legal reasons."
         autoFocus
         required
         defaultValue="2022-06-30"
