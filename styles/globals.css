@@ -145,6 +145,7 @@
   a {
     @apply focus-visible-ring;
     @apply break-words;
+    @apply text-blue;
   }
 
   b,
