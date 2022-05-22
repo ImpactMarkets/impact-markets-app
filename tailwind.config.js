@@ -193,47 +193,32 @@ module.exports = {
             '--tw-prose-code': 'var(--text-primary)',
             '--tw-prose-th-borders': 'var(--border-secondary)',
             '--tw-prose-td-borders': 'var(--border-primary)',
-            p: {
-              lineHeight: '24px',
-              marginBottom: '1em',
-            },
-            a: {
-              textDecoration: 'none',
-              fontWeight: 'default',
-            },
             img: {
               marginTop: '1.5em',
               marginBottom: '1.5em',
             },
             h1: {
-              fontWeight: '600',
+              fontWeight: 'unset',
               fontSize: '28px',
-              lineHeight: '32px',
             },
             h2: {
-              fontWeight: '600',
+              fontWeight: 'unset',
               fontSize: '24px',
-              lineHeight: '28px',
-              marginTop: '1em',
             },
             h3: {
+              fontWeight: 'unset',
               fontSize: '20px',
-              lineHeight: '24px',
             },
             h4: {
               fontSize: '16px',
-              lineHeight: '24px',
             },
             h5: {
               fontSize: '16px',
-              lineHeight: '24px',
             },
             h6: {
               fontSize: '16px',
-              lineHeight: '24px',
             },
             li: {
-              lineHeight: '24px',
               marginTop: '0.25em',
               marginBottom: '0.25em',
             },
