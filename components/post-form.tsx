@@ -65,7 +65,10 @@ export function PostForm({
         label={
           <span>
             Version of{' '}
-            <a href="https://forum.effectivealtruism.org/posts/7kqL4G5badqjskYQs/toward-impact-markets-1#Attributed_Impact">
+            <a
+              href="https://forum.effectivealtruism.org/posts/7kqL4G5badqjskYQs/toward-impact-markets-1#Attributed_Impact"
+              className="text-blue"
+            >
               Attributed Impact
             </a>
           </span>
