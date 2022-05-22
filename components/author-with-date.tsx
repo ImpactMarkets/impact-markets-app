@@ -24,13 +24,13 @@ export function AuthorWithDate({ author, date }: AuthorWithDateProps) {
       <div className="flex-1 text-sm sm:text-base">
         <div>
           <Link href={`/profile/${author.id}`}>
-            <a className="font-medium tracking-tight transition-colors hover:text-blue">
+            <a className="font-medium transition-colors hover:text-blue">
               {author.name}
             </a>
           </Link>
         </div>
 
-        <p className="tracking-tight text-secondary">
+        <p className="text-secondary">
           <time dateTime={date.toISOString()}>{formatDistanceToNow(date)}</time>{' '}
           ago
         </p>
