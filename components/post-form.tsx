@@ -115,6 +115,7 @@ export function PostForm({
               value={field.value}
               onChange={field.onChange}
               onTriggerSubmit={handleSubmit(onSubmit)}
+              defaultValue={browserEnv.DESCRIPTION_PROMPTS}
               required
             />
           )}
