@@ -17,9 +17,13 @@ const DESCRIPTION_PROMPTS=`## Fundamental Justification
 
 ### Who are the current owners of the impact and what fraction do they each own?
 
-## Extra Credit
+## Procedural Questions
+
+### What is your miniumum valuation under which you’ll not sell any shares in your impact?
 
 ### What would you have done had there been no chance to get retro funding? (This helps us assess our impact but has no effect on our evaluation of the certificate’s impact.)
+
+### What can we improve about this process?
 `
 
 export const browserEnv = envsafe({
