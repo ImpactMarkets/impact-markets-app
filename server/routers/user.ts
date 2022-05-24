@@ -16,7 +16,6 @@ export const userRouter = createProtectedRouter()
           name: true,
           image: true,
           title: true,
-          email: true,
         },
       })
 
