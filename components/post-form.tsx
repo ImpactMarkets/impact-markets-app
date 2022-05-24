@@ -132,10 +132,7 @@ export function PostForm({
       <p className="mb-4">By submitting I confirm that:</p>
       <ol className="list-decimal list-inside mb-4">
         <li>I am not and will never sell these rights more than once, and</li>
-        <li>
-          I am happy for this record to be publicly accessible forever,
-          including on a blockchain.
-        </li>
+        <li>I am happy for this record to be publicly accessible forever.</li>
       </ol>
 
       <div className="flex items-center justify-between gap-4 mt-8">
