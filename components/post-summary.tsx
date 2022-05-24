@@ -76,7 +76,7 @@ export function PostSummary({
 
         <div className={classNames(hideAuthor ? 'mt-2' : 'mt-6')}>
           {hideAuthor ? (
-            <p className="tracking-tight text-secondary">
+            <p className="text-secondary">
               <time dateTime={post.createdAt.toISOString()}>
                 {formatDistanceToNow(post.createdAt)}
               </time>{' '}

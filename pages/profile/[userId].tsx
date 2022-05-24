@@ -115,7 +115,7 @@ function ProfileInfo() {
             <div className="flex-1">
               <Heading1>{profileQuery.data.name}</Heading1>
               {profileQuery.data.title && (
-                <p className="text-lg tracking-tight text-secondary">
+                <p className="text-lg text-secondary">
                   {profileQuery.data.title}
                 </p>
               )}
