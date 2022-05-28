@@ -180,7 +180,7 @@ export const postRouter = createProtectedRouter()
     input: z.object({
       title: z.string().min(1),
       content: z.string().min(1),
-      attributedImpactVersion: z.string().min(5),
+      attributedImpactVersion: z.string().min(1),
       proof: z.string(),
       location: z.string(),
       rights: z.string(),
@@ -220,7 +220,7 @@ export const postRouter = createProtectedRouter()
       data: z.object({
         title: z.string().min(1),
         content: z.string().min(1),
-        attributedImpactVersion: z.string().min(5),
+        attributedImpactVersion: z.string().min(1),
         proof: z.string(),
         location: z.string(),
         rights: z.string(),
