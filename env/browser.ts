@@ -7,19 +7,17 @@ const DESCRIPTION_PROMPTS=`## Fundamental Justification
 
 ### What did you do?
 
-### What was the expected outcome of your action when you were still planning it, based on your knowledge and understanding at the time? What were the 1-in-1000 best and worst outcomes?
+### What positive impact did you expect before you started the project? What were unusually good and unusually bad possible outcomes? (Please avoid hindsight bias and take the interests of all sentient beings into account.)
 
-### What effects did those outcomes have? You can limit this to effects that any sentient being might plausibly care about.
+### What actual outcomes are you aware of?
 
-### What was the actual outcome of your action? How do you evaluate that outcome morally, taking into account all effects that any sentient being at any point in time might plausibly care about?
-
-### Who can make a legitimate claim to a fraction of the impact, and have you made a contract with them that stipulates the fraction?
+### Who can make a legitimate claim to a fraction of the impact, and have you talked to them?
 
 ### Who are the current owners of the impact and what fraction do they each own?
 
 ## Procedural Questions
 
-### What is your miniumum valuation under which you’ll not sell any shares in your impact?
+### What is your minimum valuation under which you’ll not sell any shares in your impact?
 
 ### What would you have done had there been no chance to get retro funding? (This helps us assess our impact but has no effect on our evaluation of the certificate’s impact.)
 
