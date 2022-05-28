@@ -45,8 +45,12 @@ const EditPostPage: NextPageWithAuthAndLayout = () => {
                   proof: postQuery.data.proof || '',
                   location: postQuery.data.location || '',
                   rights: postQuery.data.rights,
-                  actionStart: postQuery.data.actionStart.toISOString(),
-                  actionEnd: postQuery.data.actionEnd.toISOString(),
+                  actionStart: postQuery.data.actionStart
+                    .toISOString()
+                    .slice(0, 10),
+                  actionEnd: postQuery.data.actionEnd
+                    .toISOString()
+                    .slice(0, 10),
                   impactStart: postQuery.data.impactStart,
                   impactEnd: postQuery.data.impactEnd,
                   tags: postQuery.data.tags || '',
