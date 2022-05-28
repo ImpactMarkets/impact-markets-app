@@ -56,6 +56,7 @@ export function PostForm({
         {...register('title', { required: true })}
         label="Title"
         info="This can be the same as your article’s title if it is descriptive"
+        placeholder="Why you should contribute to Giving What We Can as a ventriloquist"
         autoFocus
         required
         className="text-lg !py-1.5"
@@ -74,6 +75,7 @@ export function PostForm({
           </span>
         }
         info="Your certificate description needs to justify the value of your impact based on a particular version of Attributed Impact."
+        placeholder="0.42"
         autoFocus
         required
         defaultValue={browserEnv.ATTRIBUTED_IMPACT_RECOMMENDED_VERSION}
@@ -83,6 +85,8 @@ export function PostForm({
         {...register('proof', {})}
         label="Link to your work that links back here"
         info="You can first enter a link to your post, submit the certificate, and then edit your post to include the verification link."
+        placeholder="https://forum.effectivealtruism.org/posts/gqTN6jcqygiew4N5Y"
+        type="url"
         autoFocus
         required
         className="text-lg !py-1.5"
