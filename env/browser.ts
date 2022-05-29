@@ -5,8 +5,6 @@ const ATTRIBUTED_IMPACT_RECOMMENDED_VERSION='0.2'
 
 const DESCRIPTION_PROMPTS=`## Fundamental Justification
 
-### What did you do?
-
 ### What positive impact did you expect before you started the project? What were unusually good and unusually bad possible outcomes? (Please avoid hindsight bias and take the interests of all sentient beings into account.)
 
 ### What actual outcomes are you aware of?
