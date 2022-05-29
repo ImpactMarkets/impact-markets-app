@@ -98,6 +98,7 @@ export function PostForm({
         {...register('actionStart', { required: true })}
         label="Start of the action period"
         info="The action period is the time that you define during which you worked on the project that this certificate describes."
+        type="date"
         placeholder="YYYY-MM-DD"
         autoFocus
         required
@@ -107,6 +108,7 @@ export function PostForm({
         {...register('actionEnd', { required: true })}
         label="End of the action period"
         info="This should for now be in the past, for legal reasons."
+        type="date"
         placeholder="YYYY-MM-DD"
         autoFocus
         required
