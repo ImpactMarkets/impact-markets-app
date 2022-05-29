@@ -1,6 +1,7 @@
 import { Heading1 } from '@/components/heading-1'
 import { Layout } from '@/components/layout'
 import { PostForm } from '@/components/post-form'
+import { browserEnv } from '@/env/browser'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import Head from 'next/head'
@@ -25,7 +26,22 @@ const NewPostPage: NextPageWithAuthAndLayout = () => {
 
       <div className="mt-6">
         <PostForm
+          isNew
           isSubmitting={addPostMutation.isLoading}
+          defaultValues={{
+            title: '',
+            proof: '',
+            location: '',
+            rights: '',
+            impactStart: null,
+            impactEnd: null,
+            tags: '',
+            attributedImpactVersion:
+              browserEnv.ATTRIBUTED_IMPACT_RECOMMENDED_VERSION,
+            actionStart: '2022-05-01',
+            actionEnd: '2022-06-30',
+            content: browserEnv.DESCRIPTION_PROMPTS,
+          }}
           backTo="/"
           onSubmit={(values) => {
             addPostMutation.mutate(

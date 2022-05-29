@@ -25,6 +25,7 @@ type FormData = {
 type PostFormProps = {
   defaultValues?: FormData
   isSubmitting?: boolean
+  isNew?: boolean
   backTo: string
   onSubmit: SubmitHandler<FormData>
 }
@@ -32,6 +33,7 @@ type PostFormProps = {
 export function PostForm({
   defaultValues,
   isSubmitting,
+  isNew,
   backTo,
   onSubmit,
 }: PostFormProps) {
@@ -99,7 +101,6 @@ export function PostForm({
         placeholder="YYYY-MM-DD"
         autoFocus
         required
-        defaultValue="2022-05-01"
         className="text-lg !py-1.5"
       />
       <TextField
@@ -109,7 +110,6 @@ export function PostForm({
         placeholder="YYYY-MM-DD"
         autoFocus
         required
-        defaultValue="2022-06-30"
         className="text-lg !py-1.5"
       />
 
@@ -124,7 +124,6 @@ export function PostForm({
               value={field.value}
               onChange={field.onChange}
               onTriggerSubmit={handleSubmit(onSubmit)}
-              defaultValue={browserEnv.DESCRIPTION_PROMPTS}
               required
             />
           )}
@@ -146,9 +145,9 @@ export function PostForm({
           <Button
             type="submit"
             isLoading={isSubmitting}
-            loadingChildren={`${defaultValues ? 'Saving' : 'Publishing'}`}
+            loadingChildren={`${isNew ? 'Publishing' : 'Saving'}`}
           >
-            {defaultValues?.title ? 'Save' : 'Publish'}
+            {isNew ? 'Publish' : 'Save'}
           </Button>
           <ButtonLink href={backTo} variant="secondary">
             Cancel
