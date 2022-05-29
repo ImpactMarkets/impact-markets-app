@@ -19,10 +19,12 @@ import TextareaAutosize, {
 import getCaretCoordinates from 'textarea-caret'
 import TextareaMarkdown, { TextareaMarkdownRef } from 'textarea-markdown-editor'
 import { ItemOptions, useItemList } from 'use-item-list'
+import { InfoTooltip } from './info-tooltip'
 import { Label } from './label'
 
 type MarkdownEditorProps = {
-  label?: string
+  label?: string | React.ReactElement
+  info?: string | React.ReactElement
   value: string
   onChange: (value: string) => void
   onTriggerSubmit?: () => void
@@ -129,6 +131,7 @@ function MarkdownPreview({ markdown }: { markdown: string }) {
 
 export function MarkdownEditor({
   label,
+  info,
   value,
   minRows = 15,
   onChange,
@@ -154,7 +157,11 @@ export function MarkdownEditor({
 
   return (
     <div>
-      {label && <Label className="block mb-2">{label}</Label>}
+      {label && (
+        <Label className="block mb-2">
+          {label} {info && <InfoTooltip text={info} />}
+        </Label>
+      )}
       <div>
         <div className="flex items-center justify-between gap-4 px-4 py-px border rounded bg-primary">
           <div className="flex gap-2 -ml-2">

@@ -123,6 +123,7 @@ export function PostForm({
           render={({ field }) => (
             <MarkdownEditor
               label="Description"
+              info="You can leave this untouched until someone shows interest in your certificate; then you can fill it in."
               value={field.value}
               onChange={field.onChange}
               onTriggerSubmit={handleSubmit(onSubmit)}
