@@ -275,6 +275,9 @@ const PostPage: NextPageWithAuthAndLayout = () => {
               <span className="bg-blue-500 text-white font-bold text-sm py-1 px-2 mr-1 mb-1 rounded">
                 Impact: all time
               </span>
+              <span className="bg-blue-500 text-white font-bold text-sm py-1 px-2 mr-1 mb-1 rounded">
+                No audit
+              </span>
               {postQuery.data.tags && (
                 <span className="bg-blue-500 text-white font-bold text-sm py-1 px-2 mr-1 mb-1 rounded">
                   {postQuery.data.tags}
