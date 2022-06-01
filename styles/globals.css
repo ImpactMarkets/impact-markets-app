@@ -171,6 +171,13 @@
       @apply top-[516px];
     }
   }
+
+  /* Hack because it doesn’t seem to work in Tailwind */
+  .disabled {
+    cursor: not-allowed;
+    opacity: 50%;
+    background-color: slate;
+  }
 }
 
 @layer utilities {
