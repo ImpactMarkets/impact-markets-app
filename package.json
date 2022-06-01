@@ -10,7 +10,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "deploy-beta": "ssh im-web2-app 'cd /opt/im-web2-app-beta && git pull && npm run build && sudo supervisorctl restart im-web2-app-beta'",
+    "deploy-prod": "ssh im-web2-app 'cd /opt/im-web2-app-prod && git pull && npm run build && sudo supervisorctl restart im-web2-app-prod'"
   },
   "dependencies": {
     "@headlessui/react": "^1.4.3",
