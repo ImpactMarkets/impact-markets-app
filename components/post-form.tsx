@@ -64,26 +64,6 @@ export function PostForm({
         className="text-lg !py-1.5"
       />
       <TextField
-        {...register('attributedImpactVersion', { required: true })}
-        label={
-          <span>
-            Version of{' '}
-            <a
-              href="https://forum.effectivealtruism.org/posts/7kqL4G5badqjskYQs/toward-impact-markets-1#Attributed_Impact"
-              className="text-blue"
-            >
-              Attributed Impact
-            </a>
-          </span>
-        }
-        info="Your certificate description needs to justify the value of your impact based on a particular version of Attributed Impact."
-        placeholder="0.42"
-        autoFocus
-        required
-        defaultValue={browserEnv.ATTRIBUTED_IMPACT_RECOMMENDED_VERSION}
-        className="text-lg !py-1.5"
-      />
-      <TextField
         {...register('proof', {})}
         label="Link to your work that links back here"
         info="You can first enter a link to your post, submit the certificate, and then edit your post to include the verification link."
@@ -107,12 +87,33 @@ export function PostForm({
       <TextField
         {...register('actionEnd', { required: true })}
         label="End of the action period"
-        info="This should for now be in the past, for legal reasons."
+        info="Must be the day of certificate creation or earlier."
         type="date"
         placeholder="YYYY-MM-DD"
         autoFocus
         required
         className="text-lg !py-1.5"
+      />
+      <TextField
+        {...register('attributedImpactVersion', { required: true })}
+        label={
+          <span>
+            Version of{' '}
+            <a
+              href="https://forum.effectivealtruism.org/posts/7kqL4G5badqjskYQs/toward-impact-markets-1#Attributed_Impact"
+              className="text-blue"
+            >
+              Attributed Impact
+            </a>
+          </span>
+        }
+        info="Your certificate description needs to justify the value of your impact based on a particular version of Attributed Impact."
+        placeholder="0.42"
+        autoFocus
+        required
+        disabled
+        defaultValue={browserEnv.ATTRIBUTED_IMPACT_RECOMMENDED_VERSION}
+        className="text-lg !py-1.5 disabled"
       />
 
       <div className="my-6">
@@ -148,9 +149,9 @@ export function PostForm({
           <Button
             type="submit"
             isLoading={isSubmitting}
-            loadingChildren={`${isNew ? 'Publishing' : 'Saving'}`}
+            loadingChildren={`${isNew ? 'Submitting' : 'Saving'}`}
           >
-            {isNew ? 'Publish' : 'Save'}
+            {isNew ? 'Submit' : 'Save'}
           </Button>
           <ButtonLink href={backTo} variant="secondary">
             Cancel
