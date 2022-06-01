@@ -286,7 +286,7 @@ const PostPage: NextPageWithAuthAndLayout = () => {
             </div>
             {postBelongsToUser && (
               <div
-                className="flex items-center bg-blue-500 text-white text-sm font-bold px-4 py-3 my-5"
+                className="flex items-center bg-blue-500 text-white text-sm px-4 py-3 my-5"
                 role="alert"
               >
                 <svg
@@ -298,21 +298,21 @@ const PostPage: NextPageWithAuthAndLayout = () => {
                 </svg>
                 <p>
                   {' '}
-                  Please add this note to the bottom of your post:{' '}
-                  <em>
-                    As of {postQuery.data.createdAt.toISOString().slice(0, 10)},
-                    the{' '}
-                    <a
-                      href={window.location.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="underline"
-                    >
-                      certificate of this article
-                    </a>{' '}
-                    is owned by [name] ([percentage]), [name] ([percentage]), …,
-                    and [name] ([percentage]).
-                  </em>
+                  <strong className="font-bold">
+                    Please edit your post to include at the bottom:
+                  </strong>{' '}
+                  As of {postQuery.data.createdAt.toISOString().slice(0, 10)},
+                  the{' '}
+                  <a
+                    href={window.location.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="underline"
+                  >
+                    certificate of this article
+                  </a>{' '}
+                  is owned by [name] ([percentage]), [name] ([percentage]), …,
+                  and [name] ([percentage]).
                 </p>
               </div>
             )}
