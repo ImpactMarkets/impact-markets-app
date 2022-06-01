@@ -198,24 +198,27 @@ module.exports = {
               marginBottom: '1.5em',
             },
             h1: {
-              fontWeight: 'unset',
+              fontWeight: 'bold',
               fontSize: '28px',
             },
             h2: {
-              fontWeight: 'unset',
+              fontWeight: 'bold',
               fontSize: '24px',
             },
             h3: {
-              fontWeight: 'unset',
+              fontWeight: 'bold',
               fontSize: '20px',
             },
             h4: {
+              fontWeight: 'bold',
               fontSize: '16px',
             },
             h5: {
+              fontWeight: 'bold',
               fontSize: '16px',
             },
             h6: {
+              fontWeight: 'bold',
               fontSize: '16px',
             },
             li: {
