@@ -39,7 +39,7 @@ const NewPostPage: NextPageWithAuthAndLayout = () => {
             attributedImpactVersion:
               browserEnv.ATTRIBUTED_IMPACT_RECOMMENDED_VERSION,
             actionStart: '2022-05-01',
-            actionEnd: '2022-06-30',
+            actionEnd: '2022-06-01',
             content: browserEnv.DESCRIPTION_PROMPTS,
           }}
           backTo="/"
