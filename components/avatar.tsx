@@ -36,6 +36,7 @@ export function Avatar({ size = 'md', name, src }: AvatarProps) {
             width={dimension[size]}
             height={dimension[size]}
             className="object-cover rounded-full"
+            unoptimized
           />
           <div className="absolute border border-[rgba(0,0,0,0.04)] rounded-full inset-0" />
         </>
