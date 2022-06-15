@@ -66,7 +66,7 @@ export function PostForm({
       <TextField
         {...register('proof', {})}
         label="Link to your work that links back here"
-        info="You can first enter a link to your post, submit the certificate, and then edit your post to include the verification link."
+        info="You can first enter a link to your post, submit the certificate, and then edit your post to include the ledger note with the link back that you’ll find on your certificate page after you submit it."
         placeholder="https://forum.effectivealtruism.org/posts/gqTN6jcqygiew4N5Y"
         type="url"
         autoFocus
