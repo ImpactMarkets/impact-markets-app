@@ -1,11 +1,11 @@
 import { bool, envsafe, str } from 'envsafe'
 
 // FIXME: Reading of the .env file in the browser process doesn’t seem to work
-const ATTRIBUTED_IMPACT_RECOMMENDED_VERSION='0.2'
+const ATTRIBUTED_IMPACT_RECOMMENDED_VERSION = '0.2'
 
-const DESCRIPTION_PROMPTS=`## Fundamental Justification
+const DESCRIPTION_PROMPTS = `## Fundamental Justification
 
-### What positive impact did you expect before you started the project? What were unusually good and unusually bad possible outcomes? (Please avoid hindsight bias and take the interests of all sentient beings into account.)
+### What outcomes were to be expected before you started the project? What were unusually good and unusually bad possible outcomes? (Please avoid hindsight bias and take the interests of all sentient beings into account.)
 
 ### What actual outcomes are you aware of?
 
@@ -28,7 +28,7 @@ export const browserEnv = envsafe({
     default: false,
   }),
   ATTRIBUTED_IMPACT_RECOMMENDED_VERSION: str({
-      input: process.env.ATTRIBUTED_IMPACT_RECOMMENDED_VERSION,
+    input: process.env.ATTRIBUTED_IMPACT_RECOMMENDED_VERSION,
     default: ATTRIBUTED_IMPACT_RECOMMENDED_VERSION,
   }),
   DESCRIPTION_PROMPTS: str({
