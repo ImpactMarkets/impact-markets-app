@@ -8,7 +8,7 @@ export function Footer() {
       <div className="inline-flex items-center gap-1 text-sm">
         <span>Made with</span>
         <HeartFilledIcon className="w-4 h-4" />
-        <span>by PlanetScale and Good Exchange</span>
+        <span>by PlanetScale and GoodX</span>
       </div>
     </footer>
   )
