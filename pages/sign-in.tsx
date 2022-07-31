@@ -6,7 +6,7 @@ import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from 'next'
-import { getServerSession } from 'next-auth/next'
+import { unstable_getServerSession as getServerSession } from 'next-auth/next'
 import { getProviders, signIn } from 'next-auth/react'
 import Head from 'next/head'
 import Div100vh from 'react-div-100vh'
@@ -49,7 +49,7 @@ const SignIn = ({
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const session = await getServerSession(context, authOptions)
+  const session = await getServerSession(context.req, context.res, authOptions)
   const providers = await getProviders()
 
   if (session?.user) {
