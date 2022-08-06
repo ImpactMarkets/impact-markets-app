@@ -100,7 +100,7 @@ export function PostForm({
           <span>
             Version of{' '}
             <a
-              href="https://forum.effectivealtruism.org/posts/7kqL4G5badqjskYQs/toward-impact-markets-1#Attributed_Impact"
+              href="https://impactmarkets.substack.com/i/64916368/impact-attribution-norm-formerly-attributed-impact"
               className="text-blue"
             >
               Attributed Impact
@@ -112,7 +112,9 @@ export function PostForm({
         autoFocus
         required
         disabled
-        defaultValue={browserEnv.ATTRIBUTED_IMPACT_RECOMMENDED_VERSION}
+        defaultValue={
+          browserEnv.NEXT_PUBLIC_ATTRIBUTED_IMPACT_RECOMMENDED_VERSION
+        }
         className="text-lg !py-1.5 disabled"
       />
 

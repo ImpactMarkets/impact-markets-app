@@ -37,10 +37,10 @@ const NewPostPage: NextPageWithAuthAndLayout = () => {
             impactEnd: null,
             tags: '',
             attributedImpactVersion:
-              browserEnv.ATTRIBUTED_IMPACT_RECOMMENDED_VERSION,
+              browserEnv.NEXT_PUBLIC_ATTRIBUTED_IMPACT_RECOMMENDED_VERSION,
             actionStart: '2022-05-01',
             actionEnd: '2022-06-01',
-            content: browserEnv.DESCRIPTION_PROMPTS,
+            content: browserEnv.NEXT_PUBLIC_DESCRIPTION_PROMPTS,
           }}
           backTo="/"
           onSubmit={(values) => {
