@@ -11,8 +11,9 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky install",
-    "deploy-beta": "ssh im-web2-app 'cd /opt/im-web2-app-beta && git pull && npm run build && sudo supervisorctl restart im-web2-app-beta'",
-    "deploy-prod": "ssh im-web2-app 'cd /opt/im-web2-app-prod && git pull && npm run build && sudo supervisorctl restart im-web2-app-prod'"
+    "postinstall": "patch-package",
+    "deploy-beta": "ssh im-web2-app 'cd /opt/im-web2-app-beta && git pull && npm install && npm run build && sudo supervisorctl restart im-web2-app-beta'",
+    "deploy-prod": "ssh im-web2-app 'cd /opt/im-web2-app-prod && git pull && npm install && npm run build && sudo supervisorctl restart im-web2-app-prod'"
   },
   "dependencies": {
     "@headlessui/react": "^1.4.3",
@@ -68,6 +69,7 @@
     "eslint": "8.8.0",
     "eslint-config-next": "12.0.10",
     "husky": "^7.0.0",
+    "patch-package": "^6.4.7",
     "postcss": "^8.4.14",
     "prettier": "2.5.1",
     "pretty-quick": "^3.1.3",
