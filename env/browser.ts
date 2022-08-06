@@ -1,38 +1,34 @@
 import { bool, envsafe, str } from 'envsafe'
 
-// FIXME: Reading of the .env file in the browser process doesn’t seem to work
-const ATTRIBUTED_IMPACT_RECOMMENDED_VERSION = '0.2'
+const NEXT_PUBLIC_ATTRIBUTED_IMPACT_RECOMMENDED_VERSION = '0.3'
 
-const DESCRIPTION_PROMPTS = `## Fundamental Justification
+const NEXT_PUBLIC_DESCRIPTION_PROMPTS = `**Might someone feel that your action is not morally good according to their values?**
 
-### What outcomes were to be expected before you started the project? What were unusually good and unusually bad possible outcomes? (Please avoid hindsight bias and take the interests of all sentient beings into account.)
+**Has your action ever been risky?**
 
-### What actual outcomes are you aware of?
+**What is the complete list of all collaborators and how much have they each contributed?**
 
-### Who can make a legitimate claim to a fraction of the impact, and have you talked to them?
+**What is your minimum valuation for selling any shares in your impact? (Optional.)**
 
-### Who are the current owners of the impact and what fraction do they each own?
+**What would you have done had there been no chance to get retro funding? (This doesn’t affect our evaluation of your impact.) (Optional.)**
 
-## Procedural Questions
+**What can we improve about this process? (Optional.)**
 
-### What is your minimum valuation under which you’ll not sell any shares in your impact?
-
-### What would you have done had there been no chance to get retro funding? (This helps us assess our impact but has no effect on our evaluation of the certificate’s impact.)
-
-### What can we improve about this process?
 `
 
+// Variable names must start with NEXT_PUBLIC_
+// https://nextjs.org/docs/basic-features/environment-variables#exposing-environment-variables-to-the-browser
 export const browserEnv = envsafe({
   NEXT_PUBLIC_ENABLE_IMAGE_UPLOAD: bool({
     input: process.env.NEXT_PUBLIC_ENABLE_IMAGE_UPLOAD,
     default: false,
   }),
-  ATTRIBUTED_IMPACT_RECOMMENDED_VERSION: str({
-    input: process.env.ATTRIBUTED_IMPACT_RECOMMENDED_VERSION,
-    default: ATTRIBUTED_IMPACT_RECOMMENDED_VERSION,
+  NEXT_PUBLIC_ATTRIBUTED_IMPACT_RECOMMENDED_VERSION: str({
+    input: process.env.NEXT_PUBLIC_ATTRIBUTED_IMPACT_RECOMMENDED_VERSION,
+    default: NEXT_PUBLIC_ATTRIBUTED_IMPACT_RECOMMENDED_VERSION,
   }),
-  DESCRIPTION_PROMPTS: str({
-    input: process.env.DESCRIPTION_PROMPTS,
-    default: DESCRIPTION_PROMPTS,
+  NEXT_PUBLIC_DESCRIPTION_PROMPTS: str({
+    input: process.env.NEXT_PUBLIC_DESCRIPTION_PROMPTS,
+    default: NEXT_PUBLIC_DESCRIPTION_PROMPTS,
   }),
 })

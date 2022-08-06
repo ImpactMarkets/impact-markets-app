@@ -241,7 +241,7 @@ const PostPage: NextPageWithAuthAndLayout = () => {
             <div className="flex flex-wrap">
               <span className="bg-blue-500 text-white font-bold text-sm py-1 px-2 mr-1 mb-1 rounded">
                 <a
-                  href="https://forum.effectivealtruism.org/posts/7kqL4G5badqjskYQs/toward-impact-markets-1#Attributed_Impact"
+                  href="https://impactmarkets.substack.com/i/64916368/impact-attribution-norm-formerly-attributed-impact"
                   target="_blank"
                   rel="noreferrer"
                   className="underline"
