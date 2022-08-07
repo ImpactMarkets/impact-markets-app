@@ -18,7 +18,14 @@ enum Role {
 }
 
 enum Right {
+  RECOGNITION
   RETROACTIVE_FUNDING
+}
+
+enum HoldingType {
+  OWNERSHIP
+  RESERVATION
+  CONSUMPTION
 }
 
 model Account {
@@ -71,6 +78,7 @@ model User {
 
   transactionsSent     Transaction[] @relation("sender")
   transactionsReceived Transaction[] @relation("receiver")
+  Holdings             Holdings[]
 }
 
 model VerificationToken {
@@ -90,6 +98,7 @@ model Post {
   // Is it optimal to prerender the MD to HTML?
   contentHtml String
   hidden      Boolean      @default(false)
+  unique      Boolean      @default(true)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   authorId    String
@@ -108,8 +117,9 @@ model Post {
   tags                    String?
 
   // TODO: Rename to issuer or replace with group of issuers, such as an org
-  author      User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  transaction Transaction[]
+  author       User          @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  transactions Transaction[]
+  Holdings     Holdings[]
 
   @@index([authorId])
 }
@@ -119,12 +129,28 @@ model LikedPosts {
   userId    String
   createdAt DateTime @default(now())
 
-  post Post @relation(fields: [postId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user User @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@id([postId, userId])
   @@index([postId])
   @@index([userId])
+}
+
+model Holdings {
+  postId Int
+  userId String
+  type   HoldingType @default(OWNERSHIP)
+
+  size Decimal
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+
+  @@id([postId, userId, type])
+  @@index([postId])
+  @@index([userId])
+  @@index([type])
 }
 
 model Comment {
