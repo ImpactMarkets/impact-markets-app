@@ -1,12 +1,13 @@
+import { useSession } from 'next-auth/react'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+import toast from 'react-hot-toast'
+
 import { Heading1 } from '@/components/heading-1'
 import { Layout } from '@/components/layout'
 import { PostForm } from '@/components/post-form'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
-import { useSession } from 'next-auth/react'
-import Head from 'next/head'
-import { useRouter } from 'next/router'
-import toast from 'react-hot-toast'
 
 const EditPostPage: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()
