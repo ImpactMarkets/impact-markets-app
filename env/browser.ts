@@ -2,9 +2,11 @@ import { bool, envsafe, str } from 'envsafe'
 
 const NEXT_PUBLIC_ATTRIBUTED_IMPACT_RECOMMENDED_VERSION = '0.3'
 
-const NEXT_PUBLIC_DESCRIPTION_PROMPTS = `**Might someone feel that your action is not morally good according to their values?**
+const NEXT_PUBLIC_DESCRIPTION_PROMPTS = `**What is the action that this certificate is about?**
 
-**Has your action ever been risky?**
+**Might someone feel that the action is not morally good according to their values?**
+
+**Has the action ever been risky?**
 
 **What is the complete list of all collaborators and how much have they each contributed?**
 
