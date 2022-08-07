@@ -1,5 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// This is your Prisma schema file, learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Migrations: https://github.com/prisma/prisma/issues/11555#issuecomment-1027242342
 
 generator client {
   provider        = "prisma-client-js"
@@ -69,8 +69,8 @@ model User {
   comments      Comment[]
   role          Role         @default(USER)
 
-  transactionsSent     Transaction[] @relation(name: "sender")
-  transactionsReceived Transaction[] @relation(name: "receiver")
+  transactionsSent     Transaction[] @relation("sender")
+  transactionsReceived Transaction[] @relation("receiver")
 }
 
 model VerificationToken {
@@ -86,9 +86,9 @@ model Post {
   id          Int          @id @default(autoincrement())
   title       String       @db.VarChar(255)
   // TODO: Rename to something like description
-  content     String       @db.Text
+  content     String
   // Is it optimal to prerender the MD to HTML?
-  contentHtml String       @db.Text
+  contentHtml String
   hidden      Boolean      @default(false)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
@@ -109,7 +109,7 @@ model Post {
 
   // TODO: Rename to issuer or replace with group of issuers, such as an org
   author      User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  transaction Transaction[] @relation()
+  transaction Transaction[]
 
   @@index([authorId])
 }
@@ -129,8 +129,8 @@ model LikedPosts {
 
 model Comment {
   id          Int      @id @default(autoincrement())
-  content     String   @db.Text
-  contentHtml String   @db.Text
+  content     String
+  contentHtml String
   createdAt   DateTime @default(now())
   authorId    String
   postId      Int
@@ -150,11 +150,10 @@ model Transaction {
   cost       Decimal
   senderId   String
   receiverId String
-  // TODO: Rename, really a certificate
   postId     Int
 
-  sender   User @relation(name: "sender", fields: [senderId], references: [id])
-  receiver User @relation(name: "receiver", fields: [receiverId], references: [id])
+  sender   User @relation("sender", fields: [senderId], references: [id])
+  receiver User @relation("receiver", fields: [receiverId], references: [id])
   post     Post @relation(fields: [postId], references: [id])
 
   @@index([senderId])
