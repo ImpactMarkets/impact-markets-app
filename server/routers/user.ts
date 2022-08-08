@@ -1,5 +1,7 @@
-import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
+
+import { TRPCError } from '@trpc/server'
+
 import { createProtectedRouter } from '../create-protected-router'
 
 export const userRouter = createProtectedRouter()
