@@ -17,4 +17,13 @@ module.exports = {
       'lh9.googleusercontent.com',
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/post/:slug',
+        destination: '/certificate/:slug',
+        permanent: true,
+      },
+    ]
+  },
 }
