@@ -1,3 +1,14 @@
+import { matchSorter } from 'match-sorter'
+import * as React from 'react'
+import { useDetectClickOutside } from 'react-detect-click-outside'
+import { useQuery } from 'react-query'
+import TextareaAutosize, {
+  TextareaAutosizeProps,
+} from 'react-textarea-autosize'
+import getCaretCoordinates from 'textarea-caret'
+import TextareaMarkdown, { TextareaMarkdownRef } from 'textarea-markdown-editor'
+import { ItemOptions, useItemList } from 'use-item-list'
+
 import { HtmlView } from '@/components/html-view'
 import { BoldIcon, ItalicIcon, LinkIcon, ListIcon } from '@/components/icons'
 import { browserEnv } from '@/env/browser'
@@ -9,16 +20,7 @@ import {
 } from '@/lib/editor'
 import { trpc } from '@/lib/trpc'
 import { Switch } from '@headlessui/react'
-import { matchSorter } from 'match-sorter'
-import * as React from 'react'
-import { useDetectClickOutside } from 'react-detect-click-outside'
-import { useQuery } from 'react-query'
-import TextareaAutosize, {
-  TextareaAutosizeProps,
-} from 'react-textarea-autosize'
-import getCaretCoordinates from 'textarea-caret'
-import TextareaMarkdown, { TextareaMarkdownRef } from 'textarea-markdown-editor'
-import { ItemOptions, useItemList } from 'use-item-list'
+
 import { InfoTooltip } from './info-tooltip'
 import { Label } from './label'
 
@@ -217,15 +219,7 @@ export function MarkdownEditor({
         </div>
 
         <div className={classNames('mt-2 relative', showPreview && 'sr-only')}>
-          <TextareaMarkdown.Wrapper
-            ref={textareaMarkdownRef}
-            commands={[
-              {
-                name: 'indent',
-                enable: false,
-              },
-            ]}
-          >
+          <TextareaMarkdown.Wrapper ref={textareaMarkdownRef}>
             <TextareaAutosize
               {...rest}
               value={value}
