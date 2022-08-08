@@ -1,16 +1,17 @@
-import { Heading1 } from '@/components/heading-1'
-import { Layout } from '@/components/layout'
-import { PostForm } from '@/components/post-form'
-import { browserEnv } from '@/env/browser'
-import { trpc } from '@/lib/trpc'
-import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 
-const NewPostPage: NextPageWithAuthAndLayout = () => {
+import { CertificateForm } from '@/components/certificate-form'
+import { Heading1 } from '@/components/heading-1'
+import { Layout } from '@/components/layout'
+import { browserEnv } from '@/env/browser'
+import { trpc } from '@/lib/trpc'
+import type { NextPageWithAuthAndLayout } from '@/lib/types'
+
+const NewCertificatePage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
-  const addPostMutation = trpc.useMutation('post.add', {
+  const addCertificateMutation = trpc.useMutation('certificate.add', {
     onError: (error) => {
       toast.error(`Something went wrong: ${error.message}`)
     },
@@ -25,9 +26,9 @@ const NewPostPage: NextPageWithAuthAndLayout = () => {
       <Heading1>New certificate</Heading1>
 
       <div className="mt-6">
-        <PostForm
+        <CertificateForm
           isNew
-          isSubmitting={addPostMutation.isLoading}
+          isSubmitting={addCertificateMutation.isLoading}
           defaultValues={{
             title: '',
             proof: '',
@@ -44,7 +45,7 @@ const NewPostPage: NextPageWithAuthAndLayout = () => {
           }}
           backTo="/"
           onSubmit={(values) => {
-            addPostMutation.mutate(
+            addCertificateMutation.mutate(
               {
                 title: values.title,
                 content: values.content,
@@ -57,7 +58,7 @@ const NewPostPage: NextPageWithAuthAndLayout = () => {
                 tags: '',
               },
               {
-                onSuccess: (data) => router.push(`/post/${data.id}`),
+                onSuccess: (data) => router.push(`/certificate/${data.id}`),
               }
             )
           }}
@@ -67,10 +68,10 @@ const NewPostPage: NextPageWithAuthAndLayout = () => {
   )
 }
 
-NewPostPage.auth = true
+NewCertificatePage.auth = true
 
-NewPostPage.getLayout = function getLayout(page: React.ReactElement) {
+NewCertificatePage.getLayout = function getLayout(page: React.ReactElement) {
   return <Layout>{page}</Layout>
 }
 
-export default NewPostPage
+export default NewCertificatePage

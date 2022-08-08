@@ -1,5 +1,16 @@
+import { useSession } from 'next-auth/react'
+import dynamic from 'next/dynamic'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+import * as React from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
+import { useMutation } from 'react-query'
+
 import { Avatar } from '@/components/avatar'
 import { Button } from '@/components/button'
+import type { CertificateSummaryProps } from '@/components/certificate-summary'
+import { CertificateSummarySkeleton } from '@/components/certificate-summary-skeleton'
 import {
   Dialog,
   DialogActions,
@@ -11,29 +22,22 @@ import { Heading1 } from '@/components/heading-1'
 import { IconButton } from '@/components/icon-button'
 import { EditIcon } from '@/components/icons'
 import { Layout } from '@/components/layout'
-import { getQueryPaginationInput, Pagination } from '@/components/pagination'
-import type { PostSummaryProps } from '@/components/post-summary'
-import { PostSummarySkeleton } from '@/components/post-summary-skeleton'
+import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import { TextField } from '@/components/text-field'
 import { browserEnv } from '@/env/browser'
 import { uploadImage } from '@/lib/cloudinary'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
-import { useSession } from 'next-auth/react'
-import dynamic from 'next/dynamic'
-import Head from 'next/head'
-import { useRouter } from 'next/router'
-import * as React from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import { useMutation } from 'react-query'
 
-const PostSummary = dynamic<PostSummaryProps>(
-  () => import('@/components/post-summary').then((mod) => mod.PostSummary),
+const CertificateSummary = dynamic<CertificateSummaryProps>(
+  () =>
+    import('@/components/certificate-summary').then(
+      (mod) => mod.CertificateSummary
+    ),
   { ssr: false }
 )
 
-const POSTS_PER_PAGE = 20
+const ITEMS_PER_PAGE = 20
 
 function getProfileQueryPathAndInput(
   id: string
@@ -185,16 +189,17 @@ function ProfileFeed() {
   const router = useRouter()
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
   const utils = trpc.useContext()
-  const profileFeedQueryPathAndInput: InferQueryPathAndInput<'post.feed'> = [
-    'post.feed',
-    {
-      ...getQueryPaginationInput(POSTS_PER_PAGE, currentPageNumber),
-      authorId: String(router.query.userId),
-    },
-  ]
+  const profileFeedQueryPathAndInput: InferQueryPathAndInput<'certificate.feed'> =
+    [
+      'certificate.feed',
+      {
+        ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
+        authorId: String(router.query.userId),
+      },
+    ]
   const profileFeedQuery = trpc.useQuery(profileFeedQueryPathAndInput)
-  const likeMutation = trpc.useMutation(['post.like'], {
-    onMutate: async (likedPostId) => {
+  const likeMutation = trpc.useMutation(['certificate.like'], {
+    onMutate: async (likedCertificateId) => {
       await utils.cancelQuery(profileFeedQueryPathAndInput)
 
       const previousQuery = utils.getQueryData(profileFeedQueryPathAndInput)
@@ -202,18 +207,18 @@ function ProfileFeed() {
       if (previousQuery) {
         utils.setQueryData(profileFeedQueryPathAndInput, {
           ...previousQuery,
-          posts: previousQuery.posts.map((post) =>
-            post.id === likedPostId
+          certificates: previousQuery.certificates.map((certificate) =>
+            certificate.id === likedCertificateId
               ? {
-                  ...post,
+                  ...certificate,
                   likedBy: [
-                    ...post.likedBy,
+                    ...certificate.likedBy,
                     {
                       user: { id: session!.user.id, name: session!.user.name },
                     },
                   ],
                 }
-              : post
+              : certificate
           ),
         })
       }
@@ -226,8 +231,8 @@ function ProfileFeed() {
       }
     },
   })
-  const unlikeMutation = trpc.useMutation(['post.unlike'], {
-    onMutate: async (unlikedPostId) => {
+  const unlikeMutation = trpc.useMutation(['certificate.unlike'], {
+    onMutate: async (unlikedCertificateId) => {
       await utils.cancelQuery(profileFeedQueryPathAndInput)
 
       const previousQuery = utils.getQueryData(profileFeedQueryPathAndInput)
@@ -235,15 +240,15 @@ function ProfileFeed() {
       if (previousQuery) {
         utils.setQueryData(profileFeedQueryPathAndInput, {
           ...previousQuery,
-          posts: previousQuery.posts.map((post) =>
-            post.id === unlikedPostId
+          certificates: previousQuery.certificates.map((certificate) =>
+            certificate.id === unlikedCertificateId
               ? {
-                  ...post,
-                  likedBy: post.likedBy.filter(
+                  ...certificate,
+                  likedBy: certificate.likedBy.filter(
                     (item) => item.user.id !== session!.user.id
                   ),
                 }
-              : post
+              : certificate
           ),
         })
       }
@@ -261,22 +266,22 @@ function ProfileFeed() {
     return (
       <>
         <div className="flow-root mt-28">
-          {profileFeedQuery.data.postCount === 0 ? (
+          {profileFeedQuery.data.certificateCount === 0 ? (
             <div className="text-center text-secondary border rounded py-20 px-10">
-              This user hasn&apos;t published any posts yet.
+              This user hasn&apos;t published any certificates yet.
             </div>
           ) : (
             <ul className="-my-12 divide-y divide-primary">
-              {profileFeedQuery.data.posts.map((post) => (
-                <li key={post.id} className="py-10">
-                  <PostSummary
+              {profileFeedQuery.data.certificates.map((certificate) => (
+                <li key={certificate.id} className="py-10">
+                  <CertificateSummary
                     hideAuthor
-                    post={post}
+                    certificate={certificate}
                     onLike={() => {
-                      likeMutation.mutate(post.id)
+                      likeMutation.mutate(certificate.id)
                     }}
                     onUnlike={() => {
-                      unlikeMutation.mutate(post.id)
+                      unlikeMutation.mutate(certificate.id)
                     }}
                   />
                 </li>
@@ -286,8 +291,8 @@ function ProfileFeed() {
         </div>
 
         <Pagination
-          itemCount={profileFeedQuery.data.postCount}
-          itemsPerPage={POSTS_PER_PAGE}
+          itemCount={profileFeedQuery.data.certificateCount}
+          itemsPerPage={ITEMS_PER_PAGE}
           currentPageNumber={currentPageNumber}
         />
       </>
@@ -303,7 +308,7 @@ function ProfileFeed() {
       <ul className="-my-12 divide-y divide-primary">
         {[...Array(3)].map((_, idx) => (
           <li key={idx} className="py-10">
-            <PostSummarySkeleton hideAuthor />
+            <CertificateSummarySkeleton hideAuthor />
           </li>
         ))}
       </ul>

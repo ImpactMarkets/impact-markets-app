@@ -19,22 +19,22 @@ import * as Tooltip from '@radix-ui/react-tooltip'
 
 import { Heading2 } from './heading-2'
 
-export type PostSummaryProps = {
-  post: InferQueryOutput<'post.feed'>['posts'][number]
+export type CertificateSummaryProps = {
+  certificate: InferQueryOutput<'certificate.feed'>['certificates'][number]
   hideAuthor?: boolean
   onLike: () => void
   onUnlike: () => void
 }
 
-export function PostSummary({
-  post,
+export function CertificateSummary({
+  certificate,
   hideAuthor = false,
   onLike,
   onUnlike,
-}: PostSummaryProps) {
+}: CertificateSummaryProps) {
   const contentDocument = React.useMemo(
-    () => new DOMParser().parseFromString(post.contentHtml, 'text/html'),
-    [post.contentHtml]
+    () => new DOMParser().parseFromString(certificate.contentHtml, 'text/html'),
+    [certificate.contentHtml]
   )
   //   TODO: decide on the order of the allowed tags
   //   and research on how to truncate html to a max amount of characters
@@ -58,34 +58,38 @@ export function PostSummary({
   const { data: session } = useSession()
 
   const isLikedByCurrentUser = Boolean(
-    post.likedBy.find((item) => item.user.id === session!.user.id)
+    certificate.likedBy.find((item) => item.user.id === session!.user.id)
   )
-  const likeCount = post.likedBy.length
+  const likeCount = certificate.likedBy.length
 
   return (
     <div>
-      {post.hidden && (
+      {certificate.hidden && (
         <Banner className="mb-6">
-          This post has been hidden and is only visible to administrators.
+          This certificate has been hidden and is only visible to
+          administrators.
         </Banner>
       )}
-      <div className={classNames(post.hidden ? 'opacity-50' : '')}>
-        <Link href={`/post/${post.id}`}>
+      <div className={classNames(certificate.hidden ? 'opacity-50' : '')}>
+        <Link href={`/certificate/${certificate.id}`}>
           <a>
-            <Heading2>{post.title}</Heading2>
+            <Heading2>{certificate.title}</Heading2>
           </a>
         </Link>
 
         <div className={classNames(hideAuthor ? 'mt-2' : 'mt-6')}>
           {hideAuthor ? (
             <p className="text-secondary">
-              <time dateTime={post.createdAt.toISOString()}>
-                {formatDistanceToNow(post.createdAt)}
+              <time dateTime={certificate.createdAt.toISOString()}>
+                {formatDistanceToNow(certificate.createdAt)}
               </time>{' '}
               ago
             </p>
           ) : (
-            <AuthorWithDate author={post.author} date={post.createdAt} />
+            <AuthorWithDate
+              author={certificate.author}
+              date={certificate.createdAt}
+            />
           )}
         </div>
 
@@ -93,7 +97,7 @@ export function PostSummary({
 
         <div className="flex items-center gap-4 mt-4">
           {hasMoreContent && (
-            <Link href={`/post/${post.id}`}>
+            <Link href={`/certificate/${certificate.id}`}>
               <a className="inline-flex items-center font-medium transition-colors text-blue">
                 Continue reading <ChevronRightIcon className="w-4 h-4 ml-1" />
               </a>
@@ -131,7 +135,7 @@ export function PostSummary({
                   )}
                 >
                   <p className="text-sm">
-                    {post.likedBy
+                    {certificate.likedBy
                       .slice(0, MAX_LIKED_BY_SHOWN)
                       .map((item) =>
                         item.user.id === session!.user.id
@@ -153,7 +157,7 @@ export function PostSummary({
             <div className="inline-flex items-center gap-1.5">
               <MessageIcon className="w-4 h-4 text-secondary" />
               <span className="text-sm font-semibold tabular-nums">
-                {post._count.comments}
+                {certificate._count.comments}
               </span>
             </div>
           </div>

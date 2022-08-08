@@ -12,7 +12,7 @@ import { CertificateMenu } from '@/components/certificate/CertificateMenu'
 import { Comment } from '@/components/certificate/Comment'
 import { Labels } from '@/components/certificate/Labels'
 import { ProofTemplate } from '@/components/certificate/ProofTemplate'
-import { getPostQueryPathAndInput } from '@/components/certificate/utils'
+import { getCertificateQueryPathAndInput } from '@/components/certificate/utils'
 import { Heading1 } from '@/components/heading-1'
 import { HtmlView } from '@/components/html-view'
 import { MessageIcon } from '@/components/icons'
@@ -21,123 +21,145 @@ import { LikeButton } from '@/components/like-button'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
-const PostPage: NextPageWithAuthAndLayout = () => {
+const CertificatePage: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()
   const router = useRouter()
   const utils = trpc.useContext()
-  const postQueryPathAndInput = getPostQueryPathAndInput(
+  const certificateQueryPathAndInput = getCertificateQueryPathAndInput(
     Number(router.query.id)
   )
-  const postQuery = trpc.useQuery(postQueryPathAndInput)
-  const likeMutation = trpc.useMutation(['post.like'], {
-    onMutate: async (likedPostId) => {
-      await utils.cancelQuery(postQueryPathAndInput)
+  const certificateQuery = trpc.useQuery(certificateQueryPathAndInput)
+  const likeMutation = trpc.useMutation(['certificate.like'], {
+    onMutate: async (likedCertificateId) => {
+      await utils.cancelQuery(certificateQueryPathAndInput)
 
-      const previousPost = utils.getQueryData(postQueryPathAndInput)
+      const previousCertificate = utils.getQueryData(
+        certificateQueryPathAndInput
+      )
 
-      if (previousPost) {
-        utils.setQueryData(postQueryPathAndInput, {
-          ...previousPost,
+      if (previousCertificate) {
+        utils.setQueryData(certificateQueryPathAndInput, {
+          ...previousCertificate,
           likedBy: [
-            ...previousPost.likedBy,
+            ...previousCertificate.likedBy,
             { user: { id: session!.user.id, name: session!.user.name } },
           ],
         })
       }
 
-      return { previousPost }
+      return { previousCertificate }
     },
     onError: (err, id, context: any) => {
-      if (context?.previousPost) {
-        utils.setQueryData(postQueryPathAndInput, context.previousPost)
+      if (context?.previousCertificate) {
+        utils.setQueryData(
+          certificateQueryPathAndInput,
+          context.previousCertificate
+        )
       }
     },
   })
-  const unlikeMutation = trpc.useMutation(['post.unlike'], {
-    onMutate: async (unlikedPostId) => {
-      await utils.cancelQuery(postQueryPathAndInput)
+  const unlikeMutation = trpc.useMutation(['certificate.unlike'], {
+    onMutate: async (unlikedCertificateId) => {
+      await utils.cancelQuery(certificateQueryPathAndInput)
 
-      const previousPost = utils.getQueryData(postQueryPathAndInput)
+      const previousCertificate = utils.getQueryData(
+        certificateQueryPathAndInput
+      )
 
-      if (previousPost) {
-        utils.setQueryData(postQueryPathAndInput, {
-          ...previousPost,
-          likedBy: previousPost.likedBy.filter(
+      if (previousCertificate) {
+        utils.setQueryData(certificateQueryPathAndInput, {
+          ...previousCertificate,
+          likedBy: previousCertificate.likedBy.filter(
             (item) => item.user.id !== session!.user.id
           ),
         })
       }
 
-      return { previousPost }
+      return { previousCertificate }
     },
     onError: (err, id, context: any) => {
-      if (context?.previousPost) {
-        utils.setQueryData(postQueryPathAndInput, context.previousPost)
+      if (context?.previousCertificate) {
+        utils.setQueryData(
+          certificateQueryPathAndInput,
+          context.previousCertificate
+        )
       }
     },
   })
 
-  if (postQuery.data) {
+  if (certificateQuery.data) {
     const isUserAdmin = session!.user.role === 'ADMIN'
-    const postBelongsToUser = postQuery.data.author.id === session!.user.id
+    const certificateBelongsToUser =
+      certificateQuery.data.author.id === session!.user.id
 
     return (
       <>
         <Head>
-          <title>{postQuery.data.title} – Impact Markets</title>
+          <title>{certificateQuery.data.title} – Impact Markets</title>
         </Head>
 
         <div className="divide-y divide-primary">
           <div className="pb-12">
-            {postQuery.data.hidden && (
+            {certificateQuery.data.hidden && (
               <Banner className="mb-6">
-                This post has been hidden and is only visible to administrators.
+                This certificate has been hidden and is only visible to
+                administrators.
               </Banner>
             )}
 
             <div className="flex items-center justify-between gap-4">
-              <Heading1>{postQuery.data.title}</Heading1>
+              <Heading1>{certificateQuery.data.title}</Heading1>
               <CertificateMenu
-                queryData={postQuery.data}
+                queryData={certificateQuery.data}
                 isUserAdmin={isUserAdmin}
-                postBelongsToUser={postBelongsToUser}
+                certificateBelongsToUser={certificateBelongsToUser}
               />
             </div>
             <div className="my-6">
               <AuthorWithDate
-                author={postQuery.data.author}
-                date={postQuery.data.createdAt}
+                author={certificateQuery.data.author}
+                date={certificateQuery.data.createdAt}
               />
             </div>
-            <Labels queryData={postQuery.data} />
-            {postBelongsToUser && <ProofTemplate queryData={postQuery.data} />}
-            <HtmlView html={postQuery.data.contentHtml} className="mt-8" />
+            <Labels queryData={certificateQuery.data} />
+            {certificateBelongsToUser && (
+              <ProofTemplate queryData={certificateQuery.data} />
+            )}
+            <HtmlView
+              html={certificateQuery.data.contentHtml}
+              className="mt-8"
+            />
             <div className="flex gap-4 mt-6">
               <LikeButton
-                likedBy={postQuery.data.likedBy}
+                likedBy={certificateQuery.data.likedBy}
                 onLike={() => {
-                  likeMutation.mutate(postQuery.data.id)
+                  likeMutation.mutate(certificateQuery.data.id)
                 }}
                 onUnlike={() => {
-                  unlikeMutation.mutate(postQuery.data.id)
+                  unlikeMutation.mutate(certificateQuery.data.id)
                 }}
               />
               <ButtonLink
-                href={`/post/${postQuery.data.id}#comments`}
+                href={`/certificate/${certificateQuery.data.id}#comments`}
                 variant="secondary"
               >
                 <MessageIcon className="w-4 h-4 text-secondary" />
-                <span className="ml-1.5">{postQuery.data._count.comments}</span>
+                <span className="ml-1.5">
+                  {certificateQuery.data._count.comments}
+                </span>
               </ButtonLink>
             </div>
           </div>
 
           <div id="comments" className="pt-12 space-y-12">
-            {postQuery.data.comments.length > 0 && (
+            {certificateQuery.data.comments.length > 0 && (
               <ul className="space-y-12">
-                {postQuery.data.comments.map((comment) => (
+                {certificateQuery.data.comments.map((comment) => (
                   <li key={comment.id}>
-                    <Comment postId={postQuery.data.id} comment={comment} />
+                    <Comment
+                      certificateId={certificateQuery.data.id}
+                      comment={comment}
+                    />
                   </li>
                 ))}
               </ul>
@@ -153,7 +175,7 @@ const PostPage: NextPageWithAuthAndLayout = () => {
                   size="sm"
                 />
               </span>
-              <AddCommentForm postId={postQuery.data.id} />
+              <AddCommentForm certificateId={certificateQuery.data.id} />
             </div>
           </div>
         </div>
@@ -161,8 +183,8 @@ const PostPage: NextPageWithAuthAndLayout = () => {
     )
   }
 
-  if (postQuery.isError) {
-    return <div>Error: {postQuery.error.message}</div>
+  if (certificateQuery.isError) {
+    return <div>Error: {certificateQuery.error.message}</div>
   }
 
   return (
@@ -199,10 +221,10 @@ const PostPage: NextPageWithAuthAndLayout = () => {
   )
 }
 
-PostPage.auth = true
+CertificatePage.auth = true
 
-PostPage.getLayout = function getLayout(page: React.ReactElement) {
+CertificatePage.getLayout = function getLayout(page: React.ReactElement) {
   return <Layout>{page}</Layout>
 }
 
-export default PostPage
+export default CertificatePage

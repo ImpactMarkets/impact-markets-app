@@ -12,15 +12,15 @@ import {
 } from '@/components/dialog'
 import { trpc } from '@/lib/trpc'
 
-import { getPostQueryPathAndInput } from './utils'
+import { getCertificateQueryPathAndInput } from './utils'
 
 export function ConfirmDeleteCommentDialog({
-  postId,
+  certificateId,
   commentId,
   isOpen,
   onClose,
 }: {
-  postId: number
+  certificateId: number
   commentId: number
   isOpen: boolean
   onClose: () => void
@@ -29,7 +29,9 @@ export function ConfirmDeleteCommentDialog({
   const utils = trpc.useContext()
   const deleteCommentMutation = trpc.useMutation('comment.delete', {
     onSuccess: () => {
-      return utils.invalidateQueries(getPostQueryPathAndInput(postId))
+      return utils.invalidateQueries(
+        getCertificateQueryPathAndInput(certificateId)
+      )
     },
     onError: (error) => {
       toast.error(`Something went wrong: ${error.message}`)

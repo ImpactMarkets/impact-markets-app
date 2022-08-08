@@ -1,12 +1,14 @@
+import { z } from 'zod'
+
 import { markdownToHtml } from '@/lib/editor'
 import { TRPCError } from '@trpc/server'
-import { z } from 'zod'
+
 import { createProtectedRouter } from '../create-protected-router'
 
 export const commentRouter = createProtectedRouter()
   .mutation('add', {
     input: z.object({
-      postId: z.number(),
+      certificateId: z.number(),
       content: z.string().min(1),
     }),
     async resolve({ ctx, input }) {
@@ -19,9 +21,9 @@ export const commentRouter = createProtectedRouter()
               id: ctx.session.user.id,
             },
           },
-          post: {
+          certificate: {
             connect: {
-              id: input.postId,
+              id: input.certificateId,
             },
           },
         },

@@ -1,34 +1,38 @@
-import { Layout } from '@/components/layout'
-import { getQueryPaginationInput, Pagination } from '@/components/pagination'
-import type { PostSummaryProps } from '@/components/post-summary'
-import { PostSummarySkeleton } from '@/components/post-summary-skeleton'
-import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
-import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
-const PostSummary = dynamic<PostSummaryProps>(
-  () => import('@/components/post-summary').then((mod) => mod.PostSummary),
+import type { CertificateSummaryProps } from '@/components/certificate-summary'
+import { CertificateSummarySkeleton } from '@/components/certificate-summary-skeleton'
+import { Layout } from '@/components/layout'
+import { Pagination, getQueryPaginationInput } from '@/components/pagination'
+import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
+import type { NextPageWithAuthAndLayout } from '@/lib/types'
+
+const CertificateSummary = dynamic<CertificateSummaryProps>(
+  () =>
+    import('@/components/certificate-summary').then(
+      (mod) => mod.CertificateSummary
+    ),
   { ssr: false }
 )
 
-const POSTS_PER_PAGE = 20
+const ITEMS_PER_PAGE = 20
 
 const Home: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()
   const router = useRouter()
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
   const utils = trpc.useContext()
-  const feedQueryPathAndInput: InferQueryPathAndInput<'post.feed'> = [
-    'post.feed',
-    getQueryPaginationInput(POSTS_PER_PAGE, currentPageNumber),
+  const feedQueryPathAndInput: InferQueryPathAndInput<'certificate.feed'> = [
+    'certificate.feed',
+    getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
   ]
   const feedQuery = trpc.useQuery(feedQueryPathAndInput)
-  const likeMutation = trpc.useMutation(['post.like'], {
-    onMutate: async (likedPostId) => {
+  const likeMutation = trpc.useMutation(['certificate.like'], {
+    onMutate: async (likedCertificateId) => {
       await utils.cancelQuery(feedQueryPathAndInput)
 
       const previousQuery = utils.getQueryData(feedQueryPathAndInput)
@@ -36,18 +40,18 @@ const Home: NextPageWithAuthAndLayout = () => {
       if (previousQuery) {
         utils.setQueryData(feedQueryPathAndInput, {
           ...previousQuery,
-          posts: previousQuery.posts.map((post) =>
-            post.id === likedPostId
+          certificates: previousQuery.certificates.map((certificate) =>
+            certificate.id === likedCertificateId
               ? {
-                  ...post,
+                  ...certificate,
                   likedBy: [
-                    ...post.likedBy,
+                    ...certificate.likedBy,
                     {
                       user: { id: session!.user.id, name: session!.user.name },
                     },
                   ],
                 }
-              : post
+              : certificate
           ),
         })
       }
@@ -60,8 +64,8 @@ const Home: NextPageWithAuthAndLayout = () => {
       }
     },
   })
-  const unlikeMutation = trpc.useMutation(['post.unlike'], {
-    onMutate: async (unlikedPostId) => {
+  const unlikeMutation = trpc.useMutation(['certificate.unlike'], {
+    onMutate: async (unlikedCertificateId) => {
       await utils.cancelQuery(feedQueryPathAndInput)
 
       const previousQuery = utils.getQueryData(feedQueryPathAndInput)
@@ -69,15 +73,15 @@ const Home: NextPageWithAuthAndLayout = () => {
       if (previousQuery) {
         utils.setQueryData(feedQueryPathAndInput, {
           ...previousQuery,
-          posts: previousQuery.posts.map((post) =>
-            post.id === unlikedPostId
+          certificates: previousQuery.certificates.map((certificate) =>
+            certificate.id === unlikedCertificateId
               ? {
-                  ...post,
-                  likedBy: post.likedBy.filter(
+                  ...certificate,
+                  likedBy: certificate.likedBy.filter(
                     (item) => item.user.id !== session!.user.id
                   ),
                 }
-              : post
+              : certificate
           ),
         })
       }
@@ -98,22 +102,22 @@ const Home: NextPageWithAuthAndLayout = () => {
           <title>Impact Markets</title>
         </Head>
 
-        {feedQuery.data.postCount === 0 ? (
+        {feedQuery.data.certificateCount === 0 ? (
           <div className="text-center text-secondary border rounded py-20 px-10">
             There are no published certificates to show yet.
           </div>
         ) : (
           <div className="flow-root">
             <ul className="-my-12 divide-y divide-primary">
-              {feedQuery.data.posts.map((post) => (
-                <li key={post.id} className="py-10">
-                  <PostSummary
-                    post={post}
+              {feedQuery.data.certificates.map((certificate) => (
+                <li key={certificate.id} className="py-10">
+                  <CertificateSummary
+                    certificate={certificate}
                     onLike={() => {
-                      likeMutation.mutate(post.id)
+                      likeMutation.mutate(certificate.id)
                     }}
                     onUnlike={() => {
-                      unlikeMutation.mutate(post.id)
+                      unlikeMutation.mutate(certificate.id)
                     }}
                   />
                 </li>
@@ -123,8 +127,8 @@ const Home: NextPageWithAuthAndLayout = () => {
         )}
 
         <Pagination
-          itemCount={feedQuery.data.postCount}
-          itemsPerPage={POSTS_PER_PAGE}
+          itemCount={feedQuery.data.certificateCount}
+          itemsPerPage={ITEMS_PER_PAGE}
           currentPageNumber={currentPageNumber}
         />
       </>
@@ -140,7 +144,7 @@ const Home: NextPageWithAuthAndLayout = () => {
       <ul className="-my-12 divide-y divide-primary">
         {[...Array(3)].map((_, idx) => (
           <li key={idx} className="py-10">
-            <PostSummarySkeleton />
+            <CertificateSummarySkeleton />
           </li>
         ))}
       </ul>

@@ -6,21 +6,23 @@ import { Button } from '@/components/button'
 import { MarkdownEditor } from '@/components/markdown-editor'
 import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc'
 
-import { CommentFormData, getPostQueryPathAndInput } from './utils'
+import { CommentFormData, getCertificateQueryPathAndInput } from './utils'
 
 export function EditCommentForm({
-  postId,
+  certificateId,
   comment,
   onDone,
 }: {
-  postId: number
-  comment: InferQueryOutput<'post.detail'>['comments'][number]
+  certificateId: number
+  comment: InferQueryOutput<'certificate.detail'>['comments'][number]
   onDone: () => void
 }) {
   const utils = trpc.useContext()
   const editCommentMutation = trpc.useMutation('comment.edit', {
     onSuccess: () => {
-      return utils.invalidateQueries(getPostQueryPathAndInput(postId))
+      return utils.invalidateQueries(
+        getCertificateQueryPathAndInput(certificateId)
+      )
     },
     onError: (error) => {
       toast.error(`Something went wrong: ${error.message}`)

@@ -1,12 +1,13 @@
-import { SearchIcon, SpinnerIcon } from '@/components/icons'
-import { classNames } from '@/lib/classnames'
-import { InferQueryOutput, trpc } from '@/lib/trpc'
-import { Dialog, Transition } from '@headlessui/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 import { useDebounce } from 'use-debounce'
 import { ItemOptions, useItemList } from 'use-item-list'
+
+import { SearchIcon, SpinnerIcon } from '@/components/icons'
+import { classNames } from '@/lib/classnames'
+import { InferQueryOutput, trpc } from '@/lib/trpc'
+import { Dialog, Transition } from '@headlessui/react'
 
 type SearchDialogProps = {
   isOpen: boolean
@@ -25,7 +26,7 @@ function SearchResult({
     selected: any
     useHighlighted: () => Boolean
   }
-  result: InferQueryOutput<'post.search'>[number]
+  result: InferQueryOutput<'certificate.search'>[number]
 }) {
   const ref = React.useRef<HTMLLIElement>(null)
   const { id, index, highlight, select, useHighlighted } = useItem({
@@ -36,7 +37,7 @@ function SearchResult({
 
   return (
     <li ref={ref} id={id} onMouseEnter={highlight} onClick={select}>
-      <Link href={`/post/${result.id}`}>
+      <Link href={`/certificate/${result.id}`}>
         <a
           className={classNames(
             'block py-3.5 pl-10 pr-3 transition-colors leading-tight',
@@ -57,7 +58,7 @@ function SearchField({ onSelect }: { onSelect: () => void }) {
 
   const feedQuery = trpc.useQuery(
     [
-      'post.search',
+      'certificate.search',
       {
         query: debouncedValue,
       },
@@ -69,7 +70,7 @@ function SearchField({ onSelect }: { onSelect: () => void }) {
 
   const { moveHighlightedItem, selectHighlightedItem, useItem } = useItemList({
     onSelect: (item) => {
-      router.push(`/post/${item.value.id}`)
+      router.push(`/certificate/${item.value.id}`)
       onSelect()
     },
   })

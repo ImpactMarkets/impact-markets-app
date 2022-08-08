@@ -1,3 +1,6 @@
+import * as React from 'react'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+
 import { Button } from '@/components/button'
 import { ButtonLink } from '@/components/button-link'
 import { MarkdownIcon } from '@/components/icons'
@@ -5,8 +8,6 @@ import { MarkdownEditor } from '@/components/markdown-editor'
 import { TextField } from '@/components/text-field'
 import { browserEnv } from '@/env/browser'
 import { useLeaveConfirm } from '@/lib/form'
-import * as React from 'react'
-import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
 type FormData = {
   title: string
@@ -22,7 +23,7 @@ type FormData = {
   tags: string
 }
 
-type PostFormProps = {
+type CertificateFormProps = {
   defaultValues?: FormData
   isSubmitting?: boolean
   isNew?: boolean
@@ -30,13 +31,13 @@ type PostFormProps = {
   onSubmit: SubmitHandler<FormData>
 }
 
-export function PostForm({
+export function CertificateForm({
   defaultValues,
   isSubmitting,
   isNew,
   backTo,
   onSubmit,
-}: PostFormProps) {
+}: CertificateFormProps) {
   const { control, register, formState, getValues, reset, handleSubmit } =
     useForm<FormData>({
       defaultValues,

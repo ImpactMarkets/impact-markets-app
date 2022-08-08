@@ -19,11 +19,11 @@ import { ConfirmDeleteCommentDialog } from './ConfirmDeleteCommentDialog'
 import { EditCommentForm } from './EditCommentForm'
 
 export function Comment({
-  postId,
+  certificateId,
   comment,
 }: {
-  postId: number
-  comment: InferQueryOutput<'post.detail'>['comments'][number]
+  certificateId: number
+  comment: InferQueryOutput<'certificate.detail'>['comments'][number]
 }) {
   const { data: session } = useSession()
   const [isEditing, setIsEditing] = React.useState(false)
@@ -37,7 +37,7 @@ export function Comment({
       <div className="flex items-start gap-4">
         <Avatar name={comment.author.name!} src={comment.author.image} />
         <EditCommentForm
-          postId={postId}
+          certificateId={certificateId}
           comment={comment}
           onDone={() => {
             setIsEditing(false)
@@ -85,7 +85,7 @@ export function Comment({
       </div>
 
       <ConfirmDeleteCommentDialog
-        postId={postId}
+        certificateId={certificateId}
         commentId={comment.id}
         isOpen={isConfirmDeleteDialogOpen}
         onClose={() => {

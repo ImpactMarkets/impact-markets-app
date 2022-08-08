@@ -3,7 +3,7 @@ import * as React from 'react'
 import { InferQueryOutput } from '@/lib/trpc'
 
 type LabelsProps = {
-  queryData: InferQueryOutput<'post.detail'>
+  queryData: InferQueryOutput<'certificate.detail'>
 }
 
 export const Labels = ({ queryData }: LabelsProps) => (

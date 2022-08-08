@@ -1,10 +1,12 @@
 import { classNames } from '@/lib/classnames'
 
-type PostSummarySkeletonProps = {
+type CertificateSummarySkeletonProps = {
   hideAuthor?: boolean
 }
 
-export function PostSummarySkeleton({ hideAuthor }: PostSummarySkeletonProps) {
+export function CertificateSummarySkeleton({
+  hideAuthor,
+}: CertificateSummarySkeletonProps) {
   return (
     <div className="animate-pulse">
       <div className="w-3/4 h-8 bg-gray-200 rounded dark:bg-gray-700" />

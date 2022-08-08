@@ -1,17 +1,18 @@
-import { serverEnv } from '@/env/server'
-import type { Post } from '@prisma/client'
-import { markdownToBlocks } from '@instantish/mack'
 import { marked } from 'marked'
 
+import { serverEnv } from '@/env/server'
+import { markdownToBlocks } from '@instantish/mack'
+import type { Certificate } from '@prisma/client'
+
 export async function postToSlackIfEnabled({
-  post,
+  certificate,
   authorName,
 }: {
-  post: Post
+  certificate: Certificate
   authorName: string
 }) {
   if (serverEnv.ENABLE_SLACK_POSTING && serverEnv.SLACK_WEBHOOK_URL) {
-    const tokens = marked.lexer(post.content)
+    const tokens = marked.lexer(certificate.content)
     const summaryToken = tokens.find((token) => {
       return (
         token.type === 'paragraph' ||
@@ -33,7 +34,7 @@ export async function postToSlackIfEnabled({
             type: 'section',
             text: {
               type: 'mrkdwn',
-              text: `*<${serverEnv.NEXT_APP_URL}/post/${post.id}|${post.title}>*`,
+              text: `*<${serverEnv.NEXT_APP_URL}/certificate/${certificate.id}|${certificate.title}>*`,
             },
           },
           summaryBlocks[0],

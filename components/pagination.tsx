@@ -1,6 +1,7 @@
+import { useRouter } from 'next/router'
+
 import { ButtonLink } from '@/components/button-link'
 import { ChevronLeftIcon, ChevronRightIcon } from '@/components/icons'
-import { useRouter } from 'next/router'
 
 type PaginationProps = {
   itemCount: number
@@ -49,7 +50,7 @@ export function Pagination({
         <span className="mr-1">
           <ChevronLeftIcon />
         </span>
-        Newer posts
+        Newer certificates
       </ButtonLink>
       <ButtonLink
         href={{
@@ -63,7 +64,7 @@ export function Pagination({
             : ''
         }
       >
-        Older posts{' '}
+        Older certificates{' '}
         <span className="ml-1">
           <ChevronRightIcon />
         </span>

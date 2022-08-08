@@ -6,14 +6,16 @@ import { Button } from '@/components/button'
 import { MarkdownEditor } from '@/components/markdown-editor'
 import { trpc } from '@/lib/trpc'
 
-import { CommentFormData, getPostQueryPathAndInput } from './utils'
+import { CommentFormData, getCertificateQueryPathAndInput } from './utils'
 
-export function AddCommentForm({ postId }: { postId: number }) {
+export function AddCommentForm({ certificateId }: { certificateId: number }) {
   const [markdownEditorKey, setMarkdownEditorKey] = React.useState(0)
   const utils = trpc.useContext()
   const addCommentMutation = trpc.useMutation('comment.add', {
     onSuccess: () => {
-      return utils.invalidateQueries(getPostQueryPathAndInput(postId))
+      return utils.invalidateQueries(
+        getCertificateQueryPathAndInput(certificateId)
+      )
     },
     onError: (error) => {
       toast.error(`Something went wrong: ${error.message}`)
@@ -24,7 +26,7 @@ export function AddCommentForm({ postId }: { postId: number }) {
   const onSubmit: SubmitHandler<CommentFormData> = (data) => {
     addCommentMutation.mutate(
       {
-        postId,
+        certificateId,
         content: data.content,
       },
       {

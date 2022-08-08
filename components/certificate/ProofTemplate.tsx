@@ -3,7 +3,7 @@ import * as React from 'react'
 import { InferQueryOutput } from '@/lib/trpc'
 
 type ProofTemplateProps = {
-  queryData: InferQueryOutput<'post.detail'>
+  queryData: InferQueryOutput<'certificate.detail'>
 }
 
 export const ProofTemplate = ({ queryData }: ProofTemplateProps) => (
@@ -21,7 +21,7 @@ export const ProofTemplate = ({ queryData }: ProofTemplateProps) => (
     <p>
       {' '}
       <strong className="font-bold">
-        Please edit your post to include at the bottom:
+        Please edit your certificate to include at the bottom:
       </strong>{' '}
       As of {queryData.createdAt.toISOString().slice(0, 10)}, the{' '}
       <a

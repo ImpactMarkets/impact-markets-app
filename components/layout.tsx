@@ -1,3 +1,8 @@
+import { signOut, useSession } from 'next-auth/react'
+import { useTheme } from 'next-themes'
+import Link from 'next/link'
+import * as React from 'react'
+
 import { Avatar } from '@/components/avatar'
 import { ButtonLink } from '@/components/button-link'
 import { Footer } from '@/components/footer'
@@ -13,10 +18,7 @@ import {
 } from '@/components/menu'
 import { SearchDialog } from '@/components/search-dialog'
 import { capitalize } from '@/lib/text'
-import { signOut, useSession } from 'next-auth/react'
-import { useTheme } from 'next-themes'
-import Link from 'next/link'
-import * as React from 'react'
+
 import { Label } from './label'
 
 type LayoutProps = {
@@ -88,7 +90,7 @@ export function Layout({ children }: LayoutProps) {
           </Menu>
 
           <ButtonLink href="/new">
-            <span className="sm:hidden">Post</span>
+            <span className="sm:hidden">New</span>
             <span className="hidden sm:block shrink-0">New certificate</span>
           </ButtonLink>
         </div>

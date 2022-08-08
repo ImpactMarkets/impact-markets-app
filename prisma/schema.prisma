@@ -63,22 +63,22 @@ model Session {
 }
 
 model User {
-  id            String       @id @default(cuid())
-  name          String?
-  email         String?      @unique
-  emailVerified DateTime?
-  image         String?
-  title         String?
-  accounts      Account[]
-  sessions      Session[]
-  posts         Post[]
-  likedPosts    LikedPosts[]
-  comments      Comment[]
-  role          Role         @default(USER)
+  id               String             @id @default(cuid())
+  name             String?
+  email            String?            @unique
+  emailVerified    DateTime?
+  image            String?
+  title            String?
+  accounts         Account[]
+  sessions         Session[]
+  certificates     Certificate[]
+  likedCertificate LikedCertificate[]
+  comments         Comment[]
+  role             Role               @default(USER)
 
   transactionsSent     Transaction[] @relation("sender")
   transactionsReceived Transaction[] @relation("receiver")
-  Holdings             Holdings[]
+  Holding              Holding[]
 }
 
 model VerificationToken {
@@ -89,20 +89,18 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-// TODO: Rename to Certificate
-model Post {
-  id          Int          @id @default(autoincrement())
-  title       String       @db.VarChar(255)
-  // TODO: Rename to something like description
+model Certificate {
+  id          Int                @id @default(autoincrement())
+  title       String             @db.VarChar(255)
   content     String
   // Is it optimal to prerender the MD to HTML?
   contentHtml String
-  hidden      Boolean      @default(false)
-  unique      Boolean      @default(true)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  hidden      Boolean            @default(false)
+  unique      Boolean            @default(true)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
   authorId    String
-  likedBy     LikedPosts[]
+  likedBy     LikedCertificate[]
   comments    Comment[]
 
   // TODO: Move these to CertificateVersion to enable versioning
@@ -116,73 +114,72 @@ model Post {
   impactEnd               DateTime?
   tags                    String?
 
-  // TODO: Rename to issuer or replace with group of issuers, such as an org
   author       User          @relation(fields: [authorId], references: [id], onDelete: Restrict)
   transactions Transaction[]
-  Holdings     Holdings[]
+  Holding      Holding[]
 
   @@index([authorId])
 }
 
-model LikedPosts {
-  postId    Int
-  userId    String
-  createdAt DateTime @default(now())
+model LikedCertificate {
+  certificateId Int
+  userId        String
+  createdAt     DateTime @default(now())
 
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  certificate Certificate @relation(fields: [certificateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  @@id([postId, userId])
-  @@index([postId])
+  @@id([certificateId, userId])
+  @@index([certificateId])
   @@index([userId])
 }
 
-model Holdings {
-  postId Int
-  userId String
-  type   HoldingType @default(OWNERSHIP)
+model Holding {
+  certificateId Int
+  userId        String
+  type          HoldingType @default(OWNERSHIP)
 
   size Decimal
 
-  post Post @relation(fields: [postId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  certificate Certificate @relation(fields: [certificateId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  user        User        @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
-  @@id([postId, userId, type])
-  @@index([postId])
+  @@id([certificateId, userId, type])
+  @@index([certificateId])
   @@index([userId])
   @@index([type])
 }
 
 model Comment {
-  id          Int      @id @default(autoincrement())
-  content     String
-  contentHtml String
-  createdAt   DateTime @default(now())
-  authorId    String
-  postId      Int
+  id            Int      @id @default(autoincrement())
+  content       String
+  contentHtml   String
+  createdAt     DateTime @default(now())
+  authorId      String
+  certificateId Int
 
-  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author      User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  certificate Certificate @relation(fields: [certificateId], references: [id], onDelete: Cascade)
 
   @@index([authorId])
-  @@index([postId])
+  @@index([certificateId])
 }
 
 model Transaction {
-  id         String   @id @default(cuid())
-  createdAt  DateTime @default(now())
-  state      String
-  size       Decimal
-  cost       Decimal
-  senderId   String
-  receiverId String
-  postId     Int
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
+  state         String
+  size          Decimal
+  cost          Decimal
+  senderId      String
+  receiverId    String
+  certificateId Int
 
-  sender   User @relation("sender", fields: [senderId], references: [id])
-  receiver User @relation("receiver", fields: [receiverId], references: [id])
-  post     Post @relation(fields: [postId], references: [id])
+  sender      User        @relation("sender", fields: [senderId], references: [id])
+  receiver    User        @relation("receiver", fields: [receiverId], references: [id])
+  certificate Certificate @relation(fields: [certificateId], references: [id])
 
   @@index([senderId])
   @@index([receiverId])
-  @@index([postId])
+  @@index([certificateId])
 }

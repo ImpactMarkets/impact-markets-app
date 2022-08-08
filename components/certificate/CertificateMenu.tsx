@@ -26,29 +26,20 @@ import {
   MenuItems,
   MenuItemsContent,
 } from '@/components/menu'
-import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc'
+import { InferQueryOutput, trpc } from '@/lib/trpc'
 
-function getPostQueryPathAndInput(
-  id: number
-): InferQueryPathAndInput<'post.detail'> {
-  return [
-    'post.detail',
-    {
-      id,
-    },
-  ]
-}
+import { getCertificateQueryPathAndInput } from './utils'
 
 type CertificateMenuProps = {
-  queryData: InferQueryOutput<'post.detail'>
+  queryData: InferQueryOutput<'certificate.detail'>
   isUserAdmin: Boolean
-  postBelongsToUser: Boolean
+  certificateBelongsToUser: Boolean
 }
 
 export const CertificateMenu = ({
   queryData,
   isUserAdmin,
-  postBelongsToUser,
+  certificateBelongsToUser,
 }: CertificateMenuProps) => {
   const router = useRouter()
 
@@ -68,14 +59,14 @@ export const CertificateMenu = ({
   }
 
   function handleEdit() {
-    router.push(`/post/${queryData?.id}/edit`)
+    router.push(`/certificate/${queryData?.id}/edit`)
   }
 
   function handleDelete() {
     setIsConfirmDeleteDialogOpen(true)
   }
 
-  if (!(postBelongsToUser || isUserAdmin)) {
+  if (!(certificateBelongsToUser || isUserAdmin)) {
     return null
   }
 
@@ -95,7 +86,7 @@ export const CertificateMenu = ({
                 ) : (
                   <MenuItemButton onClick={handleHide}>Hide</MenuItemButton>
                 ))}
-              {postBelongsToUser && (
+              {certificateBelongsToUser && (
                 <>
                   <MenuItemButton onClick={handleEdit}>Edit</MenuItemButton>
                   <MenuItemButton className="!text-red" onClick={handleDelete}>
@@ -122,7 +113,7 @@ export const CertificateMenu = ({
               <EyeClosedIcon className="w-4 h-4" />
             </IconButton>
           ))}
-        {postBelongsToUser && (
+        {certificateBelongsToUser && (
           <>
             <IconButton variant="secondary" title="Edit" onClick={handleEdit}>
               <EditIcon className="w-4 h-4" />
@@ -139,7 +130,7 @@ export const CertificateMenu = ({
       </div>
 
       <ConfirmDeleteDialog
-        postId={queryData.id}
+        certificateId={queryData.id}
         isOpen={isConfirmDeleteDialogOpen}
         onClose={() => {
           setIsConfirmDeleteDialogOpen(false)
@@ -147,7 +138,7 @@ export const CertificateMenu = ({
       />
 
       <ConfirmHideDialog
-        postId={queryData.id}
+        certificateId={queryData.id}
         isOpen={isConfirmHideDialogOpen}
         onClose={() => {
           setIsConfirmHideDialogOpen(false)
@@ -155,7 +146,7 @@ export const CertificateMenu = ({
       />
 
       <ConfirmUnhideDialog
-        postId={queryData.id}
+        certificateId={queryData.id}
         isOpen={isConfirmUnhideDialogOpen}
         onClose={() => {
           setIsConfirmUnhideDialogOpen(false)
@@ -166,19 +157,21 @@ export const CertificateMenu = ({
 }
 
 function ConfirmHideDialog({
-  postId,
+  certificateId,
   isOpen,
   onClose,
 }: {
-  postId: number
+  certificateId: number
   isOpen: boolean
   onClose: () => void
 }) {
   const cancelRef = React.useRef<HTMLButtonElement>(null)
   const utils = trpc.useContext()
-  const hidePostMutation = trpc.useMutation('post.hide', {
+  const hideCertificateMutation = trpc.useMutation('certificate.hide', {
     onSuccess: () => {
-      return utils.invalidateQueries(getPostQueryPathAndInput(postId))
+      return utils.invalidateQueries(
+        getCertificateQueryPathAndInput(certificateId)
+      )
     },
     onError: (error) => {
       toast.error(`Something went wrong: ${error.message}`)
@@ -188,27 +181,27 @@ function ConfirmHideDialog({
   return (
     <Dialog isOpen={isOpen} onClose={onClose} initialFocus={cancelRef}>
       <DialogContent>
-        <DialogTitle>Hide post</DialogTitle>
+        <DialogTitle>Hide certificate</DialogTitle>
         <DialogDescription className="mt-6">
-          Are you sure you want to hide this post?
+          Are you sure you want to hide this certificate?
         </DialogDescription>
         <DialogCloseButton onClick={onClose} />
       </DialogContent>
       <DialogActions>
         <Button
           variant="secondary"
-          isLoading={hidePostMutation.isLoading}
-          loadingChildren="Hiding post"
+          isLoading={hideCertificateMutation.isLoading}
+          loadingChildren="Hiding certificate"
           onClick={() => {
-            hidePostMutation.mutate(postId, {
+            hideCertificateMutation.mutate(certificateId, {
               onSuccess: () => {
-                toast.success('Post hidden')
+                toast.success('Certificate hidden')
                 onClose()
               },
             })
           }}
         >
-          Hide post
+          Hide certificate
         </Button>
         <Button variant="secondary" onClick={onClose} ref={cancelRef}>
           Cancel
@@ -219,19 +212,21 @@ function ConfirmHideDialog({
 }
 
 function ConfirmUnhideDialog({
-  postId,
+  certificateId,
   isOpen,
   onClose,
 }: {
-  postId: number
+  certificateId: number
   isOpen: boolean
   onClose: () => void
 }) {
   const cancelRef = React.useRef<HTMLButtonElement>(null)
   const utils = trpc.useContext()
-  const unhidePostMutation = trpc.useMutation('post.unhide', {
+  const unhideCertificateMutation = trpc.useMutation('certificate.unhide', {
     onSuccess: () => {
-      return utils.invalidateQueries(getPostQueryPathAndInput(postId))
+      return utils.invalidateQueries(
+        getCertificateQueryPathAndInput(certificateId)
+      )
     },
     onError: (error) => {
       toast.error(`Something went wrong: ${error.message}`)
@@ -241,27 +236,27 @@ function ConfirmUnhideDialog({
   return (
     <Dialog isOpen={isOpen} onClose={onClose} initialFocus={cancelRef}>
       <DialogContent>
-        <DialogTitle>Unhide post</DialogTitle>
+        <DialogTitle>Unhide certificate</DialogTitle>
         <DialogDescription className="mt-6">
-          Are you sure you want to unhide this post?
+          Are you sure you want to unhide this certificate?
         </DialogDescription>
         <DialogCloseButton onClick={onClose} />
       </DialogContent>
       <DialogActions>
         <Button
           variant="secondary"
-          isLoading={unhidePostMutation.isLoading}
-          loadingChildren="Unhiding post"
+          isLoading={unhideCertificateMutation.isLoading}
+          loadingChildren="Unhiding certificate"
           onClick={() => {
-            unhidePostMutation.mutate(postId, {
+            unhideCertificateMutation.mutate(certificateId, {
               onSuccess: () => {
-                toast.success('Post unhidden')
+                toast.success('Certificate unhidden')
                 onClose()
               },
             })
           }}
         >
-          Unhide post
+          Unhide certificate
         </Button>
         <Button variant="secondary" onClick={onClose} ref={cancelRef}>
           Cancel
@@ -272,17 +267,17 @@ function ConfirmUnhideDialog({
 }
 
 function ConfirmDeleteDialog({
-  postId,
+  certificateId,
   isOpen,
   onClose,
 }: {
-  postId: number
+  certificateId: number
   isOpen: boolean
   onClose: () => void
 }) {
   const cancelRef = React.useRef<HTMLButtonElement>(null)
   const router = useRouter()
-  const deletePostMutation = trpc.useMutation('post.delete', {
+  const deleteCertificateMutation = trpc.useMutation('certificate.delete', {
     onError: (error) => {
       toast.error(`Something went wrong: ${error.message}`)
     },
@@ -291,9 +286,9 @@ function ConfirmDeleteDialog({
   return (
     <Dialog isOpen={isOpen} onClose={onClose} initialFocus={cancelRef}>
       <DialogContent>
-        <DialogTitle>Delete post</DialogTitle>
+        <DialogTitle>Delete certificate</DialogTitle>
         <DialogDescription className="mt-6">
-          Are you sure you want to delete this post?
+          Are you sure you want to delete this certificate?
         </DialogDescription>
         <DialogCloseButton onClick={onClose} />
       </DialogContent>
@@ -301,15 +296,15 @@ function ConfirmDeleteDialog({
         <Button
           variant="secondary"
           className="!text-red"
-          isLoading={deletePostMutation.isLoading}
-          loadingChildren="Deleting post"
+          isLoading={deleteCertificateMutation.isLoading}
+          loadingChildren="Deleting certificate"
           onClick={() => {
-            deletePostMutation.mutate(postId, {
+            deleteCertificateMutation.mutate(certificateId, {
               onSuccess: () => router.push('/'),
             })
           }}
         >
-          Delete post
+          Delete certificate
         </Button>
         <Button variant="secondary" onClick={onClose} ref={cancelRef}>
           Cancel

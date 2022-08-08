@@ -1,6 +1,6 @@
 <img src="public/images/logo-light.svg" width="150" />
 
-Beam is a simple tool that allows members to write posts to share across your organization. Think of it like a lightweight internal blog. Features include a simple **Markdown-based** editor with preview, **image drag and drop**, comments and likes, **search**, a clean responsive layout with **dark mode support**, and an admin role for hiding posts.
+This is a simple tool that allows members to issue certificates. Features include a simple **Markdown-based** editor with preview, **image drag and drop**, comments and likes, **search**, a clean responsive layout with **dark mode support**, and an admin role for hiding certificates.
 
 <img src="public/images/screenshot.png" width="690" />
 
@@ -54,7 +54,7 @@ Beam uses Cloudinary for storing uploaded images. You can [sign up for a free ac
 
 ### Configure Slack notifications (optional)
 
-If you'd like to have new Beam posts published to a Slack channel, follow [these instructions](doc/slack_setup.md).
+If you'd like to have new certificates published to a Slack channel, follow [these instructions](doc/slack_setup.md).
 
 ## Running the app locally
 

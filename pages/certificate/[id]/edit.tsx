@@ -3,64 +3,65 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 
+import { CertificateForm } from '@/components/certificate-form'
 import { Heading1 } from '@/components/heading-1'
 import { Layout } from '@/components/layout'
-import { PostForm } from '@/components/post-form'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
-const EditPostPage: NextPageWithAuthAndLayout = () => {
+const EditCertificatePage: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()
   const router = useRouter()
-  const postQuery = trpc.useQuery([
-    'post.detail',
+  const certificateQuery = trpc.useQuery([
+    'certificate.detail',
     { id: Number(router.query.id) },
   ])
-  const editPostMutation = trpc.useMutation('post.edit', {
+  const editCertificateMutation = trpc.useMutation('certificate.edit', {
     onError: (error) => {
       toast.error(`Something went wrong: ${error.message}`)
     },
   })
 
-  if (postQuery.data) {
-    const postBelongsToUser = postQuery.data.author.id === session!.user.id
+  if (certificateQuery.data) {
+    const certificateBelongsToUser =
+      certificateQuery.data.author.id === session!.user.id
 
     return (
       <>
         <Head>
-          <title>Edit {postQuery.data.title} – Impact Markets</title>
+          <title>Edit {certificateQuery.data.title} – Impact Markets</title>
         </Head>
 
-        {postBelongsToUser ? (
+        {certificateBelongsToUser ? (
           <>
-            <Heading1>Edit “{postQuery.data.title}”</Heading1>
+            <Heading1>Edit “{certificateQuery.data.title}”</Heading1>
 
             <div className="mt-6">
-              <PostForm
-                isSubmitting={editPostMutation.isLoading}
+              <CertificateForm
+                isSubmitting={editCertificateMutation.isLoading}
                 defaultValues={{
-                  title: postQuery.data.title,
-                  content: postQuery.data.content,
+                  title: certificateQuery.data.title,
+                  content: certificateQuery.data.content,
                   attributedImpactVersion:
-                    postQuery.data.attributedImpactVersion,
-                  proof: postQuery.data.proof || '',
-                  location: postQuery.data.location || '',
-                  rights: postQuery.data.rights,
-                  actionStart: postQuery.data.actionStart
+                    certificateQuery.data.attributedImpactVersion,
+                  proof: certificateQuery.data.proof || '',
+                  location: certificateQuery.data.location || '',
+                  rights: certificateQuery.data.rights,
+                  actionStart: certificateQuery.data.actionStart
                     .toISOString()
                     .slice(0, 10),
-                  actionEnd: postQuery.data.actionEnd
+                  actionEnd: certificateQuery.data.actionEnd
                     .toISOString()
                     .slice(0, 10),
-                  impactStart: postQuery.data.impactStart,
-                  impactEnd: postQuery.data.impactEnd,
-                  tags: postQuery.data.tags || '',
+                  impactStart: certificateQuery.data.impactStart,
+                  impactEnd: certificateQuery.data.impactEnd,
+                  tags: certificateQuery.data.tags || '',
                 }}
-                backTo={`/post/${postQuery.data.id}`}
+                backTo={`/certificate/${certificateQuery.data.id}`}
                 onSubmit={(values) => {
-                  editPostMutation.mutate(
+                  editCertificateMutation.mutate(
                     {
-                      id: postQuery.data.id,
+                      id: certificateQuery.data.id,
                       data: {
                         title: values.title,
                         content: values.content,
@@ -75,7 +76,7 @@ const EditPostPage: NextPageWithAuthAndLayout = () => {
                     },
                     {
                       onSuccess: () =>
-                        router.push(`/post/${postQuery.data.id}`),
+                        router.push(`/certificate/${certificateQuery.data.id}`),
                     }
                   )
                 }}
@@ -83,14 +84,14 @@ const EditPostPage: NextPageWithAuthAndLayout = () => {
             </div>
           </>
         ) : (
-          <div>You don&apos;t have permissions to edit this post.</div>
+          <div>You don&apos;t have permissions to edit this certificate.</div>
         )}
       </>
     )
   }
 
-  if (postQuery.isError) {
-    return <div>Error: {postQuery.error.message}</div>
+  if (certificateQuery.isError) {
+    return <div>Error: {certificateQuery.error.message}</div>
   }
 
   return (
@@ -115,10 +116,10 @@ const EditPostPage: NextPageWithAuthAndLayout = () => {
   )
 }
 
-EditPostPage.auth = true
+EditCertificatePage.auth = true
 
-EditPostPage.getLayout = function getLayout(page: React.ReactElement) {
+EditCertificatePage.getLayout = function getLayout(page: React.ReactElement) {
   return <Layout>{page}</Layout>
 }
 
-export default EditPostPage
+export default EditCertificatePage

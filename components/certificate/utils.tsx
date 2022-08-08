@@ -1,10 +1,10 @@
 import { InferQueryPathAndInput } from '@/lib/trpc'
 
-export function getPostQueryPathAndInput(
+export function getCertificateQueryPathAndInput(
   id: number
-): InferQueryPathAndInput<'post.detail'> {
+): InferQueryPathAndInput<'certificate.detail'> {
   return [
-    'post.detail',
+    'certificate.detail',
     {
       id,
     },
