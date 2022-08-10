@@ -28,6 +28,12 @@ enum HoldingType {
   CONSUMPTION
 }
 
+enum TransactionState {
+  PENDING
+  CONFIRMED
+  REJECTED
+}
+
 model Account {
   id                       String  @id @default(cuid())
   userId                   String
@@ -76,9 +82,8 @@ model User {
   comments         Comment[]
   role             Role               @default(USER)
 
-  transactionsSent     Transaction[] @relation("sender")
-  transactionsReceived Transaction[] @relation("receiver")
-  Holding              Holding[]
+  transactions Transaction[]
+  holdings     Holding[]
 }
 
 model VerificationToken {
@@ -91,6 +96,7 @@ model VerificationToken {
 
 model Certificate {
   id          Int                @id @default(autoincrement())
+  cuid        String?            @default(cuid())
   title       String             @db.VarChar(255)
   content     String
   // Is it optimal to prerender the MD to HTML?
@@ -114,9 +120,8 @@ model Certificate {
   impactEnd               DateTime?
   tags                    String?
 
-  author       User          @relation(fields: [authorId], references: [id], onDelete: Restrict)
-  transactions Transaction[]
-  Holding      Holding[]
+  author   User      @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  holdings Holding[]
 
   @@index([authorId])
 }
@@ -135,16 +140,20 @@ model LikedCertificate {
 }
 
 model Holding {
+  id            Int         @id @default(autoincrement())
   certificateId Int
   userId        String
   type          HoldingType @default(OWNERSHIP)
 
-  size Decimal
+  size Decimal @default(0)
+  cost Decimal @default(0) // It’s unimportant to keep track of the cost except for type REWARD
 
-  certificate Certificate @relation(fields: [certificateId], references: [id], onDelete: Restrict, onUpdate: Cascade)
-  user        User        @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  certificate      Certificate   @relation(fields: [certificateId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  user             User          @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  sellTransactions Transaction[] @relation("sellingHolding")
+  buyTransactions  Transaction[] @relation("buyingHolding")
 
-  @@id([certificateId, userId, type])
+  @@unique([certificateId, userId, type])
   @@index([certificateId])
   @@index([userId])
   @@index([type])
@@ -166,20 +175,21 @@ model Comment {
 }
 
 model Transaction {
-  id            String   @id @default(cuid())
-  createdAt     DateTime @default(now())
-  state         String
-  size          Decimal
-  cost          Decimal
-  senderId      String
-  receiverId    String
-  certificateId Int
+  id               Int              @id @default(autoincrement())
+  createdAt        DateTime         @default(now())
+  state            TransactionState @default(PENDING)
+  consume          Boolean          @default(false)
+  size             Decimal
+  cost             Decimal
+  buyerId          String
+  sellingHoldingId Int
+  buyingHoldingId  Int
 
-  sender      User        @relation("sender", fields: [senderId], references: [id])
-  receiver    User        @relation("receiver", fields: [receiverId], references: [id])
-  certificate Certificate @relation(fields: [certificateId], references: [id])
+  buyer          User    @relation(fields: [buyerId], references: [id])
+  sellingHolding Holding @relation("sellingHolding", fields: [sellingHoldingId], references: [id])
+  buyingHolding  Holding @relation("buyingHolding", fields: [buyingHoldingId], references: [id])
 
-  @@index([senderId])
-  @@index([receiverId])
-  @@index([certificateId])
+  @@index([buyerId])
+  @@index([sellingHoldingId])
+  @@index([buyingHoldingId])
 }
