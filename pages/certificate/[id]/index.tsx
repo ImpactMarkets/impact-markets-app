@@ -11,6 +11,7 @@ import { AddCommentForm } from '@/components/certificate/AddCommentForm'
 import { CertificateMenu } from '@/components/certificate/CertificateMenu'
 import { Comment } from '@/components/certificate/Comment'
 import { Labels } from '@/components/certificate/Labels'
+import { Ledger } from '@/components/certificate/Ledger'
 import { ProofTemplate } from '@/components/certificate/ProofTemplate'
 import { getCertificateQueryPathAndInput } from '@/components/certificate/utils'
 import { Heading1 } from '@/components/heading-1'
@@ -121,9 +122,16 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
                 date={certificateQuery.data.createdAt}
               />
             </div>
-            <Labels queryData={certificateQuery.data} />
+            <div className="my-6">
+              <Ledger queryData={certificateQuery.data} />
+            </div>
+            <div className="my-6">
+              <Labels queryData={certificateQuery.data} />
+            </div>
             {certificateBelongsToUser && (
-              <ProofTemplate queryData={certificateQuery.data} />
+              <div className="my-6">
+                <ProofTemplate queryData={certificateQuery.data} />
+              </div>
             )}
             <HtmlView
               html={certificateQuery.data.contentHtml}
