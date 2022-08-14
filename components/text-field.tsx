@@ -1,6 +1,7 @@
 import * as React from 'react'
+
 import { classNames } from '@/lib/classnames'
-import * as Tooltip from '@radix-ui/react-tooltip'
+
 import { InfoTooltip } from './info-tooltip'
 import { Label } from './label'
 

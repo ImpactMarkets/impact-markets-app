@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+import { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
 import { createProtectedRouter } from '../create-protected-router'
@@ -12,8 +13,8 @@ export const transactionRouter = createProtectedRouter()
         id: z.number(),
         certificateId: z.number(),
       }),
-      size: z.number(),
-      cost: z.number(),
+      size: z.instanceof(Prisma.Decimal),
+      cost: z.instanceof(Prisma.Decimal),
       consume: z.boolean(),
     }),
     async resolve({
