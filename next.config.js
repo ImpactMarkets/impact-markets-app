@@ -26,4 +26,23 @@ module.exports = {
       },
     ]
   },
+  webpack: (config) => {
+    config.resolve = {
+      ...config.resolve,
+      fallback: {
+        fs: false,
+        path: false,
+        os: false,
+        child_process: false,
+        net: false,
+        tls: false,
+        perf_hooks: false,
+        async_hooks: false,
+        console: false,
+        'stream/web': false,
+        'util/types': false,
+      },
+    }
+    return config
+  },
 }
