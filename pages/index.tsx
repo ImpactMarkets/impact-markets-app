@@ -7,6 +7,7 @@ import * as React from 'react'
 import type { CertificateSummaryProps } from '@/components/certificate-summary'
 import { CertificateSummarySkeleton } from '@/components/certificate-summary-skeleton'
 import { Layout } from '@/components/layout'
+import { NavbarSimple } from '@/components/navbar'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
@@ -107,10 +108,10 @@ const Home: NextPageWithAuthAndLayout = () => {
             There are no published certificates to show yet.
           </div>
         ) : (
-          <div className="flow-root">
-            <ul className="-my-12 divide-y divide-primary">
+          <div className="flow-root max-w-4xl mt-8">
+            <ul className="my-5 divide-y divide-transparent">
               {feedQuery.data.certificates.map((certificate) => (
-                <li key={certificate.id} className="py-10">
+                <li key={certificate.id} className="py-6">
                   <CertificateSummary
                     certificate={certificate}
                     onLike={() => {
@@ -141,7 +142,7 @@ const Home: NextPageWithAuthAndLayout = () => {
 
   return (
     <div className="flow-root">
-      <ul className="-my-12 divide-y divide-primary">
+      <ul className="my-10 divide-y divide-transparent">
         {[...Array(3)].map((_, idx) => (
           <li key={idx} className="py-10">
             <CertificateSummarySkeleton />

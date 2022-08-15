@@ -3,7 +3,6 @@ import * as React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
-import { Button } from '@/components/button'
 import {
   Dialog,
   DialogActions,
@@ -14,6 +13,7 @@ import {
 import { TextField } from '@/components/text-field'
 import { trpc } from '@/lib/trpc'
 import { InferQueryOutput } from '@/lib/trpc'
+import { Button } from '@mantine/core'
 import { Decimal } from '@prisma/client/runtime'
 
 type LedgerProps = {
@@ -42,7 +42,9 @@ export const Ledger = ({ queryData }: LedgerProps) => (
                   <td className="text-right" key="size">{`${
                     +holding.size * 100 // https://github.com/microsoft/TypeScript/issues/5710
                   }%`}</td>
-                  <td className="px-2">Buy</td>
+                  <td className="px-2">
+                    <Button color="blue">Buy</Button>
+                  </td>
                 </tr>
               ))}
           </tbody>
@@ -130,4 +132,3 @@ export const Ledger = ({ queryData }: LedgerProps) => (
     )}
   </div>
 )
-
