@@ -1,6 +1,7 @@
+import * as React from 'react'
+
 import { XIcon } from '@/components/icons'
 import { Dialog as HeadlessDialog, Transition } from '@headlessui/react'
-import * as React from 'react'
 
 type DialogProps = {
   isOpen: boolean
@@ -20,6 +21,7 @@ export function Dialog({
       <HeadlessDialog
         as="div"
         className="fixed inset-0 z-10 overflow-y-auto"
+        open={isOpen}
         onClose={onClose}
         initialFocus={initialFocus}
       >
@@ -45,7 +47,7 @@ export function Dialog({
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="inline-block w-full max-w-md mt-[15vh] mb-8 overflow-hidden text-left align-middle transition-all transform bg-primary rounded-lg shadow-xl dark:border">
+            <div className="inline-block w-full max-w-md mt-[15vh] mb-8 text-left align-middle transition-all transform bg-primary rounded-lg shadow-xl dark:border">
               {children}
             </div>
           </Transition.Child>
