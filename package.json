@@ -24,7 +24,6 @@
     "@next-auth/prisma-adapter": "^1.0.4",
     "@prisma/client": "^4.2.1",
     "@radix-ui/react-tooltip": "^1.0.0",
-    "@tabler/icons": "^1.82.0",
     "@trpc/client": "^9.26.2",
     "@trpc/next": "^9.26.2",
     "@trpc/react": "^9.26.2",

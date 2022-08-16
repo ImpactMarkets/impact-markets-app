@@ -2,14 +2,14 @@ import Link from 'next/link'
 import { useState } from 'react'
 
 import { Logo } from '@/components/icons'
-import { Code, Group, Navbar, createStyles } from '@mantine/core'
 import {
-  IconBolt,
-  IconBuildingStore,
-  IconFile,
-  IconHome,
-  IconLifebuoy,
-} from '@tabler/icons'
+  BoltIcon,
+  FileIcon,
+  HomeIcon,
+  LifebuoyIcon,
+  StoreIcon,
+} from '@/components/icons'
+import { Code, Group, Navbar, createStyles } from '@mantine/core'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
@@ -90,11 +90,11 @@ const useStyles = createStyles((theme, _params, getRef) => {
 })
 
 const data = [
-  { link: '', label: 'Home', icon: IconHome },
-  { link: '', label: 'Funders & prizes', icon: IconBuildingStore },
-  { link: '', label: 'Why impact markets?', icon: IconBolt },
-  { link: '', label: 'Rules & terms', icon: IconFile },
-  { link: '', label: 'Help & support', icon: IconLifebuoy },
+  { link: '', label: 'Home', icon: HomeIcon },
+  { link: '', label: 'Funders & prizes', icon: StoreIcon },
+  { link: '', label: 'Why impact markets?', icon: BoltIcon },
+  { link: '', label: 'Rules & terms', icon: FileIcon },
+  { link: '', label: 'Help & support', icon: LifebuoyIcon },
 ]
 
 export function NavbarSimple() {
@@ -113,13 +113,13 @@ export function NavbarSimple() {
         setActive(item.label)
       }}
     >
-      <item.icon className={classes.linkIcon} stroke={1.5} />
+      <item.icon className={classes.linkIcon} stroke="1.5" />
       <span>{item.label}</span>
     </a>
   ))
 
   return (
-    <Navbar width={{ sm: 250 }} p="md" className="mt-6 sticky top-6 z-1">
+    <Navbar width={{ sm: 250 }} p="md" className="pt-12 sticky top-0 z-1">
       <Navbar.Section grow>
         <Group className="mb-6" position="apart">
           <Link href="/">
