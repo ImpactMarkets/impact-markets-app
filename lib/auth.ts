@@ -1,11 +1,12 @@
+import type { NextAuthOptions } from 'next-auth'
+import GithubProvider from 'next-auth/providers/github'
+import GoogleProvider from 'next-auth/providers/google'
+import OktaProvider from 'next-auth/providers/okta'
+
 import { serverEnv } from '@/env/server'
 import { prisma } from '@/lib/prisma'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { Role } from '@prisma/client'
-import type { NextAuthOptions } from 'next-auth'
-import GithubProvider from 'next-auth/providers/github'
-import OktaProvider from 'next-auth/providers/okta'
-import GoogleProvider from 'next-auth/providers/google'
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -76,10 +77,10 @@ export const authOptions: NextAuthOptions = {
       : []),
     ...(serverEnv.AUTH_PROVIDER === 'google'
       ? [
-         GoogleProvider({
-           clientId: serverEnv.GOOGLE_CLIENT_ID,
-           clientSecret: serverEnv.GOOGLE_CLIENT_SECRET
-         })
+          GoogleProvider({
+            clientId: serverEnv.GOOGLE_CLIENT_ID,
+            clientSecret: serverEnv.GOOGLE_CLIENT_SECRET,
+          }),
         ]
       : []),
   ],
