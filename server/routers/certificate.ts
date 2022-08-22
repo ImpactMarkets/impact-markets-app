@@ -141,6 +141,8 @@ export const certificateRouter = createProtectedRouter()
               size: 'desc',
             },
             select: {
+              id: true,
+              certificateId: true,
               user: true,
               type: true,
               size: true,

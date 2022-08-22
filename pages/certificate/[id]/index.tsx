@@ -13,6 +13,7 @@ import { Comment } from '@/components/certificate/Comment'
 import { Labels } from '@/components/certificate/Labels'
 import { Ledger } from '@/components/certificate/Ledger'
 import { ProofTemplate } from '@/components/certificate/ProofTemplate'
+import { Transactions } from '@/components/certificate/Transactions'
 import { getCertificateQueryPathAndInput } from '@/components/certificate/utils'
 import { Heading1 } from '@/components/heading-1'
 import { HtmlView } from '@/components/html-view'
@@ -124,6 +125,12 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
             </div>
             <div className="my-6">
               <Ledger queryData={certificateQuery.data} />
+            </div>
+            <div className="my-6">
+              <Transactions
+                certificate={certificateQuery.data}
+                user={session!.user}
+              />
             </div>
             <div className="my-6">
               <Labels queryData={certificateQuery.data} />
