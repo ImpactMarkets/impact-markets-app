@@ -1,11 +1,51 @@
 import { z } from 'zod'
 
-import { Prisma } from '@prisma/client'
+import { Prisma, TransactionState } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
 import { createProtectedRouter } from '../create-protected-router'
 
 export const transactionRouter = createProtectedRouter()
+  .query('feed', {
+    input: z
+      .object({
+        take: z.number().min(1).max(50).optional(),
+        skip: z.number().min(1).optional(),
+        userId: z.string(),
+        certificateId: z.number().optional(),
+        state: z.nativeEnum(TransactionState).optional(),
+      })
+      .optional(),
+    async resolve({ input, ctx }) {
+      const take = input?.take ?? 50
+      const skip = input?.skip
+
+      const transactions = await ctx.prisma.transaction.findMany({
+        take,
+        skip,
+        orderBy: {
+          createdAt: 'desc',
+        },
+        where: {
+          sellingHolding: {
+            certificateId: input?.certificateId,
+          },
+          buyerId: input?.userId,
+          state: input?.state,
+        },
+        select: {
+          id: true,
+          createdAt: true,
+          state: true,
+          consume: true,
+          size: true,
+          cost: true,
+        },
+      })
+
+      return transactions
+    },
+  })
   .mutation('add', {
     input: z.object({
       userId: z.string(),
@@ -13,14 +53,16 @@ export const transactionRouter = createProtectedRouter()
         id: z.number(),
         certificateId: z.number(),
       }),
-      size: z.instanceof(Prisma.Decimal),
-      cost: z.instanceof(Prisma.Decimal),
+      size: z.string(),
+      cost: z.string(),
       consume: z.boolean(),
     }),
     async resolve({
       ctx,
-      input: { userId, sellingHolding, size, cost, consume },
+      input: { userId, sellingHolding, size: size_, cost: cost_, consume },
     }) {
+      const size = new Prisma.Decimal(size_)
+      const cost = new Prisma.Decimal(cost_)
       const buyingHolding = await ctx.prisma.holding.upsert({
         where: {
           certificateId_userId_type: {
@@ -121,7 +163,7 @@ export const transactionRouter = createProtectedRouter()
       return id
     },
   })
-  .mutation('reject', {
+  .mutation('cancel', {
     input: z.number(),
     async resolve({ input: id, ctx }) {
       const transaction = await ctx.prisma.transaction.findUnique({
