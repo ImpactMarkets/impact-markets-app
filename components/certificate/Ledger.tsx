@@ -12,14 +12,13 @@ type LedgerProps = {
 
 export const Ledger = ({ queryData }: LedgerProps) => {
   const [isBuyDialogOpen, setIsBuyDialogOpen] = React.useState(false)
-  const [isCanelDialogOpen, setIsCancelDialogOpen] = React.useState(false)
 
   const { data: session } = useSession()
 
   return (
     <div className="flex w-full gap-10">
       {queryData.holdings.some((holding) => holding.type === 'OWNERSHIP') && (
-        <div className="flex-auto">
+        <div className="flex-auto max-w-xs">
           <table className="table-auto w-full">
             <thead>
               <tr>
@@ -38,24 +37,26 @@ export const Ledger = ({ queryData }: LedgerProps) => {
                     <td className="text-right" key="size">{`${
                       +holding.size * 100 // https://github.com/microsoft/TypeScript/issues/5710
                     }%`}</td>
-                    <td className="text-right px-2">
-                      <ButtonLink
-                        href="#"
-                        onClick={() => {
-                          setIsBuyDialogOpen(true)
-                        }}
-                      >
-                        <span className="block shrink-0">Buy</span>
-                      </ButtonLink>
-                      <BuyDialog
-                        user={session!.user}
-                        holding={holding}
-                        isOpen={isBuyDialogOpen}
-                        onClose={() => {
-                          setIsBuyDialogOpen(false)
-                        }}
-                      />
-                    </td>
+                    {holding.user.id !== session!.user.id && (
+                      <td className="text-right px-2">
+                        <ButtonLink
+                          href="#"
+                          onClick={() => {
+                            setIsBuyDialogOpen(true)
+                          }}
+                        >
+                          <span className="block shrink-0">Buy</span>
+                        </ButtonLink>
+                        <BuyDialog
+                          user={session!.user}
+                          holding={holding}
+                          isOpen={isBuyDialogOpen}
+                          onClose={() => {
+                            setIsBuyDialogOpen(false)
+                          }}
+                        />
+                      </td>
+                    )}
                   </tr>
                 ))}
             </tbody>
@@ -82,24 +83,6 @@ export const Ledger = ({ queryData }: LedgerProps) => {
                     <td className="text-right" key="size">{`${
                       +holding.size * 100
                     }%`}</td>
-                    <td className="text-right px-2">
-                      <ButtonLink
-                        href="#"
-                        onClick={() => {
-                          setIsCancelDialogOpen(true)
-                        }}
-                      >
-                        <span className="block shrink-0">Cancel</span>
-                      </ButtonLink>
-                      {/* <CancelDialog
-                        user={session!.user}
-                        holding={holding}
-                        isOpen={isBuyDialogOpen}
-                        onClose={() => {
-                          setIsCancelDialogOpen(false)
-                        }}
-                      /> */}
-                    </td>
                   </tr>
                 ))}
             </tbody>
