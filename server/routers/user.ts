@@ -18,6 +18,7 @@ export const userRouter = createProtectedRouter()
           name: true,
           image: true,
           title: true,
+          email: ctx.session.user.role === 'ADMIN',
         },
       })
 
