@@ -11,6 +11,7 @@ import { Avatar } from '@/components/avatar'
 import { Button } from '@/components/button'
 import type { CertificateSummaryProps } from '@/components/certificate-summary'
 import { CertificateSummarySkeleton } from '@/components/certificate-summary-skeleton'
+import { Transactions } from '@/components/certificate/Transactions'
 import {
   Dialog,
   DialogActions,
@@ -26,7 +27,7 @@ import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import { TextField } from '@/components/text-field'
 import { browserEnv } from '@/env/browser'
 import { uploadImage } from '@/lib/cloudinary'
-import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
+import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
 const CertificateSummary = dynamic<CertificateSummaryProps>(
@@ -50,13 +51,32 @@ function getProfileQueryPathAndInput(
   ]
 }
 
+type ProfileComponentProps = {
+  user: InferQueryOutput<'user.profile'>
+}
+
 const ProfilePage: NextPageWithAuthAndLayout = () => {
-  return (
-    <>
-      <ProfileInfo />
-      <ProfileFeed />
-    </>
+  const router = useRouter()
+  const profileQueryPathAndInput = getProfileQueryPathAndInput(
+    String(router.query.userId)
   )
+  const profileQuery = trpc.useQuery(profileQueryPathAndInput)
+
+  if (profileQuery.isError) {
+    return <div>Error: {profileQuery.error.message}</div>
+  }
+
+  if (profileQuery.data) {
+    return (
+      <>
+        <ProfileInfo user={profileQuery.data} />
+        <TransactionFeed user={profileQuery.data} />
+        <CertificateFeed user={profileQuery.data} />
+      </>
+    )
+  }
+
+  return null
 }
 
 ProfilePage.auth = true
@@ -65,26 +85,21 @@ ProfilePage.getLayout = function getLayout(page: React.ReactElement) {
   return <Layout>{page}</Layout>
 }
 
-function ProfileInfo() {
+function ProfileInfo({ user }: ProfileComponentProps) {
   const { data: session } = useSession()
-  const router = useRouter()
-  const profileQueryPathAndInput = getProfileQueryPathAndInput(
-    String(router.query.userId)
-  )
-  const profileQuery = trpc.useQuery(profileQueryPathAndInput)
 
   const [isEditProfileDialogOpen, setIsEditProfileDialogOpen] =
     React.useState(false)
   const [isUpdateAvatarDialogOpen, setIsUpdateAvatarDialogOpen] =
     React.useState(false)
 
-  if (profileQuery.data) {
-    const profileBelongsToUser = profileQuery.data.id === session!.user.id
+  if (user) {
+    const profileBelongsToUser = user.id === session!.user.id
 
     return (
       <>
         <Head>
-          <title>{profileQuery.data.name} – Impact Markets</title>
+          <title>{user.name} – Impact Markets</title>
         </Head>
 
         <div className="relative flex items-center gap-4 py-8 overflow-hidden">
@@ -98,30 +113,23 @@ function ProfileInfo() {
                   setIsUpdateAvatarDialogOpen(true)
                 }}
               >
-                <Avatar
-                  name={profileQuery.data.name!}
-                  src={profileQuery.data.image}
-                  size="lg"
-                />
+                <Avatar name={user.name!} src={user.image} size="lg" />
                 <div className="absolute inset-0 transition-opacity bg-gray-900 rounded-full opacity-0 group-hover:opacity-50" />
                 <div className="absolute inline-flex items-center justify-center transition-opacity -translate-x-1/2 -translate-y-1/2 bg-gray-900 border border-white rounded-full opacity-0 top-1/2 left-1/2 h-9 w-9 group-hover:opacity-100">
                   <EditIcon className="w-4 h-4 text-white" />
                 </div>
               </button>
             ) : (
-              <Avatar
-                name={profileQuery.data.name!}
-                src={profileQuery.data.image}
-                size="lg"
-              />
+              <Avatar name={user.name!} src={user.image} size="lg" />
             )}
 
             <div className="flex-1">
-              <Heading1>{profileQuery.data.name}</Heading1>
-              {profileQuery.data.title && (
-                <p className="text-lg text-secondary">
-                  {profileQuery.data.title}
-                </p>
+              <Heading1>{user.name}</Heading1>
+              {user.title && (
+                <p className="text-lg text-secondary">{user.title}</p>
+              )}
+              {user.email && (
+                <p className="text-lg text-secondary">{user.email}</p>
               )}
             </div>
           </div>
@@ -144,8 +152,8 @@ function ProfileInfo() {
 
         <EditProfileDialog
           user={{
-            name: profileQuery.data.name!,
-            title: profileQuery.data.title,
+            name: user.name!,
+            title: user.title,
           }}
           isOpen={isEditProfileDialogOpen}
           onClose={() => {
@@ -154,10 +162,10 @@ function ProfileInfo() {
         />
 
         <UpdateAvatarDialog
-          key={profileQuery.data.image}
+          key={user.image}
           user={{
-            name: profileQuery.data.name!,
-            image: profileQuery.data.image,
+            name: user.name!,
+            image: user.image,
           }}
           isOpen={isUpdateAvatarDialogOpen}
           onClose={() => {
@@ -166,10 +174,6 @@ function ProfileInfo() {
         />
       </>
     )
-  }
-
-  if (profileQuery.isError) {
-    return <div>Error: {profileQuery.error.message}</div>
   }
 
   return (
@@ -184,7 +188,17 @@ function ProfileInfo() {
   )
 }
 
-function ProfileFeed() {
+function TransactionFeed({ user }: ProfileComponentProps) {
+  const { data: session } = useSession()
+
+  if (user?.id !== session!.user.id && session!.user.role !== 'ADMIN') {
+    return null
+  }
+
+  return <Transactions userId={user.id} />
+}
+
+function CertificateFeed({ user }: ProfileComponentProps) {
   const { data: session } = useSession()
   const router = useRouter()
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
