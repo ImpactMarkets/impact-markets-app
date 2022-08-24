@@ -227,6 +227,15 @@ export const certificateRouter = createProtectedRouter()
           },
         },
       })
+      await ctx.prisma.holding.create({
+        data: {
+          certificateId: certificate.id,
+          userId: ctx.session.user.id,
+          type: 'OWNERSHIP',
+          size: 1,
+          cost: 0,
+        },
+      })
 
       await postToSlackIfEnabled({
         certificate,
