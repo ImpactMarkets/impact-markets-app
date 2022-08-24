@@ -13,7 +13,7 @@ import {
 } from '@/components/dialog'
 import { trpc } from '@/lib/trpc'
 
-export function CancelDialog({
+export function ConfirmDialog({
   transactionId,
   certificateId,
   isOpen,
@@ -25,9 +25,9 @@ export function CancelDialog({
   onClose: () => void
 }) {
   const { data: session } = useSession()
-  const cancelRef = React.useRef<HTMLButtonElement>(null)
+  const confirmRef = React.useRef<HTMLButtonElement>(null)
   const utils = trpc.useContext()
-  const cancelTransactionMutation = trpc.useMutation('transaction.cancel', {
+  const confirmTransactionMutation = trpc.useMutation('transaction.confirm', {
     onSuccess: () => {
       certificateId &&
         utils.invalidateQueries(['certificate.detail', { id: certificateId }])
@@ -42,11 +42,11 @@ export function CancelDialog({
   })
 
   return (
-    <Dialog isOpen={isOpen} onClose={onClose} initialFocus={cancelRef}>
+    <Dialog isOpen={isOpen} onClose={onClose} initialFocus={confirmRef}>
       <DialogContent>
-        <DialogTitle>Cancel transaction</DialogTitle>
+        <DialogTitle>Confirm transaction</DialogTitle>
         <DialogDescription className="mt-6">
-          Are you sure you want to cancel this transaction?
+          Do you want to confirm that you have received this transaction?
         </DialogDescription>
         <DialogCloseButton onClick={onClose} />
       </DialogContent>
@@ -54,18 +54,18 @@ export function CancelDialog({
         <Button
           variant="secondary"
           className="!text-red"
-          isLoading={cancelTransactionMutation.isLoading}
-          loadingChildren="Canceling transaction"
+          isLoading={confirmTransactionMutation.isLoading}
+          loadingChildren="Confirming transaction"
           onClick={() => {
-            cancelTransactionMutation.mutate(transactionId, {
+            confirmTransactionMutation.mutate(transactionId, {
               onSuccess: () => onClose(),
             })
           }}
         >
-          Cancel transaction
+          Confirm transaction
         </Button>
-        <Button variant="secondary" onClick={onClose} ref={cancelRef}>
-          Cancel
+        <Button variant="secondary" onClick={onClose} ref={confirmRef}>
+          Confirm
         </Button>
       </DialogActions>
     </Dialog>
