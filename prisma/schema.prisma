@@ -82,8 +82,7 @@ model User {
   comments         Comment[]
   role             Role               @default(USER)
 
-  transactions Transaction[]
-  holdings     Holding[]
+  holdings Holding[]
 }
 
 model VerificationToken {
@@ -181,15 +180,12 @@ model Transaction {
   consume          Boolean          @default(false)
   size             Decimal
   cost             Decimal
-  buyerId          String
   sellingHoldingId Int
   buyingHoldingId  Int
 
-  buyer          User    @relation(fields: [buyerId], references: [id])
   sellingHolding Holding @relation("sellingHolding", fields: [sellingHoldingId], references: [id])
   buyingHolding  Holding @relation("buyingHolding", fields: [buyingHoldingId], references: [id])
 
-  @@index([buyerId])
   @@index([sellingHoldingId])
   @@index([buyingHoldingId])
 }
