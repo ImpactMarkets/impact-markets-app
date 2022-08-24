@@ -128,8 +128,8 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
             </div>
             <div className="my-6">
               <Transactions
-                certificate={certificateQuery.data}
-                user={session!.user}
+                certificateId={certificateQuery.data.id}
+                userId={session!.user.id}
               />
             </div>
             <div className="my-6">
