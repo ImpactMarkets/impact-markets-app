@@ -67,8 +67,8 @@ export function BuyDialog({
       {
         userId: user.id,
         sellingHolding: holding,
-        size: data.size,
-        cost: data.cost,
+        size: String(data.size),
+        cost: String(data.cost),
         consume: data.consume,
       },
       {
