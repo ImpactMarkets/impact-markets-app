@@ -1,8 +1,4 @@
 import * as React from 'react'
-import { Control, Controller } from 'react-hook-form'
-
-import { classNames } from '@/lib/classnames'
-import { Switch } from '@headlessui/react'
 
 import { InfoTooltip } from './info-tooltip'
 import { Label } from './label'
