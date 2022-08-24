@@ -7,31 +7,33 @@ import { createProtectedRouter } from '../create-protected-router'
 
 export const transactionRouter = createProtectedRouter()
   .query('feed', {
-    input: z
-      .object({
-        take: z.number().min(1).max(50).optional(),
-        skip: z.number().min(1).optional(),
-        userId: z.string(),
-        certificateId: z.number().optional(),
-        state: z.nativeEnum(TransactionState).optional(),
-      })
-      .optional(),
+    input: z.object({
+      userId: z.string(),
+      certificateId: z.number().optional(),
+      state: z.nativeEnum(TransactionState).optional(),
+    }),
     async resolve({ input, ctx }) {
-      const take = input?.take ?? 50
-      const skip = input?.skip
-
       const transactions = await ctx.prisma.transaction.findMany({
-        take,
-        skip,
         orderBy: {
           createdAt: 'desc',
         },
         where: {
+          OR: [
+            {
+              sellingHolding: {
+                userId: input.userId || undefined,
+              },
+            },
+            {
+              buyingHolding: {
+                userId: input.userId || undefined,
+              },
+            },
+          ],
           sellingHolding: {
-            certificateId: input?.certificateId,
+            certificateId: input.certificateId || undefined,
           },
-          buyerId: input?.userId,
-          state: input?.state,
+          state: input.state || undefined,
         },
         select: {
           id: true,
@@ -40,6 +42,8 @@ export const transactionRouter = createProtectedRouter()
           consume: true,
           size: true,
           cost: true,
+          sellingHolding: { select: { user: true } },
+          buyingHolding: { select: { user: true } },
         },
       })
 
@@ -63,32 +67,35 @@ export const transactionRouter = createProtectedRouter()
     }) {
       const size = new Prisma.Decimal(size_)
       const cost = new Prisma.Decimal(cost_)
-      const buyingHolding = await ctx.prisma.holding.upsert({
-        where: {
-          certificateId_userId_type: {
+
+      const transaction = await ctx.prisma.$transaction(async (prisma) => {
+        const buyingHolding = await prisma.holding.upsert({
+          where: {
+            certificateId_userId_type: {
+              certificateId: sellingHolding.certificateId,
+              userId: userId,
+              type: 'RESERVATION',
+            },
+          },
+          update: { size: { increment: size }, cost: { increment: cost } },
+          create: {
             certificateId: sellingHolding.certificateId,
             userId: userId,
             type: 'RESERVATION',
+            size,
+            cost,
           },
-        },
-        update: { size: { increment: size }, cost: { increment: cost } },
-        create: {
-          certificateId: sellingHolding.certificateId,
-          userId: userId,
-          type: 'RESERVATION',
-          size,
-          cost,
-        },
-      })
-      const transaction = await ctx.prisma.transaction.create({
-        data: {
-          buyerId: userId,
-          sellingHoldingId: sellingHolding.id,
-          buyingHoldingId: buyingHolding.id,
-          size,
-          cost,
-          consume,
-        },
+        })
+        const transaction = await prisma.transaction.create({
+          data: {
+            sellingHoldingId: sellingHolding.id,
+            buyingHoldingId: buyingHolding.id,
+            size,
+            cost,
+            consume,
+          },
+        })
+        return transaction
       })
 
       return transaction
@@ -100,6 +107,7 @@ export const transactionRouter = createProtectedRouter()
       const transaction = await ctx.prisma.transaction.findUnique({
         where: { id },
         include: {
+          buyingHolding: true,
           sellingHolding: true,
         },
       })
@@ -108,13 +116,7 @@ export const transactionRouter = createProtectedRouter()
         throw new TRPCError({ code: 'FORBIDDEN' })
       }
 
-      const [
-        _sellingHolding,
-        _reservingHolding,
-        _buyingHolding,
-        _transaction,
-        _deletedHoldings,
-      ] = await ctx.prisma.$transaction([
+      await ctx.prisma.$transaction([
         ctx.prisma.holding.update({
           where: { id: transaction.sellingHoldingId },
           data: {
@@ -133,7 +135,7 @@ export const transactionRouter = createProtectedRouter()
           where: {
             certificateId_userId_type: {
               certificateId: transaction.sellingHolding.certificateId,
-              userId: transaction.buyerId,
+              userId: transaction.buyingHolding.userId,
               type: transaction.consume ? 'CONSUMPTION' : 'OWNERSHIP',
             },
           },
@@ -143,7 +145,7 @@ export const transactionRouter = createProtectedRouter()
           },
           create: {
             certificateId: transaction.sellingHolding.certificateId,
-            userId: transaction.buyerId,
+            userId: transaction.buyingHolding.userId,
             type: transaction.consume ? 'CONSUMPTION' : 'OWNERSHIP',
             size: transaction.size,
             cost: transaction.cost,
@@ -169,33 +171,36 @@ export const transactionRouter = createProtectedRouter()
       const transaction = await ctx.prisma.transaction.findUnique({
         where: { id },
         include: {
+          buyingHolding: true,
           sellingHolding: true,
         },
       })
 
-      if (transaction?.sellingHolding.userId !== ctx.session.user.id) {
+      if (
+        transaction?.buyingHolding.userId !== ctx.session.user.id &&
+        transaction?.sellingHolding.userId !== ctx.session.user.id
+      ) {
         throw new TRPCError({ code: 'FORBIDDEN' })
       }
 
-      const [_reservingHolding, _buyingHolding, _deletedHoldings] =
-        await ctx.prisma.$transaction([
-          ctx.prisma.holding.update({
-            where: { id: transaction.buyingHoldingId },
-            data: {
-              size: { decrement: transaction.size },
-              cost: { decrement: transaction.cost },
-            },
-          }),
-          ctx.prisma.transaction.update({
-            where: { id: transaction.id },
-            data: {
-              state: 'CONFIRMED',
-            },
-          }),
-          ctx.prisma.holding.deleteMany({
-            where: { size: 0, type: { in: ['RESERVATION', 'OWNERSHIP'] } },
-          }),
-        ])
+      await ctx.prisma.$transaction([
+        ctx.prisma.holding.update({
+          where: { id: transaction.buyingHoldingId },
+          data: {
+            size: { decrement: transaction.size },
+            cost: { decrement: transaction.cost },
+          },
+        }),
+        ctx.prisma.transaction.update({
+          where: { id: transaction.id },
+          data: {
+            state: 'CONFIRMED',
+          },
+        }),
+        ctx.prisma.holding.deleteMany({
+          where: { size: 0, type: { in: ['RESERVATION', 'OWNERSHIP'] } },
+        }),
+      ])
 
       return id
     },
