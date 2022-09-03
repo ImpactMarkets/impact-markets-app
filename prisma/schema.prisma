@@ -1,5 +1,6 @@
 // This is your Prisma schema file, learn more about it in the docs: https://pris.ly/d/prisma-schema
 // Migrations: https://github.com/prisma/prisma/issues/11555#issuecomment-1027242342
+// npx prisma migrate diff --preview-feature --from-migrations prisma/migrations --to-schema-datamodel prisma/schema.prisma --script > prisma/migrations/$(date +%Y%m%d%H%M%S)_<name>/migration.sql
 
 generator client {
   provider        = "prisma-client-js"
