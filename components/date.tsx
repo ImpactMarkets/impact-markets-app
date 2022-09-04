@@ -6,11 +6,7 @@ type DateProps = {
 
 export function Date({ date }: DateProps) {
   return (
-    <time
-      dateTime={date.toISOString()}
-      title={date.toISOString()}
-      className="underline underline-offset-1 decoration-dotted"
-    >
+    <time dateTime={date.toISOString()} title={date.toISOString()}>
       {formatDistanceToNow(date)} ago
     </time>
   )
