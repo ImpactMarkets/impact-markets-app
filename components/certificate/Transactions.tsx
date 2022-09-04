@@ -56,7 +56,7 @@ export const Transactions = ({
     <table className="w-full">
       <thead>
         <tr>
-          <th className="text-left pl-5">Created by</th>
+          <th className="text-left">Created by</th>
           <th className="text-left pl-5">At</th>
           <th className="text-right pl-5">Size</th>
           <th className="text-right pl-5">Cost</th>
@@ -65,7 +65,7 @@ export const Transactions = ({
       <tbody>
         {transactionQuery.data.map((transaction) => (
           <tr key={transaction.id}>
-            <td className="pl-5">
+            <td>
               <div className="pt-[5px]">
                 <Author author={transaction.buyingHolding.user} />
               </div>
