@@ -23,6 +23,118 @@ export function SearchIcon(props: IconProps) {
   )
 }
 
+export function HomeIcon(props: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      className="__mantine-ref-icon mantine-1syvhlf"
+      height="24"
+      viewBox="0 0 24 24"
+      strokeWidth="1.5"
+      stroke="currentColor"
+      fill="none"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+      <polyline points="5 12 3 12 12 3 21 12 19 12"></polyline>
+      <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"></path>
+      <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"></path>
+    </svg>
+  )
+}
+
+export function StoreIcon(props: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      className="__mantine-ref-icon mantine-1syvhlf"
+      height="24"
+      viewBox="0 0 24 24"
+      strokeWidth="1.5"
+      stroke="currentColor"
+      fill="none"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+      <line x1="3" y1="21" x2="21" y2="21"></line>
+      <path d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4"></path>
+      <line x1="5" y1="21" x2="5" y2="10.85"></line>
+      <line x1="19" y1="21" x2="19" y2="10.85"></line>
+      <path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4"></path>
+    </svg>
+  )
+}
+
+export function BoltIcon(props: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      className="__mantine-ref-icon mantine-1syvhlf"
+      height="24"
+      viewBox="0 0 24 24"
+      strokeWidth="1.5"
+      stroke="currentColor"
+      fill="none"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+      <polyline points="13 3 13 10 19 10 11 21 11 14 5 14 13 3"></polyline>
+    </svg>
+  )
+}
+
+export function FileIcon(props: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      className="__mantine-ref-icon mantine-1syvhlf"
+      height="24"
+      viewBox="0 0 24 24"
+      strokeWidth="1.5"
+      stroke="currentColor"
+      fill="none"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+      <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+      <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
+    </svg>
+  )
+}
+
+export function LifebuoyIcon(props: IconProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      className="__mantine-ref-icon mantine-1syvhlf"
+      height="24"
+      viewBox="0 0 24 24"
+      strokeWidth="1.5"
+      stroke="currentColor"
+      fill="none"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+      <circle cx="12" cy="12" r="4"></circle>
+      <circle cx="12" cy="12" r="9"></circle>
+      <line x1="15" y1="15" x2="18.35" y2="18.35"></line>
+      <line x1="9" y1="15" x2="5.65" y2="18.35"></line>
+      <line x1="5.65" y1="5.65" x2="9" y2="9"></line>
+      <line x1="18.35" y1="5.65" x2="15" y2="9"></line>
+    </svg>
+  )
+}
+
 export function HeartIcon(props: IconProps) {
   return (
     <svg

@@ -1,15 +1,18 @@
-import { transformer } from '@/lib/trpc'
-import type { NextPageWithAuthAndLayout } from '@/lib/types'
-import { AppRouter } from '@/server/routers/_app'
-import { httpBatchLink } from '@trpc/client/links/httpBatchLink'
-import { loggerLink } from '@trpc/client/links/loggerLink'
-import { withTRPC } from '@trpc/next'
-import { TRPCError } from '@trpc/server'
 import { SessionProvider, signIn, useSession } from 'next-auth/react'
 import { ThemeProvider } from 'next-themes'
 import type { AppProps } from 'next/app'
 import * as React from 'react'
 import { Toaster } from 'react-hot-toast'
+
+import { transformer } from '@/lib/trpc'
+import type { NextPageWithAuthAndLayout } from '@/lib/types'
+import { AppRouter } from '@/server/routers/_app'
+import { MantineProvider } from '@mantine/core'
+import { httpBatchLink } from '@trpc/client/links/httpBatchLink'
+import { loggerLink } from '@trpc/client/links/loggerLink'
+import { withTRPC } from '@trpc/next'
+import { TRPCError } from '@trpc/server'
+
 import '../styles/globals.css'
 
 type AppPropsWithAuthAndLayout = AppProps & {
@@ -23,16 +26,18 @@ function MyApp({
   const getLayout = Component.getLayout ?? ((page) => page)
 
   return (
-    <SessionProvider session={session} refetchOnWindowFocus={false}>
-      <ThemeProvider attribute="class" disableTransitionOnChange>
-        {Component.auth ? (
-          <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
-        ) : (
-          getLayout(<Component {...pageProps} />)
-        )}
-        <Toaster />
-      </ThemeProvider>
-    </SessionProvider>
+    <MantineProvider withGlobalStyles withNormalizeCSS>
+      <SessionProvider session={session} refetchOnWindowFocus={false}>
+        <ThemeProvider attribute="class" disableTransitionOnChange>
+          {Component.auth ? (
+            <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
+          ) : (
+            getLayout(<Component {...pageProps} />)
+          )}
+          <Toaster />
+        </ThemeProvider>
+      </SessionProvider>
+    </MantineProvider>
   )
 }
 
