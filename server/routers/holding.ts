@@ -1,26 +1,19 @@
 import { z } from 'zod'
+
 import { createProtectedRouter } from '../create-protected-router'
 
 export const holdingRouter = createProtectedRouter().query('feed', {
   input: z.object({
-    take: z.number().min(1).max(50).optional(),
-    skip: z.number().min(1).optional(),
-    certificateId: z.string().optional(),
+    certificateId: z.number(),
   }),
   async resolve({ input, ctx }) {
-    const take = input?.take ?? 50
-    const skip = input?.skip
-    const where = {
-      hidden: ctx.isUserAdmin ? undefined : false,
-      certificateId: input?.certificateId,
-    }
     const holdings = await ctx.prisma.holding.findMany({
-      take,
-      skip,
       orderBy: {
-        createdAt: 'desc',
+        size: 'desc',
       },
-      where,
+      where: {
+        certificateId: input.certificateId,
+      },
       select: {
         id: true,
         certificateId: true,
@@ -31,10 +24,6 @@ export const holdingRouter = createProtectedRouter().query('feed', {
       },
     })
 
-    const holdingCount = await ctx.prisma.holding.count({
-      where,
-    })
-
-    return { holdings, holdingCount }
+    return holdings
   },
 })
