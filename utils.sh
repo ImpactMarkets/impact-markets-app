@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -x
 
 source .env
 
@@ -17,23 +18,17 @@ makemigrations () {
     dropdb im-web2-app-temp
 }
 
-migrate () {
-    psql -v ON_ERROR_STOP=1 -U im-web2-app -d im-web2-app -f prisma/migrations/$1/migration.sql
-    npx prisma migrate resolve --applied $1
-}
-
 deploy () {
     npm install
     npm run build
+    npx prisma migrate resolve --applied 20220807000000_init
+    npx prisma migrate deploy
     sudo supervisorctl restart im-web2-app-$1
 }
 
 case "$1" in
     makemigrations)
         makemigrations
-        ;;
-    migrate)
-        migrate $2
         ;;
     deploy-prod)
         deploy prod
