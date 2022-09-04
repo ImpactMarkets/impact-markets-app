@@ -1,20 +1,40 @@
-import type { Author as AuthorType } from '@/lib/types'
+import Link from 'next/link'
 
-import { Author } from './author'
+import { Avatar } from '@/components/avatar'
+import type { Author } from '@/lib/types'
+
 import { Date } from './date'
 
 type AuthorWithDateProps = {
-  author: AuthorType
+  author: Author
   date: Date
 }
 
 export function AuthorWithDate({ author, date }: AuthorWithDateProps) {
   return (
     <div className="flex items-center gap-2 sm:gap-4">
-      <Author author={author} />
-      <p className="text-secondary">
-        <Date date={date} />
-      </p>
+      <Link href={`/profile/${author.id}`}>
+        <a className="relative inline-flex">
+          <span className="hidden sm:flex">
+            <Avatar name={author.name!} src={author.image} />
+          </span>
+          <span className="flex sm:hidden">
+            <Avatar name={author.name!} src={author.image} size="sm" />
+          </span>
+        </a>
+      </Link>
+      <div className="flex-1 text-sm sm:text-base">
+        <div>
+          <Link href={`/profile/${author.id}`}>
+            <a className="font-medium transition-colors hover:text-blue">
+              {author.name}
+            </a>
+          </Link>
+        </div>
+        <div className="text-secondary">
+          <Date date={date} />
+        </div>
+      </div>
     </div>
   )
 }
