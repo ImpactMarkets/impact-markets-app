@@ -1,8 +1,9 @@
-import { uploadImage } from '@/lib/cloudinary'
 import DOMPurify from 'isomorphic-dompurify'
 import { marked } from 'marked'
 import toast from 'react-hot-toast'
 import { Cursor } from 'textarea-markdown-editor'
+
+import { uploadImage } from '@/lib/cloudinary'
 
 export function markdownToHtml(markdown: string) {
   return DOMPurify.sanitize(marked.parse(markdown, { breaks: true }))
@@ -13,7 +14,7 @@ function replacePlaceholder(
   placeholder: string,
   replaceWith: string
 ) {
-  cursor.setText(cursor.getText().replace(placeholder, replaceWith))
+  cursor.setValue(cursor.value.replace(placeholder, replaceWith))
 }
 
 export function handleUploadImages(
@@ -21,14 +22,10 @@ export function handleUploadImages(
   files: File[]
 ) {
   const cursor = new Cursor(textareaEl)
-  const currentLineNumber = cursor.getCurrentPosition().lineNumber
 
   files.forEach(async (file, idx) => {
     const placeholder = `![Uploading ${file.name}...]()`
-
-    cursor.spliceContent(Cursor.raw`${placeholder}${Cursor.$}`, {
-      startLineNumber: currentLineNumber + idx,
-    })
+    cursor.insert(`${placeholder}`)
 
     try {
       const uploadedImage = await uploadImage(file)
