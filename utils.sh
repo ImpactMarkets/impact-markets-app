@@ -21,7 +21,7 @@ makemigrations () {
 deploy () {
     npm install
     npm run build
-    npx prisma migrate resolve --applied 20220807000000_init
+    npx prisma migrate resolve --applied 20220807000000_init || true
     npx prisma migrate deploy
     sudo supervisorctl restart im-web2-app-$1
 }
