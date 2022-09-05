@@ -16,7 +16,7 @@ export const Ledger = ({ queryData }: LedgerProps) => {
   const { data: session } = useSession()
 
   return (
-    <div className="flex w-full gap-10">
+    <div className="flex w-full gap-10 justify-center">
       {queryData.holdings.some((holding) => holding.type === 'OWNERSHIP') && (
         <div className="flex-auto max-w-xs">
           <table className="table-auto w-full">
@@ -64,7 +64,7 @@ export const Ledger = ({ queryData }: LedgerProps) => {
         </div>
       )}
       {queryData.holdings.some((holding) => holding.type === 'RESERVATION') && (
-        <div className="flex-auto">
+        <div className="flex-auto max-w-xs">
           <table className="table-auto w-full">
             <thead>
               <tr>
@@ -90,7 +90,7 @@ export const Ledger = ({ queryData }: LedgerProps) => {
         </div>
       )}
       {queryData.holdings.some((holding) => holding.type === 'CONSUMPTION') && (
-        <div className="flex-auto relative">
+        <div className="flex-auto relative max-w-xs">
           <table className="table-auto w-full">
             <thead>
               <tr>

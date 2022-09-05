@@ -5,6 +5,7 @@ import { InferQueryPathAndInput } from '@/lib/trpc'
 import { TransactionState } from '@prisma/client'
 
 import { Author } from '../author'
+import { AuthorWithDate } from '../author-with-date'
 import { ButtonLink } from '../button-link'
 import { Date } from '../date'
 import { CancelDialog } from './CancelDialog'
@@ -53,82 +54,83 @@ export const Transactions = ({
   }
 
   return (
-    <table className="w-full">
-      <thead>
-        <tr>
-          <th className="text-left">Created by</th>
-          <th className="text-left pl-5">At</th>
-          <th className="text-right pl-5">Size</th>
-          <th className="text-right pl-5">Cost</th>
-        </tr>
-      </thead>
-      <tbody>
-        {transactionQuery.data.map((transaction) => (
-          <tr key={transaction.id}>
-            <td>
-              <div className="pt-[5px]">
-                <Author author={transaction.buyingHolding.user} />
-              </div>
-            </td>
-            <td className="pl-5">
-              <Date date={transaction.createdAt} />
-            </td>
-            <td
-              className="text-right pl-5 underline underline-offset-1 decoration-dotted"
-              title={transaction.consume ? 'To be consumed' : 'To be owned'}
-            >
-              {+transaction.size * 100}%
-            </td>
-            <td className="text-right pl-5">${+transaction.cost}</td>
-            <td className="text-right px-2">
-              <ButtonLink
-                href="#"
-                onClick={() => {
-                  setIsCancelDialogOpen(true)
-                }}
+    <div className="flex w-full gap-10 justify-center">
+      <table className="w-1/2">
+        <thead>
+          <tr>
+            <th className="text-left">Pending purchases</th>
+            <th className="text-right pl-5">Size</th>
+            <th className="text-right pl-5">Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          {transactionQuery.data.map((transaction) => (
+            <tr key={transaction.id}>
+              <td>
+                <div className="pt-[5px]">
+                  <AuthorWithDate
+                    author={transaction.buyingHolding.user}
+                    date={transaction.createdAt}
+                  />
+                </div>
+              </td>
+              <td
+                className="text-right pl-5 underline underline-offset-1 decoration-dotted"
+                title={transaction.consume ? 'To be consumed' : 'To be owned'}
               >
-                <span className="block shrink-0">
-                  {/* Call it “Decline” if the user whose profile this is is also the seller;
+                {+transaction.size * 100}%
+              </td>
+              <td className="text-right pl-5">${+transaction.cost}</td>
+              <td className="text-right px-2">
+                <ButtonLink
+                  href="#"
+                  onClick={() => {
+                    setIsCancelDialogOpen(true)
+                  }}
+                >
+                  <span className="block shrink-0">
+                    {/* Call it “Decline” if the user whose profile this is is also the seller;
                     call it cancel if they’re the buyer. This ignores the case where an admin
                     looks at the profile. No other user can see this section. */}
-                  {transaction.sellingHolding.user.id === userId
-                    ? 'Decline'
-                    : 'Cancel'}
-                </span>
-              </ButtonLink>
-              <CancelDialog
-                transactionId={transaction.id}
-                certificateId={certificateId}
-                isOpen={isCancelDialogOpen}
-                onClose={() => {
-                  setIsCancelDialogOpen(false)
-                }}
-              />
-              {transaction.sellingHolding.user.id === userId && (
-                <>
-                  <ButtonLink
-                    href="#"
-                    className="mx-1"
-                    onClick={() => {
-                      setIsCancelDialogOpen(true)
-                    }}
-                  >
-                    <span className="block shrink-0">Confirm</span>
-                  </ButtonLink>
-                  <ConfirmDialog
-                    transactionId={transaction.id}
-                    certificateId={certificateId}
-                    isOpen={isConfirmDialogOpen}
-                    onClose={() => {
-                      setIsConfirmDialogOpen(false)
-                    }}
-                  />
-                </>
-              )}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+                    {transaction.sellingHolding.user.id === userId
+                      ? 'Decline'
+                      : 'Cancel'}
+                  </span>
+                </ButtonLink>
+                <CancelDialog
+                  transactionId={transaction.id}
+                  certificateId={certificateId}
+                  isOpen={isCancelDialogOpen}
+                  onClose={() => {
+                    setIsCancelDialogOpen(false)
+                  }}
+                />
+                {transaction.sellingHolding.user.id === userId && (
+                  <>
+                    <ButtonLink
+                      href="#"
+                      className="mx-1"
+                      onClick={() => {
+                        setIsCancelDialogOpen(true)
+                      }}
+                    >
+                      <span className="block shrink-0">Confirm</span>
+                    </ButtonLink>
+                    <ConfirmDialog
+                      transactionId={transaction.id}
+                      certificateId={certificateId}
+                      isOpen={isConfirmDialogOpen}
+                      onClose={() => {
+                        setIsConfirmDialogOpen(false)
+                      }}
+                    />
+                  </>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
