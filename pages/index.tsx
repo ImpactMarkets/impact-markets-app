@@ -108,7 +108,7 @@ const Home: NextPageWithAuthAndLayout = () => {
             There are no published certificates to show yet.
           </div>
         ) : (
-          <div className="flow-root max-w-4xl mt-8">
+          <div className="flow-root mt-8">
             <ul className="my-5 divide-y divide-transparent">
               {feedQuery.data.certificates.map((certificate) => (
                 <li key={certificate.id} className="py-6">
