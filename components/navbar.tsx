@@ -119,7 +119,7 @@ export function NavbarSimple() {
   ))
 
   return (
-    <Navbar width={{ sm: 250 }} p="md" className="pt-12 sticky top-0 z-1">
+    <Navbar width={{ sm: 250 }} p="md" className="pt-12 sticky top-0 z-auto">
       <Navbar.Section grow>
         <Group className="mb-6" position="apart">
           <Link href="/">
