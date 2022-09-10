@@ -1,6 +1,4 @@
 import { signOut, useSession } from 'next-auth/react'
-import { useTheme } from 'next-themes'
-import Link from 'next/link'
 import * as React from 'react'
 
 import { Avatar } from '@/components/avatar'
@@ -17,9 +15,7 @@ import {
   MenuItemsContent,
 } from '@/components/menu'
 import { SearchDialog } from '@/components/search-dialog'
-import { capitalize } from '@/lib/text'
 
-import { Label } from './label'
 import { NavbarSimple } from './navbar'
 
 type LayoutProps = {
@@ -28,8 +24,10 @@ type LayoutProps = {
 
 export function Layout({ children }: LayoutProps) {
   const { data: session } = useSession()
-  const { theme, themes, setTheme } = useTheme()
   const [isSearchDialogOpen, setIsSearchDialogOpen] = React.useState(false)
+  {
+    /* const { theme, themes, setTheme } = useTheme() */
+  }
 
   return (
     <div className="flex relative max-w-7xl m-auto">
@@ -64,26 +62,28 @@ export function Layout({ children }: LayoutProps) {
                     Log out
                   </MenuItemButton>
                 </MenuItemsContent>
-                <div className="flex items-center gap-4 px-4 py-3 rounded-b bg-secondary">
-                  <Label htmlFor="theme" className="text-sm">
-                    Theme
-                  </Label>
-                  <select
-                    id="theme"
-                    name="theme"
-                    value={theme}
-                    onChange={(event) => {
-                      setTheme(event.target.value)
-                    }}
-                    className="block w-full py-1.5 text-xs border rounded shadow-sm bg-primary border-secondary"
-                  >
-                    {themes.map((theme) => (
-                      <option key={theme} value={theme}>
-                        {capitalize(theme)}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                {/*
+                  <div className="flex items-center gap-4 px-4 py-3 rounded-b bg-secondary">
+                    <Label htmlFor="theme" className="text-sm">
+                      Theme
+                    </Label>
+                    <select
+                      id="theme"
+                      name="theme"
+                      value={theme}
+                      onChange={(event) => {
+                        setTheme(event.target.value)
+                      }}
+                      className="block w-full py-1.5 text-xs border rounded shadow-sm bg-primary border-secondary"
+                    >
+                      {themes.map((theme) => (
+                        <option key={theme} value={theme}>
+                          {capitalize(theme)}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                */}
               </MenuItems>
             </Menu>
 

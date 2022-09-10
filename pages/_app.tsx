@@ -28,7 +28,11 @@ function MyApp({
   return (
     <MantineProvider withGlobalStyles withNormalizeCSS>
       <SessionProvider session={session} refetchOnWindowFocus={false}>
-        <ThemeProvider attribute="class" disableTransitionOnChange>
+        <ThemeProvider
+          forcedTheme="light"
+          attribute="class"
+          disableTransitionOnChange
+        >
           {Component.auth ? (
             <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
           ) : (
