@@ -145,8 +145,9 @@ model Holding {
   userId        String
   type          HoldingType @default(OWNERSHIP)
 
-  size Decimal @default(0)
-  cost Decimal @default(0) // It’s unimportant to keep track of the cost except for type REWARD
+  size      Decimal @default(0)
+  cost      Decimal @default(0) // Only needed for the potential future reward mode
+  valuation Decimal @default(0) // Minimum valuation for offers
 
   certificate      Certificate   @relation(fields: [certificateId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   user             User          @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
