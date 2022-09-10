@@ -6,8 +6,40 @@ import { ButtonLink } from '@/components/button-link'
 import { MarkdownIcon } from '@/components/icons'
 import { MarkdownEditor } from '@/components/markdown-editor'
 import { TextField } from '@/components/text-field'
-import { browserEnv } from '@/env/browser'
 import { useLeaveConfirm } from '@/lib/form'
+
+const DESCRIPTION_PROMPTS = (
+  <>
+    <p className="mt-2">Please touch on the following points:</p>
+    <ol className="list-decimal list-inside m-2">
+      <li className="mb-2">
+        What is the action that this certificate is about?
+      </li>
+
+      <li className="mb-2">
+        Might someone feel that the action is morally bad according to their
+        values?
+      </li>
+
+      <li className="mb-2">
+        Was there ever a risk that the action might be harmful?
+      </li>
+
+      <li>
+        Who are all collaborators and how much have they each contributed?
+      </li>
+    </ol>
+    <p>And optionally:</p>
+    <ol className="list-decimal list-inside m-2">
+      <li className="mb-2">
+        What would you have done had there been no chance to get retro funding?
+        (This doesn’t affect our evaluation of your impact.)
+      </li>
+
+      <li>What can we improve about this process?</li>
+    </ol>
+  </>
+)
 
 type FormData = {
   title: string
@@ -59,7 +91,7 @@ export function CertificateForm({
         {...register('title', { required: true })}
         label="Title"
         info="This can be the same as your article’s title if it is descriptive"
-        placeholder="Why you should contribute to Giving What We Can as a ventriloquist"
+        placeholder="Practical Implications of Evidential Cooperation in Large Worlds for Population Ethics"
         autoFocus
         required
         className="text-lg !py-1.5"
@@ -74,13 +106,11 @@ export function CertificateForm({
         required
         className="text-lg !py-1.5"
       />
-      {/* TODO: Action period */}
       <TextField
         {...register('actionStart', { required: true })}
         label="Start of the action period"
         info="The action period is the time that you define during which you worked on the project that this certificate describes."
         type="date"
-        placeholder="YYYY-MM-DD"
         autoFocus
         required
         className="text-lg !py-1.5"
@@ -90,7 +120,6 @@ export function CertificateForm({
         label="End of the action period"
         info="Must be the day of certificate creation or earlier."
         type="date"
-        placeholder="YYYY-MM-DD"
         autoFocus
         required
         className="text-lg !py-1.5"
@@ -113,9 +142,6 @@ export function CertificateForm({
         autoFocus
         required
         disabled
-        defaultValue={
-          browserEnv.NEXT_PUBLIC_ATTRIBUTED_IMPACT_RECOMMENDED_VERSION
-        }
         className="text-lg !py-1.5 disabled"
       />
 
@@ -127,7 +153,7 @@ export function CertificateForm({
           render={({ field }) => (
             <MarkdownEditor
               label="Description"
-              info="You can leave this untouched until someone shows interest in your certificate; then you can fill it in."
+              info={DESCRIPTION_PROMPTS}
               value={field.value}
               onChange={field.onChange}
               onTriggerSubmit={handleSubmit(onSubmit)}

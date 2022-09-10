@@ -5,9 +5,10 @@ import toast from 'react-hot-toast'
 import { CertificateForm } from '@/components/certificate-form'
 import { Heading1 } from '@/components/heading-1'
 import { Layout } from '@/components/layout'
-import { browserEnv } from '@/env/browser'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
+
+const ATTRIBUTED_IMPACT_RECOMMENDED_VERSION = '0.3'
 
 const NewCertificatePage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
@@ -37,11 +38,12 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
             impactStart: null,
             impactEnd: null,
             tags: '',
-            attributedImpactVersion:
-              browserEnv.NEXT_PUBLIC_ATTRIBUTED_IMPACT_RECOMMENDED_VERSION,
-            actionStart: '2022-05-01',
-            actionEnd: '2022-06-01',
-            content: browserEnv.NEXT_PUBLIC_DESCRIPTION_PROMPTS,
+            attributedImpactVersion: ATTRIBUTED_IMPACT_RECOMMENDED_VERSION,
+            actionStart: new Date().toISOString().slice(0, 10),
+            actionEnd: new Date(new Date().getTime() + 1000 * 60 * 60 * 24)
+              .toISOString()
+              .slice(0, 10),
+            content: '',
           }}
           backTo="/"
           onSubmit={(values) => {
