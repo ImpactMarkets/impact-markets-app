@@ -136,19 +136,6 @@ export const certificateRouter = createProtectedRouter()
               },
             },
           },
-          holdings: {
-            orderBy: {
-              size: 'desc',
-            },
-            select: {
-              id: true,
-              certificateId: true,
-              user: true,
-              type: true,
-              size: true,
-              cost: true,
-            },
-          },
           _count: {
             select: {
               comments: true,
