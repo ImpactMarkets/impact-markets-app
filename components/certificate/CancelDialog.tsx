@@ -30,7 +30,7 @@ export function CancelDialog({
   const cancelTransactionMutation = trpc.useMutation('transaction.cancel', {
     onSuccess: () => {
       certificateId &&
-        utils.invalidateQueries(['certificate.detail', { id: certificateId }])
+        utils.invalidateQueries(['holding.feed', { certificateId }])
       utils.invalidateQueries([
         'transaction.feed',
         { userId: session!.user.id },
