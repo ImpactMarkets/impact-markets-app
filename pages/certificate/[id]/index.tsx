@@ -127,13 +127,7 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
               <Labels queryData={certificateQuery.data} />
             </div>
             <div className="my-6">
-              <Ledger queryData={certificateQuery.data} />
-            </div>
-            <div className="my-6">
-              <Transactions
-                certificateId={certificateQuery.data.id}
-                userId={session!.user.id}
-              />
+              <Ledger certificateId={Number(router.query.id)} />
             </div>
             {certificateBelongsToUser && (
               <div className="my-6">

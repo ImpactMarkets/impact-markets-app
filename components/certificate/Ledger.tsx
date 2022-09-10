@@ -7,27 +7,36 @@ import { InferQueryOutput } from '@/lib/trpc'
 import { ButtonLink } from '../button-link'
 
 type LedgerProps = {
-  queryData: InferQueryOutput<'certificate.detail'>
+  certificateId: number
 }
 
-export const Ledger = ({ queryData }: LedgerProps) => {
+export const Ledger = ({ certificateId }: LedgerProps) => {
   const [isBuyDialogOpen, setIsBuyDialogOpen] = React.useState(false)
+  const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false)
+
+  const holdingsQuery = trpc.useQuery([
+    'holding.feed',
+    {
+      certificateId,
+    },
+  ])
+  const holdings = holdingsQuery.data || []
 
   const { data: session } = useSession()
 
   return (
-    <div className="flex w-full gap-10 justify-center">
-      {queryData.holdings.some((holding) => holding.type === 'OWNERSHIP') && (
+    <div className="flex w-full justify-between">
+      {holdings.some((holding) => holding.type === 'OWNERSHIP') && (
         <div className="flex-auto max-w-xs">
           <table className="table-auto w-full">
             <thead>
               <tr>
-                <th className="text-left">Owned</th>
+                <th className="text-left">Owners</th>
                 <th className="text-right"></th>
               </tr>
             </thead>
             <tbody>
-              {queryData.holdings
+              {holdings
                 .filter((holding) => holding.type === 'OWNERSHIP')
                 .map((holding) => (
                   <tr key={holding.user.id + holding.type}>
@@ -89,7 +98,7 @@ export const Ledger = ({ queryData }: LedgerProps) => {
           </table>
         </div>
       )}
-      {queryData.holdings.some((holding) => holding.type === 'CONSUMPTION') && (
+      {holdings.some((holding) => holding.type === 'CONSUMPTION') && (
         <div className="flex-auto relative max-w-xs">
           <table className="table-auto w-full">
             <thead>
@@ -99,7 +108,7 @@ export const Ledger = ({ queryData }: LedgerProps) => {
               </tr>
             </thead>
             <tbody>
-              {queryData.holdings
+              {holdings
                 .filter((holding) => holding.type === 'CONSUMPTION')
                 .map((holding) => (
                   <tr key={holding.user.id + holding.type}>
@@ -115,6 +124,7 @@ export const Ledger = ({ queryData }: LedgerProps) => {
           </table>
         </div>
       )}
+      <Transactions certificateId={certificateId} userId={session!.user.id} />
     </div>
   )
 }

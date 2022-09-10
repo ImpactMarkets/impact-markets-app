@@ -54,11 +54,11 @@ export const Transactions = ({
   }
 
   return (
-    <div className="flex w-full gap-10 justify-center">
-      <table className="w-1/2">
+    <div className="flex gap-1 justify-center">
+      <table>
         <thead>
           <tr>
-            <th className="text-left">Pending purchases</th>
+            <th className="text-left whitespace-nowrap">Pending purchases</th>
             <th className="text-right pl-5">Size</th>
             <th className="text-right pl-5">Cost</th>
           </tr>
@@ -67,7 +67,7 @@ export const Transactions = ({
           {transactionQuery.data.map((transaction) => (
             <tr key={transaction.id}>
               <td>
-                <div className="pt-[5px]">
+                <div className="pt-[5px] whitespace-nowrap">
                   <AuthorWithDate
                     author={transaction.buyingHolding.user}
                     date={transaction.createdAt}
