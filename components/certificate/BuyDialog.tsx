@@ -1,3 +1,4 @@
+import { useSession } from 'next-auth/react'
 import * as React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -23,34 +24,39 @@ type BuyFormData = {
 }
 
 export function BuyDialog({
-  user,
   holding,
+  reservedSize,
   isOpen,
   onClose,
 }: {
-  user: {
-    id: string
-  }
   holding: {
     id: number
     certificateId: number
     size: Prisma.Decimal
   }
+  reservedSize: number
   isOpen: boolean
   onClose: () => void
 }) {
   const { register, handleSubmit, reset } = useForm<BuyFormData>({
     defaultValues: {
-      size: new Prisma.Decimal('0.00'),
+      size: new Prisma.Decimal('0.000'),
       cost: new Prisma.Decimal('0.00'),
       consume: false,
     },
   })
   const utils = trpc.useContext()
+  const { data: session } = useSession()
   const transactionMutation = trpc.useMutation('transaction.add', {
     onSuccess: () => {
-      window.location.reload()
-      return utils.invalidateQueries(['certificate.detail'])
+      utils.invalidateQueries([
+        'holding.feed',
+        { certificateId: holding.certificateId },
+      ])
+      utils.invalidateQueries([
+        'transaction.feed',
+        { certificateId: holding.certificateId, userId: session!.user.id },
+      ])
     },
     onError: (error) => {
       toast.error(`Something went wrong: ${error.message}`)
@@ -65,7 +71,6 @@ export function BuyDialog({
   const onSubmit: SubmitHandler<BuyFormData> = (data) => {
     transactionMutation.mutate(
       {
-        userId: user.id,
         sellingHolding: holding,
         size: String(data.size),
         cost: String(data.cost),
@@ -88,8 +93,11 @@ export function BuyDialog({
               label="Size"
               type="number"
               step="0.001"
+              min="0.001"
+              max={+holding.size - reservedSize}
               required
             />
+            {/* Validate minimum valuation */}
             <TextField
               {...register('cost', { required: true })}
               label="Cost"

@@ -51,19 +51,21 @@ export const transactionRouter = createProtectedRouter()
     },
   })
   .mutation('add', {
-    input: z.object({
-      userId: z.string(),
-      sellingHolding: z.object({
-        id: z.number(),
-        certificateId: z.number(),
-      }),
-      size: z.string(),
-      cost: z.string(),
-      consume: z.boolean(),
-    }),
+    input: (input) => {
+      const schema = z.object({
+        sellingHolding: z.object({
+          id: z.number(),
+          certificateId: z.number(),
+        }),
+        size: z.string(),
+        cost: z.string(),
+        consume: z.boolean(),
+      })
+      return schema.parse(input)
+    },
     async resolve({
       ctx,
-      input: { userId, sellingHolding, size: size_, cost: cost_, consume },
+      input: { sellingHolding, size: size_, cost: cost_, consume },
     }) {
       const size = new Prisma.Decimal(size_)
       const cost = new Prisma.Decimal(cost_)
@@ -73,14 +75,14 @@ export const transactionRouter = createProtectedRouter()
           where: {
             certificateId_userId_type: {
               certificateId: sellingHolding.certificateId,
-              userId: userId,
+              userId: ctx.session.user.id,
               type: 'RESERVATION',
             },
           },
           update: { size: { increment: size }, cost: { increment: cost } },
           create: {
             certificateId: sellingHolding.certificateId,
-            userId: userId,
+            userId: ctx.session.user.id,
             type: 'RESERVATION',
             size,
             cost,
