@@ -2,9 +2,11 @@ import { useSession } from 'next-auth/react'
 import * as React from 'react'
 
 import { BuyDialog } from '@/components/certificate/BuyDialog'
-import { InferQueryOutput } from '@/lib/trpc'
+import { EditDialog } from '@/components/certificate/EditDialog'
+import { trpc } from '@/lib/trpc'
 
 import { ButtonLink } from '../button-link'
+import { Transactions } from './Transactions'
 
 type LedgerProps = {
   certificateId: number
@@ -23,6 +25,10 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
   const holdings = holdingsQuery.data || []
 
   const { data: session } = useSession()
+
+  const reservedSize = holdings
+    .filter((holding) => holding.type === 'RESERVATION')
+    .reduce((aggregator, holding) => +holding.size + aggregator, 0)
 
   return (
     <div className="flex w-full justify-between">
@@ -46,54 +52,56 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
                     <td className="text-right" key="size">{`${
                       +holding.size * 100 // https://github.com/microsoft/TypeScript/issues/5710
                     }%`}</td>
-                    {holding.user.id !== session!.user.id && (
-                      <td className="text-right px-2">
-                        <ButtonLink
-                          href="#"
-                          onClick={() => {
-                            setIsBuyDialogOpen(true)
-                          }}
-                        >
-                          <span className="block shrink-0">Buy</span>
-                        </ButtonLink>
-                        <BuyDialog
-                          user={session!.user}
-                          holding={holding}
-                          isOpen={isBuyDialogOpen}
-                          onClose={() => {
-                            setIsBuyDialogOpen(false)
-                          }}
-                        />
-                      </td>
-                    )}
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-      {queryData.holdings.some((holding) => holding.type === 'RESERVATION') && (
-        <div className="flex-auto max-w-xs">
-          <table className="table-auto w-full">
-            <thead>
-              <tr>
-                <th className="text-left">Reserved</th>
-                <th className="text-right"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {queryData.holdings
-                .filter((holding) => holding.type === 'RESERVATION')
-                .map((holding) => (
-                  <tr key={holding.user.id + holding.type}>
-                    <td className="text-left" key="owner">
-                      {holding.user.name}
+                    <td className="text-right px-2">
+                      {holding.user.id === session!.user.id ? (
+                        <>
+                          <ButtonLink
+                            href="#"
+                            onClick={() => {
+                              setIsEditDialogOpen(true)
+                            }}
+                          >
+                            <span className="block shrink-0">Edit</span>
+                          </ButtonLink>
+                          <EditDialog
+                            holding={holding}
+                            isOpen={isEditDialogOpen}
+                            onClose={() => {
+                              setIsEditDialogOpen(false)
+                            }}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <ButtonLink
+                            href="#"
+                            onClick={() => {
+                              setIsBuyDialogOpen(true)
+                            }}
+                          >
+                            <span className="block shrink-0">Buy</span>
+                          </ButtonLink>
+                          <BuyDialog
+                            holding={holding}
+                            reservedSize={reservedSize}
+                            isOpen={isBuyDialogOpen}
+                            onClose={() => {
+                              setIsBuyDialogOpen(false)
+                            }}
+                          />
+                        </>
+                      )}
                     </td>
-                    <td className="text-right" key="size">{`${
-                      +holding.size * 100
-                    }%`}</td>
                   </tr>
                 ))}
+              <tr key="Reservation">
+                <td className="text-left" key="owner">
+                  Reserved
+                </td>
+                <td className="text-right" key="size">{`${
+                  reservedSize * 100
+                }%`}</td>
+              </tr>
             </tbody>
           </table>
         </div>
