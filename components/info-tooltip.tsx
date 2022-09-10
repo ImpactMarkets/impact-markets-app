@@ -14,13 +14,13 @@ export function InfoTooltip({ text }: InfoTooltipProps) {
     <Tooltip.Provider>
       <Tooltip.Root delayDuration={0}>
         <Tooltip.Trigger
-          asChild
           onClick={(event) => {
             event.preventDefault()
           }}
           onMouseDown={(event) => {
             event.preventDefault()
           }}
+          asChild
         >
           <span>
             {' '}
@@ -28,13 +28,14 @@ export function InfoTooltip({ text }: InfoTooltipProps) {
           </span>
         </Tooltip.Trigger>
         <Tooltip.Content
+          style={{ zIndex: '10' }}
           side="bottom"
           sideOffset={4}
           className={classNames(
             'max-w-[260px] px-3 py-1.5 rounded shadow-lg bg-secondary-inverse text-secondary-inverse sm:max-w-sm'
           )}
         >
-          <p className="text-sm">{text}</p>
+          <div className="text-sm">{text}</div>
           <Tooltip.Arrow
             offset={22}
             className="fill-gray-800 dark:fill-gray-50"
