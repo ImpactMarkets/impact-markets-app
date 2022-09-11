@@ -1,6 +1,6 @@
 {
-  "name": "im-web2-app",
-  "version": "1.0.0",
+  "name": "im-app",
+  "version": "2.1.0",
   "private": true,
   "engines": {
     "node": "^16.0.0"

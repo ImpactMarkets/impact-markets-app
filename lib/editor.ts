@@ -17,15 +17,17 @@ function replacePlaceholder(
   cursor.setValue(cursor.value.replace(placeholder, replaceWith))
 }
 
-export function handleUploadImages(
+export function uploadImageCommandHandler(
   textareaEl: HTMLTextAreaElement,
   files: File[]
 ) {
   const cursor = new Cursor(textareaEl)
+  const currentLineNumber = cursor.position.line
 
   files.forEach(async (file) => {
     const placeholder = `![Uploading ${file.name}...]()`
-    cursor.insert(`${placeholder}`)
+
+    cursor.replaceLine(currentLineNumber.lineNumber, placeholder)
 
     try {
       const uploadedImage = await uploadImage(file)
