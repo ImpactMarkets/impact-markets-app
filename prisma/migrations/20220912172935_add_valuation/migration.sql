@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Holding" ADD COLUMN "valuation" DECIMAL(65,30) NOT NULL DEFAULT 0;
