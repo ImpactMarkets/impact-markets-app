@@ -6,7 +6,7 @@ set -x
 source .env
 
 makemigrations () {
-    dir=prisma/migrations/$(date +%Y%m%d%H%M%S)_holdings_fixes
+    dir=prisma/migrations/$(date +%Y%m%d%H%M%S)_$1
     mkdir $dir
     createdb im-web2-app-temp --owner im-web2-app
     npx prisma migrate diff \
@@ -28,7 +28,7 @@ deploy () {
 
 case "$1" in
     makemigrations)
-        makemigrations
+        makemigrations $2
         ;;
     deploy-prod)
         deploy prod
