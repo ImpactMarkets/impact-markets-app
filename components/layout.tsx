@@ -5,7 +5,7 @@ import { Avatar } from '@/components/avatar'
 import { ButtonLink } from '@/components/button-link'
 import { Footer } from '@/components/footer'
 import { IconButton } from '@/components/icon-button'
-import { Logo, SearchIcon } from '@/components/icons'
+import { SearchIcon } from '@/components/icons'
 import {
   Menu,
   MenuButton,
