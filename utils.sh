@@ -20,6 +20,7 @@ makemigrations () {
 
 deploy () {
     npm install
+    npx prisma generate
     npm run build
     npx prisma migrate resolve --applied 20220807000000_init || true
     npx prisma migrate deploy
