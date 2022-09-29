@@ -6,29 +6,40 @@ This is a simple tool that allows members to issue certificates. Features includ
 
 ## Setup
 
-Note: Node versions > 16 can currently cause this [segmentation fault](https://github.com/prisma/prisma/issues/10649).
+## Local dependencies
 
-### Install dependencies
+- Node.js
+
+  Note: Node versions > 16 can currently cause this [segmentation fault](https://github.com/prisma/prisma/issues/10649).
+
+- docker-compose
+
+  Linux Mint: `apt install docker-compose`
+
+### Install project dependencies
 
 ```bash
 npm install
 ```
 
-### Create a database
+### Prepare the database
 
-- [Create a PlanetScale database](https://docs.planetscale.com/tutorials/planetscale-quick-start-guide#create-a-database)
-- Create a [connection string](https://docs.planetscale.com/concepts/connection-strings#creating-a-password) to connect to your database. Choose **Prisma** for the format
 - Set up the environment variables:
 
 ```bash
 cp .env.example .env
 ```
 
-- Open `.env` and set the `DATABASE_URL` variable with the connection string from PlanetScale
+- Start the database
+
+```bash
+docker-compose up -d
+```
+
 - Create the database schema:
 
 ```bash
-npx prisma db push
+DATABASE_URL=postgresql://im-app:empty@127.0.0.1/im-app npx prisma migrate deploy
 ```
 
 ### Configure authentication
