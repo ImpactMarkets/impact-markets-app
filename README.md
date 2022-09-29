@@ -2,8 +2,6 @@
 
 This is a simple tool that allows members to issue certificates. Features include a simple **Markdown-based** editor with preview, **image drag and drop**, comments and likes, **search**, a clean responsive layout with **dark mode support**, and an admin role for hiding certificates.
 
-<img src="public/images/screenshot.png" width="690" />
-
 ## Setup
 
 ## Local dependencies
