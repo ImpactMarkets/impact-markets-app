@@ -24,7 +24,7 @@ function SearchResult({
     highlight: () => void
     select: () => void
     selected: any
-    useHighlighted: () => Boolean
+    useHighlighted: () => boolean
   }
   result: InferQueryOutput<'certificate.search'>[number]
 }) {

@@ -32,8 +32,8 @@ import { getCertificateQueryPathAndInput } from './utils'
 
 type CertificateMenuProps = {
   queryData: InferQueryOutput<'certificate.detail'>
-  isUserAdmin: Boolean
-  certificateBelongsToUser: Boolean
+  isUserAdmin: boolean
+  certificateBelongsToUser: boolean
 }
 
 export const CertificateMenu = ({

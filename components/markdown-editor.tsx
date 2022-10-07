@@ -498,7 +498,7 @@ function SuggestionResult({
     highlight: () => void
     select: () => void
     selected: any
-    useHighlighted: () => Boolean
+    useHighlighted: () => boolean
   }
   suggestionResult: SuggestionResult
 }) {

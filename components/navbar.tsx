@@ -9,7 +9,7 @@ import {
   LifebuoyIcon,
   StoreIcon,
 } from '@/components/icons'
-import { Code, Group, Navbar, createStyles } from '@mantine/core'
+import { Group, Navbar, createStyles } from '@mantine/core'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')

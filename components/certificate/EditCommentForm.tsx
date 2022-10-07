@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 
 import { Button } from '@/components/button'
 import { MarkdownEditor } from '@/components/markdown-editor'
-import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc'
+import { InferQueryOutput, trpc } from '@/lib/trpc'
 
 import { CommentFormData, getCertificateQueryPathAndInput } from './utils'
 
