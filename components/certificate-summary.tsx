@@ -30,8 +30,6 @@ export type CertificateSummaryProps = {
 export function CertificateSummary({
   certificate,
   hideAuthor = false,
-  onLike,
-  onUnlike,
 }: CertificateSummaryProps) {
   const contentDocument = React.useMemo(
     () => new DOMParser().parseFromString(certificate.contentHtml, 'text/html'),

@@ -12,7 +12,7 @@ type SwitchFieldProps = SwitchFieldOwnProps &
   React.ComponentPropsWithoutRef<'input'>
 
 export const SwitchField = React.forwardRef<HTMLInputElement, SwitchFieldProps>(
-  ({ label, info, className, ...rest }, forwardedRef) => {
+  ({ label, info, ...rest }, forwardedRef) => {
     console.log(rest)
 
     return (

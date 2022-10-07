@@ -198,7 +198,7 @@ function TransactionFeed({ user }: ProfileComponentProps) {
   return <Transactions userId={user.id} />
 }
 
-function CertificateFeed({ user }: ProfileComponentProps) {
+function CertificateFeed({ user: _ }: ProfileComponentProps) {
   const { data: session } = useSession()
   const router = useRouter()
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1

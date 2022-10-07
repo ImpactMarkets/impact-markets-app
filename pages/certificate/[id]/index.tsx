@@ -31,7 +31,7 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
   )
   const certificateQuery = trpc.useQuery(certificateQueryPathAndInput)
   const likeMutation = trpc.useMutation(['certificate.like'], {
-    onMutate: async (likedCertificateId) => {
+    onMutate: async () => {
       await utils.cancelQuery(certificateQueryPathAndInput)
 
       const previousCertificate = utils.getQueryData(
@@ -60,7 +60,7 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
     },
   })
   const unlikeMutation = trpc.useMutation(['certificate.unlike'], {
-    onMutate: async (unlikedCertificateId) => {
+    onMutate: async () => {
       await utils.cancelQuery(certificateQueryPathAndInput)
 
       const previousCertificate = utils.getQueryData(

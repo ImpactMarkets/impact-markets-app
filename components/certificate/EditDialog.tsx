@@ -32,13 +32,7 @@ export function EditDialog({
   isOpen: boolean
   onClose: () => void
 }) {
-  const {
-    register,
-    watch,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<EditFormData>({
+  const { register, watch, handleSubmit, reset } = useForm<EditFormData>({
     defaultValues: {
       valuation: holding.valuation || new Prisma.Decimal('0.00'),
     },
