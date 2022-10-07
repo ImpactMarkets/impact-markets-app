@@ -1,6 +1,7 @@
+import * as React from 'react'
+
 import { SpinnerIcon } from '@/components/icons'
 import { classNames } from '@/lib/classnames'
-import * as React from 'react'
 
 export type ButtonVariant = 'primary' | 'secondary'
 

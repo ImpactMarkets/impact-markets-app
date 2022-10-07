@@ -6,6 +6,7 @@ import {
   str,
   url,
 } from 'envsafe'
+
 import { browserEnv } from './browser'
 
 if (process.browser) {

@@ -1,7 +1,8 @@
-import { classNames } from '@/lib/classnames'
-import { Menu as HeadlessMenu, Transition } from '@headlessui/react'
 import Link, { LinkProps } from 'next/link'
 import * as React from 'react'
+
+import { classNames } from '@/lib/classnames'
+import { Menu as HeadlessMenu, Transition } from '@headlessui/react'
 
 export function Menu({ children }: { children: React.ReactNode }) {
   return (

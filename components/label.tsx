@@ -1,5 +1,6 @@
-import { classNames } from '@/lib/classnames'
 import * as React from 'react'
+
+import { classNames } from '@/lib/classnames'
 
 export const Label = React.forwardRef<
   HTMLLabelElement,

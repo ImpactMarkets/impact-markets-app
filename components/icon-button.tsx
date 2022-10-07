@@ -1,6 +1,7 @@
+import * as React from 'react'
+
 import { ButtonVariant } from '@/components/button'
 import { classNames } from '@/lib/classnames'
-import * as React from 'react'
 
 export type IconButtonOwnProps = {
   variant?: ButtonVariant
