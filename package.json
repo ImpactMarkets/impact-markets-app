@@ -10,6 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "pretty": "prettier --write '**/*.{ts,tsx,json,html,css}'",
     "prepare": "husky install",
     "postinstall": "patch-package",
     "deploy-beta": "ssh im-web2-app 'cd /opt/im-web2-app-beta && git pull && ./utils.sh deploy-beta'",
