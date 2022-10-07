@@ -22,8 +22,8 @@ export const authOptions: NextAuthOptions = {
               url: 'https://api.github.com/user',
               async request({ client, tokens }) {
                 // Get base profile
-                // @ts-ignore
-                const profile = await client.userinfo(tokens)
+                // FIXME: Why are different types clashing here ? Version conflict ?
+                const profile = await client.userinfo(tokens as any)
 
                 // If user has email hidden, get their primary email from the GitHub API
                 if (!profile.email) {
