@@ -15,7 +15,7 @@ import {
 import { MAX_LIKED_BY_SHOWN } from '@/components/like-button'
 import { classNames } from '@/lib/classnames'
 import { InferQueryOutput } from '@/lib/trpc'
-import { Badge, Button, Card, Group, Image, Text } from '@mantine/core'
+import { Card } from '@mantine/core'
 import * as Tooltip from '@radix-ui/react-tooltip'
 
 import { Heading2 } from './heading-2'
@@ -30,8 +30,6 @@ export type CertificateSummaryProps = {
 export function CertificateSummary({
   certificate,
   hideAuthor = false,
-  onLike,
-  onUnlike,
 }: CertificateSummaryProps) {
   const contentDocument = React.useMemo(
     () => new DOMParser().parseFromString(certificate.contentHtml, 'text/html'),

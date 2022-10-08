@@ -1,12 +1,14 @@
-import { classNames } from '@/lib/classnames'
 import * as React from 'react'
 
+import { classNames } from '@/lib/classnames'
+
 export const Heading1 = React.forwardRef<
-  HTMLLabelElement,
+  HTMLHeadingElement,
   React.ComponentPropsWithoutRef<'h1'>
 >(({ children, className, ...rest }, forwardedRef) => (
   <h1
     className={classNames('font-display text-3xl md:text-4xl', className)}
+    ref={forwardedRef}
     {...rest}
   >
     {children}

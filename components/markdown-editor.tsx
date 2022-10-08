@@ -498,12 +498,12 @@ function SuggestionResult({
     highlight: () => void
     select: () => void
     selected: any
-    useHighlighted: () => Boolean
+    useHighlighted: () => boolean
   }
   suggestionResult: SuggestionResult
 }) {
   const ref = React.useRef<HTMLLIElement>(null)
-  const { id, index, highlight, select, useHighlighted } = useItem({
+  const { id, highlight, select, useHighlighted } = useItem({
     ref,
     value: suggestionResult,
   })

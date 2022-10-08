@@ -23,7 +23,7 @@ export function handleUploadImages(
 ) {
   const cursor = new Cursor(textareaEl)
 
-  files.forEach(async (file, idx) => {
+  files.forEach(async (file) => {
     const placeholder = `![Uploading ${file.name}...]()`
     cursor.insert(`${placeholder}`)
 

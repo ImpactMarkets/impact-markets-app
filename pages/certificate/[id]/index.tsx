@@ -13,7 +13,6 @@ import { Comment } from '@/components/certificate/Comment'
 import { Labels } from '@/components/certificate/Labels'
 import { Ledger } from '@/components/certificate/Ledger'
 import { ProofTemplate } from '@/components/certificate/ProofTemplate'
-import { Transactions } from '@/components/certificate/Transactions'
 import { getCertificateQueryPathAndInput } from '@/components/certificate/utils'
 import { Heading1 } from '@/components/heading-1'
 import { HtmlView } from '@/components/html-view'
@@ -32,7 +31,7 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
   )
   const certificateQuery = trpc.useQuery(certificateQueryPathAndInput)
   const likeMutation = trpc.useMutation(['certificate.like'], {
-    onMutate: async (likedCertificateId) => {
+    onMutate: async () => {
       await utils.cancelQuery(certificateQueryPathAndInput)
 
       const previousCertificate = utils.getQueryData(
@@ -61,7 +60,7 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
     },
   })
   const unlikeMutation = trpc.useMutation(['certificate.unlike'], {
-    onMutate: async (unlikedCertificateId) => {
+    onMutate: async () => {
       await utils.cancelQuery(certificateQueryPathAndInput)
 
       const previousCertificate = utils.getQueryData(

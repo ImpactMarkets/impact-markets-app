@@ -1,6 +1,7 @@
-import { buttonClasses, ButtonVariant } from '@/components/button'
 import Link, { LinkProps } from 'next/link'
 import * as React from 'react'
+
+import { ButtonVariant, buttonClasses } from '@/components/button'
 
 type ButtonLinkProps = {
   variant?: ButtonVariant

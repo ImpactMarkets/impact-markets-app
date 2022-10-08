@@ -1,8 +1,9 @@
-import { serverEnv } from '@/env/server'
-import { authOptions } from '@/lib/auth'
 import { v2 as cloudinary } from 'cloudinary'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { unstable_getServerSession as getServerSession } from 'next-auth/next'
+
+import { serverEnv } from '@/env/server'
+import { authOptions } from '@/lib/auth'
 
 type Data = {
   timestamp: number

@@ -1,7 +1,3 @@
-import { Button } from '@/components/button'
-import { Footer } from '@/components/footer'
-import { Logo } from '@/components/icons'
-import { authOptions } from '@/lib/auth'
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
@@ -10,6 +6,11 @@ import { unstable_getServerSession as getServerSession } from 'next-auth/next'
 import { getProviders, signIn } from 'next-auth/react'
 import Head from 'next/head'
 import Div100vh from 'react-div-100vh'
+
+import { Button } from '@/components/button'
+import { Footer } from '@/components/footer'
+import { Logo } from '@/components/icons'
+import { authOptions } from '@/lib/auth'
 
 const SignIn = ({
   providers,
