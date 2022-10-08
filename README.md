@@ -44,7 +44,7 @@ sudo docker-compose up -d
 - Create the database schema:
 
 ```bash
-DATABASE_URL=postgresql://im-app:empty@127.0.0.1/im-app npx prisma migrate deploy
+npx prisma migrate deploy
 ```
 
 ### Launch the app
