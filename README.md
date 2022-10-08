@@ -12,7 +12,7 @@ This is a simple tool that allows members to issue certificates. Features includ
 
 - docker-compose
 
-  Linux Mint: `apt install docker-compose`
+  Linux Mint: `sudo apt install docker-compose`
 
 ### Install project dependencies
 
@@ -38,7 +38,7 @@ GOOGLE_CLIENT_SECRET=
 - Start the database
 
 ```bash
-docker-compose up -d
+sudo docker-compose up -d
 ```
 
 - Create the database schema:
