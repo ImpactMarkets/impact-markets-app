@@ -8,14 +8,14 @@ source .env
 makemigrations () {
     dir=prisma/migrations/$(date +%Y%m%d%H%M%S)_$1
     mkdir $dir
-    createdb im-web2-app-temp --owner im-web2-app
+    createdb im-app-temp --owner im-app
     npx prisma migrate diff \
         --from-migrations prisma/migrations \
         --shadow-database-url ${DATABASE_URL}-temp \
         --to-schema-datamodel prisma/schema.prisma \
         --script \
         > $dir/migration.sql
-    dropdb im-web2-app-temp
+    dropdb im-app-temp
 }
 
 deploy () {
@@ -24,7 +24,8 @@ deploy () {
     npm run build
     npx prisma migrate resolve --applied 20220807000000_init || true
     npx prisma migrate deploy
-    sudo supervisorctl restart im-web2-app-$1
+    sudo supervisorctl restart im-app-$1
+}
 }
 
 case "$1" in
