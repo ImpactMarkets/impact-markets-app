@@ -26,6 +26,11 @@ deploy () {
     npx prisma migrate deploy
     sudo supervisorctl restart im-app-$1
 }
+
+import () {
+    pg_restore --no-owner -d postgresql://im-app:empty@127.0.0.1/im-app "$1"
+    npx prisma migrate resolve --applied 20220807000000_init || true
+    npx prisma migrate deploy
 }
 
 case "$1" in
@@ -37,5 +42,8 @@ case "$1" in
         ;;
     deploy-beta)
         deploy beta
+        ;;
+    import)
+        import $2
         ;;
 esac
