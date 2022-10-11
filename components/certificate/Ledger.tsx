@@ -78,6 +78,7 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
                             onClick={() => {
                               setIsBuyDialogOpen(true)
                             }}
+                            variant="highlight"
                           >
                             <span className="block shrink-0">Buy</span>
                           </ButtonLink>

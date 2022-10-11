@@ -3,7 +3,7 @@ import * as React from 'react'
 import { SpinnerIcon } from '@/components/icons'
 import { classNames } from '@/lib/classnames'
 
-export type ButtonVariant = 'primary' | 'secondary'
+export type ButtonVariant = 'primary' | 'secondary' | 'highlight'
 
 type ButtonProps = {
   variant?: ButtonVariant
@@ -28,6 +28,7 @@ export function buttonClasses({
       'text-secondary-inverse bg-secondary-inverse hover:text-primary-inverse hover:bg-primary-inverse',
     variant === 'secondary' &&
       'border text-primary border-secondary bg-primary hover:bg-secondary',
+    variant === 'highlight' && 'text-highlight bg-highlight hover:bg-blue-500',
     (disabled || isLoading) && 'opacity-50 cursor-default',
     className
   )

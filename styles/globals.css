@@ -90,6 +90,7 @@
   --bg-primary-inverse: var(--color-gray-900);
   --bg-secondary: var(--color-gray-050);
   --bg-secondary-inverse: var(--color-gray-800);
+  --bg-highlight: var(--color-blue-600);
   --bg-green: var(--color-green-600);
   --bg-green-light: var(--color-green-050);
   --bg-yellow-light: var(--color-yellow-050);
@@ -101,6 +102,7 @@
   --text-primary-inverse: var(--color-white);
   --text-secondary: var(--color-gray-600);
   --text-secondary-inverse: var(--color-gray-050);
+  --text-highlight: var(--color-white);
   --text-blue: var(--color-blue-600);
   --text-green: var(--color-green-600);
   --text-orange: var(--color-orange-600);
@@ -114,6 +116,7 @@
   --bg-primary-inverse: var(--color-white);
   --bg-secondary: var(--color-gray-850);
   --bg-secondary-inverse: var(--color-gray-050);
+  --bg-highlight: var(--color-blue-500);
   --bg-green: var(--color-green-500);
   --bg-green-light: var(--color-green-900);
   --bg-yellow-light: var(--color-yellow-900);
@@ -126,6 +129,7 @@
   --text-primary-inverse: var(--color-gray-900);
   --text-secondary: var(--color-gray-300);
   --text-secondary-inverse: var(--color-gray-800);
+  --text-highlight: var(--color-white);
   --text-blue: var(--color-blue-400);
   --text-green: var(--color-green-500);
   --text-orange: var(--color-orange-300);

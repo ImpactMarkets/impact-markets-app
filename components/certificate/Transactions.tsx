@@ -85,6 +85,7 @@ export const Transactions = ({
                   onClick={() => {
                     setIsCancelDialogOpen(true)
                   }}
+                  variant="secondary"
                 >
                   <span className="block shrink-0">
                     {/* Call it “Decline” if the user whose profile this is is also the seller;
