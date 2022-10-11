@@ -13,8 +13,6 @@ type SwitchFieldProps = SwitchFieldOwnProps &
 
 export const SwitchField = React.forwardRef<HTMLInputElement, SwitchFieldProps>(
   ({ label, info, ...rest }, forwardedRef) => {
-    console.log(rest)
-
     return (
       <Label className="block text-s">
         {label}

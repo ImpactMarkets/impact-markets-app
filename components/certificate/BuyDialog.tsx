@@ -33,15 +33,14 @@ export function BuyDialog({
     id: number
     certificateId: number
     size: Prisma.Decimal
+    valuation: Prisma.Decimal
   }
   reservedSize: number
   isOpen: boolean
   onClose: () => void
 }) {
-  const { register, handleSubmit, reset } = useForm<BuyFormData>({
+  const { register, handleSubmit, reset, watch } = useForm<BuyFormData>({
     defaultValues: {
-      size: new Prisma.Decimal('0.000'),
-      cost: new Prisma.Decimal('0.00'),
       consume: false,
     },
   })
@@ -82,31 +81,68 @@ export function BuyDialog({
     )
   }
 
+  const watchSize = watch('size')
+  const watchCost = watch('cost')
+
+  const toSize = (value: number) =>
+    value.toLocaleString(undefined, {
+      maximumFractionDigits: 1,
+    })
+  const toCost = (value: number) =>
+    value.toLocaleString(undefined, {
+      maximumFractionDigits: 2,
+    })
+
   return (
     <Dialog isOpen={isOpen} onClose={handleClose}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
           <DialogTitle>Buy</DialogTitle>
           <div className="mt-6 space-y-6">
+            {/* Not using NumberInput because onChange is called with only the value, not the field element */}
             <TextField
-              {...register('size', { required: true })}
+              {...register('size', {
+                required: true,
+                shouldUnregister: true,
+                setValueAs: (value) => value / 100,
+              })}
               label="Size"
+              description={
+                <span>
+                  Percentage points in the <em>whole</em> certificate (max.:{' '}
+                  {toSize((1 - reservedSize) * 100)}
+                  %)
+                </span>
+              }
+              rightSection="%"
+              classNames={{ rightSection: 'w-12' }}
               type="number"
-              step="0.001"
-              min="0.001"
-              max={+holding.size - reservedSize}
+              step="0.1"
+              min="0.1"
+              max={(+holding.size - reservedSize) * 100}
               required
             />
             {/* Validate minimum valuation */}
             <TextField
-              {...register('cost', { required: true })}
+              {...register('cost', { required: true, shouldUnregister: true })}
               label="Cost"
+              description={
+                <span>
+                  Seller’s valuation: ${toCost(+holding.valuation || 1)}, your
+                  valuation: ${toCost(+watchCost / +watchSize)}, min. cost: $
+                  {toCost((+holding.valuation || 1) * +watchSize)}
+                </span>
+              }
+              rightSection="USD"
+              classNames={{ rightSection: 'w-16' }}
               type="number"
               step="0.01"
+              min={(+holding.valuation || 1) * +watchSize}
               required
             />
+
             <SwitchField
-              {...register('consume')}
+              {...register('consume', { shouldUnregister: true })}
               label="Consume immediately"
               info="You will never be able to resell shares that you have consumed."
             />
@@ -118,6 +154,7 @@ export function BuyDialog({
             type="submit"
             isLoading={transactionMutation.isLoading}
             loadingChildren="Saving"
+            variant="highlight"
           >
             Buy
           </Button>

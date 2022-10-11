@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { classNames } from '@/lib/classnames'
+import { TextInput, TextInputProps } from '@mantine/core'
 
 import { InfoTooltip } from './info-tooltip'
 import { Label } from './label'
@@ -11,6 +12,7 @@ export type TextFieldOwnProps = {
 }
 
 type TextFieldProps = TextFieldOwnProps &
+  TextInputProps &
   React.ComponentPropsWithoutRef<'input'>
 
 export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
@@ -26,7 +28,7 @@ export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             {info && <InfoTooltip text={info} />}
           </Label>
         )}
-        <input
+        <TextInput
           {...rest}
           ref={forwardedRef}
           id={id || name}
