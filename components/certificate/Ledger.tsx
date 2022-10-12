@@ -57,6 +57,7 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
                         <>
                           <ButtonLink
                             href="#"
+                            variant="secondary"
                             onClick={() => {
                               setIsEditDialogOpen(true)
                             }}
@@ -75,10 +76,10 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
                         <>
                           <ButtonLink
                             href="#"
+                            variant="highlight"
                             onClick={() => {
                               setIsBuyDialogOpen(true)
                             }}
-                            variant="highlight"
                           >
                             <span className="block shrink-0">Buy</span>
                           </ButtonLink>

@@ -41,7 +41,7 @@ export const holdingRouter = createProtectedRouter()
       const valuation = new Prisma.Decimal(valuation_)
 
       const one = new Prisma.Decimal(1)
-      if (valuation <= one) {
+      if (valuation < one) {
         throw new TRPCError({ code: 'BAD_REQUEST' })
       }
 
