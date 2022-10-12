@@ -21,19 +21,18 @@ export const ProofTemplate = ({ queryData }: ProofTemplateProps) => (
     <p>
       {' '}
       <strong className="font-bold">
-        Please edit your certificate to include at the bottom:
+        Please edit your article to include at the bottom:
       </strong>{' '}
-      As of {queryData.createdAt.toISOString().slice(0, 10)}, the{' '}
+      There is exactly one{' '}
       <a
         href={window.location.href}
         target="_blank"
         rel="noreferrer"
         className="underline"
       >
-        certificate of this article
-      </a>{' '}
-      is owned by [name] ([percentage]), [name] ([percentage]), …, and [name]
-      ([percentage]).
+        impact certificate of this article
+      </a>
+      .
     </p>
   </div>
 )
