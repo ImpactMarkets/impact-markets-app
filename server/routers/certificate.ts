@@ -287,31 +287,6 @@ export const certificateRouter = createProtectedRouter()
       return updatedCertificate
     },
   })
-  .mutation('delete', {
-    input: z.number(),
-    async resolve({ input: id, ctx }) {
-      const certificate = await ctx.prisma.certificate.findUnique({
-        where: { id },
-        select: {
-          author: {
-            select: {
-              id: true,
-            },
-          },
-        },
-      })
-
-      const certificateBelongsToUser =
-        certificate?.author.id === ctx.session.user.id
-
-      if (!certificateBelongsToUser) {
-        throw new TRPCError({ code: 'FORBIDDEN' })
-      }
-
-      await ctx.prisma.certificate.delete({ where: { id } })
-      return id
-    },
-  })
   .mutation('like', {
     input: z.number(),
     async resolve({ input: id, ctx }) {

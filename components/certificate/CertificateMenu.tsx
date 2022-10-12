@@ -89,9 +89,6 @@ export const CertificateMenu = ({
               {certificateBelongsToUser && (
                 <>
                   <MenuItemButton onClick={handleEdit}>Edit</MenuItemButton>
-                  <MenuItemButton className="!text-red" onClick={handleDelete}>
-                    Delete
-                  </MenuItemButton>
                 </>
               )}
             </MenuItemsContent>
@@ -114,18 +111,9 @@ export const CertificateMenu = ({
             </IconButton>
           ))}
         {certificateBelongsToUser && (
-          <>
-            <IconButton variant="secondary" title="Edit" onClick={handleEdit}>
-              <EditIcon className="w-4 h-4" />
-            </IconButton>
-            <IconButton
-              variant="secondary"
-              title="Delete"
-              onClick={handleDelete}
-            >
-              <TrashIcon className="w-4 h-4 text-red" />
-            </IconButton>
-          </>
+          <IconButton variant="secondary" title="Edit" onClick={handleEdit}>
+            <EditIcon className="w-4 h-4" />
+          </IconButton>
         )}
       </div>
 
