@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { classNames } from '@/lib/classnames'
+import { classNames as classNamesUtil } from '@/lib/classnames'
 import { TextInput, TextInputProps } from '@mantine/core'
 
 import { InfoTooltip } from './info-tooltip'
@@ -17,13 +17,13 @@ type TextFieldProps = TextFieldOwnProps &
 
 export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
   (
-    { label, info, id, name, type = 'text', className, ...rest },
+    { label, info, id, name, type = 'text', className, classNames, ...rest },
     forwardedRef
   ) => {
     return (
       <div className="mt-6">
         {label && (
-          <Label htmlFor={id || name} className="block mb-2 text-s">
+          <Label htmlFor={id || name} className="block text-s">
             {label}
             {info && <InfoTooltip text={info} />}
           </Label>
@@ -34,10 +34,13 @@ export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           id={id || name}
           name={name}
           type={type}
-          className={classNames(
-            'block w-full py-1 rounded shadow-sm bg-secondary border-secondary focus-ring',
-            className
-          )}
+          classNames={{
+            input: classNamesUtil(
+              'block w-full py-1 rounded shadow-sm bg-secondary border-secondary focus-ring',
+              className
+            ),
+            ...classNames,
+          }}
         />
       </div>
     )

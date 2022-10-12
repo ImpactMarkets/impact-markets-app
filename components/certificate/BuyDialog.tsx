@@ -34,6 +34,9 @@ export function BuyDialog({
     certificateId: number
     size: Prisma.Decimal
     valuation: Prisma.Decimal
+    user: {
+      name: string
+    }
   }
   reservedSize: number
   isOpen: boolean
@@ -99,6 +102,10 @@ export function BuyDialog({
         <DialogContent>
           <DialogTitle>Buy</DialogTitle>
           <div className="mt-6 space-y-6">
+            <p>
+              Please contact the current owner {holding.user.name} to agree on a
+              payment method.
+            </p>
             {/* Not using NumberInput because onChange is called with only the value, not the field element */}
             <TextField
               {...register('size', {
@@ -129,8 +136,14 @@ export function BuyDialog({
               description={
                 <span>
                   Seller’s valuation: ${toCost(+holding.valuation || 1)}, your
-                  valuation: ${toCost(+watchCost / +watchSize)}, min. cost: $
-                  {toCost((+holding.valuation || 1) * +watchSize)}
+                  valuation: $
+                  {watchCost && watchSize
+                    ? toCost(+watchCost / +watchSize)
+                    : '–'}
+                  , min. cost: $
+                  {watchSize
+                    ? toCost((+holding.valuation || 1) * +watchSize)
+                    : '–'}
                 </span>
               }
               rightSection="USD"
