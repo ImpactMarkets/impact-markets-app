@@ -78,6 +78,7 @@ export function EditDialog({
               info="Your minimum valuation of the whole certificate. You won’t receive any lower offers."
               type="number"
               step="0.01"
+              min="1"
               required
             />
           </div>

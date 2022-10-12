@@ -70,6 +70,28 @@ export const transactionRouter = createProtectedRouter()
       const size = new Prisma.Decimal(size_)
       const cost = new Prisma.Decimal(cost_)
 
+      const holding = await ctx.prisma.holding.findUniqueOrThrow({
+        where: { id: sellingHolding.id },
+      })
+      const reservations = await ctx.prisma.holding.aggregate({
+        where: {
+          type: 'RESERVATION',
+          certificateId: sellingHolding.certificateId,
+        },
+        _sum: { size: true },
+      })
+
+      const zero = new Prisma.Decimal(0)
+      const one = new Prisma.Decimal(1)
+      const reservedSize = reservations._sum.size || zero
+      if (size <= zero || size > holding.size.minus(reservedSize)) {
+        throw new TRPCError({ code: 'BAD_REQUEST' })
+      }
+      if (cost < (holding.valuation || one).times(size)) {
+        throw new TRPCError({ code: 'BAD_REQUEST' })
+      }
+
+      // This is a bit confusing b/c our model and the database feature are both called tranactions
       const transaction = await ctx.prisma.$transaction(async (prisma) => {
         const buyingHolding = await prisma.holding.upsert({
           where: {

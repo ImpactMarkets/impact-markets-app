@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { Prisma } from '@prisma/client'
+import { TRPCError } from '@trpc/server'
 
 import { createProtectedRouter } from '../create-protected-router'
 
@@ -38,6 +39,12 @@ export const holdingRouter = createProtectedRouter()
     }),
     async resolve({ input: { id, valuation: valuation_ }, ctx }) {
       const valuation = new Prisma.Decimal(valuation_)
+
+      const one = new Prisma.Decimal(1)
+      if (valuation <= one) {
+        throw new TRPCError({ code: 'BAD_REQUEST' })
+      }
+
       // updateMany only to make the userId condition work – should still always be 0 or 1
       await ctx.prisma.holding.updateMany({
         where: {
