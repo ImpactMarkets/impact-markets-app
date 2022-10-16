@@ -84,6 +84,7 @@ export const certificateRouter = createProtectedRouter()
         where: { id },
         select: {
           id: true,
+          cuid: true,
           title: true,
           content: true,
           contentHtml: true,
