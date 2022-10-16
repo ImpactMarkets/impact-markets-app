@@ -74,7 +74,7 @@ export function EditDialog({
           <div className="mt-6 space-y-6">
             <TextField
               {...register('valuation', { required: true })}
-              label="Valuation"
+              label="Minimum valuation"
               info="Your minimum valuation of the whole certificate. You won’t receive any lower offers."
               type="number"
               step="0.01"
@@ -83,7 +83,8 @@ export function EditDialog({
             />
           </div>
           <p className="mt-5">
-            Value of your holding: $
+            Value of your holding{' '}
+            {new Prisma.Decimal(+holding.size * 100).toFixed(0)}%: $
             {new Prisma.Decimal(+holding.size * +watchValuation).toFixed(2)}
           </p>
           <DialogCloseButton onClick={handleClose} />
