@@ -12,13 +12,7 @@ import {
   DialogTitle,
 } from '@/components/dialog'
 import { IconButton } from '@/components/icon-button'
-import {
-  DotsIcon,
-  EditIcon,
-  EyeClosedIcon,
-  EyeIcon,
-  TrashIcon,
-} from '@/components/icons'
+import { DotsIcon, EditIcon, EyeClosedIcon, EyeIcon } from '@/components/icons'
 import {
   Menu as BaseMenu,
   MenuButton,
@@ -43,8 +37,6 @@ export const CertificateMenu = ({
 }: CertificateMenuProps) => {
   const router = useRouter()
 
-  const [isConfirmDeleteDialogOpen, setIsConfirmDeleteDialogOpen] =
-    React.useState(false)
   const [isConfirmHideDialogOpen, setIsConfirmHideDialogOpen] =
     React.useState(false)
   const [isConfirmUnhideDialogOpen, setIsConfirmUnhideDialogOpen] =
@@ -60,10 +52,6 @@ export const CertificateMenu = ({
 
   function handleEdit() {
     router.push(`/certificate/${queryData?.id}/edit`)
-  }
-
-  function handleDelete() {
-    setIsConfirmDeleteDialogOpen(true)
   }
 
   if (!(certificateBelongsToUser || isUserAdmin)) {
@@ -116,14 +104,6 @@ export const CertificateMenu = ({
           </IconButton>
         )}
       </div>
-
-      <ConfirmDeleteDialog
-        certificateId={queryData.id}
-        isOpen={isConfirmDeleteDialogOpen}
-        onClose={() => {
-          setIsConfirmDeleteDialogOpen(false)
-        }}
-      />
 
       <ConfirmHideDialog
         certificateId={queryData.id}
@@ -245,54 +225,6 @@ function ConfirmUnhideDialog({
           }}
         >
           Unhide certificate
-        </Button>
-        <Button variant="secondary" onClick={onClose} ref={cancelRef}>
-          Cancel
-        </Button>
-      </DialogActions>
-    </Dialog>
-  )
-}
-
-function ConfirmDeleteDialog({
-  certificateId,
-  isOpen,
-  onClose,
-}: {
-  certificateId: number
-  isOpen: boolean
-  onClose: () => void
-}) {
-  const cancelRef = React.useRef<HTMLButtonElement>(null)
-  const router = useRouter()
-  const deleteCertificateMutation = trpc.useMutation('certificate.delete', {
-    onError: (error) => {
-      toast.error(`Something went wrong: ${error.message}`)
-    },
-  })
-
-  return (
-    <Dialog isOpen={isOpen} onClose={onClose} initialFocus={cancelRef}>
-      <DialogContent>
-        <DialogTitle>Delete certificate</DialogTitle>
-        <DialogDescription className="mt-6">
-          Are you sure you want to delete this certificate?
-        </DialogDescription>
-        <DialogCloseButton onClick={onClose} />
-      </DialogContent>
-      <DialogActions>
-        <Button
-          variant="secondary"
-          className="!text-red"
-          isLoading={deleteCertificateMutation.isLoading}
-          loadingChildren="Deleting certificate"
-          onClick={() => {
-            deleteCertificateMutation.mutate(certificateId, {
-              onSuccess: () => router.push('/'),
-            })
-          }}
-        >
-          Delete certificate
         </Button>
         <Button variant="secondary" onClick={onClose} ref={cancelRef}>
           Cancel
