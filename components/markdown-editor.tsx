@@ -498,7 +498,8 @@ function SuggestionResult({
     highlight: () => void
     select: () => void
     selected: any
-    useHighlighted: () => boolean
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    useHighlighted: () => boolean | Boolean // Boolean due to dependency on use-item-list
   }
   suggestionResult: SuggestionResult
 }) {

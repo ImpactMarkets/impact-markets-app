@@ -35,7 +35,7 @@ export function BuyDialog({
     size: Prisma.Decimal
     valuation: Prisma.Decimal
     user: {
-      name: string
+      name: string | null
     }
   }
   reservedSize: number
@@ -103,8 +103,8 @@ export function BuyDialog({
           <DialogTitle>Buy</DialogTitle>
           <div className="mt-6 space-y-6">
             <p>
-              Please contact the current owner {holding.user.name} to agree on a
-              payment method.
+              Please contact the current owner {holding.user.name || ''} to
+              agree on a payment method.
             </p>
             {/* Not using NumberInput because onChange is called with only the value, not the field element */}
             <TextField

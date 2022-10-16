@@ -1,16 +1,16 @@
 import { useRouter } from 'next/router'
 import * as React from 'react'
 import { useBeforeunload } from 'react-beforeunload'
-import { FormState } from 'react-hook-form'
+import { FieldValues, FormState } from 'react-hook-form'
 
-type Props<T> = {
+type Props<T extends FieldValues> = {
   formState: FormState<T>
   message?: string
 }
 
 const defaultMessage = 'Are you sure to leave without saving?'
 
-export function useLeaveConfirm<T>({
+export function useLeaveConfirm<T extends FieldValues>({
   formState,
   message = defaultMessage,
 }: Props<T>) {
