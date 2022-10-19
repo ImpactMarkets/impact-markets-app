@@ -135,22 +135,20 @@ export function BuyDialog({
               label="Cost"
               description={
                 <span>
-                  Seller’s valuation: ${toCost(+holding.valuation || 1)}, your
+                  Seller’s valuation: ${toCost(+holding.valuation)}, your
                   valuation: $
                   {watchCost && watchSize
                     ? toCost(+watchCost / +watchSize)
                     : '–'}
                   , min. cost: $
-                  {watchSize
-                    ? toCost((+holding.valuation || 1) * +watchSize)
-                    : '–'}
+                  {watchSize ? toCost(+holding.valuation * +watchSize) : '–'}
                 </span>
               }
               rightSection="USD"
               classNames={{ rightSection: 'w-16' }}
               type="number"
               step="0.01"
-              min={(+holding.valuation || 1) * +watchSize}
+              min={+holding.valuation * +watchSize}
               required
             />
 

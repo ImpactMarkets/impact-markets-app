@@ -147,7 +147,7 @@ model Holding {
 
   size      Decimal @default(0)
   cost      Decimal @default(0) // Only needed for the potential future reward mode
-  valuation Decimal @default(0) // Minimum valuation for offers
+  valuation Decimal @default(1) // Minimum valuation for offers
 
   certificate      Certificate   @relation(fields: [certificateId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   user             User          @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
