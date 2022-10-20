@@ -5,13 +5,12 @@ name: Style and type checks
 
 on:
   push:
-    branches: [ "main", "beta", "development" ]
+    branches: ['main', 'beta', 'development']
   pull_request:
-    branches: [ "main", "beta", "development" ]
+    branches: ['main', 'beta', 'development']
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -20,12 +19,12 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm install typescript
-    - run: npx pretty-quick --staged
-    - run: npx tsc --checkJs
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm install typescript
+      - run: npx pretty-quick --staged
+      - run: npx tsc --checkJs
