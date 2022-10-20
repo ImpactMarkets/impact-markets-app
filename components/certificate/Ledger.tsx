@@ -104,9 +104,9 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
                 <td className="text-left" key="owner">
                   Reserved
                 </td>
-                <td className="text-right" key="size">{`${
-                  reservedSize * 100
-                }%`}</td>
+                <td className="text-right" key="size">
+                  {reservedSize * 100}%
+                </td>
               </tr>
             </tbody>
           </table>
@@ -129,9 +129,9 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
                     <td className="text-left" key="owner">
                       {holding.user.name}
                     </td>
-                    <td className="text-right" key="size">{`${
-                      +holding.size * 100
-                    }%`}</td>
+                    <td className="text-right" key="size">
+                      {+holding.size * 100}%
+                    </td>
                   </tr>
                 ))}
             </tbody>
