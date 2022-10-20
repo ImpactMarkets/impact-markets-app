@@ -129,7 +129,6 @@ export function BuyDialog({
               max={(+holding.size - reservedSize) * 100}
               required
             />
-            {/* Validate minimum valuation */}
             <TextField
               {...register('cost', { required: true, shouldUnregister: true })}
               label="Cost"
@@ -141,14 +140,14 @@ export function BuyDialog({
                     ? toCost(+watchCost / +watchSize)
                     : '–'}
                   , min. cost: $
-                  {watchSize ? toCost(+holding.valuation * +watchSize) : '–'}
+                  {toCost(Math.max(+holding.valuation * +watchSize, 1))}
                 </span>
               }
               rightSection="USD"
               classNames={{ rightSection: 'w-16' }}
               type="number"
               step="0.01"
-              min={+holding.valuation * +watchSize}
+              min={Math.max(+holding.valuation * +watchSize, 1)}
               required
             />
 
