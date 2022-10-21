@@ -51,10 +51,18 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
                       {holding.user.name}
                     </td>
                     <td className="text-right" key="size">
-                      {+holding.size * 100}%
+                      {(+holding.size * 100).toLocaleString(undefined, {
+                        maximumFractionDigits: 1,
+                      })}
+                      %
                     </td>
-                    <td className="text-right" key="size">
-                      <>at ${holding.valuation}</>
+                    <td className="text-right" key="valuation">
+                      <>
+                        at $
+                        {(+holding.valuation).toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                        })}
+                      </>
                     </td>
                     <td className="text-right px-2">
                       {holding.user.id === session!.user.id ? (
@@ -105,7 +113,10 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
                   Reserved
                 </td>
                 <td className="text-right" key="size">
-                  {reservedSize * 100}%
+                  {(reservedSize * 100).toLocaleString(undefined, {
+                    maximumFractionDigits: 1,
+                  })}
+                  %
                 </td>
               </tr>
             </tbody>
@@ -130,7 +141,10 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
                       {holding.user.name}
                     </td>
                     <td className="text-right" key="size">
-                      {+holding.size * 100}%
+                      {(+holding.size * 100).toLocaleString(undefined, {
+                        maximumFractionDigits: 1,
+                      })}
+                      %
                     </td>
                   </tr>
                 ))}
