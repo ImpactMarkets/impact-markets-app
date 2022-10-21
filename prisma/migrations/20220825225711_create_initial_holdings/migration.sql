@@ -24,7 +24,8 @@ insert into "Holding" ("certificateId", "userId", "type", "size", "cost") values
  (25, 'cl51ejlys7229pcop9n9e7ijg', 'OWNERSHIP', 1, 0),
  (26, 'cl4xkdjkk3944pcopqp36ystr', 'OWNERSHIP', 1, 0),
  (27, 'cl5b05t0z10459pcoptr3m2pvo', 'OWNERSHIP', 1, 0),
- (28, 'cl5bivaaz0052xuopr19f2ak3', 'OWNERSHIP', 1, 0)
+ (28, 'cl5bivaaz0052xuopr19f2ak3', 'OWNERSHIP', 1, 0),
+ (30, 'cl3ahmzcn0123a4opvnc35uyg', 'OWNERSHIP', 1, 0)
 ;
 
 update "Certificate" set "cuid" = 'cl79kcvu1000101ol3u5g1avh' where "id" = 2 and "cuid" is null;
@@ -53,3 +54,4 @@ update "Certificate" set "cuid" = 'cl79kcvu1000l01olaxku5l7z' where "id" = 25 an
 update "Certificate" set "cuid" = 'cl79kcvu1000m01ol4k510c94' where "id" = 26 and "cuid" is null;
 update "Certificate" set "cuid" = 'cl79kcvu1000n01olg5vlgcaa' where "id" = 27 and "cuid" is null;
 update "Certificate" set "cuid" = 'cl79kcvu1000o01ol8zp9azcj' where "id" = 28 and "cuid" is null;
+update "Certificate" set "cuid" = 'cl9h33trz000001qq9wfx4cpv' where "id" = 30 and "cuid" is null;

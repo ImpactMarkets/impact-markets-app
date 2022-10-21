@@ -39,6 +39,7 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
               <tr>
                 <th className="text-left">Owners</th>
                 <th className="text-right"></th>
+                <th className="text-right"></th>
               </tr>
             </thead>
             <tbody>
@@ -49,9 +50,20 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
                     <td className="text-left" key="owner">
                       {holding.user.name}
                     </td>
-                    <td className="text-right" key="size">{`${
-                      +holding.size * 100 // https://github.com/microsoft/TypeScript/issues/5710
-                    }%`}</td>
+                    <td className="text-right" key="size">
+                      {(+holding.size * 100).toLocaleString(undefined, {
+                        maximumFractionDigits: 1,
+                      })}
+                      %
+                    </td>
+                    <td className="text-right" key="valuation">
+                      <>
+                        at $
+                        {(+holding.valuation).toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                        })}
+                      </>
+                    </td>
                     <td className="text-right px-2">
                       {holding.user.id === session!.user.id ? (
                         <>
@@ -100,9 +112,12 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
                 <td className="text-left" key="owner">
                   Reserved
                 </td>
-                <td className="text-right" key="size">{`${
-                  reservedSize * 100
-                }%`}</td>
+                <td className="text-right" key="size">
+                  {(reservedSize * 100).toLocaleString(undefined, {
+                    maximumFractionDigits: 1,
+                  })}
+                  %
+                </td>
               </tr>
             </tbody>
           </table>
@@ -125,9 +140,12 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
                     <td className="text-left" key="owner">
                       {holding.user.name}
                     </td>
-                    <td className="text-right" key="size">{`${
-                      +holding.size * 100
-                    }%`}</td>
+                    <td className="text-right" key="size">
+                      {(+holding.size * 100).toLocaleString(undefined, {
+                        maximumFractionDigits: 1,
+                      })}
+                      %
+                    </td>
                   </tr>
                 ))}
             </tbody>

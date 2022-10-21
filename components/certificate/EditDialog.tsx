@@ -75,7 +75,9 @@ export function EditDialog({
             <TextField
               {...register('valuation', { required: true })}
               label="Minimum valuation"
-              info="Your minimum valuation of the whole certificate. You won’t receive any lower offers."
+              description="Give your valuation of the whole certificate to prevent lower offers"
+              rightSection="USD"
+              classNames={{ rightSection: 'w-16' }}
               type="number"
               step="0.01"
               min="1"
@@ -83,8 +85,8 @@ export function EditDialog({
             />
           </div>
           <p className="mt-5">
-            Value of your holding{' '}
-            {new Prisma.Decimal(+holding.size * 100).toFixed(0)}%: $
+            Value of your holding (
+            {new Prisma.Decimal(+holding.size * 100).toFixed(0)}%): $
             {new Prisma.Decimal(+holding.size * +watchValuation).toFixed(2)}
           </p>
           <DialogCloseButton onClick={handleClose} />

@@ -76,9 +76,17 @@ export const Transactions = ({
                 className="text-right pl-5 underline underline-offset-1 decoration-dotted"
                 title={transaction.consume ? 'To be consumed' : 'To be owned'}
               >
-                {+transaction.size * 100}%
+                {(+transaction.size * 100).toLocaleString(undefined, {
+                  maximumFractionDigits: 1,
+                })}
+                %
               </td>
-              <td className="text-right pl-5">${+transaction.cost}</td>
+              <td className="text-right pl-5">
+                $
+                {(+transaction.cost).toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                })}
+              </td>
               <td className="text-right px-2">
                 <ButtonLink
                   href="#"

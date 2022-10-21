@@ -8,7 +8,7 @@ source .env
 makemigrations () {
     dir=prisma/migrations/$(date +%Y%m%d%H%M%S)_$1
     mkdir $dir
-    createdb im-app-temp --owner im-app
+    PGPASSWORD=empty createdb -U im-app -h 127.0.0.1 im-app-temp --owner im-app
     npx prisma migrate diff \
         --from-migrations prisma/migrations \
         --shadow-database-url ${DATABASE_URL}-temp \
