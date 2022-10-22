@@ -11,6 +11,8 @@ export function createProtectedRouter() {
       // https://stackoverflow.com/questions/73763655/trpc-how-to-encapsulate-middleware
       // I’ve taken some cues from https://github.com/omar-dulaimi/trpc-shield, but didn’t use the
       // library itself because it does some odd things such as discard the first segment of the path
+      // This is needed for Prettier to process this file:
+      // https://github.com/trivago/prettier-plugin-sort-imports/issues/113#issuecomment-1226730519
 
       const isAuthenticated = () => {
         return !!ctx.session
