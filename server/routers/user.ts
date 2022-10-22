@@ -18,7 +18,7 @@ export const userRouter = createProtectedRouter()
           name: true,
           image: true,
           title: true,
-          email: ctx.session.user.role === 'ADMIN',
+          email: ctx.session!.user.role === 'ADMIN',
         },
       })
 
@@ -39,7 +39,7 @@ export const userRouter = createProtectedRouter()
     }),
     async resolve({ ctx, input }) {
       const user = await ctx.prisma.user.update({
-        where: { id: ctx.session.user.id },
+        where: { id: ctx.session!.user.id },
         data: {
           name: input.name,
           title: input.title,
@@ -55,7 +55,7 @@ export const userRouter = createProtectedRouter()
     }),
     async resolve({ ctx, input }) {
       const user = await ctx.prisma.user.update({
-        where: { id: ctx.session.user.id },
+        where: { id: ctx.session!.user.id },
         data: {
           image: input.image,
         },
