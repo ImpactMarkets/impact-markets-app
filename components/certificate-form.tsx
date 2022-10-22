@@ -7,6 +7,7 @@ import { MarkdownIcon } from '@/components/icons'
 import { MarkdownEditor } from '@/components/markdown-editor'
 import { TextField } from '@/components/text-field'
 import { useLeaveConfirm } from '@/lib/form'
+import { Accordion } from '@mantine/core'
 
 const DESCRIPTION_PROMPTS = (
   <>
@@ -14,6 +15,10 @@ const DESCRIPTION_PROMPTS = (
     <ol className="list-decimal list-inside m-2">
       <li className="mb-2">
         What is the action that this certificate is about?
+      </li>
+
+      <li className="mb-2">
+        If you have already completed it, where can investors see proof of it?
       </li>
 
       <li className="mb-2">
@@ -90,17 +95,18 @@ export function CertificateForm({
       <TextField
         {...register('title', { required: true })}
         label="Title"
-        info="This can be the same as your article’s title if it is descriptive"
-        placeholder="Practical Implications of Evidential Cooperation in Large Worlds for Population Ethics"
+        placeholder="An article on implications of Evidential Cooperation in Large Worlds for population ethics"
         autoFocus
         required
         className="text-lg !py-1.5"
       />
+      {/* TODO: Once we have CUIDs, we can generate one now and provide the link back */}
       <TextField
         {...register('proof', {})}
-        label="Link to your work that links back here"
-        info="You can first enter a link to your post, submit the certificate, and then edit your post to include the ledger note with the link back that you’ll find on your certificate page after you submit it."
-        placeholder="https://forum.effectivealtruism.org/posts/gqTN6jcqygiew4N5Y"
+        label="Proof of ownership"
+        description="Any website or profile that is clearly yours and that contains a link to this certificate."
+        info="For your convenience, you’ll see on the next page a text with a link to your certificate that you can copy to your personal website or profile. This proves that you are really who you claim you are."
+        placeholder="https://forum.effectivealtruism.org/users/inga"
         type="url"
         autoFocus
         required
@@ -109,7 +115,7 @@ export function CertificateForm({
       <TextField
         {...register('actionStart', { required: true })}
         label="Start of the action period"
-        info="The action period is the time that you define during which you worked on the project that this certificate describes."
+        description="When did you (or will you) start working on this? You can edit it later."
         type="date"
         autoFocus
         required
@@ -118,33 +124,14 @@ export function CertificateForm({
       <TextField
         {...register('actionEnd', { required: true })}
         label="End of the action period"
-        info="Must be the day of certificate creation or earlier."
+        description="When did you (or will you) finish working on this? You can edit it later."
         type="date"
         autoFocus
         required
         className="text-lg !py-1.5"
       />
-      <TextField
-        {...register('attributedImpactVersion', { required: true })}
-        label={
-          <span>
-            Version of{' '}
-            <a
-              href="https://impactmarkets.substack.com/i/64916368/impact-attribution-norm-formerly-attributed-impact"
-              className="text-blue"
-            >
-              Attributed Impact
-            </a>
-          </span>
-        }
-        info="Your certificate description needs to justify the value of your impact based on a particular version of Attributed Impact."
-        placeholder="0.42"
-        autoFocus
-        required
-        disabled
-        className="text-lg !py-1.5 disabled"
-      />
 
+      {/* TODO: Split out feedback */}
       <div className="my-6">
         <Controller
           name="content"
@@ -163,7 +150,35 @@ export function CertificateForm({
         />
       </div>
 
-      <p className="mb-4">
+      <Accordion variant="separated">
+        <Accordion.Item value="advanced-options">
+          <Accordion.Control>Advanced options</Accordion.Control>
+          <Accordion.Panel>
+            <TextField
+              {...register('attributedImpactVersion', { required: true })}
+              label={
+                <span>
+                  Version of{' '}
+                  <a
+                    href="https://impactmarkets.substack.com/i/64916368/impact-attribution-norm-formerly-attributed-impact"
+                    className="text-blue"
+                  >
+                    Attributed Impact
+                  </a>
+                </span>
+              }
+              info="Your certificate description needs to justify the value of your impact based on a particular version of Attributed Impact."
+              placeholder="0.42"
+              autoFocus
+              required
+              disabled
+              className="text-lg !py-1.5 disabled"
+            />
+          </Accordion.Panel>
+        </Accordion.Item>
+      </Accordion>
+
+      <p className="mt-4 mb-4">
         This certificate defines a right to retroactive funding. The impact
         period is from the beginning to the end of time.
       </p>
