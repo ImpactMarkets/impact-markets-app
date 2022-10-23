@@ -7,12 +7,12 @@ import { MarkdownIcon } from '@/components/icons'
 import { MarkdownEditor } from '@/components/markdown-editor'
 import { TextField } from '@/components/text-field'
 import { useLeaveConfirm } from '@/lib/form'
-import { Accordion } from '@mantine/core'
+import { Accordion, SimpleGrid, Switch } from '@mantine/core'
 
 const DESCRIPTION_PROMPTS = (
   <>
     <p className="mt-2">Please touch on the following points:</p>
-    <ol className="list-decimal list-inside m-2">
+    <ol className="list-decimal list-outside m-2">
       <li className="mb-2">
         What is the action that this certificate is about?
       </li>
@@ -34,15 +34,6 @@ const DESCRIPTION_PROMPTS = (
         Who are all collaborators and how much have they each contributed?
       </li>
     </ol>
-    <p>And optionally:</p>
-    <ol className="list-decimal list-inside m-2">
-      <li className="mb-2">
-        What would you have done had there been no chance to get retro funding?
-        (This doesn’t affect our evaluation of your impact.)
-      </li>
-
-      <li>What can we improve about this process?</li>
-    </ol>
   </>
 )
 
@@ -50,6 +41,7 @@ type FormData = {
   title: string
   content: string
   attributedImpactVersion: string
+  counterfactual: string
   proof: string
   location: string
   rights: string
@@ -95,23 +87,41 @@ export function CertificateForm({
       <TextField
         {...register('title', { required: true })}
         label="Title"
+        description="What did you do (will you do), in a few words?"
         placeholder="An article on implications of Evidential Cooperation in Large Worlds for population ethics"
         autoFocus
         required
-        className="text-lg !py-1.5"
+        className="my-6"
       />
       {/* TODO: Once we have CUIDs, we can generate one now and provide the link back */}
       <TextField
         {...register('proof', {})}
         label="Proof of ownership"
-        description="Any website or profile that is clearly yours and that contains a link to this certificate."
+        description="Where can we find any website or profile that is clearly yours and that contains a link to this certificate?"
         info="For your convenience, you’ll see on the next page a text with a link to your certificate that you can copy to your personal website or profile. This proves that you are really who you claim you are."
         placeholder="https://forum.effectivealtruism.org/users/inga"
         type="url"
-        autoFocus
         required
-        className="text-lg !py-1.5"
+        className="my-6"
       />
+      <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
+        <TextField
+          {...register('actionStart', { required: true })}
+          label="Start of the work period"
+          description="When did you (or will you) start working on this?"
+          info="You can edit it later."
+          type="date"
+          required
+        />
+        <TextField
+          {...register('actionEnd', { required: true })}
+          label="End of the work period"
+          description="… finish working on this?"
+          info="You can edit it later."
+          type="date"
+          required
+        />
+      </SimpleGrid>
       <TextField
         {...register('counterfactual')}
         label="Counterfactual"
@@ -121,7 +131,7 @@ export function CertificateForm({
       />
 
       {/* TODO: Split out feedback */}
-      <div className="my-6">
+      <div className="mt-6">
         <Controller
           name="content"
           control={control}
@@ -138,21 +148,32 @@ export function CertificateForm({
           )}
         />
       </div>
+      <div className="flex justify-end mt-2">
+        <a
+          href="https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax"
+          target="_blank"
+          rel="noreferrer"
+          className="flex items-center gap-2 transition-colors text-secondary hover:text-blue"
+        >
+          <MarkdownIcon />
+          <span className="text-xs">Markdown supported</span>
+        </a>
+      </div>
 
-      <Accordion variant="separated">
+      <Accordion variant="separated" className="my-6">
         <Accordion.Item value="advanced-options">
           <Accordion.Control>Advanced options</Accordion.Control>
-          <Accordion.Panel>
+          <Accordion.Panel className="text-sm">
             <TextField
               {...register('attributedImpactVersion', { required: true })}
               label={
                 <span>
-                  Version of{' '}
+                  Version of the{' '}
                   <a
                     href="https://impactmarkets.substack.com/i/64916368/impact-attribution-norm-formerly-attributed-impact"
                     className="text-blue"
                   >
-                    Attributed Impact
+                    Attributed Impact Norm
                   </a>
                 </span>
               }
@@ -161,21 +182,42 @@ export function CertificateForm({
               autoFocus
               required
               disabled
-              className="text-lg !py-1.5 disabled"
+              className="text-lg disabled my-6"
             />
+            <ol className="list-decimal list-outside mx-5">
+              <li className="mb-2">
+                This certificate defines a{' '}
+                <strong>right to retroactive funding</strong>. That is, anyone
+                who owns shares in it can offer to sell them to a retro funder,
+                but no one is forced to buy or sell them.
+              </li>
+              <li className="mb-2">
+                We allow <strong>no limitation of the impact period</strong> of
+                your certificate. The impact period is from the beginning to the
+                end of time. That is, any impact that your action has at any
+                point in time counts under this certificate.
+              </li>
+              <li className="mb-2">
+                We allow <strong>no limitation of the impact scopes</strong> of
+                your certificate. That is, any impact in any form and shape that
+                your action has counts under this certificate.
+              </li>
+            </ol>
           </Accordion.Panel>
         </Accordion.Item>
       </Accordion>
 
-      <p className="mt-4 mb-4">
-        This certificate defines a right to retroactive funding. The impact
-        period is from the beginning to the end of time.
-      </p>
-      <p className="mb-4">By submitting I confirm that:</p>
-      <ol className="list-decimal list-inside mb-4">
-        <li>I am not and will never sell these rights more than once, and</li>
-        <li>I am happy for this record to be publicly accessible forever.</li>
-      </ol>
+      <p className="mt-2 mb-2 text-sm">I confirm that:</p>
+      <Switch
+        label="I will never sell these rights more than once"
+        classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
+        required
+      />
+      <Switch
+        label="I am happy for this record to be publicly accessible forever"
+        classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
+        required
+      />
 
       <div className="flex items-center justify-between gap-4 mt-8">
         <div className="flex gap-4">
@@ -190,17 +232,16 @@ export function CertificateForm({
             Cancel
           </ButtonLink>
         </div>
-        {!isSubmitting && (
+        <div>
           <a
-            href="https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax"
+            href="https://airtable.com/shrXCFWdrzgG9jWn3"
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-2 transition-colors text-secondary hover:text-blue"
+            className="font-medium transition-colors hover:text-blue hover:underline"
           >
-            <MarkdownIcon />
-            <span className="text-xs">Markdown supported</span>
+            Do you have any feedback or tips for us?
           </a>
-        )}
+        </div>
       </div>
     </form>
   )

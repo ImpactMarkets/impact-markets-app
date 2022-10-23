@@ -73,8 +73,8 @@ export function CertificateSummary({
       <div>
         {certificate.hidden && (
           <Banner className="mb-6">
-            This certificate has been hidden and is only visible to
-            administrators.
+            This certificate will remain hidden until it’s published by the
+            curators.
           </Banner>
         )}
         <div className={classNames(certificate.hidden ? 'opacity-50' : '')}>

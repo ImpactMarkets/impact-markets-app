@@ -15,7 +15,7 @@ export const Labels = ({ queryData }: LabelsProps) => (
         rel="noreferrer"
         className="underline"
       >
-        Attributed Impact
+        Impact Attribution Norm
       </a>{' '}
       v{queryData.attributedImpactVersion}
     </span>
@@ -26,7 +26,7 @@ export const Labels = ({ queryData }: LabelsProps) => (
         rel="noreferrer"
         className="underline"
       >
-        Proof
+        Proof of ownership
       </a>
     </span>
     {queryData.location && (
@@ -38,11 +38,11 @@ export const Labels = ({ queryData }: LabelsProps) => (
       Right to retroactive funding
     </span>
     <span className="border text-primary border-secondary bg-primary font-bold text-sm py-1 px-2 mr-1 mb-1 rounded">
-      Action: {queryData.actionStart.toISOString().slice(0, 10)} to{' '}
+      Work: {queryData.actionStart.toISOString().slice(0, 10)} to{' '}
       {queryData.actionEnd.toISOString().slice(0, 10)}
     </span>
     <span className="border text-primary border-secondary bg-primary font-bold text-sm py-1 px-2 mr-1 mb-1 rounded">
-      Impact: all time
+      Impact: all time, any scope
     </span>
     <span className="border text-primary border-secondary bg-primary font-bold text-sm py-1 px-2 mr-1 mb-1 rounded">
       No audit
