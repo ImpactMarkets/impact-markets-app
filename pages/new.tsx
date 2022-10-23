@@ -38,6 +38,7 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
             impactStart: null,
             impactEnd: null,
             tags: '',
+            counterfactual: '',
             attributedImpactVersion: ATTRIBUTED_IMPACT_RECOMMENDED_VERSION,
             actionStart: new Date().toISOString().slice(0, 10),
             actionEnd: new Date(new Date().getTime() + 1000 * 60 * 60 * 24)
@@ -51,6 +52,7 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
               {
                 title: values.title,
                 content: values.content,
+                counterfactual: values.counterfactual,
                 attributedImpactVersion: values.attributedImpactVersion,
                 proof: values.proof,
                 location: values.location || '',

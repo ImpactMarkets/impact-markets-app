@@ -113,22 +113,11 @@ export function CertificateForm({
         className="text-lg !py-1.5"
       />
       <TextField
-        {...register('actionStart', { required: true })}
-        label="Start of the action period"
-        description="When did you (or will you) start working on this? You can edit it later."
-        type="date"
-        autoFocus
-        required
-        className="text-lg !py-1.5"
-      />
-      <TextField
-        {...register('actionEnd', { required: true })}
-        label="End of the action period"
-        description="When did you (or will you) finish working on this? You can edit it later."
-        type="date"
-        autoFocus
-        required
-        className="text-lg !py-1.5"
+        {...register('counterfactual')}
+        label="Counterfactual"
+        description="What would you have done (or what would you do) if there were no offer of retroactive funding?"
+        info="This is not displayed publicly"
+        className="my-6"
       />
 
       {/* TODO: Split out feedback */}

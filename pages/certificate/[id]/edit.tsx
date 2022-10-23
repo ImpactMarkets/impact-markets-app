@@ -42,6 +42,7 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
                 defaultValues={{
                   title: certificateQuery.data.title,
                   content: certificateQuery.data.content,
+                  counterfactual: certificateQuery.data.counterfactual,
                   attributedImpactVersion:
                     certificateQuery.data.attributedImpactVersion,
                   proof: certificateQuery.data.proof || '',
@@ -65,6 +66,7 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
                       data: {
                         title: values.title,
                         content: values.content,
+                        counterfactual: values.counterfactual,
                         attributedImpactVersion: values.attributedImpactVersion,
                         proof: values.proof,
                         location: values.location || '',
