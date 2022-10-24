@@ -103,8 +103,8 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
           <div className="pb-12">
             {certificateQuery.data.hidden && (
               <Banner className="mb-6">
-                This certificate has been hidden and is only visible to
-                administrators.
+                This certificate will remain hidden until it’s published by the
+                curators.
               </Banner>
             )}
 

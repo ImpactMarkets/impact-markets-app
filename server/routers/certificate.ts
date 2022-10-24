@@ -91,6 +91,7 @@ export const certificateRouter = createProtectedRouter()
           createdAt: true,
           hidden: true,
           attributedImpactVersion: true,
+          counterfactual: true,
           proof: true,
           location: true,
           rights: true,
@@ -147,7 +148,7 @@ export const certificateRouter = createProtectedRouter()
       })
 
       const certificateBelongsToUser =
-        certificate?.author.id === ctx.session.user.id
+        certificate?.author.id === ctx.session!.user.id
 
       if (
         !certificate ||
@@ -188,6 +189,7 @@ export const certificateRouter = createProtectedRouter()
       title: z.string().min(1),
       content: z.string().min(1),
       attributedImpactVersion: z.string().min(1),
+      counterfactual: z.string().min(1),
       proof: z.string(),
       location: z.string(),
       rights: z.string(),
@@ -202,6 +204,7 @@ export const certificateRouter = createProtectedRouter()
           content: input.content,
           contentHtml: markdownToHtml(input.content),
           attributedImpactVersion: input.attributedImpactVersion,
+          counterfactual: input.counterfactual,
           proof: input.proof,
           location: input.location,
           rights: 'RETROACTIVE_FUNDING',
@@ -210,7 +213,7 @@ export const certificateRouter = createProtectedRouter()
           tags: input.tags,
           author: {
             connect: {
-              id: ctx.session.user.id,
+              id: ctx.session!.user.id,
             },
           },
         },
@@ -218,7 +221,7 @@ export const certificateRouter = createProtectedRouter()
       await ctx.prisma.holding.create({
         data: {
           certificateId: certificate.id,
-          userId: ctx.session.user.id,
+          userId: ctx.session!.user.id,
           type: 'OWNERSHIP',
           size: 1,
           cost: 0,
@@ -227,7 +230,7 @@ export const certificateRouter = createProtectedRouter()
 
       await postToSlackIfEnabled({
         certificate,
-        authorName: ctx.session.user.name,
+        authorName: ctx.session!.user.name,
       })
 
       return certificate
@@ -240,6 +243,7 @@ export const certificateRouter = createProtectedRouter()
         title: z.string().min(1),
         content: z.string().min(1),
         attributedImpactVersion: z.string().min(1),
+        counterfactual: z.string().min(1),
         proof: z.string(),
         location: z.string(),
         rights: z.string(),
@@ -250,25 +254,6 @@ export const certificateRouter = createProtectedRouter()
     }),
     async resolve({ ctx, input }) {
       const { id, data } = input
-
-      const certificate = await ctx.prisma.certificate.findUnique({
-        where: { id },
-        select: {
-          author: {
-            select: {
-              id: true,
-            },
-          },
-        },
-      })
-
-      const certificateBelongsToUser =
-        certificate?.author.id === ctx.session.user.id
-
-      if (!certificateBelongsToUser) {
-        throw new TRPCError({ code: 'FORBIDDEN' })
-      }
-
       const updatedCertificate = await ctx.prisma.certificate.update({
         where: { id },
         data: {
@@ -276,6 +261,7 @@ export const certificateRouter = createProtectedRouter()
           content: data.content,
           contentHtml: markdownToHtml(data.content),
           attributedImpactVersion: data.attributedImpactVersion,
+          counterfactual: data.counterfactual,
           proof: data.proof,
           location: data.location,
           rights: 'RETROACTIVE_FUNDING',
@@ -300,7 +286,7 @@ export const certificateRouter = createProtectedRouter()
           },
           user: {
             connect: {
-              id: ctx.session.user.id,
+              id: ctx.session!.user.id,
             },
           },
         },
@@ -316,7 +302,7 @@ export const certificateRouter = createProtectedRouter()
         where: {
           certificateId_userId: {
             certificateId: id,
-            userId: ctx.session.user.id,
+            userId: ctx.session!.user.id,
           },
         },
       })
@@ -327,10 +313,6 @@ export const certificateRouter = createProtectedRouter()
   .mutation('hide', {
     input: z.number(),
     async resolve({ input: id, ctx }) {
-      if (!ctx.isUserAdmin) {
-        throw new TRPCError({ code: 'FORBIDDEN' })
-      }
-
       const certificate = await ctx.prisma.certificate.update({
         where: { id },
         data: {
@@ -346,10 +328,6 @@ export const certificateRouter = createProtectedRouter()
   .mutation('unhide', {
     input: z.number(),
     async resolve({ input: id, ctx }) {
-      if (!ctx.isUserAdmin) {
-        throw new TRPCError({ code: 'FORBIDDEN' })
-      }
-
       const certificate = await ctx.prisma.certificate.update({
         where: { id },
         data: {

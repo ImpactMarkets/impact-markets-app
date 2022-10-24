@@ -95,19 +95,20 @@ model VerificationToken {
 }
 
 model Certificate {
-  id          Int                @id @default(autoincrement())
-  cuid        String?            @default(cuid())
-  title       String             @db.VarChar(255)
-  content     String
+  id             Int                @id @default(autoincrement())
+  cuid           String?            @default(cuid())
+  title          String             @db.VarChar(255)
+  content        String
   // Is it optimal to prerender the MD to HTML?
-  contentHtml String
-  hidden      Boolean            @default(true)
-  unique      Boolean            @default(true)
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
-  authorId    String
-  likedBy     LikedCertificate[]
-  comments    Comment[]
+  contentHtml    String
+  counterfactual String             @default("")
+  hidden         Boolean            @default(true)
+  unique         Boolean            @default(true)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  authorId       String
+  likedBy        LikedCertificate[]
+  comments       Comment[]
 
   // TODO: Move these to CertificateVersion to enable versioning
   attributedImpactVersion String

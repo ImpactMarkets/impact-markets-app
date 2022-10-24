@@ -97,14 +97,14 @@ export const transactionRouter = createProtectedRouter()
           where: {
             certificateId_userId_type: {
               certificateId: sellingHolding.certificateId,
-              userId: ctx.session.user.id,
+              userId: ctx.session!.user.id,
               type: 'RESERVATION',
             },
           },
           update: { size: { increment: size }, cost: { increment: cost } },
           create: {
             certificateId: sellingHolding.certificateId,
-            userId: ctx.session.user.id,
+            userId: ctx.session!.user.id,
             type: 'RESERVATION',
             size,
             cost,
@@ -128,17 +128,13 @@ export const transactionRouter = createProtectedRouter()
   .mutation('confirm', {
     input: z.number(),
     async resolve({ input: id, ctx }) {
-      const transaction = await ctx.prisma.transaction.findUnique({
+      const transaction = await ctx.prisma.transaction.findUniqueOrThrow({
         where: { id },
         include: {
           buyingHolding: true,
           sellingHolding: true,
         },
       })
-
-      if (transaction?.sellingHolding.userId !== ctx.session.user.id) {
-        throw new TRPCError({ code: 'FORBIDDEN' })
-      }
 
       await ctx.prisma.$transaction([
         ctx.prisma.holding.update({
@@ -192,20 +188,13 @@ export const transactionRouter = createProtectedRouter()
   .mutation('cancel', {
     input: z.number(),
     async resolve({ input: id, ctx }) {
-      const transaction = await ctx.prisma.transaction.findUnique({
+      const transaction = await ctx.prisma.transaction.findUniqueOrThrow({
         where: { id },
         include: {
           buyingHolding: true,
           sellingHolding: true,
         },
       })
-
-      if (
-        transaction?.buyingHolding.userId !== ctx.session.user.id &&
-        transaction?.sellingHolding.userId !== ctx.session.user.id
-      ) {
-        throw new TRPCError({ code: 'FORBIDDEN' })
-      }
 
       await ctx.prisma.$transaction([
         ctx.prisma.holding.update({

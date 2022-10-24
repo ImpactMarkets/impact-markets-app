@@ -45,11 +45,9 @@ export const holdingRouter = createProtectedRouter()
         throw new TRPCError({ code: 'BAD_REQUEST' })
       }
 
-      // updateMany only to make the userId condition work – should still always be 0 or 1
-      await ctx.prisma.holding.updateMany({
+      await ctx.prisma.holding.update({
         where: {
           id,
-          userId: ctx.session.user.id,
         },
         data: {
           valuation,
