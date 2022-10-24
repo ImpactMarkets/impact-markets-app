@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { useState } from 'react'
+import { useRouter } from 'next/router'
 
 import { Logo } from '@/components/icons'
 import {
@@ -90,28 +90,24 @@ const useStyles = createStyles((theme, _params, getRef) => {
 })
 
 const data = [
-  { link: '', label: 'Home', icon: HomeIcon },
+  { link: '/', label: 'Home', icon: HomeIcon },
   { link: '', label: 'Funders & prizes', icon: StoreIcon },
-  { link: '', label: 'Why impact markets?', icon: BoltIcon },
+  { link: '/why-impact-markets', label: 'Why impact markets?', icon: BoltIcon },
   { link: '', label: 'Rules & terms', icon: FileIcon },
   { link: '', label: 'Help & support', icon: LifebuoyIcon },
 ]
 
 export function NavbarSimple() {
   const { classes, cx } = useStyles()
-  const [active, setActive] = useState('Billing')
+  const router = useRouter()
 
   const links = data.map((item) => (
     <a
       className={cx(classes.link, {
-        [classes.linkActive]: item.label === active,
+        [classes.linkActive]: item.link === router.pathname,
       })}
       href={item.link}
       key={item.label}
-      onClick={(event) => {
-        event.preventDefault()
-        setActive(item.label)
-      }}
     >
       <item.icon className={classes.linkIcon} stroke="1.5" />
       <span>{item.label}</span>
