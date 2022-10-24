@@ -109,7 +109,7 @@ export function NavbarSimple() {
       href={item.link}
       key={item.label}
     >
-      <item.icon className={classes.linkIcon} stroke="1.5" />
+      <item.icon className={classes.linkIcon} stroke-width="1.5" />
       <span>{item.label}</span>
     </a>
   ))
