@@ -232,7 +232,7 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
 CertificatePage.auth = true
 
 CertificatePage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>
+  return <Layout activeTab="Home">{page}</Layout>
 }
 
 export default CertificatePage
