@@ -91,13 +91,13 @@ const useStyles = createStyles((theme, _params, getRef) => {
 
 const data = [
   { link: '/', label: 'Home', icon: HomeIcon },
-  { link: '', label: 'Funders & prizes', icon: StoreIcon },
-  { link: '/why-impact-markets', label: 'Why impact markets?', icon: BoltIcon },
-  { link: '', label: 'Rules & terms', icon: FileIcon },
-  { link: '', label: 'Help & support', icon: LifebuoyIcon },
+  { link: '/funders', label: 'Funders & prizes', icon: StoreIcon },
+  { link: '/why', label: 'Why impact markets?', icon: BoltIcon },
+  { link: '/rules', label: 'Rules & terms', icon: FileIcon },
+  { link: '/support', label: 'Help & support', icon: LifebuoyIcon },
 ]
 
-export function NavbarSimple() {
+export function NavbarSimple({ activeTab }: { activeTab: string }) {
   const { classes, cx } = useStyles()
   const router = useRouter()
 

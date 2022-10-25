@@ -11,6 +11,13 @@ import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
+declare global {
+  interface Window {
+    intercomSettings: any
+    Intercom: any
+  }
+}
+
 const CertificateSummary = dynamic<CertificateSummaryProps>(
   () =>
     import('@/components/certificate-summary').then(
@@ -107,7 +114,7 @@ const Home: NextPageWithAuthAndLayout = () => {
             There are no published certificates to show yet.
           </div>
         ) : (
-          <div className="flow-root mt-8">
+          <div className="flow-root">
             <ul className="my-5 divide-y divide-transparent">
               {feedQuery.data.certificates.map((certificate) => (
                 <li key={certificate.id} className="py-6">
@@ -155,7 +162,7 @@ const Home: NextPageWithAuthAndLayout = () => {
 Home.auth = true
 
 Home.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>
+  return <Layout activeTab="Home">{page}</Layout>
 }
 
 export default Home

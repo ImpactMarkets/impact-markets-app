@@ -82,7 +82,7 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
 ProfilePage.auth = true
 
 ProfilePage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>
+  return <Layout activeTab="Home">{page}</Layout>
 }
 
 function ProfileInfo({ user }: ProfileComponentProps) {
