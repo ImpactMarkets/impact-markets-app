@@ -3,7 +3,6 @@ import { ThemeProvider } from 'next-themes'
 import type { AppProps } from 'next/app'
 import * as React from 'react'
 import { Toaster } from 'react-hot-toast'
-import 'react-notion-x/src/styles.css'
 
 import { transformer } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'

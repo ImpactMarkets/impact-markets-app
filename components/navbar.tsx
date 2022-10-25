@@ -1,15 +1,15 @@
 import Link from 'next/link'
-import { useState } from 'react'
+import { useRouter } from 'next/router'
 
 import { Logo } from '@/components/icons'
-import { Group, Navbar, createStyles } from '@mantine/core'
 import {
-  IconBolt,
-  IconBuildingStore,
-  IconFileDescription,
-  IconHome,
-  IconLifebuoy,
-} from '@tabler/icons'
+  BoltIcon,
+  FileIcon,
+  HomeIcon,
+  LifebuoyIcon,
+  StoreIcon,
+} from '@/components/icons'
+import { Group, Navbar, createStyles } from '@mantine/core'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
@@ -90,29 +90,26 @@ const useStyles = createStyles((theme, _params, getRef) => {
 })
 
 const data = [
-  { link: '/', label: 'Home', icon: IconHome },
-  { link: '/funders', label: 'Funders & prizes', icon: IconBuildingStore },
-  { link: '/why', label: 'Why impact markets?', icon: IconBolt },
-  { link: '/rules', label: 'Rules & terms', icon: IconFileDescription },
-  { link: '/support', label: 'Help & support', icon: IconLifebuoy },
+  { link: '/', label: 'Home', icon: HomeIcon },
+  { link: '/funders', label: 'Funders & prizes', icon: StoreIcon },
+  { link: '/why', label: 'Why impact markets?', icon: BoltIcon },
+  { link: '/rules', label: 'Rules & terms', icon: FileIcon },
+  { link: '/support', label: 'Help & support', icon: LifebuoyIcon },
 ]
 
 export function NavbarSimple({ activeTab }: { activeTab: string }) {
   const { classes, cx } = useStyles()
-  const [active, setActive] = useState(activeTab)
+  const router = useRouter()
 
   const links = data.map((item) => (
     <a
       className={cx(classes.link, {
-        [classes.linkActive]: item.label === active,
+        [classes.linkActive]: item.link === router.pathname,
       })}
       href={item.link}
       key={item.label}
-      onClick={() => {
-        setActive(item.label)
-      }}
     >
-      <item.icon className={classes.linkIcon} stroke="1.5" />
+      <item.icon className={classes.linkIcon} />
       <span>{item.label}</span>
     </a>
   ))
