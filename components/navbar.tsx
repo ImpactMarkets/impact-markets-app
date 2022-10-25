@@ -109,7 +109,7 @@ export function NavbarSimple({ activeTab }: { activeTab: string }) {
       href={item.link}
       key={item.label}
     >
-      <item.icon className={classes.linkIcon} stroke-width="1.5" />
+      <item.icon className={classes.linkIcon} />
       <span>{item.label}</span>
     </a>
   ))
