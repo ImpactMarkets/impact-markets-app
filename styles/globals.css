@@ -144,6 +144,16 @@
   max-width: 100%;
 }
 
+/* Hiding Notion Nav Header */
+.notion-header {
+  display: none;
+}
+
+/* Removing top margin to match */
+.notion-page-no-cover {
+  margin-top: 0px !important;
+}
+
 @layer base {
   body {
     @apply text-base;

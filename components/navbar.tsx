@@ -2,14 +2,14 @@ import Link from 'next/link'
 import { useState } from 'react'
 
 import { Logo } from '@/components/icons'
-import {
-  BoltIcon,
-  FileIcon,
-  HomeIcon,
-  LifebuoyIcon,
-  StoreIcon,
-} from '@/components/icons'
 import { Group, Navbar, createStyles } from '@mantine/core'
+import {
+  IconBolt,
+  IconBuildingStore,
+  IconFileDescription,
+  IconHome,
+  IconLifebuoy,
+} from '@tabler/icons'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
@@ -90,16 +90,16 @@ const useStyles = createStyles((theme, _params, getRef) => {
 })
 
 const data = [
-  { link: '', label: 'Home', icon: HomeIcon },
-  { link: '', label: 'Funders & prizes', icon: StoreIcon },
-  { link: '', label: 'Why impact markets?', icon: BoltIcon },
-  { link: '', label: 'Rules & terms', icon: FileIcon },
-  { link: '', label: 'Help & support', icon: LifebuoyIcon },
+  { link: '/', label: 'Home', icon: IconHome },
+  { link: '/funders', label: 'Funders & prizes', icon: IconBuildingStore },
+  { link: '/why', label: 'Why impact markets?', icon: IconBolt },
+  { link: '/rules', label: 'Rules & terms', icon: IconFileDescription },
+  { link: '/support', label: 'Help & support', icon: IconLifebuoy },
 ]
 
-export function NavbarSimple() {
+export function NavbarSimple({ activeTab }: { activeTab: string }) {
   const { classes, cx } = useStyles()
-  const [active, setActive] = useState('Billing')
+  const [active, setActive] = useState(activeTab)
 
   const links = data.map((item) => (
     <a
@@ -108,8 +108,7 @@ export function NavbarSimple() {
       })}
       href={item.link}
       key={item.label}
-      onClick={(event) => {
-        event.preventDefault()
+      onClick={() => {
         setActive(item.label)
       }}
     >

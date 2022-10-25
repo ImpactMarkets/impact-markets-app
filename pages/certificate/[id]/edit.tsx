@@ -121,7 +121,7 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
 EditCertificatePage.auth = true
 
 EditCertificatePage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>
+  return <Layout activeTab="Home">{page}</Layout>
 }
 
 export default EditCertificatePage
