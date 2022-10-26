@@ -102,16 +102,18 @@ export function NavbarSimple({ activeTab }: { activeTab: string }) {
   const router = useRouter()
 
   const links = data.map((item) => (
-    <a
+    <Link
       className={cx(classes.link, {
         [classes.linkActive]: item.link === router.pathname,
       })}
       href={item.link}
       key={item.label}
     >
-      <item.icon className={classes.linkIcon} />
-      <span>{item.label}</span>
-    </a>
+      <div className="flex py-5 text-sm items-center cursor-pointer">
+        <item.icon className={classes.linkIcon} />
+        <span>{item.label}</span>
+      </div>
+    </Link>
   ))
 
   return (
