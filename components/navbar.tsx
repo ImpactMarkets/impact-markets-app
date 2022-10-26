@@ -91,10 +91,10 @@ const useStyles = createStyles((theme, _params, getRef) => {
 
 const data = [
   { link: '/', label: 'Home', icon: HomeIcon },
-  { link: '/funders', label: 'Funders & prizes', icon: StoreIcon },
-  { link: '/why', label: 'Why impact markets?', icon: BoltIcon },
-  { link: '/rules', label: 'Rules & terms', icon: FileIcon },
-  { link: '/support', label: 'Help & support', icon: LifebuoyIcon },
+  { link: '/page/funders', label: 'Funders & prizes', icon: StoreIcon },
+  { link: '/page/why', label: 'Why impact markets?', icon: BoltIcon },
+  { link: '/page/rules', label: 'Rules & terms', icon: FileIcon },
+  { link: '/page/support', label: 'Help & support', icon: LifebuoyIcon },
 ]
 
 export function NavbarSimple({ activeTab }: { activeTab: string }) {
@@ -109,7 +109,7 @@ export function NavbarSimple({ activeTab }: { activeTab: string }) {
       href={item.link}
       key={item.label}
     >
-      <div className="flex py-5 text-sm items-center cursor-pointer">
+      <div className="flex my-5 text-sm items-center cursor-pointer">
         <item.icon className={classes.linkIcon} />
         <span>{item.label}</span>
       </div>

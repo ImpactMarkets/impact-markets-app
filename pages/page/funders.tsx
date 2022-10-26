@@ -8,12 +8,12 @@ const FundersAndPrizesPage: NextPageWithAuthAndLayout = () => {
   return (
     <div className="max-w-[720px] mx-auto my-5 py-6">
       <Head>
-        <title>Funders & Prizes</title>
+        <title>Funders & prizes</title>
       </Head>
 
       <Heading1>Funders & Prizes</Heading1>
 
-      <div className="mt-6">Funders & prizes coming soon...</div>
+      <div className="mt-6">Funders & prizes are coming soon…</div>
     </div>
   )
 }
