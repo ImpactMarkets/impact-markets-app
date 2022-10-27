@@ -11,6 +11,7 @@ on:
 
 jobs:
   build:
+    name: Style and type checks
     runs-on: ubuntu-latest
 
     strategy:
