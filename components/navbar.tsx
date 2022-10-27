@@ -107,7 +107,7 @@ export function NavbarSimple() {
         className={
           cx(classes.link, {
             [classes.linkActive]: item.link === router.pathname,
-          }) + ' flex my-5 text-sm items-center cursor-pointer'
+          }) + ' flex text-sm items-center cursor-pointer'
         }
       >
         <item.icon className={classes.linkIcon} />
