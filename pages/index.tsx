@@ -162,7 +162,7 @@ const Home: NextPageWithAuthAndLayout = () => {
 Home.auth = true
 
 Home.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout activeTab="Home">{page}</Layout>
+  return <Layout>{page}</Layout>
 }
 
 export default Home

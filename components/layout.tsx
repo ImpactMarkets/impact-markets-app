@@ -20,10 +20,9 @@ import { NavbarSimple } from './navbar'
 
 type LayoutProps = {
   children: React.ReactNode
-  activeTab: string
 }
 
-export function Layout({ children, activeTab }: LayoutProps) {
+export function Layout({ children }: LayoutProps) {
   const { data: session } = useSession()
   const [isSearchDialogOpen, setIsSearchDialogOpen] = React.useState(false)
   {
@@ -32,7 +31,7 @@ export function Layout({ children, activeTab }: LayoutProps) {
 
   return (
     <div className="flex relative max-w-7xl m-auto">
-      <NavbarSimple activeTab={activeTab}></NavbarSimple>
+      <NavbarSimple></NavbarSimple>
       <div className="px-6 w-full mx-auto flex flex-col min-h-screen">
         <header className="flex items-center justify-end mt-6 mb-6 pt-4 gap-4 h-16">
           <div className="flex items-center gap-2 md:gap-4">

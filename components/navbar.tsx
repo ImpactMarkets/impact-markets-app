@@ -97,19 +97,19 @@ const data = [
   { link: '/page/support', label: 'Help & support', icon: LifebuoyIcon },
 ]
 
-export function NavbarSimple({ activeTab }: { activeTab: string }) {
+export function NavbarSimple() {
   const { classes, cx } = useStyles()
   const router = useRouter()
 
   const links = data.map((item) => (
-    <Link
-      className={cx(classes.link, {
-        [classes.linkActive]: item.link === router.pathname,
-      })}
-      href={item.link}
-      key={item.label}
-    >
-      <div className="flex my-5 text-sm items-center cursor-pointer">
+    <Link href={item.link} key={item.label}>
+      <div
+        className={
+          cx(classes.link, {
+            [classes.linkActive]: item.link === router.pathname,
+          }) + ' flex my-5 text-sm items-center cursor-pointer'
+        }
+      >
         <item.icon className={classes.linkIcon} />
         <span>{item.label}</span>
       </div>

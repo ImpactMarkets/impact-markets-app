@@ -75,7 +75,7 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
 NewCertificatePage.auth = true
 
 NewCertificatePage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout activeTab="Home">{page}</Layout>
+  return <Layout>{page}</Layout>
 }
 
 export default NewCertificatePage

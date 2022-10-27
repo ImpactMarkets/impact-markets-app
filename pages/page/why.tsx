@@ -21,7 +21,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
 WhyImpactMarkets.auth = true
 
 WhyImpactMarkets.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout activeTab="Why impact markets?">{page}</Layout>
+  return <Layout>{page}</Layout>
 }
 
 export default WhyImpactMarkets

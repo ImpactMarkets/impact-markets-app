@@ -21,7 +21,7 @@ const FundersAndPrizesPage: NextPageWithAuthAndLayout = () => {
 FundersAndPrizesPage.auth = true
 
 FundersAndPrizesPage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout activeTab="Funders & prizes">{page}</Layout>
+  return <Layout>{page}</Layout>
 }
 
 export default FundersAndPrizesPage

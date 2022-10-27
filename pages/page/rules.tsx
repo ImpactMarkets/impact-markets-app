@@ -21,7 +21,7 @@ const RulesAndTerms: NextPageWithAuthAndLayout = () => {
 RulesAndTerms.auth = true
 
 RulesAndTerms.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout activeTab="Rules & terms">{page}</Layout>
+  return <Layout>{page}</Layout>
 }
 
 export default RulesAndTerms
