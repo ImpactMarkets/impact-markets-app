@@ -144,6 +144,11 @@
   max-width: 100%;
 }
 
+/* https://stackoverflow.com/questions/1417934/how-to-prevent-scrollbar-from-repositioning-web-page */
+html {
+  padding-left: calc(100vw - 100%);
+}
+
 @layer base {
   body {
     @apply text-base;
