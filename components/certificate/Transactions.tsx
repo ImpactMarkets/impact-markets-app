@@ -52,7 +52,7 @@ export const Transactions = ({
   }
 
   return (
-    <div className="flex gap-1 justify-center">
+    <div className="flex gap-1 justify-center text-sm">
       <table>
         <thead>
           <tr>

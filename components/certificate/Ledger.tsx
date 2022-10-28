@@ -5,6 +5,7 @@ import { BuyDialog } from '@/components/certificate/BuyDialog'
 import { EditDialog } from '@/components/certificate/EditDialog'
 import { trpc } from '@/lib/trpc'
 
+import { Author } from '../author'
 import { ButtonLink } from '../button-link'
 import { Transactions } from './Transactions'
 
@@ -31,9 +32,9 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
     .reduce((aggregator, holding) => +holding.size + aggregator, 0)
 
   return (
-    <div className="flex w-full justify-between">
+    <div className="flex w-full justify-between text-sm">
       {holdings.some((holding) => holding.type === 'OWNERSHIP') && (
-        <div className="flex-auto max-w-xs">
+        <div className="flex-auto max-w-sm">
           <table className="table-auto w-full">
             <thead>
               <tr>
@@ -48,7 +49,7 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
                 .map((holding) => (
                   <tr key={holding.user.id + holding.type}>
                     <td className="text-left" key="owner">
-                      {holding.user.name}
+                      <Author author={holding.user} />
                     </td>
                     <td className="text-right" key="size">
                       {(+holding.size * 1e5).toLocaleString(undefined, {
