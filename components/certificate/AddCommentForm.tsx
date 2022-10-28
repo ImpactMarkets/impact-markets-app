@@ -18,7 +18,7 @@ export function AddCommentForm({ certificateId }: { certificateId: number }) {
       )
     },
     onError: (error) => {
-      toast.error(`Something went wrong: ${error.message}`)
+      toast.error(<pre>{error.message}</pre>)
     },
   })
   const { control, handleSubmit, reset } = useForm<CommentFormData>()

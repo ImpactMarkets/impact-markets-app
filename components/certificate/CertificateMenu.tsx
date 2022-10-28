@@ -142,7 +142,7 @@ function ConfirmHideDialog({
       )
     },
     onError: (error) => {
-      toast.error(`Something went wrong: ${error.message}`)
+      toast.error(<pre>{error.message}</pre>)
     },
   })
 
@@ -197,7 +197,7 @@ function ConfirmUnhideDialog({
       )
     },
     onError: (error) => {
-      toast.error(`Something went wrong: ${error.message}`)
+      toast.error(<pre>{error.message}</pre>)
     },
   })
 

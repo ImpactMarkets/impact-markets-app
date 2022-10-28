@@ -25,7 +25,7 @@ export function EditCommentForm({
       )
     },
     onError: (error) => {
-      toast.error(`Something went wrong: ${error.message}`)
+      toast.error(<pre>{error.message}</pre>)
     },
   })
   const { control, handleSubmit } = useForm<CommentFormData>({

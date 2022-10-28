@@ -37,7 +37,7 @@ export function CancelDialog({
       ])
     },
     onError: (error) => {
-      toast.error(`Something went wrong: ${error.message}`)
+      toast.error(<pre>{error.message}</pre>)
     },
   })
 

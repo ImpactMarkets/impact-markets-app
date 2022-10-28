@@ -45,7 +45,7 @@ export function EditDialog({
       utils.invalidateQueries(['holding.feed'])
     },
     onError: (error) => {
-      toast.error(`Something went wrong: ${error.message}`)
+      toast.error(<pre>{error.message}</pre>)
     },
   })
 

@@ -14,7 +14,7 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
   const addCertificateMutation = trpc.useMutation('certificate.add', {
     onError: (error) => {
-      toast.error(`Something went wrong: ${error.message}`)
+      toast.error(<pre>{error.message}</pre>)
     },
   })
 

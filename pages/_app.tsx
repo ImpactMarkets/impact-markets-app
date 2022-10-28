@@ -38,7 +38,14 @@ function MyApp({
           ) : (
             getLayout(<Component {...pageProps} />)
           )}
-          <Toaster />
+          <Toaster
+            toastOptions={{
+              className: 'text-xs',
+              style: {
+                maxWidth: '100%',
+              },
+            }}
+          />
         </ThemeProvider>
       </SessionProvider>
     </MantineProvider>

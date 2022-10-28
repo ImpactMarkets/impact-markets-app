@@ -395,7 +395,7 @@ function EditProfileDialog({
       )
     },
     onError: (error) => {
-      toast.error(`Something went wrong: ${error.message}`)
+      toast.error(<pre>{error.message}</pre>)
     },
   })
 
@@ -468,7 +468,7 @@ function UpdateAvatarDialog({
       window.location.reload()
     },
     onError: (error) => {
-      toast.error(`Something went wrong: ${error.message}`)
+      toast.error(<pre>{error.message}</pre>)
     },
   })
   const uploadImageMutation = useMutation(
