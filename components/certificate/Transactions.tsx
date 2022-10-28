@@ -76,10 +76,10 @@ export const Transactions = ({
                 className="text-right pl-5 underline underline-offset-1 decoration-dotted"
                 title={transaction.consume ? 'To be consumed' : 'To be owned'}
               >
-                {(+transaction.size * 100).toLocaleString(undefined, {
+                {(+transaction.size * 1e5).toLocaleString(undefined, {
                   maximumFractionDigits: 1,
-                })}
-                %
+                })}{' '}
+                shares
               </td>
               <td className="text-right pl-5">
                 $

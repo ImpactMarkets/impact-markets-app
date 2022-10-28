@@ -86,7 +86,7 @@ export function EditDialog({
           </div>
           <p className="mt-5">
             Value of your holding (
-            {new Prisma.Decimal(+holding.size * 100).toFixed(0)}%): $
+            {new Prisma.Decimal(+holding.size * 1e5).toFixed(0)} shares): $
             {new Prisma.Decimal(+holding.size * +watchValuation).toFixed(2)}
           </p>
           <DialogCloseButton onClick={handleClose} />

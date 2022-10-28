@@ -15,6 +15,7 @@ import { TextField } from '@/components/text-field'
 import { trpc } from '@/lib/trpc'
 import { Prisma } from '@prisma/client'
 
+import { Banner } from '../banner'
 import { SwitchField } from '../switch-field'
 
 type BuyFormData = {
@@ -102,7 +103,7 @@ export function BuyDialog({
         <DialogContent>
           <DialogTitle>Buy</DialogTitle>
           <div className="mt-6 space-y-6">
-            <p>
+            <p className="text-sm">
               Please contact the current owner {holding.user.name || ''} to
               agree on a payment method.
             </p>
@@ -111,22 +112,21 @@ export function BuyDialog({
               {...register('size', {
                 required: true,
                 shouldUnregister: true,
-                setValueAs: (value) => value / 100,
+                setValueAs: (value) => value / 1e5,
               })}
               label="Size"
               description={
                 <span>
-                  Percentage points in the <em>whole</em> certificate (max.:{' '}
-                  {toSize((1 - reservedSize) * 100)}
-                  %)
+                  Shares in the certificate (max.{' '}
+                  {toSize((1 - reservedSize) * 1e5)})
                 </span>
               }
-              rightSection="%"
-              classNames={{ rightSection: 'w-12' }}
+              rightSection="shares"
+              classNames={{ rightSection: 'w-20' }}
               type="number"
               step="0.1"
               min="0.1"
-              max={(+holding.size - reservedSize) * 100}
+              max={(+holding.size - reservedSize) * 1e5}
               required
             />
             <TextField
@@ -156,6 +156,10 @@ export function BuyDialog({
               label="Consume immediately"
               info="You will never be able to resell shares that you have consumed."
             />
+
+            <Banner className="flex items-center text-sm px-4 py-3 my-5">
+              Make sure that you trust the recipient to confirm the transaction!
+            </Banner>
           </div>
           <DialogCloseButton onClick={handleClose} />
         </DialogContent>

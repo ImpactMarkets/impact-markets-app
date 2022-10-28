@@ -58,7 +58,7 @@ export function Dialog({
 }
 
 export function DialogContent({ children }: { children: React.ReactNode }) {
-  return <div className="px-6 pt-6 pb-12">{children}</div>
+  return <div className="p-6">{children}</div>
 }
 
 export function DialogActions({ children }: { children: React.ReactNode }) {
