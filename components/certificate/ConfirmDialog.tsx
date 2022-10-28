@@ -24,17 +24,13 @@ export function ConfirmDialog({
   isOpen: boolean
   onClose: () => void
 }) {
-  const { data: session } = useSession()
   const confirmRef = React.useRef<HTMLButtonElement>(null)
   const utils = trpc.useContext()
   const confirmTransactionMutation = trpc.useMutation('transaction.confirm', {
     onSuccess: () => {
       certificateId &&
         utils.invalidateQueries(['holding.feed', { certificateId }])
-      utils.invalidateQueries([
-        'transaction.feed',
-        { userId: session!.user.id },
-      ])
+      utils.invalidateQueries(['transaction.feed'])
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
@@ -46,7 +42,7 @@ export function ConfirmDialog({
       <DialogContent>
         <DialogTitle>Confirm transaction</DialogTitle>
         <DialogDescription className="mt-6">
-          Do you want to confirm that you have received this transaction?
+          Do you want to confirm that you have received the funds?
         </DialogDescription>
         <DialogCloseButton onClick={onClose} />
       </DialogContent>

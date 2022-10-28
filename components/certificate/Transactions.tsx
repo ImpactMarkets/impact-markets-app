@@ -118,7 +118,7 @@ export const Transactions = ({
                       href="#"
                       className="mx-1"
                       onClick={() => {
-                        setIsCancelDialogOpen(true)
+                        setIsConfirmDialogOpen(true)
                       }}
                     >
                       <span className="block shrink-0">Confirm</span>

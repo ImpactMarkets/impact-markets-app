@@ -24,17 +24,13 @@ export function CancelDialog({
   isOpen: boolean
   onClose: () => void
 }) {
-  const { data: session } = useSession()
   const cancelRef = React.useRef<HTMLButtonElement>(null)
   const utils = trpc.useContext()
   const cancelTransactionMutation = trpc.useMutation('transaction.cancel', {
     onSuccess: () => {
       certificateId &&
         utils.invalidateQueries(['holding.feed', { certificateId }])
-      utils.invalidateQueries([
-        'transaction.feed',
-        { userId: session!.user.id },
-      ])
+      utils.invalidateQueries(['transaction.feed'])
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
