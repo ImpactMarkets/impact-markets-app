@@ -83,10 +83,7 @@ export function createProtectedRouter() {
       }
 
       const buyingHoldingBelongsToUser = async () => {
-        interface transactionInput {
-          id: number
-        }
-        const { id } = <transactionInput>rawInput
+        const id = <number>rawInput
         const transaction = await ctx.prisma.transaction.findUnique({
           where: { id },
           select: {
