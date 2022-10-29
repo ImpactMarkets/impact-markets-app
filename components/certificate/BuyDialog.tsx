@@ -124,8 +124,8 @@ export function BuyDialog({
               rightSection="shares"
               classNames={{ rightSection: 'w-20' }}
               type="number"
-              step="0.1"
-              min="0.1"
+              step="1"
+              min="1"
               max={(+holding.size - reservedSize) * 1e5}
               required
             />
