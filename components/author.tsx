@@ -12,10 +12,7 @@ export function Author({ author }: AuthorProps) {
     <div className="relative inline-flex items-center gap-2">
       <Link href={`/profile/${author.id}`}>
         <a className="relative inline-flex">
-          <span className="hidden sm:flex">
-            <Avatar name={author.name!} src={author.image} />
-          </span>
-          <span className="flex sm:hidden">
+          <span className="flex">
             <Avatar name={author.name!} src={author.image} size="sm" />
           </span>
         </a>
