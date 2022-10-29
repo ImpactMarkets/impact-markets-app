@@ -60,7 +60,7 @@ export function CancelDialog({
           Cancel transaction
         </Button>
         <Button variant="secondary" onClick={onClose} ref={cancelRef}>
-          Cancel
+          Close
         </Button>
       </DialogActions>
     </Dialog>

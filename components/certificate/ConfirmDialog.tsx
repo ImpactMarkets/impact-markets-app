@@ -60,7 +60,7 @@ export function ConfirmDialog({
           Confirm transaction
         </Button>
         <Button variant="secondary" onClick={onClose} ref={confirmRef}>
-          Confirm
+          Close
         </Button>
       </DialogActions>
     </Dialog>
