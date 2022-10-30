@@ -1,3 +1,5 @@
+import transformer from 'trpc-transformer'
+
 import * as trpc from '@trpc/server'
 
 import { Context } from './context'
@@ -5,6 +7,7 @@ import { Context } from './context'
 export function createProtectedRouter() {
   return trpc
     .router<Context>()
+    .transformer(transformer)
     .middleware(async ({ ctx, path, rawInput, next }) => {
       // Rules
       // I had to embed them here because I couldn’t access the types of ctx, etc. outside
