@@ -12,6 +12,7 @@ import {
   DialogTitle,
 } from '@/components/dialog'
 import { TextField } from '@/components/text-field'
+import { BondingCurve } from '@/lib/auction'
 import { trpc } from '@/lib/trpc'
 import { Prisma } from '@prisma/client'
 
@@ -97,6 +98,9 @@ export function BuyDialog({
       maximumFractionDigits: 2,
     })
 
+  const bondingCurve = new BondingCurve(new Prisma.Decimal(50000))
+  console.log(holding.valuation, typeof holding.valuation)
+
   return (
     <Dialog isOpen={isOpen} onClose={handleClose}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -118,7 +122,7 @@ export function BuyDialog({
               description={
                 <span>
                   Shares in the certificate (max.{' '}
-                  {toSize((1 - reservedSize) * 1e5)})
+                  {toSize((+holding.size - reservedSize) * 1e5)})
                 </span>
               }
               rightSection="shares"
@@ -129,7 +133,7 @@ export function BuyDialog({
               max={(+holding.size - reservedSize) * 1e5}
               required
             />
-            <TextField
+            {/* <TextField
               {...register('cost', { required: true, shouldUnregister: true })}
               label="Cost"
               description={
@@ -149,7 +153,42 @@ export function BuyDialog({
               step="0.01"
               min={Math.max(+holding.valuation * +watchSize, 1)}
               required
-            />
+            /> */}
+
+            <table className="text-sm mx-auto">
+              <tr>
+                <td className="text-right pr-4">Starting valuation:</td>
+                <td className="text-right pr-4">
+                  ${toCost(+holding.valuation)}
+                </td>
+              </tr>
+              <tr>
+                <td className="text-right pr-4">New valuation:</td>
+                <td className="text-right pr-4">
+                  $
+                  {watchSize
+                    ? toCost(
+                        +bondingCurve.valuationAt(
+                          bondingCurve
+                            .fractionAt(holding.valuation)
+                            .plus(watchSize)
+                        )
+                      )
+                    : '–'}
+                </td>
+              </tr>
+              <tr>
+                <td className="text-right font-bold pr-4">Cost:</td>
+                <td className="text-right font-bold pr-4">
+                  $
+                  {watchSize
+                    ? toCost(
+                        +bondingCurve.costBetween(holding.valuation, watchSize)
+                      )
+                    : '–'}
+                </td>
+              </tr>
+            </table>
 
             <SwitchField
               {...register('consume', { shouldUnregister: true })}
