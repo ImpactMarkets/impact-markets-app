@@ -37,6 +37,7 @@ export function BuyDialog({
     certificateId: number
     size: Prisma.Decimal
     valuation: Prisma.Decimal
+    target: Prisma.Decimal
     user: {
       name: string | null
     }
@@ -77,8 +78,7 @@ export function BuyDialog({
     transactionMutation.mutate(
       {
         sellingHolding: holding,
-        size: String(data.size),
-        cost: String(data.cost),
+        size: data.size,
         consume: data.consume,
       },
       {
@@ -88,10 +88,9 @@ export function BuyDialog({
   }
 
   const watchSize = watch('size')
-  const watchCost = watch('cost')
   const zero = new Prisma.Decimal(0)
 
-  const bondingCurve = new BondingCurve(new Prisma.Decimal(50000))
+  const bondingCurve = new BondingCurve(holding.target)
 
   return (
     <Dialog isOpen={isOpen} onClose={handleClose}>
@@ -126,28 +125,6 @@ export function BuyDialog({
               max={holding.size.minus(reservedSize).times(1e5).toNumber()}
               required
             />
-            {/* <TextField
-              {...register('cost', { required: true, shouldUnregister: true })}
-              label="Cost"
-              description={
-                <span>
-                  Seller’s valuation: ${toCost(+holding.valuation)}, your
-                  valuation: $
-                  {watchCost && watchSize
-                    ? toCost(+watchCost / +watchSize)
-                    : '–'}
-                  , min. cost: $
-                  {toCost(Math.max(+holding.valuation * +watchSize, 1))}
-                </span>
-              }
-              rightSection="USD"
-              classNames={{ rightSection: 'w-16' }}
-              type="number"
-              step="0.01"
-              min={Math.max(+holding.valuation * +watchSize, 1)}
-              required
-            /> */}
-
             <table className="text-sm mx-auto">
               <tbody>
                 <tr>
@@ -175,6 +152,7 @@ export function BuyDialog({
                     $
                     {bondingCurve
                       .costBetween(holding.valuation, watchSize || zero)
+                      .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP)
                       .toFixed(2)}
                   </td>
                 </tr>
@@ -200,6 +178,7 @@ export function BuyDialog({
                 {holding.user.name || ''} $
                 {bondingCurve
                   .costBetween(holding.valuation, watchSize || zero)
+                  .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP)
                   .toFixed(2)}
                 .
               </Banner>
@@ -218,6 +197,7 @@ export function BuyDialog({
             isLoading={transactionMutation.isLoading}
             loadingChildren="Saving"
             variant="highlight"
+            disabled={!watchSize}
           >
             Buy
           </Button>
