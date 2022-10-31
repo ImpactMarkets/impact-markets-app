@@ -27,9 +27,81 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
 
   const { data: session } = useSession()
 
-  const reservedSize = holdings
+  const totalReservedSize = holdings
     .filter((holding) => holding.type === 'RESERVATION')
     .reduce((aggregator, holding) => +holding.size + aggregator, 0)
+
+  const renderHolding = (holding: typeof holdings[0]) => {
+    const reservedSize = holding.sellTransactions.reduce(
+      (aggregator, transaction) => +transaction.size + aggregator,
+      0
+    )
+    return (
+      <tr key={holding.user.id + holding.type}>
+        <td className="text-left" key="owner">
+          <Author author={holding.user} />
+        </td>
+        <td className="text-right" key="size">
+          {(+holding.size * 1e5).toLocaleString(undefined, {
+            maximumFractionDigits: 1,
+          })}{' '}
+          shares
+        </td>
+        <td className="text-right" key="valuation">
+          <>
+            at $
+            {(+holding.valuation).toLocaleString(undefined, {
+              maximumFractionDigits: 2,
+            })}
+          </>
+        </td>
+        <td className="text-right px-2">
+          {holding.user.id === session!.user.id ? (
+            <>
+              <ButtonLink
+                href="#"
+                variant="secondary"
+                className="h-6"
+                onClick={() => {
+                  setIsEditDialogOpen(true)
+                }}
+              >
+                <span className="block shrink-0">Edit</span>
+              </ButtonLink>
+              <EditDialog
+                holding={holding}
+                isOpen={isEditDialogOpen}
+                onClose={() => {
+                  setIsEditDialogOpen(false)
+                }}
+              />
+            </>
+          ) : (
+            <>
+              <ButtonLink
+                href="#"
+                variant="highlight"
+                className="h-6"
+                onClick={() => {
+                  setIsBuyDialogOpen(true)
+                }}
+              >
+                <span className="block shrink-0">Buy</span>
+              </ButtonLink>
+              <BuyDialog
+                holding={holding}
+                reservedSize={reservedSize}
+                isOpen={isBuyDialogOpen}
+                onClose={() => {
+                  setIsBuyDialogOpen(false)
+                }}
+              />
+            </>
+          )}
+        </td>
+      </tr>
+    )
+  }
 
   return (
     <div className="flex w-full justify-between text-sm">
@@ -46,77 +118,13 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
             <tbody>
               {holdings
                 .filter((holding) => holding.type === 'OWNERSHIP')
-                .map((holding) => (
-                  <tr key={holding.user.id + holding.type}>
-                    <td className="text-left" key="owner">
-                      <Author author={holding.user} />
-                    </td>
-                    <td className="text-right" key="size">
-                      {(+holding.size * 1e5).toLocaleString(undefined, {
-                        maximumFractionDigits: 1,
-                      })}{' '}
-                      shares
-                    </td>
-                    <td className="text-right" key="valuation">
-                      <>
-                        at $
-                        {(+holding.valuation).toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                        })}
-                      </>
-                    </td>
-                    <td className="text-right px-2">
-                      {holding.user.id === session!.user.id ? (
-                        <>
-                          <ButtonLink
-                            href="#"
-                            variant="secondary"
-                            className="h-6"
-                            onClick={() => {
-                              setIsEditDialogOpen(true)
-                            }}
-                          >
-                            <span className="block shrink-0">Edit</span>
-                          </ButtonLink>
-                          <EditDialog
-                            holding={holding}
-                            isOpen={isEditDialogOpen}
-                            onClose={() => {
-                              setIsEditDialogOpen(false)
-                            }}
-                          />
-                        </>
-                      ) : (
-                        <>
-                          <ButtonLink
-                            href="#"
-                            variant="highlight"
-                            className="h-6"
-                            onClick={() => {
-                              setIsBuyDialogOpen(true)
-                            }}
-                          >
-                            <span className="block shrink-0">Buy</span>
-                          </ButtonLink>
-                          <BuyDialog
-                            holding={holding}
-                            reservedSize={reservedSize}
-                            isOpen={isBuyDialogOpen}
-                            onClose={() => {
-                              setIsBuyDialogOpen(false)
-                            }}
-                          />
-                        </>
-                      )}
-                    </td>
-                  </tr>
-                ))}
+                .map(renderHolding)}
               <tr key="Reservation">
                 <td className="text-left" key="owner">
                   Reserved
                 </td>
                 <td className="text-right" key="size">
-                  {(reservedSize * 1e5).toLocaleString(undefined, {
+                  {(totalReservedSize * 1e5).toLocaleString(undefined, {
                     maximumFractionDigits: 1,
                   })}{' '}
                   shares
