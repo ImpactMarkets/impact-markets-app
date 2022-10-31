@@ -1,8 +1,12 @@
+import superjson from 'superjson'
+
 import type { AppRouter } from '@/server/routers/_app'
 import { createReactQueryHooks } from '@trpc/react'
 import type { inferProcedureInput, inferProcedureOutput } from '@trpc/server'
 
 export const trpc = createReactQueryHooks<AppRouter>()
+
+export const transformer = superjson
 
 export type TQuery = keyof AppRouter['_def']['queries']
 
