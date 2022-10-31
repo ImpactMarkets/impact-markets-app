@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+import { BondingCurve } from '@/lib/auction'
 import { Prisma, TransactionState } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
@@ -57,19 +58,12 @@ export const transactionRouter = createProtectedRouter()
           id: z.number(),
           certificateId: z.number(),
         }),
-        size: z.string(),
-        cost: z.string(),
+        size: z.instanceof(Prisma.Decimal),
         consume: z.boolean(),
       })
       return schema.parse(input)
     },
-    async resolve({
-      ctx,
-      input: { sellingHolding, size: size_, cost: cost_, consume },
-    }) {
-      const size = new Prisma.Decimal(size_)
-      const cost = new Prisma.Decimal(cost_)
-
+    async resolve({ ctx, input: { sellingHolding, size, consume } }) {
       const holding = await ctx.prisma.holding.findUniqueOrThrow({
         where: { id: sellingHolding.id },
       })
@@ -82,14 +76,16 @@ export const transactionRouter = createProtectedRouter()
       })
 
       const zero = new Prisma.Decimal(0)
-      const one = new Prisma.Decimal(1)
       const reservedSize = reservations._sum.size || zero
       if (size <= zero || size > holding.size.minus(reservedSize)) {
         throw new TRPCError({ code: 'BAD_REQUEST' })
       }
-      if (cost < (holding.valuation || one).times(size)) {
-        throw new TRPCError({ code: 'BAD_REQUEST' })
-      }
+
+      const bondingCurve = new BondingCurve(holding.target)
+      const cost = bondingCurve
+        .costBetween(holding.valuation, size)
+        .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP)
+        .toFixed(2)
 
       // This is a bit confusing b/c our model and the database feature are both called tranactions
       const transaction = await ctx.prisma.$transaction(async (prisma) => {
