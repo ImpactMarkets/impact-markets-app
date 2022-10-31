@@ -14,6 +14,7 @@ import {
 import { TextField } from '@/components/text-field'
 import { BondingCurve } from '@/lib/auction'
 import { trpc } from '@/lib/trpc'
+import { Accordion } from '@mantine/core'
 import { Prisma } from '@prisma/client'
 
 import { Banner } from '../banner'
@@ -88,18 +89,9 @@ export function BuyDialog({
 
   const watchSize = watch('size')
   const watchCost = watch('cost')
-
-  const toSize = (value: number) =>
-    value.toLocaleString(undefined, {
-      maximumFractionDigits: 1,
-    })
-  const toCost = (value: number) =>
-    value.toLocaleString(undefined, {
-      maximumFractionDigits: 2,
-    })
+  const zero = new Prisma.Decimal(0)
 
   const bondingCurve = new BondingCurve(new Prisma.Decimal(50000))
-  console.log(holding.valuation, typeof holding.valuation)
 
   return (
     <Dialog isOpen={isOpen} onClose={handleClose}>
@@ -111,7 +103,8 @@ export function BuyDialog({
               Please contact the current owner {holding.user.name || ''} to
               agree on a payment method.
             </p>
-            {/* Not using NumberInput because onChange is called with only the value, not the field element */}
+            {/* Not using NumberInput because onChange is called with only the value,
+                not the field element */}
             <TextField
               {...register('size', {
                 required: true,
@@ -122,7 +115,7 @@ export function BuyDialog({
               description={
                 <span>
                   Shares in the certificate (max.{' '}
-                  {toSize((+holding.size - reservedSize) * 1e5)})
+                  {holding.size.minus(reservedSize).times(1e5).toFixed(0)})
                 </span>
               }
               rightSection="shares"
@@ -130,7 +123,7 @@ export function BuyDialog({
               type="number"
               step="1"
               min="1"
-              max={(+holding.size - reservedSize) * 1e5}
+              max={holding.size.minus(reservedSize).times(1e5).toNumber()}
               required
             />
             {/* <TextField
@@ -156,47 +149,64 @@ export function BuyDialog({
             /> */}
 
             <table className="text-sm mx-auto">
-              <tr>
-                <td className="text-right pr-4">Starting valuation:</td>
-                <td className="text-right pr-4">
-                  ${toCost(+holding.valuation)}
-                </td>
-              </tr>
-              <tr>
-                <td className="text-right pr-4">New valuation:</td>
-                <td className="text-right pr-4">
-                  $
-                  {watchSize
-                    ? toCost(
-                        +bondingCurve.valuationAt(
-                          bondingCurve
-                            .fractionAt(holding.valuation)
-                            .plus(watchSize)
-                        )
+              <tbody>
+                <tr>
+                  <td className="text-right pr-4">Starting valuation:</td>
+                  <td className="text-right pr-4">
+                    ${holding.valuation.toFixed(2)}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="text-right pr-4">New valuation:</td>
+                  <td className="text-right pr-4">
+                    $
+                    {bondingCurve
+                      .valuationAt(
+                        bondingCurve
+                          .fractionAt(holding.valuation)
+                          .plus(watchSize || zero)
                       )
-                    : '–'}
-                </td>
-              </tr>
-              <tr>
-                <td className="text-right font-bold pr-4">Cost:</td>
-                <td className="text-right font-bold pr-4">
-                  $
-                  {watchSize
-                    ? toCost(
-                        +bondingCurve.costBetween(holding.valuation, watchSize)
-                      )
-                    : '–'}
-                </td>
-              </tr>
+                      .toFixed(2)}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="text-right font-bold pr-4">Cost:</td>
+                  <td className="text-right font-bold pr-4">
+                    $
+                    {bondingCurve
+                      .costBetween(holding.valuation, watchSize || zero)
+                      .toFixed(2)}
+                  </td>
+                </tr>
+              </tbody>
             </table>
 
-            <SwitchField
-              {...register('consume', { shouldUnregister: true })}
-              label="Consume immediately"
-              info="You will never be able to resell shares that you have consumed."
-            />
+            <Accordion variant="separated" className="my-6">
+              <Accordion.Item value="advanced-options">
+                <Accordion.Control>Advanced options</Accordion.Control>
+                <Accordion.Panel className="text-sm">
+                  <SwitchField
+                    {...register('consume', { shouldUnregister: true })}
+                    label="Consume immediately"
+                    info="You will never be able to resell shares that you have consumed."
+                  />
+                </Accordion.Panel>
+              </Accordion.Item>
+            </Accordion>
 
-            <Banner className="flex items-center text-sm px-4 py-3 my-5">
+            {watchSize ? (
+              <Banner className="text-sm px-4 py-3 my-5">
+                When you click “Buy,” you’ll have one week to send{' '}
+                {holding.user.name || ''} $
+                {bondingCurve
+                  .costBetween(holding.valuation, watchSize || zero)
+                  .toFixed(2)}
+                .
+              </Banner>
+            ) : (
+              ''
+            )}
+            <Banner className="text-sm px-4 py-3 my-5">
               Make sure that you trust the recipient to confirm the transaction!
             </Banner>
           </div>
