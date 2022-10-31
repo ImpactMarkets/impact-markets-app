@@ -16,6 +16,7 @@ import { Prisma } from '@prisma/client'
 
 type EditFormData = {
   valuation: Prisma.Decimal
+  target: Prisma.Decimal
 }
 
 export function EditDialog({
@@ -28,16 +29,19 @@ export function EditDialog({
     certificateId: number
     size: Prisma.Decimal
     valuation: Prisma.Decimal
+    target: Prisma.Decimal
   }
   isOpen: boolean
   onClose: () => void
 }) {
   const { register, watch, handleSubmit, reset } = useForm<EditFormData>({
     defaultValues: {
-      valuation: holding.valuation || new Prisma.Decimal('0.00'),
+      valuation: holding.valuation,
+      target: holding.target,
     },
   })
   const watchValuation = watch('valuation')
+  const watchTarget = watch('target')
 
   const utils = trpc.useContext()
   const transactionMutation = trpc.useMutation('holding.edit', {
@@ -58,7 +62,8 @@ export function EditDialog({
     transactionMutation.mutate(
       {
         id: holding.id,
-        valuation: String(data.valuation),
+        valuation: data.valuation,
+        target: data.target,
       },
       {
         onSuccess: () => onClose(),
@@ -75,19 +80,31 @@ export function EditDialog({
             <TextField
               {...register('valuation', { required: true })}
               label="Minimum valuation"
-              description="Give your valuation of the whole certificate to prevent lower offers"
+              description="What is the price below which you won’t sell a single share?"
               rightSection="USD"
               classNames={{ rightSection: 'w-16' }}
               type="number"
-              step="0.01"
+              step="1"
               min="1"
               required
             />
           </div>
-          <p className="mt-5">
-            Value of your holding (
-            {new Prisma.Decimal(+holding.size * 1e5).toFixed(0)} shares): $
-            {new Prisma.Decimal(+holding.size * +watchValuation).toFixed(2)}
+          <div className="mt-6 space-y-6">
+            <TextField
+              {...register('target', { required: true })}
+              label="Target valuation"
+              description="What is the valuation that you hope this certificate will reach?"
+              rightSection="USD"
+              classNames={{ rightSection: 'w-16' }}
+              type="number"
+              step="1"
+              min="1"
+              required
+            />
+          </div>
+          <p className="text-sm mt-5">
+            Value of your holding ({holding.size.times(1e5).toFixed(0)} shares):
+            ${holding.size.times(watchValuation).toFixed(2)}
           </p>
           <DialogCloseButton onClick={handleClose} />
         </DialogContent>
