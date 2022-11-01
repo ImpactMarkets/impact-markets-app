@@ -60,35 +60,34 @@ const Transaction = ({
       </td>
       <td className="text-right pl-5">${num(transaction.cost, 2)}</td>
       <td className="text-right px-2">
-        <ButtonLink
-          href="#"
-          onClick={() => {
-            setIsCancelDialogOpen(true)
-          }}
-          variant="secondary"
-        >
-          <span className="block shrink-0">
-            {/* Call it “Decline” if the user whose profile this is is also the seller;
-          call it cancel if they’re the buyer. This ignores the case where an admin
-          looks at the profile. No other user can see this section. */}
-            {transaction.sellingHolding.user.id === userId
-              ? 'Decline'
-              : 'Cancel'}
-          </span>
-        </ButtonLink>
-        <CancelDialog
-          transactionId={transaction.id}
-          certificateId={certificateId}
-          isOpen={isCancelDialogOpen}
-          onClose={() => {
-            setIsCancelDialogOpen(false)
-          }}
-        />
-        {transaction.sellingHolding.user.id === userId && (
-          <>
+        {(session?.user.role === 'ADMIN' ||
+          transaction.buyingHolding.user.id === userId) && (
+          <div>
             <ButtonLink
               href="#"
-              className="mx-1"
+              onClick={() => {
+                setIsCancelDialogOpen(true)
+              }}
+              variant="secondary"
+              className="h-6"
+            >
+              <span className="block shrink-0">Cancel</span>
+            </ButtonLink>
+            <CancelDialog
+              transaction={transaction}
+              certificateId={certificateId}
+              isOpen={isCancelDialogOpen}
+              onClose={() => {
+                setIsCancelDialogOpen(false)
+              }}
+            />
+          </div>
+        )}
+        {(session?.user.role === 'ADMIN' ||
+          transaction.sellingHolding.user.id === userId) && (
+          <div>
+            <ButtonLink
+              href="#"
               onClick={() => {
                 setIsConfirmDialogOpen(true)
               }}
@@ -104,7 +103,7 @@ const Transaction = ({
                 setIsConfirmDialogOpen(false)
               }}
             />
-          </>
+          </div>
         )}
       </td>
     </tr>
