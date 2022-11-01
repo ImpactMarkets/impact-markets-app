@@ -318,11 +318,13 @@ export function CertificateForm({
       <Switch
         label="I will never sell these rights more than once"
         classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
+        defaultChecked={!isNew}
         required
       />
       <Switch
         label="I am happy for this record to be publicly accessible forever"
         classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
+        defaultChecked={!isNew}
         required
       />
 
