@@ -1,46 +1,36 @@
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 import * as React from 'react'
 
 import { SHARE_COUNT } from '@/lib/constants'
+import { num } from '@/lib/text'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
-import { InferQueryPathAndInput } from '@/lib/trpc'
-import { TransactionState } from '@prisma/client'
 
 import { AuthorWithDate } from '../author-with-date'
 import { ButtonLink } from '../button-link'
 import { CancelDialog } from './CancelDialog'
 import { ConfirmDialog } from './ConfirmDialog'
 
-function getTransactionQueryPathAndInput(
-  userId: string,
-  certificateId?: number,
-  state?: TransactionState
-): InferQueryPathAndInput<'transaction.feed'> {
-  return [
-    'transaction.feed',
-    {
-      userId,
-      certificateId,
-      state,
-    },
-  ]
-}
-
 export type TransactionsFormData = {
   userId: string
   certificateId?: number
+  showCertificates?: boolean
 }
 
 const Transaction = ({
   transaction,
   userId,
   certificateId,
+  showCertificates = false,
 }: {
   transaction: InferQueryOutput<'transaction.feed'>[0]
   userId: string
   certificateId?: number
+  showCertificates?: boolean
 }) => {
   const [isCancelDialogOpen, setIsCancelDialogOpen] = React.useState(false)
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = React.useState(false)
+  const { data: session } = useSession()
 
   return (
     <tr key={transaction.id}>
@@ -53,13 +43,22 @@ const Transaction = ({
           />
         </div>
       </td>
+      {showCertificates && (
+        <td className="text-left max-w-xs overflow-ellipsis">
+          <Link
+            href={`/certificate/${transaction.sellingHolding.certificate.id}`}
+          >
+            {transaction.sellingHolding.certificate.title}
+          </Link>
+        </td>
+      )}
       <td
         className="text-right pl-5 underline underline-offset-1 decoration-dotted"
         title={transaction.consume ? 'To be consumed' : 'To be owned'}
       >
-        {transaction.size.times(SHARE_COUNT).toFixed(0)} shares
+        {num(transaction.size.times(SHARE_COUNT))}
       </td>
-      <td className="text-right pl-5">${transaction.cost.toFixed(2)}</td>
+      <td className="text-right pl-5">${num(transaction.cost, 2)}</td>
       <td className="text-right px-2">
         <ButtonLink
           href="#"
@@ -93,6 +92,7 @@ const Transaction = ({
               onClick={() => {
                 setIsConfirmDialogOpen(true)
               }}
+              className="h-6"
             >
               <span className="block shrink-0">Confirm</span>
             </ButtonLink>
@@ -114,13 +114,16 @@ const Transaction = ({
 export const Transactions = ({
   userId,
   certificateId,
+  showCertificates = false,
 }: TransactionsFormData) => {
-  const transactionQueryPathAndInput = getTransactionQueryPathAndInput(
-    userId,
-    certificateId,
-    'PENDING'
-  )
-  const transactionQuery = trpc.useQuery(transactionQueryPathAndInput)
+  const transactionQuery = trpc.useQuery([
+    'transaction.feed',
+    {
+      userId,
+      certificateId,
+      state: 'PENDING',
+    },
+  ])
 
   if (transactionQuery.isError) {
     return <div>Error: {transactionQuery.error.message}</div>
@@ -131,12 +134,13 @@ export const Transactions = ({
   }
 
   return (
-    <div className="flex gap-1 justify-center text-sm">
+    <div className="flex flex-col justify-center text-sm">
       <table>
         <thead>
           <tr>
-            <th className="text-left whitespace-nowrap">Pending purchases</th>
-            <th className="text-right pl-5">Size</th>
+            <th className="text-left whitespace-nowrap">Buyer</th>
+            {showCertificates && <th className="text-left">Certificate</th>}
+            <th className="text-right pl-5">Shares</th>
             <th className="text-right pl-5">Cost</th>
           </tr>
         </thead>
@@ -147,6 +151,7 @@ export const Transactions = ({
               transaction={transaction}
               userId={userId}
               certificateId={certificateId}
+              showCertificates={showCertificates}
             />
           ))}
         </tbody>
