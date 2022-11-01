@@ -45,10 +45,8 @@ type FormData = {
   proof: string
   location: string
   rights: string
-  actionStart: string
-  actionEnd: string
-  impactStart: Date | null
-  impactEnd: Date | null
+  actionStart: Date
+  actionEnd: Date
   tags: string
 }
 
@@ -106,7 +104,7 @@ export function CertificateForm({
       />
       <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
         <TextField
-          {...register('actionStart', { required: true })}
+          {...register('actionStart', { required: true, valueAsDate: true })}
           label="Start of the work period"
           description="When did you (or will you) start working on this?"
           info="You can edit it later."
@@ -114,7 +112,7 @@ export function CertificateForm({
           required
         />
         <TextField
-          {...register('actionEnd', { required: true })}
+          {...register('actionEnd', { required: true, valueAsDate: true })}
           label="End of the work period"
           description="… finish working on this?"
           info="You can edit it later."

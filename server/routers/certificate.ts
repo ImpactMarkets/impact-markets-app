@@ -97,8 +97,6 @@ export const certificateRouter = createProtectedRouter()
           rights: true,
           actionStart: true,
           actionEnd: true,
-          impactStart: true,
-          impactEnd: true,
           tags: true,
           author: {
             select: {
@@ -193,8 +191,8 @@ export const certificateRouter = createProtectedRouter()
       proof: z.string(),
       location: z.string(),
       rights: z.string(),
-      actionStart: z.string().min(1),
-      actionEnd: z.string().min(1),
+      actionStart: z.date(),
+      actionEnd: z.date(),
       tags: z.string(),
     }),
     async resolve({ ctx, input }) {
@@ -208,8 +206,8 @@ export const certificateRouter = createProtectedRouter()
           proof: input.proof,
           location: input.location,
           rights: 'RETROACTIVE_FUNDING',
-          actionStart: new Date(input.actionStart),
-          actionEnd: new Date(input.actionEnd),
+          actionStart: input.actionStart,
+          actionEnd: input.actionEnd,
           tags: input.tags,
           author: {
             connect: {
@@ -247,8 +245,8 @@ export const certificateRouter = createProtectedRouter()
         proof: z.string(),
         location: z.string(),
         rights: z.string(),
-        actionStart: z.string().min(1),
-        actionEnd: z.string().min(1),
+        actionStart: z.date(),
+        actionEnd: z.date(),
         tags: z.string(),
       }),
     }),
@@ -265,8 +263,8 @@ export const certificateRouter = createProtectedRouter()
           proof: data.proof,
           location: data.location,
           rights: 'RETROACTIVE_FUNDING',
-          actionStart: new Date(data.actionStart),
-          actionEnd: new Date(data.actionEnd),
+          actionStart: data.actionStart,
+          actionEnd: data.actionEnd,
           tags: data.tags,
         },
       })

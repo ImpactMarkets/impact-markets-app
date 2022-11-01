@@ -35,15 +35,11 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
             proof: '',
             location: '',
             rights: '',
-            impactStart: null,
-            impactEnd: null,
             tags: '',
             counterfactual: '',
             attributedImpactVersion: ATTRIBUTED_IMPACT_RECOMMENDED_VERSION,
-            actionStart: new Date().toISOString().slice(0, 10),
-            actionEnd: new Date(new Date().getTime() + 1000 * 60 * 60 * 24)
-              .toISOString()
-              .slice(0, 10),
+            actionStart: new Date(),
+            actionEnd: new Date(new Date().getTime() + 1000 * 60 * 60 * 24),
             content: '',
           }}
           backTo="/"
