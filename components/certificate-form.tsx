@@ -46,8 +46,8 @@ type FormData = {
   proof: string
   location: string
   rights: string
-  actionStart: Date
-  actionEnd: Date
+  actionStart: string
+  actionEnd: string
   tags: string
   // These defaults are set for new forms but not for editing
   valuation?: Prisma.Decimal

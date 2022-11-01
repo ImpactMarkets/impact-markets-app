@@ -40,8 +40,10 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
             tags: '',
             counterfactual: '',
             attributedImpactVersion: ATTRIBUTED_IMPACT_RECOMMENDED_VERSION,
-            actionStart: new Date(),
-            actionEnd: new Date(new Date().getTime() + 1000 * 60 * 60 * 24),
+            actionStart: new Date().toISOString().slice(0, 10),
+            actionEnd: new Date(new Date().getTime() + 1000 * 60 * 60 * 24)
+              .toISOString()
+              .slice(0, 10),
             content: '',
             valuation: DEFAULT_VALUATION,
             target: DEFAULT_TARGET,
@@ -57,8 +59,8 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
                 proof: values.proof,
                 location: values.location || '',
                 rights: 'RETROACTIVE_FUNDING',
-                actionStart: values.actionStart,
-                actionEnd: values.actionEnd,
+                actionStart: new Date(values.actionStart),
+                actionEnd: new Date(values.actionEnd),
                 tags: '',
                 valuation: new Prisma.Decimal(
                   values.valuation || DEFAULT_VALUATION

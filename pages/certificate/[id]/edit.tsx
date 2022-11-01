@@ -48,8 +48,12 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
                   proof: certificateQuery.data.proof || '',
                   location: certificateQuery.data.location || '',
                   rights: certificateQuery.data.rights,
-                  actionStart: certificateQuery.data.actionStart,
-                  actionEnd: certificateQuery.data.actionEnd,
+                  actionStart: certificateQuery.data.actionStart
+                    .toISOString()
+                    .slice(0, 10),
+                  actionEnd: certificateQuery.data.actionEnd
+                    .toISOString()
+                    .slice(0, 10),
                   tags: certificateQuery.data.tags || '',
                 }}
                 backTo={`/certificate/${certificateQuery.data.id}`}
@@ -65,8 +69,8 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
                         proof: values.proof,
                         location: values.location || '',
                         rights: values.rights,
-                        actionStart: values.actionStart,
-                        actionEnd: values.actionEnd,
+                        actionStart: new Date(values.actionStart),
+                        actionEnd: new Date(values.actionEnd),
                         tags: values.tags,
                       },
                     },
