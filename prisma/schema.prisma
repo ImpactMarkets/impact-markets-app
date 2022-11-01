@@ -112,9 +112,9 @@ model Certificate {
 
   // TODO: Move these to CertificateVersion to enable versioning
   attributedImpactVersion String
-  proof                   String    @default("")
-  location                String    @default("")
-  rights                  Right     @default(RETROACTIVE_FUNDING)
+  proof                   String   @default("")
+  location                String   @default("")
+  rights                  Right    @default(RETROACTIVE_FUNDING)
   actionStart             DateTime
   actionEnd               DateTime
   tags                    String?
