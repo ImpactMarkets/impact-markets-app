@@ -10,7 +10,7 @@ export const transactionRouter = createProtectedRouter()
   .query('feed', {
     input: z.object({
       userId: z.string(),
-      certificateId: z.number().optional(),
+      certificateId: z.string().optional(),
       state: z.nativeEnum(TransactionState).optional(),
     }),
     async resolve({ input, ctx }) {
@@ -56,7 +56,7 @@ export const transactionRouter = createProtectedRouter()
       const schema = z.object({
         sellingHolding: z.object({
           id: z.number(),
-          certificateId: z.number(),
+          certificateId: z.string().min(1),
         }),
         size: z.instanceof(Prisma.Decimal),
         consume: z.boolean(),

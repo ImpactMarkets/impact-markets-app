@@ -8,7 +8,7 @@ import { createProtectedRouter } from '../create-protected-router'
 export const holdingRouter = createProtectedRouter()
   .query('feed', {
     input: z.object({
-      certificateId: z.number(),
+      certificateId: z.string().min(1),
     }),
     async resolve({ input, ctx }) {
       const holdings = await ctx.prisma.holding.findMany({

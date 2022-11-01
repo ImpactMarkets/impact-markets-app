@@ -79,7 +79,7 @@ export const certificateRouter = createProtectedRouter()
   })
   .query('detail', {
     input: z.object({
-      id: z.number(),
+      id: z.string().min(1),
     }),
     async resolve({ ctx, input }) {
       const { id } = input
@@ -87,7 +87,7 @@ export const certificateRouter = createProtectedRouter()
         where: { id },
         select: {
           id: true,
-          cuid: true,
+          oldId: true,
           title: true,
           content: true,
           contentHtml: true,
@@ -243,7 +243,7 @@ export const certificateRouter = createProtectedRouter()
   })
   .mutation('edit', {
     input: z.object({
-      id: z.number(),
+      id: z.string().min(1),
       data: z.object({
         title: z.string().min(1),
         content: z.string().min(1),
@@ -280,7 +280,7 @@ export const certificateRouter = createProtectedRouter()
     },
   })
   .mutation('like', {
-    input: z.number(),
+    input: z.string().min(1),
     async resolve({ input: id, ctx }) {
       await ctx.prisma.likedCertificate.create({
         data: {
@@ -301,7 +301,7 @@ export const certificateRouter = createProtectedRouter()
     },
   })
   .mutation('unlike', {
-    input: z.number(),
+    input: z.string().min(1),
     async resolve({ input: id, ctx }) {
       await ctx.prisma.likedCertificate.delete({
         where: {
@@ -316,7 +316,7 @@ export const certificateRouter = createProtectedRouter()
     },
   })
   .mutation('hide', {
-    input: z.number(),
+    input: z.string().min(1),
     async resolve({ input: id, ctx }) {
       const certificate = await ctx.prisma.certificate.update({
         where: { id },
@@ -331,7 +331,7 @@ export const certificateRouter = createProtectedRouter()
     },
   })
   .mutation('unhide', {
-    input: z.number(),
+    input: z.string().min(1),
     async resolve({ input: id, ctx }) {
       const certificate = await ctx.prisma.certificate.update({
         where: { id },

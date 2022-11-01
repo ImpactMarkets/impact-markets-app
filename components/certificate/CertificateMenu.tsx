@@ -129,7 +129,7 @@ function ConfirmHideDialog({
   isOpen,
   onClose,
 }: {
-  certificateId: number
+  certificateId: string
   isOpen: boolean
   onClose: () => void
 }) {
@@ -184,7 +184,7 @@ function ConfirmUnhideDialog({
   isOpen,
   onClose,
 }: {
-  certificateId: number
+  certificateId: string
   isOpen: boolean
   onClose: () => void
 }) {

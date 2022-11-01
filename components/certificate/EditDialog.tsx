@@ -29,7 +29,7 @@ export function EditDialog({
 }: {
   holding: {
     id: number
-    certificateId: number
+    certificateId: string
     size: Prisma.Decimal
     valuation: Prisma.Decimal
     target: Prisma.Decimal

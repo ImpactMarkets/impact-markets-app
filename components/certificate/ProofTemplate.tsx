@@ -30,7 +30,7 @@ export const ProofTemplate = ({ queryData }: ProofTemplateProps) => (
         rel="noreferrer"
         className="underline"
       >
-        impact certificate of this article (ID: {queryData.cuid})
+        impact certificate of this article (ID: {queryData.id})
       </a>
       .
     </p>

@@ -24,7 +24,7 @@ export function createProtectedRouter() {
 
       const certificateBelongsToUser = async () => {
         interface certificateInput {
-          id: number
+          id: string
         }
         const { id } = <certificateInput>rawInput
         const certificate = await ctx.prisma.certificate.findUnique({

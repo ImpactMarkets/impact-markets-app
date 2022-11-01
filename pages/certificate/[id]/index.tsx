@@ -27,7 +27,7 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
   const utils = trpc.useContext()
   const certificateQueryPathAndInput = getCertificateQueryPathAndInput(
-    Number(router.query.id)
+    String(router.query.id)
   )
   const certificateQuery = trpc.useQuery(certificateQueryPathAndInput)
   const likeMutation = trpc.useMutation(['certificate.like'], {
@@ -126,7 +126,7 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
               <Labels queryData={certificateQuery.data} />
             </div>
             <div className="my-6">
-              <Ledger certificateId={Number(router.query.id)} />
+              <Ledger certificateId={String(router.query.id)} />
             </div>
             {certificateBelongsToUser && (
               <div className="my-6">
