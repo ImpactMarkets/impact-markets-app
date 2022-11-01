@@ -66,26 +66,31 @@ export const transactionRouter = createProtectedRouter()
     async resolve({ ctx, input: { sellingHolding, size, consume } }) {
       const holding = await ctx.prisma.holding.findUniqueOrThrow({
         where: { id: sellingHolding.id },
-      })
-      const reservations = await ctx.prisma.holding.aggregate({
-        where: {
-          type: 'RESERVATION',
-          certificateId: sellingHolding.certificateId,
-        },
-        _sum: { size: true },
+        include: { sellTransactions: { where: { state: 'PENDING' } } },
       })
 
+      const reservedSize = holding.sellTransactions.reduce(
+        (aggregator, transaction) => transaction.size.plus(aggregator),
+        new Prisma.Decimal(0)
+      )
+
       const zero = new Prisma.Decimal(0)
-      const reservedSize = reservations._sum.size || zero
       if (size <= zero || size > holding.size.minus(reservedSize)) {
         throw new TRPCError({ code: 'BAD_REQUEST' })
       }
 
       const bondingCurve = new BondingCurve(holding.target)
       const cost = bondingCurve
-        .costBetween(holding.valuation, size)
+        .costOfSize(holding.valuation, size, reservedSize)
         .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP)
-        .toFixed(2)
+      const valuation = bondingCurve
+        .valuationAt(
+          bondingCurve
+            .fractionAt(holding.valuation)
+            .plus(reservedSize)
+            .plus(size)
+        )
+        .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP)
 
       // This is a bit confusing b/c our model and the database feature are both called tranactions
       const transaction = await ctx.prisma.$transaction(async (prisma) => {
@@ -97,13 +102,18 @@ export const transactionRouter = createProtectedRouter()
               type: 'RESERVATION',
             },
           },
-          update: { size: { increment: size }, cost: { increment: cost } },
+          update: {
+            size: { increment: size },
+            cost: { increment: cost },
+            valuation,
+          },
           create: {
             certificateId: sellingHolding.certificateId,
             userId: ctx.session!.user.id,
             type: 'RESERVATION',
             size,
             cost,
+            valuation,
           },
         })
         const transaction = await prisma.transaction.create({

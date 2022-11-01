@@ -14,6 +14,7 @@ import {
 import { TextField } from '@/components/text-field'
 import { BondingCurve } from '@/lib/auction'
 import { SHARE_COUNT } from '@/lib/constants'
+import { num } from '@/lib/text'
 import { trpc } from '@/lib/trpc'
 import { Accordion } from '@mantine/core'
 import { Prisma } from '@prisma/client'
@@ -93,6 +94,23 @@ export function BuyDialog({
 
   const bondingCurve = new BondingCurve(holding.target)
 
+  const startingValuation = bondingCurve.valuationAt(
+    bondingCurve.fractionAt(holding.valuation).plus(reservedSize)
+  )
+  const newValuation = bondingCurve.valuationAt(
+    bondingCurve
+      .fractionAt(holding.valuation)
+      .plus(reservedSize)
+      .plus(new Prisma.Decimal(watchSize || zero))
+  )
+  const cost = bondingCurve
+    .costOfSize(
+      holding.valuation,
+      new Prisma.Decimal(watchSize || zero),
+      reservedSize
+    )
+    .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP)
+
   return (
     <Dialog isOpen={isOpen} onClose={handleClose}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -115,11 +133,7 @@ export function BuyDialog({
               description={
                 <span>
                   Shares in the certificate (max.{' '}
-                  {holding.size
-                    .minus(reservedSize)
-                    .times(SHARE_COUNT)
-                    .toFixed(0)}
-                  )
+                  {num(holding.size.minus(reservedSize).times(SHARE_COUNT))})
                 </span>
               }
               rightSection="shares"
@@ -138,31 +152,16 @@ export function BuyDialog({
                 <tr>
                   <td className="text-right pr-4">Starting valuation:</td>
                   <td className="text-right pr-4">
-                    ${holding.valuation.toFixed(2)}
+                    ${num(startingValuation, 2)}
                   </td>
                 </tr>
                 <tr>
                   <td className="text-right pr-4">New valuation:</td>
-                  <td className="text-right pr-4">
-                    $
-                    {bondingCurve
-                      .valuationAt(
-                        bondingCurve
-                          .fractionAt(holding.valuation)
-                          .plus(watchSize || zero)
-                      )
-                      .toFixed(2)}
-                  </td>
+                  <td className="text-right pr-4">${num(newValuation, 2)}</td>
                 </tr>
                 <tr>
                   <td className="text-right font-bold pr-4">Cost:</td>
-                  <td className="text-right font-bold pr-4">
-                    $
-                    {bondingCurve
-                      .costBetween(holding.valuation, watchSize || zero)
-                      .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP)
-                      .toFixed(2)}
-                  </td>
+                  <td className="text-right font-bold pr-4">${num(cost, 2)}</td>
                 </tr>
               </tbody>
             </table>
@@ -183,12 +182,8 @@ export function BuyDialog({
             {watchSize ? (
               <Banner className="text-sm px-4 py-3 my-5">
                 When you click “Buy,” you’ll have one week to send{' '}
-                {holding.user.name || ''} $
-                {bondingCurve
-                  .costBetween(holding.valuation, watchSize || zero)
-                  .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP)
-                  .toFixed(2)}
-                .
+                {holding.user.name || ''} ${num(cost, 2)} or to cancel the
+                transaction.
               </Banner>
             ) : (
               ''
