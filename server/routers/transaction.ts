@@ -148,6 +148,7 @@ export const transactionRouter = createProtectedRouter()
           data: {
             size: { decrement: transaction.size },
             cost: { decrement: transaction.cost },
+            valuation: transaction.buyingHolding.valuation,
           },
         }),
         ctx.prisma.holding.update({
@@ -168,7 +169,7 @@ export const transactionRouter = createProtectedRouter()
           update: {
             size: { increment: transaction.size },
             cost: { increment: transaction.cost },
-            valuation: transaction.cost.dividedBy(transaction.size),
+            valuation: transaction.buyingHolding.valuation,
           },
           create: {
             certificateId: transaction.sellingHolding.certificateId,
@@ -176,7 +177,7 @@ export const transactionRouter = createProtectedRouter()
             type: transaction.consume ? 'CONSUMPTION' : 'OWNERSHIP',
             size: transaction.size,
             cost: transaction.cost,
-            valuation: transaction.cost.dividedBy(transaction.size),
+            valuation: transaction.buyingHolding.valuation,
           },
         }),
         ctx.prisma.transaction.update({
