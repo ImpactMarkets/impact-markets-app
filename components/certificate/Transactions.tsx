@@ -49,6 +49,7 @@ const Transaction = ({
           <AuthorWithDate
             author={transaction.buyingHolding.user}
             date={transaction.createdAt}
+            size="sm"
           />
         </div>
       </td>

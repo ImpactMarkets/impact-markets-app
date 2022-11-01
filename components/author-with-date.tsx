@@ -14,7 +14,7 @@ type AuthorWithDateProps = {
 export function AuthorWithDate({
   author,
   date,
-  size = 'sm',
+  size = undefined,
 }: AuthorWithDateProps) {
   return (
     <div className="flex items-center gap-2 sm:gap-4">
