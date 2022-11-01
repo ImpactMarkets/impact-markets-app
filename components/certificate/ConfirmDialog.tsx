@@ -10,6 +10,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from '@/components/dialog'
+import { num } from '@/lib/text'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
 
 export function ConfirmDialog({
@@ -41,8 +42,8 @@ export function ConfirmDialog({
       <DialogContent>
         <DialogTitle>Confirm transaction</DialogTitle>
         <DialogDescription className="mt-6">
-          Do you want to confirm that you have received the payment from{' '}
-          {transaction.buyingHolding.user.name}?
+          Do you want to confirm that you have received the payment of $
+          {num(transaction.cost, 2)} from {transaction.buyingHolding.user.name}?
         </DialogDescription>
         <DialogCloseButton onClick={onClose} />
       </DialogContent>
