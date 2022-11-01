@@ -13,6 +13,7 @@ import {
 import { TextField } from '@/components/text-field'
 import { BondingCurve } from '@/lib/auction'
 import { SHARE_COUNT } from '@/lib/constants'
+import { num } from '@/lib/text'
 import { trpc } from '@/lib/trpc'
 import { Prisma } from '@prisma/client'
 
@@ -119,16 +120,33 @@ export function EditDialog({
                 </td>
               </tr>
               <tr>
+                <td className="text-right pr-4">Maximum valuation:</td>
+                <td className="text-right pr-4">
+                  $
+                  {num(
+                    new BondingCurve(new Prisma.Decimal(watchTarget))
+                      .valuationOfSize(
+                        new Prisma.Decimal(watchValuation),
+                        holding.size
+                      )
+                      .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP),
+                    0
+                  )}
+                </td>
+              </tr>
+              <tr>
                 <td className="text-right pr-4">Maximum fundraise:</td>
                 <td className="text-right pr-4">
                   $
-                  {new BondingCurve(new Prisma.Decimal(watchTarget))
-                    .costBetween(
-                      new Prisma.Decimal(watchValuation),
-                      holding.size
-                    )
-                    .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP)
-                    .toFixed(2)}
+                  {num(
+                    new BondingCurve(new Prisma.Decimal(watchTarget))
+                      .costOfSize(
+                        new Prisma.Decimal(watchValuation),
+                        holding.size
+                      )
+                      .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP),
+                    0
+                  )}
                 </td>
               </tr>
             </tbody>

@@ -239,15 +239,34 @@ export function CertificateForm({
                       <td className="text-right pr-4">Maximum valuation:</td>
                       <td className="text-right pr-4">
                         $
-                        {new BondingCurve(
-                          new Prisma.Decimal(watchTarget || aLot)
-                        )
-                          .costBetween(
-                            new Prisma.Decimal(watchValuation || one),
-                            one
-                          )
-                          .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP)
-                          .toFixed(2)}
+                        {
+                          (num(
+                            new BondingCurve(
+                              new Prisma.Decimal(watchTarget || aLot)
+                            ).valuationOfSize(
+                              new Prisma.Decimal(watchValuation || one),
+                              one
+                            )
+                          ),
+                          0)
+                        }
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="text-right pr-4">Maximum fundraise:</td>
+                      <td className="text-right pr-4">
+                        $
+                        {
+                          (num(
+                            new BondingCurve(
+                              new Prisma.Decimal(watchTarget || aLot)
+                            ).costOfSize(
+                              new Prisma.Decimal(watchValuation || one),
+                              one
+                            )
+                          ),
+                          0)
+                        }
                       </td>
                     </tr>
                   </tbody>
