@@ -5,8 +5,10 @@ import toast from 'react-hot-toast'
 import { CertificateForm } from '@/components/certificate-form'
 import { Heading1 } from '@/components/heading-1'
 import { Layout } from '@/components/layout'
+import { DEFAULT_TARGET, DEFAULT_VALUATION } from '@/lib/constants'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
+import { Prisma } from '@prisma/client'
 
 const ATTRIBUTED_IMPACT_RECOMMENDED_VERSION = '0.3'
 
@@ -41,6 +43,8 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
             actionStart: new Date(),
             actionEnd: new Date(new Date().getTime() + 1000 * 60 * 60 * 24),
             content: '',
+            valuation: DEFAULT_VALUATION,
+            target: DEFAULT_TARGET,
           }}
           backTo="/"
           onSubmit={(values) => {
@@ -56,6 +60,10 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
                 actionStart: values.actionStart,
                 actionEnd: values.actionEnd,
                 tags: '',
+                valuation: new Prisma.Decimal(
+                  values.valuation || DEFAULT_VALUATION
+                ),
+                target: new Prisma.Decimal(values.target || DEFAULT_TARGET),
               },
               {
                 onSuccess: (data) => router.push(`/certificate/${data.id}`),

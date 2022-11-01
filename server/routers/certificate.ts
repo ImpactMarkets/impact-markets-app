@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 import { markdownToHtml } from '@/lib/editor'
 import { postToSlackIfEnabled } from '@/lib/slack'
+import { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
 import { createProtectedRouter } from '../create-protected-router'
@@ -194,6 +195,8 @@ export const certificateRouter = createProtectedRouter()
       actionStart: z.date(),
       actionEnd: z.date(),
       tags: z.string(),
+      valuation: z.instanceof(Prisma.Decimal),
+      target: z.instanceof(Prisma.Decimal),
     }),
     async resolve({ ctx, input }) {
       const certificate = await ctx.prisma.certificate.create({
@@ -223,6 +226,8 @@ export const certificateRouter = createProtectedRouter()
           type: 'OWNERSHIP',
           size: 1,
           cost: 0,
+          valuation: input.valuation,
+          target: input.target,
         },
       })
 

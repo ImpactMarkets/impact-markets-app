@@ -8,6 +8,7 @@ import { MarkdownEditor } from '@/components/markdown-editor'
 import { TextField } from '@/components/text-field'
 import { useLeaveConfirm } from '@/lib/form'
 import { Accordion, SimpleGrid, Switch } from '@mantine/core'
+import { Prisma } from '@prisma/client'
 
 const DESCRIPTION_PROMPTS = (
   <>
@@ -48,6 +49,9 @@ type FormData = {
   actionStart: Date
   actionEnd: Date
   tags: string
+  // These defaults are set for new forms but not for editing
+  valuation?: Prisma.Decimal
+  target?: Prisma.Decimal
 }
 
 type CertificateFormProps = {
@@ -162,6 +166,55 @@ export function CertificateForm({
         <Accordion.Item value="advanced-options">
           <Accordion.Control>Advanced options</Accordion.Control>
           <Accordion.Panel className="text-sm">
+            {isNew ? (
+              <>
+                <SimpleGrid
+                  cols={2}
+                  breakpoints={[{ maxWidth: 'md', cols: 1 }]}
+                >
+                  <div className="mt-6 space-y-6">
+                    <TextField
+                      {...register('valuation', {
+                        required: true,
+                      })}
+                      label="Minimum valuation"
+                      description="What is the price below which you won’t sell a single share?"
+                      rightSection="USD"
+                      classNames={{ rightSection: 'w-16' }}
+                      type="number"
+                      step="1"
+                      min="1"
+                      required
+                    />
+                  </div>
+                  <div className="mt-6 space-y-6">
+                    <TextField
+                      {...register('target', {
+                        required: true,
+                      })}
+                      label="Target valuation"
+                      description="What is the valuation that you hope this certificate will reach?"
+                      rightSection="USD"
+                      classNames={{ rightSection: 'w-16' }}
+                      type="number"
+                      step="1"
+                      min="1"
+                      required
+                    />
+                  </div>
+                </SimpleGrid>
+                <div className="mt-6 space-y-6 text-sm">
+                  You can edit these later through the edit function of your
+                  holding.
+                </div>
+              </>
+            ) : (
+              <div className="mt-6 space-y-6 text-sm">
+                Please go through the edit function of your holding to change
+                starting and target valuation.
+              </div>
+            )}
+
             <TextField
               {...register('attributedImpactVersion', { required: true })}
               label={
@@ -217,6 +270,11 @@ export function CertificateForm({
         required
       />
 
+      <p className="my-6 text-sm">
+        When you submit your certificate, you can still edit it, and it will
+        remain hidden until a curator publishes it.
+      </p>
+
       <div className="flex items-center justify-between gap-4 mt-8">
         <div className="flex gap-4">
           <Button
@@ -235,7 +293,7 @@ export function CertificateForm({
             href="https://airtable.com/shrXCFWdrzgG9jWn3"
             target="_blank"
             rel="noreferrer"
-            className="font-medium transition-colors hover:text-blue hover:underline"
+            className="text-sm font-medium transition-colors hover:text-blue hover:underline"
           >
             Do you have any feedback or tips for us?
           </a>
