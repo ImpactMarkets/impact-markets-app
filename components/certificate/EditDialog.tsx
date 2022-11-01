@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from '@/components/dialog'
 import { TextField } from '@/components/text-field'
+import { BondingCurve } from '@/lib/auction'
 import { SHARE_COUNT } from '@/lib/constants'
 import { trpc } from '@/lib/trpc'
 import { Prisma } from '@prisma/client'
@@ -63,8 +64,8 @@ export function EditDialog({
     transactionMutation.mutate(
       {
         id: holding.id,
-        valuation: data.valuation,
-        target: data.target,
+        valuation: new Prisma.Decimal(data.valuation),
+        target: new Prisma.Decimal(data.target),
       },
       {
         onSuccess: () => onClose(),
@@ -81,11 +82,11 @@ export function EditDialog({
             <TextField
               {...register('valuation', { required: true })}
               label="Minimum valuation"
-              description="What is the price below which you won’t sell a single share?"
+              description="What is the valuation below which you won’t sell a single share?"
               rightSection="USD"
               classNames={{ rightSection: 'w-16' }}
               type="number"
-              step="1"
+              step="0.01"
               min="1"
               required
             />
@@ -98,15 +99,40 @@ export function EditDialog({
               rightSection="USD"
               classNames={{ rightSection: 'w-16' }}
               type="number"
-              step="1"
+              step="0.01"
               min="1"
               required
             />
           </div>
-          <p className="text-sm mt-5">
-            Value of your holding ({holding.size.times(SHARE_COUNT).toFixed(0)}{' '}
-            shares): ${holding.size.times(watchValuation).toFixed(2)}
-          </p>
+          <table className="text-sm mx-auto mt-6">
+            <tbody>
+              <tr>
+                <td className="text-right pr-4">Shares:</td>
+                <td className="text-right pr-4">
+                  {holding.size.times(SHARE_COUNT).toFixed(0)}
+                </td>
+              </tr>
+              <tr>
+                <td className="text-right pr-4">Current valuation:</td>
+                <td className="text-right pr-4">
+                  ${holding.size.times(watchValuation).toFixed(2)}
+                </td>
+              </tr>
+              <tr>
+                <td className="text-right pr-4">Maximum raised:</td>
+                <td className="text-right pr-4">
+                  $
+                  {new BondingCurve(new Prisma.Decimal(watchTarget))
+                    .costBetween(
+                      new Prisma.Decimal(watchValuation),
+                      holding.size
+                    )
+                    .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP)
+                    .toFixed(2)}
+                </td>
+              </tr>
+            </tbody>
+          </table>
           <DialogCloseButton onClick={handleClose} />
         </DialogContent>
         <DialogActions>

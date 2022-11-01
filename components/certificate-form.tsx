@@ -6,6 +6,8 @@ import { ButtonLink } from '@/components/button-link'
 import { MarkdownIcon } from '@/components/icons'
 import { MarkdownEditor } from '@/components/markdown-editor'
 import { TextField } from '@/components/text-field'
+import { BondingCurve } from '@/lib/auction'
+import { SHARE_COUNT } from '@/lib/constants'
 import { useLeaveConfirm } from '@/lib/form'
 import { Accordion, SimpleGrid, Switch } from '@mantine/core'
 import { Prisma } from '@prisma/client'
@@ -69,10 +71,17 @@ export function CertificateForm({
   backTo,
   onSubmit,
 }: CertificateFormProps) {
-  const { control, register, formState, getValues, reset, handleSubmit } =
-    useForm<FormData>({
-      defaultValues,
-    })
+  const {
+    control,
+    register,
+    formState,
+    getValues,
+    reset,
+    handleSubmit,
+    watch,
+  } = useForm<FormData>({
+    defaultValues,
+  })
 
   useLeaveConfirm({ formState })
 
@@ -83,6 +92,10 @@ export function CertificateForm({
       reset(getValues())
     }
   }, [isSubmitSuccessful, reset, getValues])
+
+  const one = new Prisma.Decimal(1)
+  const watchValuation = watch('valuation')
+  const watchTarget = watch('target')
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -203,6 +216,33 @@ export function CertificateForm({
                     />
                   </div>
                 </SimpleGrid>
+                <table className="text-sm mx-auto mt-6">
+                  <tbody>
+                    <tr>
+                      <td className="text-right pr-4">Shares:</td>
+                      <td className="text-right pr-4">
+                        {one.times(SHARE_COUNT).toFixed(0)}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="text-right pr-4">Current valuation:</td>
+                      <td className="text-right pr-4">
+                        ${one.times(watchValuation).toFixed(2)}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="text-right pr-4">Maximum raised:</td>
+                      <td className="text-right pr-4">
+                        $
+                        {new BondingCurve(new Prisma.Decimal(watchTarget))
+                          .costBetween(new Prisma.Decimal(watchValuation), one)
+                          .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP)
+                          .toFixed(2)}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
                 <div className="mt-6 space-y-6 text-sm">
                   You can edit these later through the edit function of your
                   holding.
@@ -280,7 +320,7 @@ export function CertificateForm({
           <Button
             type="submit"
             isLoading={isSubmitting}
-            loadingChildren={`${isNew ? 'Submitting' : 'Saving'}`}
+            loadingChildren={isNew ? 'Submitting' : 'Saving'}
           >
             {isNew ? 'Submit' : 'Save'}
           </Button>
