@@ -82,7 +82,7 @@ export function EditDialog({
             <TextField
               {...register('valuation', { required: true })}
               label="Minimum valuation"
-              description="What is the valuation below which you won’t sell a single share?"
+              description="You won’t sell a single share below what valuation?"
               rightSection="USD"
               classNames={{ rightSection: 'w-16' }}
               type="number"
@@ -94,8 +94,8 @@ export function EditDialog({
           <div className="mt-6 space-y-6">
             <TextField
               {...register('target', { required: true })}
-              label="Target valuation"
-              description="What is the valuation that you hope this certificate will reach?"
+              label="Fundraising target"
+              description="How much do you hope to raise?"
               rightSection="USD"
               classNames={{ rightSection: 'w-16' }}
               type="number"
@@ -109,17 +109,17 @@ export function EditDialog({
               <tr>
                 <td className="text-right pr-4">Shares:</td>
                 <td className="text-right pr-4">
-                  {holding.size.times(SHARE_COUNT).toFixed(0)}
+                  {num(holding.size.times(SHARE_COUNT), 0)}
                 </td>
               </tr>
               <tr>
                 <td className="text-right pr-4">Current valuation:</td>
                 <td className="text-right pr-4">
-                  ${holding.size.times(watchValuation).toFixed(2)}
+                  ${num(holding.size.times(watchValuation), 0)}
                 </td>
               </tr>
               <tr>
-                <td className="text-right pr-4">Maximum raised:</td>
+                <td className="text-right pr-4">Maximum fundraise:</td>
                 <td className="text-right pr-4">
                   $
                   {new BondingCurve(new Prisma.Decimal(watchTarget))

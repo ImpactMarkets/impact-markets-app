@@ -4,6 +4,7 @@ import * as React from 'react'
 import { BuyDialog } from '@/components/certificate/BuyDialog'
 import { EditDialog } from '@/components/certificate/EditDialog'
 import { SHARE_COUNT } from '@/lib/constants'
+import { num } from '@/lib/text'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
 import { Prisma } from '@prisma/client'
 
@@ -34,10 +35,10 @@ const Holding = ({
         <Author author={holding.user} />
       </td>
       <td className="text-right" key="size">
-        {holding.size.times(SHARE_COUNT).toFixed(0)} shares
+        {num(holding.size.times(SHARE_COUNT))}
       </td>
       <td className="text-right" key="valuation">
-        <>at ${holding.valuation.toFixed(2)}</>
+        <>${num(holding.valuation, 0)}</>
       </td>
       <td className="text-right px-2">
         {holding.user.id === userId ? (
@@ -106,15 +107,15 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
     )
 
   return (
-    <div className="flex w-full justify-between text-sm">
+    <div className="flex w-full gap-6 justify-between items-start text-sm flex-col md:flex-row">
       {holdings.some((holding) => holding.type === 'OWNERSHIP') && (
         <div className="flex-auto max-w-sm">
           <table className="table-auto w-full">
             <thead>
               <tr>
                 <th className="text-left">Owners</th>
-                <th className="text-right"></th>
-                <th className="text-right"></th>
+                <th className="text-right">Shares</th>
+                <th className="text-right">Valuation</th>
               </tr>
             </thead>
             <tbody>
@@ -132,9 +133,9 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
                   Reserved
                 </td>
                 <td className="text-right" key="size">
-                  {totalReservedSize.times(SHARE_COUNT).toFixed(0)} shares
+                  {num(totalReservedSize.times(SHARE_COUNT))}
                 </td>
-                <td className="text-right" key="owner">
+                <td className="text-right" key="valuation">
                   –
                 </td>
               </tr>
@@ -160,7 +161,7 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
                       {holding.user.name}
                     </td>
                     <td className="text-right" key="size">
-                      {holding.size.times(SHARE_COUNT).toFixed(0)} shares
+                      {num(holding.size.times(SHARE_COUNT))}
                     </td>
                   </tr>
                 ))}

@@ -9,6 +9,7 @@ import { TextField } from '@/components/text-field'
 import { BondingCurve } from '@/lib/auction'
 import { SHARE_COUNT } from '@/lib/constants'
 import { useLeaveConfirm } from '@/lib/form'
+import { num } from '@/lib/text'
 import { Accordion, SimpleGrid, Switch } from '@mantine/core'
 import { Prisma } from '@prisma/client'
 
@@ -192,7 +193,7 @@ export function CertificateForm({
                         required: true,
                       })}
                       label="Minimum valuation"
-                      description="What is the price below which you won’t sell a single share?"
+                      description="You won’t sell a single share below what valuation?"
                       rightSection="USD"
                       classNames={{ rightSection: 'w-16' }}
                       type="number"
@@ -206,8 +207,8 @@ export function CertificateForm({
                       {...register('target', {
                         required: true,
                       })}
-                      label="Target valuation"
-                      description="What is the valuation that you hope this certificate will reach?"
+                      label="Fundraising target"
+                      description="How much do you hope to raise?"
                       rightSection="USD"
                       classNames={{ rightSection: 'w-16' }}
                       type="number"
@@ -222,20 +223,20 @@ export function CertificateForm({
                     <tr>
                       <td className="text-right pr-4">Shares:</td>
                       <td className="text-right pr-4">
-                        {one.times(SHARE_COUNT).toFixed(0)}
+                        {num(one.times(SHARE_COUNT))}
                       </td>
                     </tr>
                     <tr>
                       <td className="text-right pr-4">Current valuation:</td>
                       <td className="text-right pr-4">
                         $
-                        {one
-                          .times(new Prisma.Decimal(watchValuation || one))
-                          .toFixed(2)}
+                        {num(
+                          one.times(new Prisma.Decimal(watchValuation || one))
+                        )}
                       </td>
                     </tr>
                     <tr>
-                      <td className="text-right pr-4">Maximum raised:</td>
+                      <td className="text-right pr-4">Maximum valuation:</td>
                       <td className="text-right pr-4">
                         $
                         {new BondingCurve(
