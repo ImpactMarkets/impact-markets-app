@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from '@/components/dialog'
 import { TextField } from '@/components/text-field'
+import { SHARE_COUNT } from '@/lib/constants'
 import { trpc } from '@/lib/trpc'
 import { Prisma } from '@prisma/client'
 
@@ -103,8 +104,8 @@ export function EditDialog({
             />
           </div>
           <p className="text-sm mt-5">
-            Value of your holding ({holding.size.times(1e5).toFixed(0)} shares):
-            ${holding.size.times(watchValuation).toFixed(2)}
+            Value of your holding ({holding.size.times(SHARE_COUNT).toFixed(0)}{' '}
+            shares): ${holding.size.times(watchValuation).toFixed(2)}
           </p>
           <DialogCloseButton onClick={handleClose} />
         </DialogContent>

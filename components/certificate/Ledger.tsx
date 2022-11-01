@@ -3,7 +3,9 @@ import * as React from 'react'
 
 import { BuyDialog } from '@/components/certificate/BuyDialog'
 import { EditDialog } from '@/components/certificate/EditDialog'
+import { SHARE_COUNT } from '@/lib/constants'
 import { trpc } from '@/lib/trpc'
+import { Prisma } from '@prisma/client'
 
 import { Author } from '../author'
 import { ButtonLink } from '../button-link'
@@ -29,7 +31,10 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
 
   const totalReservedSize = holdings
     .filter((holding) => holding.type === 'RESERVATION')
-    .reduce((aggregator, holding) => +holding.size + aggregator, 0)
+    .reduce(
+      (aggregator, holding) => holding.size.plus(aggregator),
+      new Prisma.Decimal(0)
+    )
 
   const renderHolding = (holding: typeof holdings[0]) => {
     const reservedSize = holding.sellTransactions.reduce(
@@ -42,18 +47,10 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
           <Author author={holding.user} />
         </td>
         <td className="text-right" key="size">
-          {(+holding.size * 1e5).toLocaleString(undefined, {
-            maximumFractionDigits: 1,
-          })}{' '}
-          shares
+          {holding.size.times(SHARE_COUNT).toFixed(0)} shares
         </td>
         <td className="text-right" key="valuation">
-          <>
-            at $
-            {(+holding.valuation).toLocaleString(undefined, {
-              maximumFractionDigits: 2,
-            })}
-          </>
+          <>at ${holding.valuation.toFixed(2)}</>
         </td>
         <td className="text-right px-2">
           {holding.user.id === session!.user.id ? (
@@ -124,10 +121,7 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
                   Reserved
                 </td>
                 <td className="text-right" key="size">
-                  {(totalReservedSize * 1e5).toLocaleString(undefined, {
-                    maximumFractionDigits: 1,
-                  })}{' '}
-                  shares
+                  {totalReservedSize.times(SHARE_COUNT).toFixed(0)} shares
                 </td>
               </tr>
             </tbody>
@@ -152,10 +146,7 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
                       {holding.user.name}
                     </td>
                     <td className="text-right" key="size">
-                      {(+holding.size * 1e5).toLocaleString(undefined, {
-                        maximumFractionDigits: 1,
-                      })}{' '}
-                      shares
+                      {holding.size.times(SHARE_COUNT).toFixed(0)} shares
                     </td>
                   </tr>
                 ))}

@@ -13,6 +13,7 @@ import {
 } from '@/components/dialog'
 import { TextField } from '@/components/text-field'
 import { BondingCurve } from '@/lib/auction'
+import { SHARE_COUNT } from '@/lib/constants'
 import { trpc } from '@/lib/trpc'
 import { Accordion } from '@mantine/core'
 import { Prisma } from '@prisma/client'
@@ -78,7 +79,7 @@ export function BuyDialog({
     transactionMutation.mutate(
       {
         sellingHolding: holding,
-        size: data.size,
+        size: new Prisma.Decimal(data.size),
         consume: data.consume,
       },
       {
@@ -108,13 +109,17 @@ export function BuyDialog({
               {...register('size', {
                 required: true,
                 shouldUnregister: true,
-                setValueAs: (value) => value / 1e5,
+                setValueAs: (value) => value / SHARE_COUNT,
               })}
               label="Size"
               description={
                 <span>
                   Shares in the certificate (max.{' '}
-                  {holding.size.minus(reservedSize).times(1e5).toFixed(0)})
+                  {holding.size
+                    .minus(reservedSize)
+                    .times(SHARE_COUNT)
+                    .toFixed(0)}
+                  )
                 </span>
               }
               rightSection="shares"
@@ -122,7 +127,10 @@ export function BuyDialog({
               type="number"
               step="1"
               min="1"
-              max={holding.size.minus(reservedSize).times(1e5).toNumber()}
+              max={holding.size
+                .minus(reservedSize)
+                .times(SHARE_COUNT)
+                .toNumber()}
               required
             />
             <table className="text-sm mx-auto">
