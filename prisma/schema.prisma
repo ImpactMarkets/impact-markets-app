@@ -117,8 +117,6 @@ model Certificate {
   rights                  Right     @default(RETROACTIVE_FUNDING)
   actionStart             DateTime
   actionEnd               DateTime
-  impactStart             DateTime?
-  impactEnd               DateTime?
   tags                    String?
 
   author   User      @relation(fields: [authorId], references: [id], onDelete: Restrict)
