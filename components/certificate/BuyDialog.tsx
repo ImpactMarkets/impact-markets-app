@@ -43,7 +43,7 @@ export function BuyDialog({
       name: string | null
     }
   }
-  reservedSize: number
+  reservedSize: Prisma.Decimal
   isOpen: boolean
   onClose: () => void
 }) {

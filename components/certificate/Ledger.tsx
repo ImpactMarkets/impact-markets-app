@@ -4,7 +4,7 @@ import * as React from 'react'
 import { BuyDialog } from '@/components/certificate/BuyDialog'
 import { EditDialog } from '@/components/certificate/EditDialog'
 import { SHARE_COUNT } from '@/lib/constants'
-import { trpc } from '@/lib/trpc'
+import { InferQueryOutput, trpc } from '@/lib/trpc'
 import { Prisma } from '@prisma/client'
 
 import { Author } from '../author'
@@ -15,10 +15,79 @@ type LedgerProps = {
   certificateId: number
 }
 
-export const Ledger = ({ certificateId }: LedgerProps) => {
+const Holding = ({
+  holding,
+  userId,
+}: {
+  holding: InferQueryOutput<'holding.feed'>[0]
+  userId: string
+}) => {
   const [isBuyDialogOpen, setIsBuyDialogOpen] = React.useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false)
+  const reservedSize = holding.sellTransactions.reduce(
+    (aggregator, transaction) => transaction.size.plus(aggregator),
+    new Prisma.Decimal(0)
+  )
+  return (
+    <tr key={holding.user.id + holding.type}>
+      <td className="text-left" key="owner">
+        <Author author={holding.user} />
+      </td>
+      <td className="text-right" key="size">
+        {holding.size.times(SHARE_COUNT).toFixed(0)} shares
+      </td>
+      <td className="text-right" key="valuation">
+        <>at ${holding.valuation.toFixed(2)}</>
+      </td>
+      <td className="text-right px-2">
+        {holding.user.id === userId ? (
+          <>
+            <ButtonLink
+              href="#"
+              variant="secondary"
+              className="h-6"
+              onClick={() => {
+                setIsEditDialogOpen(true)
+              }}
+            >
+              <span className="block shrink-0">Edit</span>
+            </ButtonLink>
+            <EditDialog
+              holding={holding}
+              isOpen={isEditDialogOpen}
+              onClose={() => {
+                setIsEditDialogOpen(false)
+              }}
+            />
+          </>
+        ) : (
+          <>
+            <ButtonLink
+              href="#"
+              variant="highlight"
+              className="h-6"
+              onClick={() => {
+                setIsBuyDialogOpen(true)
+              }}
+            >
+              <span className="block shrink-0">Buy</span>
+            </ButtonLink>
+            <BuyDialog
+              holding={holding}
+              reservedSize={reservedSize}
+              isOpen={isBuyDialogOpen}
+              onClose={() => {
+                setIsBuyDialogOpen(false)
+              }}
+            />
+          </>
+        )}
+      </td>
+    </tr>
+  )
+}
 
+export const Ledger = ({ certificateId }: LedgerProps) => {
   const holdingsQuery = trpc.useQuery([
     'holding.feed',
     {
@@ -36,70 +105,6 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
       new Prisma.Decimal(0)
     )
 
-  const renderHolding = (holding: typeof holdings[0]) => {
-    const reservedSize = holding.sellTransactions.reduce(
-      (aggregator, transaction) => +transaction.size + aggregator,
-      0
-    )
-    return (
-      <tr key={holding.user.id + holding.type}>
-        <td className="text-left" key="owner">
-          <Author author={holding.user} />
-        </td>
-        <td className="text-right" key="size">
-          {holding.size.times(SHARE_COUNT).toFixed(0)} shares
-        </td>
-        <td className="text-right" key="valuation">
-          <>at ${holding.valuation.toFixed(2)}</>
-        </td>
-        <td className="text-right px-2">
-          {holding.user.id === session!.user.id ? (
-            <>
-              <ButtonLink
-                href="#"
-                variant="secondary"
-                className="h-6"
-                onClick={() => {
-                  setIsEditDialogOpen(true)
-                }}
-              >
-                <span className="block shrink-0">Edit</span>
-              </ButtonLink>
-              <EditDialog
-                holding={holding}
-                isOpen={isEditDialogOpen}
-                onClose={() => {
-                  setIsEditDialogOpen(false)
-                }}
-              />
-            </>
-          ) : (
-            <>
-              <ButtonLink
-                href="#"
-                variant="highlight"
-                className="h-6"
-                onClick={() => {
-                  setIsBuyDialogOpen(true)
-                }}
-              >
-                <span className="block shrink-0">Buy</span>
-              </ButtonLink>
-              <BuyDialog
-                holding={holding}
-                reservedSize={reservedSize}
-                isOpen={isBuyDialogOpen}
-                onClose={() => {
-                  setIsBuyDialogOpen(false)
-                }}
-              />
-            </>
-          )}
-        </td>
-      </tr>
-    )
-  }
-
   return (
     <div className="flex w-full justify-between text-sm">
       {holdings.some((holding) => holding.type === 'OWNERSHIP') && (
@@ -115,13 +120,22 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
             <tbody>
               {holdings
                 .filter((holding) => holding.type === 'OWNERSHIP')
-                .map(renderHolding)}
+                .map((holding) => (
+                  <Holding
+                    key={holding.id}
+                    holding={holding}
+                    userId={session!.user.id}
+                  />
+                ))}
               <tr key="Reservation">
-                <td className="text-left" key="owner">
+                <td className="text-left pl-11 h-9" key="owner">
                   Reserved
                 </td>
                 <td className="text-right" key="size">
                   {totalReservedSize.times(SHARE_COUNT).toFixed(0)} shares
+                </td>
+                <td className="text-right" key="owner">
+                  –
                 </td>
               </tr>
             </tbody>
