@@ -43,7 +43,7 @@ export const transactionRouter = createProtectedRouter()
           consume: true,
           size: true,
           cost: true,
-          sellingHolding: { select: { user: true } },
+          sellingHolding: { select: { user: true, certificate: true } },
           buyingHolding: { select: { user: true } },
         },
       })
