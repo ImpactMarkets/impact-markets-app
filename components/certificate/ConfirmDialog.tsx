@@ -10,15 +10,15 @@ import {
   DialogDescription,
   DialogTitle,
 } from '@/components/dialog'
-import { trpc } from '@/lib/trpc'
+import { InferQueryOutput, trpc } from '@/lib/trpc'
 
 export function ConfirmDialog({
-  transactionId,
+  transaction,
   certificateId,
   isOpen,
   onClose,
 }: {
-  transactionId: number
+  transaction: InferQueryOutput<'transaction.feed'>[0]
   certificateId?: number
   isOpen: boolean
   onClose: () => void
@@ -41,7 +41,8 @@ export function ConfirmDialog({
       <DialogContent>
         <DialogTitle>Confirm transaction</DialogTitle>
         <DialogDescription className="mt-6">
-          Do you want to confirm that you have received the funds?
+          Do you want to confirm that you have received the payment from{' '}
+          {transaction.buyingHolding.user.name}?
         </DialogDescription>
         <DialogCloseButton onClick={onClose} />
       </DialogContent>
@@ -52,7 +53,7 @@ export function ConfirmDialog({
           isLoading={confirmTransactionMutation.isLoading}
           loadingChildren="Confirming transaction"
           onClick={() => {
-            confirmTransactionMutation.mutate(transactionId, {
+            confirmTransactionMutation.mutate(transaction.id, {
               onSuccess: () => onClose(),
             })
           }}
