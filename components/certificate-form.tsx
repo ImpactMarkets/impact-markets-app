@@ -223,50 +223,37 @@ export function CertificateForm({
                     <tr>
                       <td className="text-right pr-4">Shares:</td>
                       <td className="text-right pr-4">
-                        {num(one.times(SHARE_COUNT))}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="text-right pr-4">Current valuation:</td>
-                      <td className="text-right pr-4">
-                        $
-                        {num(
-                          one.times(new Prisma.Decimal(watchValuation || one))
-                        )}
+                        {num(new Prisma.Decimal(SHARE_COUNT))}
                       </td>
                     </tr>
                     <tr>
                       <td className="text-right pr-4">Maximum valuation:</td>
                       <td className="text-right pr-4">
                         $
-                        {
-                          (num(
-                            new BondingCurve(
-                              new Prisma.Decimal(watchTarget || aLot)
-                            ).valuationOfSize(
-                              new Prisma.Decimal(watchValuation || one),
-                              one
-                            )
+                        {num(
+                          new BondingCurve(
+                            new Prisma.Decimal(watchTarget || aLot)
+                          ).valuationOfSize(
+                            new Prisma.Decimal(watchValuation || one),
+                            one
                           ),
-                          0)
-                        }
+                          0
+                        )}
                       </td>
                     </tr>
                     <tr>
                       <td className="text-right pr-4">Maximum fundraise:</td>
                       <td className="text-right pr-4">
                         $
-                        {
-                          (num(
-                            new BondingCurve(
-                              new Prisma.Decimal(watchTarget || aLot)
-                            ).costOfSize(
-                              new Prisma.Decimal(watchValuation || one),
-                              one
-                            )
+                        {num(
+                          new BondingCurve(
+                            new Prisma.Decimal(watchTarget || aLot)
+                          ).costOfSize(
+                            new Prisma.Decimal(watchValuation || one),
+                            one
                           ),
-                          0)
-                        }
+                          0
+                        )}
                       </td>
                     </tr>
                   </tbody>
