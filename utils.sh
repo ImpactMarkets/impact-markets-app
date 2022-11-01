@@ -15,7 +15,7 @@ makemigrations () {
         --to-schema-datamodel prisma/schema.prisma \
         --script \
         > $dir/migration.sql
-    dropdb im-app-temp
+    PGPASSWORD=empty dropdb -U im-app -h 127.0.0.1 im-app-temp
 }
 
 deploy () {
