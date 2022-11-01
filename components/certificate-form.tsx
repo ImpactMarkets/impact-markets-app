@@ -94,6 +94,7 @@ export function CertificateForm({
   }, [isSubmitSuccessful, reset, getValues])
 
   const one = new Prisma.Decimal(1)
+  const aLot = new Prisma.Decimal(1e5)
   const watchValuation = watch('valuation')
   const watchTarget = watch('target')
 
@@ -227,15 +228,23 @@ export function CertificateForm({
                     <tr>
                       <td className="text-right pr-4">Current valuation:</td>
                       <td className="text-right pr-4">
-                        ${one.times(watchValuation).toFixed(2)}
+                        $
+                        {one
+                          .times(new Prisma.Decimal(watchValuation || one))
+                          .toFixed(2)}
                       </td>
                     </tr>
                     <tr>
                       <td className="text-right pr-4">Maximum raised:</td>
                       <td className="text-right pr-4">
                         $
-                        {new BondingCurve(new Prisma.Decimal(watchTarget))
-                          .costBetween(new Prisma.Decimal(watchValuation), one)
+                        {new BondingCurve(
+                          new Prisma.Decimal(watchTarget || aLot)
+                        )
+                          .costBetween(
+                            new Prisma.Decimal(watchValuation || one),
+                            one
+                          )
                           .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP)
                           .toFixed(2)}
                       </td>
