@@ -199,6 +199,7 @@ export function CertificateForm({
                       type="number"
                       step="1"
                       min="1"
+                      max="1e30"
                       required
                     />
                   </div>
@@ -214,6 +215,7 @@ export function CertificateForm({
                       type="number"
                       step="1"
                       min="1"
+                      max="1e30"
                       required
                     />
                   </div>

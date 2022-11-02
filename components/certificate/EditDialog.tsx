@@ -89,6 +89,7 @@ export function EditDialog({
               type="number"
               step="0.01"
               min="1"
+              max="1e30"
               required
             />
           </div>
@@ -102,6 +103,7 @@ export function EditDialog({
               type="number"
               step="0.01"
               min="1"
+              max="1e30"
               required
             />
           </div>
