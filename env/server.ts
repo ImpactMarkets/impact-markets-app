@@ -1,11 +1,4 @@
-import {
-  bool,
-  envsafe,
-  invalidEnvError,
-  makeValidator,
-  str,
-  url,
-} from 'envsafe'
+import { bool, envsafe, invalidEnvError, makeValidator, str } from 'envsafe'
 
 import { browserEnv } from './browser'
 
