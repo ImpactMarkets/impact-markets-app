@@ -14,7 +14,7 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
   const certificateQuery = trpc.useQuery([
     'certificate.detail',
-    { id: Number(router.query.id) },
+    { id: String(router.query.id) },
   ])
   const editCertificateMutation = trpc.useMutation('certificate.edit', {
     onError: (error) => {
@@ -40,6 +40,7 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
               <CertificateForm
                 isSubmitting={editCertificateMutation.isLoading}
                 defaultValues={{
+                  id: certificateQuery.data.id,
                   title: certificateQuery.data.title,
                   content: certificateQuery.data.content,
                   counterfactual: certificateQuery.data.counterfactual,

@@ -1,4 +1,4 @@
-import { bool, envsafe, str } from 'envsafe'
+import { bool, envsafe } from 'envsafe'
 
 // Variable names must start with NEXT_PUBLIC_
 // https://nextjs.org/docs/basic-features/environment-variables#exposing-environment-variables-to-the-browser

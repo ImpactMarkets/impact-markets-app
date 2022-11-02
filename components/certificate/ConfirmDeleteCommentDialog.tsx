@@ -20,7 +20,7 @@ export function ConfirmDeleteCommentDialog({
   isOpen,
   onClose,
 }: {
-  certificateId: number
+  certificateId: string
   commentId: number
   isOpen: boolean
   onClose: () => void

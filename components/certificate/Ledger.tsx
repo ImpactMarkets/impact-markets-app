@@ -13,7 +13,7 @@ import { ButtonLink } from '../button-link'
 import { Transactions } from './Transactions'
 
 type LedgerProps = {
-  certificateId: number
+  certificateId: string
 }
 
 const Holding = ({

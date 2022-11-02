@@ -79,15 +79,16 @@ export const certificateRouter = createProtectedRouter()
   })
   .query('detail', {
     input: z.object({
-      id: z.number(),
+      id: z.string().min(1),
     }),
     async resolve({ ctx, input }) {
       const { id } = input
       const certificate = await ctx.prisma.certificate.findUnique({
-        where: { id },
+        // For the redirect from old to new certificate URLs
+        where: isNaN(Number(id)) ? { id } : { oldId: Number(id) },
         select: {
           id: true,
-          cuid: true,
+          oldId: true,
           title: true,
           content: true,
           contentHtml: true,
@@ -187,6 +188,7 @@ export const certificateRouter = createProtectedRouter()
   })
   .mutation('add', {
     input: z.object({
+      id: z.string().min(1),
       title: z.string().min(1),
       content: z.string().min(1),
       attributedImpactVersion: z.string().min(1),
@@ -203,6 +205,7 @@ export const certificateRouter = createProtectedRouter()
     async resolve({ ctx, input }) {
       const certificate = await ctx.prisma.certificate.create({
         data: {
+          id: input.id,
           title: input.title,
           content: input.content,
           contentHtml: markdownToHtml(input.content),
@@ -243,7 +246,7 @@ export const certificateRouter = createProtectedRouter()
   })
   .mutation('edit', {
     input: z.object({
-      id: z.number(),
+      id: z.string().min(1),
       data: z.object({
         title: z.string().min(1),
         content: z.string().min(1),
@@ -280,7 +283,7 @@ export const certificateRouter = createProtectedRouter()
     },
   })
   .mutation('like', {
-    input: z.number(),
+    input: z.string().min(1),
     async resolve({ input: id, ctx }) {
       await ctx.prisma.likedCertificate.create({
         data: {
@@ -301,7 +304,7 @@ export const certificateRouter = createProtectedRouter()
     },
   })
   .mutation('unlike', {
-    input: z.number(),
+    input: z.string().min(1),
     async resolve({ input: id, ctx }) {
       await ctx.prisma.likedCertificate.delete({
         where: {
@@ -316,7 +319,7 @@ export const certificateRouter = createProtectedRouter()
     },
   })
   .mutation('hide', {
-    input: z.number(),
+    input: z.string().min(1),
     async resolve({ input: id, ctx }) {
       const certificate = await ctx.prisma.certificate.update({
         where: { id },
@@ -331,7 +334,7 @@ export const certificateRouter = createProtectedRouter()
     },
   })
   .mutation('unhide', {
-    input: z.number(),
+    input: z.string().min(1),
     async resolve({ input: id, ctx }) {
       const certificate = await ctx.prisma.certificate.update({
         where: { id },

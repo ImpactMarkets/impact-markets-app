@@ -1,3 +1,4 @@
+import cuid from 'cuid'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
@@ -33,6 +34,7 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
           isNew
           isSubmitting={addCertificateMutation.isLoading}
           defaultValues={{
+            id: cuid(),
             title: '',
             proof: '',
             location: '',
@@ -52,6 +54,7 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
           onSubmit={(values) => {
             addCertificateMutation.mutate(
               {
+                id: values.id,
                 title: values.title,
                 content: values.content,
                 counterfactual: values.counterfactual,

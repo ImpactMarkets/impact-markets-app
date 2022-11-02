@@ -8,7 +8,7 @@ import { trpc } from '@/lib/trpc'
 
 import { CommentFormData, getCertificateQueryPathAndInput } from './utils'
 
-export function AddCommentForm({ certificateId }: { certificateId: number }) {
+export function AddCommentForm({ certificateId }: { certificateId: string }) {
   const [markdownEditorKey, setMarkdownEditorKey] = React.useState(0)
   const utils = trpc.useContext()
   const addCommentMutation = trpc.useMutation('comment.add', {
