@@ -84,7 +84,8 @@ export const certificateRouter = createProtectedRouter()
     async resolve({ ctx, input }) {
       const { id } = input
       const certificate = await ctx.prisma.certificate.findUnique({
-        where: { id },
+        // For the redirect from old to new certificate URLs
+        where: isNaN(Number(id)) ? { id } : { oldId: Number(id) },
         select: {
           id: true,
           oldId: true,

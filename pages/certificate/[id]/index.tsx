@@ -89,6 +89,10 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
   })
 
   if (certificateQuery.data) {
+    if (!isNaN(Number(router.query.id))) {
+      // Redirect from old to new certificate URLs
+      router.push('/certificate/' + certificateQuery.data.id)
+    }
     const isUserAdmin = session!.user.role === 'ADMIN'
     const certificateBelongsToUser =
       certificateQuery.data.author.id === session!.user.id

@@ -96,7 +96,7 @@ model VerificationToken {
 
 model Certificate {
   id             String             @id @default(cuid())
-  oldId          Int?
+  oldId          Int?               @unique
   title          String             @db.VarChar(255)
   content        String
   // Is it optimal to prerender the MD to HTML?

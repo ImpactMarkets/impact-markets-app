@@ -6,6 +6,9 @@ ALTER TABLE "Certificate" DROP CONSTRAINT "Certificate_pkey",
 SET DATA TYPE TEXT,
     ADD CONSTRAINT "Certificate_pkey" PRIMARY KEY ("id");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "Certificate_oldId_key" ON "Certificate"("oldId");
+
 DROP SEQUENCE "Post_id_seq";
 
 -- AlterTable
