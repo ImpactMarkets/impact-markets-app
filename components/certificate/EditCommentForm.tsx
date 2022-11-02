@@ -13,7 +13,7 @@ export function EditCommentForm({
   comment,
   onDone,
 }: {
-  certificateId: number
+  certificateId: string
   comment: InferQueryOutput<'certificate.detail'>['comments'][number]
   onDone: () => void
 }) {

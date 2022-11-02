@@ -13,7 +13,7 @@ import { ConfirmDialog } from './ConfirmDialog'
 
 export type TransactionsFormData = {
   userId: string
-  certificateId?: number
+  certificateId?: string
   showCertificates?: boolean
 }
 
@@ -25,7 +25,7 @@ const Transaction = ({
 }: {
   transaction: InferQueryOutput<'transaction.feed'>[0]
   userId: string
-  certificateId?: number
+  certificateId?: string
   showCertificates?: boolean
 }) => {
   const [isCancelDialogOpen, setIsCancelDialogOpen] = React.useState(false)

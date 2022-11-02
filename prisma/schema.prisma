@@ -95,8 +95,8 @@ model VerificationToken {
 }
 
 model Certificate {
-  id             Int                @id @default(autoincrement())
-  cuid           String?            @default(cuid())
+  id             String             @id @default(cuid())
+  oldId          Int?               @unique
   title          String             @db.VarChar(255)
   content        String
   // Is it optimal to prerender the MD to HTML?
@@ -126,7 +126,7 @@ model Certificate {
 }
 
 model LikedCertificate {
-  certificateId Int
+  certificateId String
   userId        String
   createdAt     DateTime @default(now())
 
@@ -140,7 +140,7 @@ model LikedCertificate {
 
 model Holding {
   id            Int         @id @default(autoincrement())
-  certificateId Int
+  certificateId String
   userId        String
   type          HoldingType @default(OWNERSHIP)
 
@@ -166,7 +166,7 @@ model Comment {
   contentHtml   String
   createdAt     DateTime @default(now())
   authorId      String
-  certificateId Int
+  certificateId String
 
   author      User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
   certificate Certificate @relation(fields: [certificateId], references: [id], onDelete: Cascade)

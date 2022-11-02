@@ -21,7 +21,7 @@ export function CancelDialog({
   onClose,
 }: {
   transaction: InferQueryOutput<'transaction.feed'>[0]
-  certificateId?: number
+  certificateId?: string
   isOpen: boolean
   onClose: () => void
 }) {
