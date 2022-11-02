@@ -40,6 +40,7 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
               <CertificateForm
                 isSubmitting={editCertificateMutation.isLoading}
                 defaultValues={{
+                  id: certificateQuery.data.id,
                   title: certificateQuery.data.title,
                   content: certificateQuery.data.content,
                   counterfactual: certificateQuery.data.counterfactual,

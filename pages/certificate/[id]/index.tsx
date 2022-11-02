@@ -132,11 +132,6 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
             <div className="my-6">
               <Ledger certificateId={String(router.query.id)} />
             </div>
-            {certificateBelongsToUser && (
-              <div className="my-6">
-                <ProofTemplate queryData={certificateQuery.data} />
-              </div>
-            )}
             <HtmlView
               html={certificateQuery.data.contentHtml}
               className="mt-8"

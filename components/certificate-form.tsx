@@ -42,6 +42,7 @@ const DESCRIPTION_PROMPTS = (
 )
 
 type FormData = {
+  id: string
   title: string
   content: string
   attributedImpactVersion: string
@@ -58,7 +59,7 @@ type FormData = {
 }
 
 type CertificateFormProps = {
-  defaultValues?: FormData
+  defaultValues: FormData
   isSubmitting?: boolean
   isNew?: boolean
   backTo: string
@@ -98,6 +99,7 @@ export function CertificateForm({
   const aLot = new Prisma.Decimal(1e5)
   const watchValuation = watch('valuation')
   const watchTarget = watch('target')
+  const watchTitle = watch('title')
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -114,8 +116,21 @@ export function CertificateForm({
       <TextField
         {...register('proof', {})}
         label="Proof of ownership"
-        description="Where can we find any website or profile that is clearly yours and that contains a link to this certificate?"
-        info="For your convenience, you’ll see on the next page a text with a link to your certificate that you can copy to your personal website or profile. This proves that you are really who you claim you are."
+        description={
+          <span>
+            Please put this link to your certificate on a website or profile
+            that is clearly yours:{' '}
+            <a
+              href={window.location.origin + '/certificate/' + defaultValues.id}
+              target="_blank"
+              rel="noreferrer"
+              className="hover:underline font-mono"
+            >
+              {watchTitle || 'My certificate'}
+            </a>
+          </span>
+        }
+        info="Putting a link to your certificate on a website that only you can edit proves to readers on this page that you are really who you claim to be."
         placeholder="https://forum.effectivealtruism.org/users/inga"
         type="url"
         required
@@ -147,7 +162,6 @@ export function CertificateForm({
         className="my-6"
       />
 
-      {/* TODO: Split out feedback */}
       <div className="mt-6">
         <Controller
           name="content"
@@ -355,7 +369,7 @@ export function CertificateForm({
             rel="noreferrer"
             className="text-sm font-medium transition-colors hover:text-blue hover:underline"
           >
-            Do you have any feedback or tips for us?
+            🗣️ Do you have any feedback or tips for us?
           </a>
         </div>
       </div>

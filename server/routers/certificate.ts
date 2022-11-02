@@ -188,6 +188,7 @@ export const certificateRouter = createProtectedRouter()
   })
   .mutation('add', {
     input: z.object({
+      id: z.string().min(1),
       title: z.string().min(1),
       content: z.string().min(1),
       attributedImpactVersion: z.string().min(1),
@@ -204,6 +205,7 @@ export const certificateRouter = createProtectedRouter()
     async resolve({ ctx, input }) {
       const certificate = await ctx.prisma.certificate.create({
         data: {
+          id: input.id,
           title: input.title,
           content: input.content,
           contentHtml: markdownToHtml(input.content),
