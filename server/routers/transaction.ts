@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+import { BondingCurve } from '@/lib/auction'
 import { Prisma, TransactionState } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
@@ -42,7 +43,7 @@ export const transactionRouter = createProtectedRouter()
           consume: true,
           size: true,
           cost: true,
-          sellingHolding: { select: { user: true } },
+          sellingHolding: { select: { user: true, certificate: true } },
           buyingHolding: { select: { user: true } },
         },
       })
@@ -57,39 +58,39 @@ export const transactionRouter = createProtectedRouter()
           id: z.number(),
           certificateId: z.number(),
         }),
-        size: z.string(),
-        cost: z.string(),
+        size: z.instanceof(Prisma.Decimal),
         consume: z.boolean(),
       })
       return schema.parse(input)
     },
-    async resolve({
-      ctx,
-      input: { sellingHolding, size: size_, cost: cost_, consume },
-    }) {
-      const size = new Prisma.Decimal(size_)
-      const cost = new Prisma.Decimal(cost_)
-
+    async resolve({ ctx, input: { sellingHolding, size, consume } }) {
       const holding = await ctx.prisma.holding.findUniqueOrThrow({
         where: { id: sellingHolding.id },
-      })
-      const reservations = await ctx.prisma.holding.aggregate({
-        where: {
-          type: 'RESERVATION',
-          certificateId: sellingHolding.certificateId,
-        },
-        _sum: { size: true },
+        include: { sellTransactions: { where: { state: 'PENDING' } } },
       })
 
+      const reservedSize = holding.sellTransactions.reduce(
+        (aggregator, transaction) => transaction.size.plus(aggregator),
+        new Prisma.Decimal(0)
+      )
+
       const zero = new Prisma.Decimal(0)
-      const one = new Prisma.Decimal(1)
-      const reservedSize = reservations._sum.size || zero
       if (size <= zero || size > holding.size.minus(reservedSize)) {
         throw new TRPCError({ code: 'BAD_REQUEST' })
       }
-      if (cost < (holding.valuation || one).times(size)) {
-        throw new TRPCError({ code: 'BAD_REQUEST' })
-      }
+
+      const bondingCurve = new BondingCurve(holding.target)
+      const cost = bondingCurve
+        .costOfSize(holding.valuation, size, reservedSize)
+        .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP)
+      const valuation = bondingCurve
+        .valuationAt(
+          bondingCurve
+            .fractionAt(holding.valuation)
+            .plus(reservedSize)
+            .plus(size)
+        )
+        .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP)
 
       // This is a bit confusing b/c our model and the database feature are both called tranactions
       const transaction = await ctx.prisma.$transaction(async (prisma) => {
@@ -101,13 +102,18 @@ export const transactionRouter = createProtectedRouter()
               type: 'RESERVATION',
             },
           },
-          update: { size: { increment: size }, cost: { increment: cost } },
+          update: {
+            size: { increment: size },
+            cost: { increment: cost },
+            valuation,
+          },
           create: {
             certificateId: sellingHolding.certificateId,
             userId: ctx.session!.user.id,
             type: 'RESERVATION',
             size,
             cost,
+            valuation,
           },
         })
         const transaction = await prisma.transaction.create({
@@ -142,6 +148,7 @@ export const transactionRouter = createProtectedRouter()
           data: {
             size: { decrement: transaction.size },
             cost: { decrement: transaction.cost },
+            valuation: transaction.buyingHolding.valuation,
           },
         }),
         ctx.prisma.holding.update({
@@ -162,7 +169,7 @@ export const transactionRouter = createProtectedRouter()
           update: {
             size: { increment: transaction.size },
             cost: { increment: transaction.cost },
-            valuation: transaction.cost.dividedBy(transaction.size),
+            valuation: transaction.buyingHolding.valuation,
           },
           create: {
             certificateId: transaction.sellingHolding.certificateId,
@@ -170,7 +177,7 @@ export const transactionRouter = createProtectedRouter()
             type: transaction.consume ? 'CONSUMPTION' : 'OWNERSHIP',
             size: transaction.size,
             cost: transaction.cost,
-            valuation: transaction.cost.dividedBy(transaction.size),
+            valuation: transaction.buyingHolding.valuation,
           },
         }),
         ctx.prisma.transaction.update({

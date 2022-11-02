@@ -1,4 +1,4 @@
-import superjson from 'superjson'
+import { superjson } from '@/lib/transformer'
 
 import { createRouter } from '../create-router'
 import { certificateRouter } from './certificate'

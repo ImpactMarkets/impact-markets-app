@@ -195,7 +195,12 @@ function TransactionFeed({ user }: ProfileComponentProps) {
     return null
   }
 
-  return <Transactions userId={user.id} />
+  return (
+    <>
+      <h2 className="text-lg font-bold my-6">Pending transactions</h2>
+      <Transactions userId={user.id} showCertificates />
+    </>
+  )
 }
 
 function CertificateFeed({ user: _ }: ProfileComponentProps) {

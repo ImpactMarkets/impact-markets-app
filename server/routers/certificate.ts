@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 import { markdownToHtml } from '@/lib/editor'
 import { postToSlackIfEnabled } from '@/lib/slack'
+import { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
 import { createProtectedRouter } from '../create-protected-router'
@@ -99,8 +100,6 @@ export const certificateRouter = createProtectedRouter()
           rights: true,
           actionStart: true,
           actionEnd: true,
-          impactStart: true,
-          impactEnd: true,
           tags: true,
           author: {
             select: {
@@ -195,9 +194,11 @@ export const certificateRouter = createProtectedRouter()
       proof: z.string(),
       location: z.string(),
       rights: z.string(),
-      actionStart: z.string().min(1),
-      actionEnd: z.string().min(1),
+      actionStart: z.date(),
+      actionEnd: z.date(),
       tags: z.string(),
+      valuation: z.instanceof(Prisma.Decimal),
+      target: z.instanceof(Prisma.Decimal),
     }),
     async resolve({ ctx, input }) {
       const certificate = await ctx.prisma.certificate.create({
@@ -210,8 +211,8 @@ export const certificateRouter = createProtectedRouter()
           proof: input.proof,
           location: input.location,
           rights: 'RETROACTIVE_FUNDING',
-          actionStart: new Date(input.actionStart),
-          actionEnd: new Date(input.actionEnd),
+          actionStart: input.actionStart,
+          actionEnd: input.actionEnd,
           tags: input.tags,
           author: {
             connect: {
@@ -227,6 +228,8 @@ export const certificateRouter = createProtectedRouter()
           type: 'OWNERSHIP',
           size: 1,
           cost: 0,
+          valuation: input.valuation,
+          target: input.target,
         },
       })
 
@@ -249,8 +252,8 @@ export const certificateRouter = createProtectedRouter()
         proof: z.string(),
         location: z.string(),
         rights: z.string(),
-        actionStart: z.string().min(1),
-        actionEnd: z.string().min(1),
+        actionStart: z.date(),
+        actionEnd: z.date(),
         tags: z.string(),
       }),
     }),
@@ -267,8 +270,8 @@ export const certificateRouter = createProtectedRouter()
           proof: data.proof,
           location: data.location,
           rights: 'RETROACTIVE_FUNDING',
-          actionStart: new Date(data.actionStart),
-          actionEnd: new Date(data.actionEnd),
+          actionStart: data.actionStart,
+          actionEnd: data.actionEnd,
           tags: data.tags,
         },
       })
