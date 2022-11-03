@@ -1,3 +1,4 @@
+import slugify from 'slugify'
 import { z } from 'zod'
 
 import { markdownToHtml } from '@/lib/editor'
@@ -173,12 +174,13 @@ export const certificateRouter = createProtectedRouter()
       query: z.string().min(1),
     }),
     async resolve({ input, ctx }) {
+      const query = slugify(input.query, ' & ')
       const certificates = await ctx.prisma.certificate.findMany({
         take: 10,
         where: {
           hidden: false,
-          title: { search: input.query },
-          content: { search: input.query },
+          title: { search: query },
+          content: { search: query },
         },
         select: {
           id: true,
