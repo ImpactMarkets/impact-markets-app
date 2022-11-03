@@ -151,7 +151,7 @@ function ConfirmHideDialog({
       <DialogContent>
         <DialogTitle>Hide certificate</DialogTitle>
         <DialogDescription className="mt-6">
-          Are you sure you want to hide this certificate?
+          Are you sure you want to publish this certificate?
         </DialogDescription>
         <DialogCloseButton onClick={onClose} />
       </DialogContent>
@@ -206,7 +206,7 @@ function ConfirmUnhideDialog({
       <DialogContent>
         <DialogTitle>Unhide certificate</DialogTitle>
         <DialogDescription className="mt-6">
-          Are you sure you want to unhide this certificate?
+          Are you sure you want to unpublish this certificate?
         </DialogDescription>
         <DialogCloseButton onClick={onClose} />
       </DialogContent>
