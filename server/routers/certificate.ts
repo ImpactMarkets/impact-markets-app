@@ -19,7 +19,9 @@ export const certificateRouter = createProtectedRouter()
       const take = input?.take ?? 50
       const skip = input?.skip
       const where = {
-        hidden: ctx.isUserAdmin ? undefined : false,
+        OR: ctx.isUserAdmin
+          ? undefined
+          : [{ hidden: false }, { authorId: ctx.session?.user.id }],
         authorId: input?.authorId,
       }
 
