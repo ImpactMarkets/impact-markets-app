@@ -15,14 +15,9 @@ export const SwitchField = React.forwardRef<HTMLInputElement, SwitchFieldProps>(
   ({ label, info, ...rest }, forwardedRef) => {
     return (
       <Label className="block text-s">
+        <input {...rest} ref={forwardedRef} type="checkbox" className="mr-2" />
         {label}
         {info && <InfoTooltip text={info} />}
-        <input
-          {...rest}
-          ref={forwardedRef}
-          type="checkbox"
-          className="block mt-2"
-        />
       </Label>
     )
   }

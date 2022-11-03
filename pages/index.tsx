@@ -11,13 +11,6 @@ import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
-declare global {
-  interface Window {
-    intercomSettings: any
-    Intercom: any
-  }
-}
-
 const CertificateSummary = dynamic<CertificateSummaryProps>(
   () =>
     import('@/components/certificate-summary').then(

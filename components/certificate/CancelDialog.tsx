@@ -10,16 +10,18 @@ import {
   DialogDescription,
   DialogTitle,
 } from '@/components/dialog'
-import { trpc } from '@/lib/trpc'
+import { SHARE_COUNT } from '@/lib/constants'
+import { num } from '@/lib/text'
+import { InferQueryOutput, trpc } from '@/lib/trpc'
 
 export function CancelDialog({
-  transactionId,
+  transaction,
   certificateId,
   isOpen,
   onClose,
 }: {
-  transactionId: number
-  certificateId?: number
+  transaction: InferQueryOutput<'transaction.feed'>[0]
+  certificateId?: string
   isOpen: boolean
   onClose: () => void
 }) {
@@ -41,7 +43,8 @@ export function CancelDialog({
       <DialogContent>
         <DialogTitle>Cancel transaction</DialogTitle>
         <DialogDescription className="mt-6">
-          Are you sure you want to cancel this transaction?
+          Are you sure you want to cancel this transaction over{' '}
+          {num(transaction.size.times(SHARE_COUNT))} shares?
         </DialogDescription>
         <DialogCloseButton onClick={onClose} />
       </DialogContent>
@@ -52,7 +55,7 @@ export function CancelDialog({
           isLoading={cancelTransactionMutation.isLoading}
           loadingChildren="Canceling transaction"
           onClick={() => {
-            cancelTransactionMutation.mutate(transactionId, {
+            cancelTransactionMutation.mutate(transaction.id, {
               onSuccess: () => onClose(),
             })
           }}
