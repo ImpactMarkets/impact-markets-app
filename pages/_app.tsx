@@ -3,7 +3,9 @@ import { ThemeProvider } from 'next-themes'
 import type { AppProps } from 'next/app'
 import * as React from 'react'
 import { Toaster } from 'react-hot-toast'
+import { IntercomProvider } from 'react-use-intercom'
 
+import { browserEnv } from '@/env/browser'
 import { transformer } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { AppRouter } from '@/server/routers/_app'
@@ -26,29 +28,31 @@ function MyApp({
   const getLayout = Component.getLayout ?? ((page) => page)
 
   return (
-    <MantineProvider withGlobalStyles withNormalizeCSS>
-      <SessionProvider session={session} refetchOnWindowFocus={false}>
-        <ThemeProvider
-          forcedTheme="light"
-          attribute="class"
-          disableTransitionOnChange
-        >
-          {Component.auth ? (
-            <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
-          ) : (
-            getLayout(<Component {...pageProps} />)
-          )}
-          <Toaster
-            toastOptions={{
-              className: 'text-xs',
-              style: {
-                maxWidth: '100%',
-              },
-            }}
-          />
-        </ThemeProvider>
-      </SessionProvider>
-    </MantineProvider>
+    <IntercomProvider appId={browserEnv.NEXT_PUBLIC_INTERCOM_APP_ID} autoBoot>
+      <MantineProvider withGlobalStyles withNormalizeCSS>
+        <SessionProvider session={session} refetchOnWindowFocus={false}>
+          <ThemeProvider
+            forcedTheme="light"
+            attribute="class"
+            disableTransitionOnChange
+          >
+            {Component.auth ? (
+              <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
+            ) : (
+              getLayout(<Component {...pageProps} />)
+            )}
+            <Toaster
+              toastOptions={{
+                className: 'text-xs',
+                style: {
+                  maxWidth: '100%',
+                },
+              }}
+            />
+          </ThemeProvider>
+        </SessionProvider>
+      </MantineProvider>
+    </IntercomProvider>
   )
 }
 
