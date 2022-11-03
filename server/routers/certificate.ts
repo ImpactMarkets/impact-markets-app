@@ -20,9 +20,10 @@ export const certificateRouter = createProtectedRouter()
       const take = input?.take ?? 50
       const skip = input?.skip
       const where = {
-        OR: ctx.isUserAdmin
-          ? undefined
-          : [{ hidden: false }, { authorId: ctx.session?.user.id }],
+        OR:
+          ctx.session?.user.role === 'ADMIN'
+            ? undefined
+            : [{ hidden: false }, { authorId: ctx.session?.user.id }],
         authorId: input?.authorId,
       }
 
@@ -154,7 +155,9 @@ export const certificateRouter = createProtectedRouter()
 
       if (
         !certificate ||
-        (certificate.hidden && !certificateBelongsToUser && !ctx.isUserAdmin)
+        (certificate.hidden &&
+          !certificateBelongsToUser &&
+          ctx.session?.user.role !== 'ADMIN')
       ) {
         throw new TRPCError({
           code: 'NOT_FOUND',
