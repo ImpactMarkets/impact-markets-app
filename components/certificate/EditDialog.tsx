@@ -45,6 +45,8 @@ export function EditDialog({
   })
   const watchValuation = watch('valuation')
   const watchTarget = watch('target')
+  const one = new Prisma.Decimal(1)
+  const aLot = new Prisma.Decimal(1e5)
 
   const utils = trpc.useContext()
   const transactionMutation = trpc.useMutation('holding.edit', {
@@ -118,7 +120,7 @@ export function EditDialog({
               <tr>
                 <td className="text-right pr-4">Current valuation:</td>
                 <td className="text-right pr-4">
-                  ${num(holding.size.times(watchValuation), 0)}
+                  ${num(holding.size.times(watchValuation || one), 0)}
                 </td>
               </tr>
               <tr>
@@ -126,9 +128,9 @@ export function EditDialog({
                 <td className="text-right pr-4">
                   $
                   {num(
-                    new BondingCurve(new Prisma.Decimal(watchTarget))
+                    new BondingCurve(new Prisma.Decimal(watchTarget || aLot))
                       .valuationOfSize(
-                        new Prisma.Decimal(watchValuation),
+                        new Prisma.Decimal(watchValuation || one),
                         holding.size
                       )
                       .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP),
@@ -141,9 +143,9 @@ export function EditDialog({
                 <td className="text-right pr-4">
                   $
                   {num(
-                    new BondingCurve(new Prisma.Decimal(watchTarget))
+                    new BondingCurve(new Prisma.Decimal(watchTarget || aLot))
                       .costOfSize(
-                        new Prisma.Decimal(watchValuation),
+                        new Prisma.Decimal(watchValuation || one),
                         holding.size
                       )
                       .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP),
