@@ -63,6 +63,7 @@ export const certificateRouter = createProtectedRouter()
               comments: true,
             },
           },
+          tags: true,
         },
       })
 

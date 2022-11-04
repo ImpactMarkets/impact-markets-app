@@ -21,6 +21,7 @@ import { Layout } from '@/components/layout'
 import { LikeButton } from '@/components/like-button'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
+import { Tags } from '@/components/certificate/Tags'
 
 const CertificatePage: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()
@@ -124,6 +125,9 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
             </div>
             <div className="my-6">
               <Labels queryData={certificateQuery.data} />
+            </div>
+            <div className="my-6">
+              <Tags queryData={certificateQuery.data} />
             </div>
             <div className="my-6">
               <Ledger certificateId={Number(router.query.id)} />

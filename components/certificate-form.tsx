@@ -8,6 +8,7 @@ import { MarkdownEditor } from '@/components/markdown-editor'
 import { TextField } from '@/components/text-field'
 import { useLeaveConfirm } from '@/lib/form'
 import { Accordion, SimpleGrid, Switch } from '@mantine/core'
+import { IMMultiSelect } from './multi-select'
 
 const DESCRIPTION_PROMPTS = (
   <>
@@ -67,7 +68,7 @@ export function CertificateForm({
   backTo,
   onSubmit,
 }: CertificateFormProps) {
-  const { control, register, formState, getValues, reset, handleSubmit } =
+  const { control, register, formState, getValues, reset, handleSubmit, setValue } =
     useForm<FormData>({
       defaultValues,
     })
@@ -128,6 +129,19 @@ export function CertificateForm({
         description="What would you have done (or what would you do) if there were no offer of retroactive funding?"
         info="This is not displayed publicly"
         className="my-6"
+      />
+      <IMMultiSelect
+        {...register('tags')}
+        label="Tags"
+        description="Tags description"
+        info="Tags tooltip"
+        data={[
+          { value: 'ai_safety', label: 'AI Safety' },
+          { value: 'climate_change', label: 'Climate Change' },
+          { value: 'animal_rigts', label: 'Animal Rights' },
+        ]}
+        onChange={(value) => Array.isArray(value) ? setValue('tags', value.join(',')) : null}
+        defaultValue={getValues().tags ? getValues().tags.split(',') : []}
       />
 
       {/* TODO: Split out feedback */}

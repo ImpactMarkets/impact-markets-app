@@ -47,10 +47,5 @@ export const Labels = ({ queryData }: LabelsProps) => (
     <span className="border text-primary border-secondary bg-primary font-bold text-sm py-1 px-2 mr-1 mb-1 rounded">
       No audit
     </span>
-    {queryData.tags && (
-      <span className="border text-primary border-secondary bg-primary font-bold text-sm py-1 px-2 mr-1 mb-1 rounded">
-        {queryData.tags}
-      </span>
-    )}
   </div>
 )

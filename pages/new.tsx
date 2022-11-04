@@ -59,7 +59,7 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
                 rights: 'RETROACTIVE_FUNDING',
                 actionStart: values.actionStart,
                 actionEnd: values.actionEnd,
-                tags: '',
+                tags: values.tags,
               },
               {
                 onSuccess: (data) => router.push(`/certificate/${data.id}`),
