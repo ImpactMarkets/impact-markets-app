@@ -187,7 +187,7 @@ export function CertificateSummary({
           )}
         </div>
         <div className="flex items-center gap-12 mt-6">
-          <StackedBarChart total={mockData.total} data={mockData.data} />
+          <StackedBarChart data={mockData.data} />
           <div
             className="flex gap-8"
             style={{

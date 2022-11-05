@@ -113,7 +113,6 @@ const useStyles = createStyles((theme) => ({
 }))
 
 interface StackedBarChartProps {
-  total: string
   data: {
     label: string
     count: string
@@ -122,7 +121,7 @@ interface StackedBarChartProps {
   }[]
 }
 
-export function StackedBarChart({ total, data }: StackedBarChartProps) {
+export function StackedBarChart({ data }: StackedBarChartProps) {
   const { classes } = useStyles()
 
   const segments = data.map((segment) => ({
