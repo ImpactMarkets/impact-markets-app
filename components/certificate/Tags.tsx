@@ -4,7 +4,7 @@ import { InferQueryOutput } from '@/lib/trpc'
 import { TAGS } from '@/lib/tags'
 
 type TagsProps = {
-  queryData: InferQueryOutput<'certificate.detail'>
+  queryData: InferQueryOutput<'certificate.detail'>|InferQueryOutput<'certificate.feed'>['certificates'][number]
 }
 
 export const Tags = ({ queryData }: TagsProps) => (
