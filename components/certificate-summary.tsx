@@ -1,18 +1,12 @@
-import {
-  BarElement,
-  CategoryScale,
-  Chart as ChartJS,
-  Legend,
-  LinearScale,
-  Title,
-} from 'chart.js'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import * as React from 'react'
 import { Bar } from 'react-chartjs-2'
+import { FaHeart, FaRegHeart } from 'react-icons/fa'
 
 import { Banner } from '@/components/banner'
+import { ListIcon } from '@/components/icons'
 import {
   ChevronRightIcon,
   HeartFilledIcon,
@@ -24,52 +18,42 @@ import { StackedBarChart } from '@/components/stacked-bar-chart'
 import { classNames } from '@/lib/classnames'
 import { InferQueryOutput } from '@/lib/trpc'
 import { Card } from '@mantine/core'
-import { User } from '@prisma/client'
 import * as Tooltip from '@radix-ui/react-tooltip'
 
 import { Author } from './author'
 import { Date } from './date'
 import { Heading2 } from './heading-2'
 import { HtmlView } from './html-view'
-
-// ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Legend)
-
-// export const options = {
-//   plugins: {
-//     title: {
-//       display: true,
-//       text: 'Chart.js Bar Chart - Stacked',
-//     },
-//   },
-//   responsive: true,
-//   scales: {
-//     x: {
-//       stacked: true,
-//     },
-//     y: {
-//       stacked: true,
-//     },
-//   },
-// }
-
-// const labels = ['Holdings']
-
-// export const data = {
-//   labels,
-//   datasets: [
-//     {
-//       label: 'Holdings',
-//       data: labels.map(() => [0, 4]),
-//       backgroundColor: 'rgb(255, 99, 132)',
-//     },
-//   ],
-// }
+import { MockListIcon } from './list-icon'
 
 export type CertificateSummaryProps = {
   certificate: InferQueryOutput<'certificate.feed'>['certificates'][number]
   hideAuthor?: boolean
   onLike: () => void
   onUnlike: () => void
+}
+
+const mockData = {
+  data: [
+    {
+      label: 'Available',
+      count: '55',
+      part: 55,
+      color: '#47d6ab',
+    },
+    {
+      label: 'Consumed',
+      count: '25',
+      part: 25,
+      color: '#03141a',
+    },
+    {
+      label: 'Reserved',
+      count: '20',
+      part: 20,
+      color: '#4fcdf7',
+    },
+  ],
 }
 
 export function CertificateSummary({
@@ -113,25 +97,59 @@ export function CertificateSummary({
     cert_summary = cert_summary.substring(0, 300) + '...'
   }
 
+  const css = `
+  .actions li {
+    display: inline;
+    list-style-type: none;
+    padding-right: 5px;
+    font-size: 1.2em;
+  }
+  `
+
   return (
     <Card shadow="sm" p="lg" radius="md" withBorder>
       <div>
+        <style>{css}</style>
         {certificate.hidden && (
           <Banner className="mb-6">
             This certificate will remain hidden until it’s published by the
             curators.
           </Banner>
         )}
+
+        <span className="actions">
+          <ul>
+            <li>
+              {MockListIcon('First', <FaHeart style={{ display: 'inline' }} />)}
+            </li>
+            <li>
+              <li>
+                {MockListIcon(
+                  'Second',
+                  <FaRegHeart style={{ display: 'inline', marginLeft: '10' }} />
+                )}
+              </li>
+            </li>
+            <li>
+              <li>
+                {MockListIcon(
+                  'Third',
+                  <FaHeart style={{ display: 'inline', marginLeft: '10' }} />
+                )}
+              </li>
+            </li>
+          </ul>
+        </span>
         <div
           style={{
             display: 'inline-block',
             width: '80%',
-            verticalAlign: 'top',
+            verticalAlign: 'bottom',
           }}
           className={classNames(certificate.hidden ? 'opacity-50' : '')}
         >
           <Link href={`/certificate/${certificate.id}`}>
-            <a style={{ display: 'inline-block', width: '60%' }}>
+            <a style={{ display: 'inline-block', width: '85%' }}>
               <Heading2>{certificate.title}</Heading2>
             </a>
           </Link>
@@ -168,9 +186,16 @@ export function CertificateSummary({
             </Link>
           )}
         </div>
-        <div className="flex items-center gap-4 mt-4">
-          <StackedBarChart />
-          <div className="ml-auto flex gap-6" style={{ marginRight: '1%' }}>
+        <div className="flex items-center gap-12 mt-6">
+          <StackedBarChart total={mockData.total} data={mockData.data} />
+          <div
+            className="flex gap-8"
+            style={{
+              position: 'absolute',
+              bottom: '8%',
+              right: '5%',
+            }}
+          >
             <Tooltip.Provider>
               <Tooltip.Root delayDuration={300}>
                 <Tooltip.Trigger
