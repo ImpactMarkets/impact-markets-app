@@ -35,7 +35,7 @@ export const IMMultiSelect = React.forwardRef<HTMLInputElement, IMTextFieldProps
           placeholder="Pick all that you like"
           classNames={{
             input:
-              'block w-full py-1 rounded shadow-sm bg-secondary border-secondary focus-ring',
+              'block w-full py-1 rounded shadow-sm bg-secondary border-secondary focus-ring im-multiselect',
             ...classNames,
           }}
         />
