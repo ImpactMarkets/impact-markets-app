@@ -1,17 +1,27 @@
 import * as React from 'react'
 
 import { InferQueryOutput } from '@/lib/trpc'
+import { TAGS } from '@/lib/tags'
 
 type TagsProps = {
-  queryData: InferQueryOutput<'certificate.detail'>|InferQueryOutput<'certificate.feed'>
+  queryData: InferQueryOutput<'certificate.detail'>
 }
 
 export const Tags = ({ queryData }: TagsProps) => (
   <div className="flex flex-wrap">
-    {queryData.tags && (
-      <span className="border text-primary border-secondary bg-primary font-bold text-sm py-1 px-2 mr-1 mb-1 rounded">
-        {queryData.tags}
-      </span>
-    )}
+    {queryData.tags && queryData.tags.split(',').map((tagValue, index) => {
+      const tag = TAGS.find(elt => elt.value === tagValue);
+      return tag && (
+        <span
+          key={index}
+          className="border text-primary border-secondary bg-primary font-bold text-sm py-1 px-2 mr-1 mb-1 rounded"
+          style={{
+            backgroundColor: tag.color,
+          }}
+        >
+          {tag.label}
+        </span>
+      );
+    })}
   </div>
 )

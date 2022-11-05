@@ -9,6 +9,7 @@ import { TextField } from '@/components/text-field'
 import { useLeaveConfirm } from '@/lib/form'
 import { Accordion, SimpleGrid, Switch } from '@mantine/core'
 import { IMMultiSelect } from './multi-select'
+import { TAGS } from '@/lib/tags'
 
 const DESCRIPTION_PROMPTS = (
   <>
@@ -135,11 +136,7 @@ export function CertificateForm({
         label="Tags"
         description="Tags description"
         info="Tags tooltip"
-        data={[
-          { value: 'ai_safety', label: 'AI Safety' },
-          { value: 'climate_change', label: 'Climate Change' },
-          { value: 'animal_rigts', label: 'Animal Rights' },
-        ]}
+        data={TAGS.map(tag => ({value: tag.value, label: tag.label}))}
         onChange={(value) => Array.isArray(value) ? setValue('tags', value.join(',')) : null}
         defaultValue={getValues().tags ? getValues().tags.split(',') : []}
       />
