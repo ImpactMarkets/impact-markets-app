@@ -22,7 +22,7 @@ export function Comment({
   certificateId,
   comment,
 }: {
-  certificateId: number
+  certificateId: string
   comment: InferQueryOutput<'certificate.detail'>['comments'][number]
 }) {
   const { data: session } = useSession()

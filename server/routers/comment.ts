@@ -7,7 +7,7 @@ import { createProtectedRouter } from '../create-protected-router'
 export const commentRouter = createProtectedRouter()
   .mutation('add', {
     input: z.object({
-      certificateId: z.number(),
+      certificateId: z.string().min(1),
       content: z.string().min(1),
     }),
     async resolve({ ctx, input }) {

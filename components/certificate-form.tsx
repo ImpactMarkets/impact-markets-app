@@ -6,10 +6,14 @@ import { ButtonLink } from '@/components/button-link'
 import { MarkdownIcon } from '@/components/icons'
 import { MarkdownEditor } from '@/components/markdown-editor'
 import { TextField } from '@/components/text-field'
+import { BondingCurve } from '@/lib/auction'
+import { SHARE_COUNT } from '@/lib/constants'
 import { useLeaveConfirm } from '@/lib/form'
+import { num } from '@/lib/text'
 import { Accordion, SimpleGrid, Switch } from '@mantine/core'
 import { IMMultiSelect } from './multi-select'
 import { TAGS } from '@/lib/tags'
+import { Prisma } from '@prisma/client'
 
 const DESCRIPTION_PROMPTS = (
   <>
@@ -40,6 +44,7 @@ const DESCRIPTION_PROMPTS = (
 )
 
 type FormData = {
+  id: string
   title: string
   content: string
   attributedImpactVersion: string
@@ -49,13 +54,14 @@ type FormData = {
   rights: string
   actionStart: string
   actionEnd: string
-  impactStart: Date | null
-  impactEnd: Date | null
   tags: string
+  // These defaults are set for new forms but not for editing
+  valuation?: Prisma.Decimal
+  target?: Prisma.Decimal
 }
 
 type CertificateFormProps = {
-  defaultValues?: FormData
+  defaultValues: FormData
   isSubmitting?: boolean
   isNew?: boolean
   backTo: string
@@ -69,10 +75,18 @@ export function CertificateForm({
   backTo,
   onSubmit,
 }: CertificateFormProps) {
-  const { control, register, formState, getValues, reset, handleSubmit, setValue } =
-    useForm<FormData>({
-      defaultValues,
-    })
+  const {
+    control,
+    register,
+    formState,
+    getValues,
+    reset,
+    handleSubmit,
+    watch,
+    setValue,
+  } = useForm<FormData>({
+    defaultValues,
+  })
 
   useLeaveConfirm({ formState })
 
@@ -94,6 +108,12 @@ export function CertificateForm({
     }
   }, [isSubmitSuccessful, reset, getValues])
 
+  const one = new Prisma.Decimal(1)
+  const aLot = new Prisma.Decimal(1e5)
+  const watchValuation = watch('valuation')
+  const watchTarget = watch('target')
+  const watchTitle = watch('title')
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <TextField
@@ -109,8 +129,21 @@ export function CertificateForm({
       <TextField
         {...register('proof', {})}
         label="Proof of ownership"
-        description="Where can we find any website or profile that is clearly yours and that contains a link to this certificate?"
-        info="For your convenience, you’ll see on the next page a text with a link to your certificate that you can copy to your personal website or profile. This proves that you are really who you claim you are."
+        description={
+          <span>
+            Please put this link to your certificate on a website or profile
+            that is clearly yours:{' '}
+            <a
+              href={window.location.origin + '/certificate/' + defaultValues.id}
+              target="_blank"
+              rel="noreferrer"
+              className="hover:underline font-mono"
+            >
+              {watchTitle || 'My certificate'}
+            </a>
+          </span>
+        }
+        info="Putting a link to your certificate on a website that only you can edit proves to readers on this page that you are really who you claim to be."
         placeholder="https://forum.effectivealtruism.org/users/inga"
         type="url"
         required
@@ -118,7 +151,7 @@ export function CertificateForm({
       />
       <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
         <TextField
-          {...register('actionStart', { required: true })}
+          {...register('actionStart', { required: true, valueAsDate: true })}
           label="Start of the work period"
           description="When did you (or will you) start working on this?"
           info="You can edit it later."
@@ -126,7 +159,7 @@ export function CertificateForm({
           required
         />
         <TextField
-          {...register('actionEnd', { required: true })}
+          {...register('actionEnd', { required: true, valueAsDate: true })}
           label="End of the work period"
           description="… finish working on this?"
           info="You can edit it later."
@@ -153,7 +186,6 @@ export function CertificateForm({
         defaultValue={getValues().tags ? getValues().tags.split(',') : []}
       />
 
-      {/* TODO: Split out feedback */}
       <div className="mt-6">
         <Controller
           name="content"
@@ -187,6 +219,98 @@ export function CertificateForm({
         <Accordion.Item value="advanced-options">
           <Accordion.Control>Advanced options</Accordion.Control>
           <Accordion.Panel className="text-sm">
+            {isNew ? (
+              <>
+                <SimpleGrid
+                  cols={2}
+                  breakpoints={[{ maxWidth: 'md', cols: 1 }]}
+                >
+                  <div className="mt-6 space-y-6">
+                    <TextField
+                      {...register('valuation', {
+                        required: true,
+                      })}
+                      label="Minimum valuation"
+                      description="You won’t sell a single share below what valuation?"
+                      rightSection="USD"
+                      classNames={{ rightSection: 'w-16' }}
+                      type="number"
+                      step="1"
+                      min="1"
+                      max="1e30"
+                      required
+                    />
+                  </div>
+                  <div className="mt-6 space-y-6">
+                    <TextField
+                      {...register('target', {
+                        required: true,
+                      })}
+                      label="Fundraising target"
+                      description="How much do you hope to raise?"
+                      rightSection="USD"
+                      classNames={{ rightSection: 'w-16' }}
+                      type="number"
+                      step="1"
+                      min="1"
+                      max="1e30"
+                      required
+                    />
+                  </div>
+                </SimpleGrid>
+                <table className="text-sm mx-auto mt-6">
+                  <tbody>
+                    <tr>
+                      <td className="text-right pr-4">Shares:</td>
+                      <td className="text-right pr-4">
+                        {num(new Prisma.Decimal(SHARE_COUNT))}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="text-right pr-4">Maximum valuation:</td>
+                      <td className="text-right pr-4">
+                        $
+                        {num(
+                          new BondingCurve(
+                            new Prisma.Decimal(watchTarget || aLot)
+                          ).valuationOfSize(
+                            new Prisma.Decimal(watchValuation || one),
+                            one
+                          ),
+                          0
+                        )}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="text-right pr-4">Maximum fundraise:</td>
+                      <td className="text-right pr-4">
+                        $
+                        {num(
+                          new BondingCurve(
+                            new Prisma.Decimal(watchTarget || aLot)
+                          ).costOfSize(
+                            new Prisma.Decimal(watchValuation || one),
+                            one
+                          ),
+                          0
+                        )}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <div className="mt-6 space-y-6 text-sm">
+                  You can edit these later through the edit function of your
+                  holding.
+                </div>
+              </>
+            ) : (
+              <div className="mt-6 space-y-6 text-sm">
+                Please go through the edit function of your holding to change
+                starting and target valuation.
+              </div>
+            )}
+
             <TextField
               {...register('attributedImpactVersion', { required: true })}
               label={
@@ -234,20 +358,27 @@ export function CertificateForm({
       <Switch
         label="I will never sell these rights more than once"
         classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
+        defaultChecked={!isNew}
         required
       />
       <Switch
         label="I am happy for this record to be publicly accessible forever"
         classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
+        defaultChecked={!isNew}
         required
       />
+
+      <p className="my-6 text-sm">
+        When you submit your certificate, you can still edit it, and it will
+        remain hidden until a curator publishes it.
+      </p>
 
       <div className="flex items-center justify-between gap-4 mt-8">
         <div className="flex gap-4">
           <Button
             type="submit"
             isLoading={isSubmitting}
-            loadingChildren={`${isNew ? 'Submitting' : 'Saving'}`}
+            loadingChildren={isNew ? 'Submitting' : 'Saving'}
           >
             {isNew ? 'Submit' : 'Save'}
           </Button>
@@ -260,9 +391,9 @@ export function CertificateForm({
             href="https://airtable.com/shrXCFWdrzgG9jWn3"
             target="_blank"
             rel="noreferrer"
-            className="font-medium transition-colors hover:text-blue hover:underline"
+            className="text-sm font-medium transition-colors hover:text-blue hover:underline"
           >
-            Do you have any feedback or tips for us?
+            🗣️ Do you have any feedback or tips for us?
           </a>
         </div>
       </div>

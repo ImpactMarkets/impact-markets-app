@@ -12,7 +12,6 @@ import { CertificateMenu } from '@/components/certificate/CertificateMenu'
 import { Comment } from '@/components/certificate/Comment'
 import { Labels } from '@/components/certificate/Labels'
 import { Ledger } from '@/components/certificate/Ledger'
-import { ProofTemplate } from '@/components/certificate/ProofTemplate'
 import { getCertificateQueryPathAndInput } from '@/components/certificate/utils'
 import { Heading1 } from '@/components/heading-1'
 import { HtmlView } from '@/components/html-view'
@@ -28,7 +27,7 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
   const utils = trpc.useContext()
   const certificateQueryPathAndInput = getCertificateQueryPathAndInput(
-    Number(router.query.id)
+    String(router.query.id)
   )
   const certificateQuery = trpc.useQuery(certificateQueryPathAndInput)
   const likeMutation = trpc.useMutation(['certificate.like'], {
@@ -90,7 +89,11 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
   })
 
   if (certificateQuery.data) {
-    const isUserAdmin = session!.user.role === 'ADMIN'
+    if (!isNaN(Number(router.query.id))) {
+      // Redirect from old to new certificate URLs
+      router.push('/certificate/' + certificateQuery.data.id)
+    }
+    const isUserAdmin = session?.user.role === 'ADMIN'
     const certificateBelongsToUser =
       certificateQuery.data.author.id === session!.user.id
 
@@ -132,11 +135,6 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
             <div className="my-6">
               <Ledger certificateId={Number(router.query.id)} />
             </div>
-            {certificateBelongsToUser && (
-              <div className="my-6">
-                <ProofTemplate queryData={certificateQuery.data} />
-              </div>
-            )}
             <HtmlView
               html={certificateQuery.data.contentHtml}
               className="mt-8"

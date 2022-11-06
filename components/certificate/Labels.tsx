@@ -42,7 +42,7 @@ export const Labels = ({ queryData }: LabelsProps) => (
       {queryData.actionEnd.toISOString().slice(0, 10)}
     </span>
     <span className="border text-primary border-secondary bg-primary font-bold text-sm py-1 px-2 mr-1 mb-1 rounded">
-      Impact: all time, any scope
+      Impact: all time, unscoped
     </span>
     <span className="border text-primary border-secondary bg-primary font-bold text-sm py-1 px-2 mr-1 mb-1 rounded">
       No audit
