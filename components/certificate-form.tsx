@@ -78,6 +78,16 @@ export function CertificateForm({
 
   const { isSubmitSuccessful } = formState
 
+  const TagDescription = (text: string) => {
+    const [messageText, linkText, endText] = text.split(/<[a][^>]*>(.+?)<\/[a]>/)
+
+    return <p>{messageText}<a
+      style={{fontWeight: 'bold'}}
+      href="#/"
+      onClick={console.log}
+    >{linkText}</a>{endText}</p>;
+  };
+
   React.useEffect(() => {
     if (isSubmitSuccessful) {
       reset(getValues())
@@ -134,8 +144,10 @@ export function CertificateForm({
       <IMMultiSelect
         {...register('tags')}
         label="Tags"
-        description="Tags description"
-        info="Tags tooltip"
+        description={TagDescription(
+          'Please select all that apply or <a>leave us feedback</a> if you can’t find suitable tags for your field and type of work so we can add them.'
+        )}
+        placeholder="Pick all that apply"
         data={TAGS.map(tag => ({value: tag.value, label: tag.label}))}
         onChange={(value) => Array.isArray(value) ? setValue('tags', value.join(',')) : null}
         defaultValue={getValues().tags ? getValues().tags.split(',') : []}

@@ -32,7 +32,7 @@ export const IMMultiSelect = React.forwardRef<HTMLInputElement, IMTextFieldProps
           ref={forwardedRef}
           id={id || name}
           name={name}
-          placeholder="Pick all that you like"
+          aria-label={label as string}
           classNames={{
             input:
               'block w-full py-1 rounded shadow-sm bg-secondary border-secondary focus-ring im-multiselect',
