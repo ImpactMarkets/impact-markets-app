@@ -14,6 +14,7 @@ import { Accordion, SimpleGrid, Switch } from '@mantine/core'
 import { IMMultiSelect } from './multi-select'
 import { TAGS } from '@/lib/tags'
 import { Prisma } from '@prisma/client'
+import { useIntercom } from 'react-use-intercom'
 
 const DESCRIPTION_PROMPTS = (
   <>
@@ -92,13 +93,14 @@ export function CertificateForm({
 
   const { isSubmitSuccessful } = formState
 
+  const { show } = useIntercom();
   const TagDescription = (text: string) => {
     const [messageText, linkText, endText] = text.split(/<[a][^>]*>(.+?)<\/[a]>/)
 
     return <p>{messageText}<a
       style={{fontWeight: 'bold'}}
       href="#/"
-      onClick={console.log}
+      onClick={() => show()}
     >{linkText}</a>{endText}</p>;
   };
 
