@@ -38,6 +38,17 @@ export const IMMultiSelect = React.forwardRef<HTMLInputElement, IMTextFieldProps
               'block w-full py-1 rounded shadow-sm bg-secondary border-secondary focus-ring im-multiselect',
             ...classNames,
           }}
+          sx={{
+            'div > input::placeholder': {
+              fontSize: 12,
+            },
+            'div > input': {
+              padding: 0,
+              fontSize: 14,
+              lineHeight: '0.2rem',
+              height: 16,
+            },
+          }}
         />
       </div>
     )
