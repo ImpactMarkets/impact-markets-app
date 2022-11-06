@@ -183,7 +183,7 @@ export function CertificateForm({
           'Please select all that apply or <a>leave us feedback</a> if you can’t find suitable tags for your field and type of work so we can add them.'
         )}
         placeholder="Pick all that apply"
-        data={TAGS.map(tag => ({value: tag.value, label: tag.label}))}
+        data={TAGS.map(tag => ({value: tag.value, label: tag.label, group: tag.group}))}
         onChange={(value) => Array.isArray(value) ? setValue('tags', value.join(',')) : null}
         defaultValue={getValues().tags ? getValues().tags.split(',') : []}
       />
