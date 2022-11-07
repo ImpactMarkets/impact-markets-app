@@ -12,6 +12,7 @@ import { CertificateMenu } from '@/components/certificate/CertificateMenu'
 import { Comment } from '@/components/certificate/Comment'
 import { Labels } from '@/components/certificate/Labels'
 import { Ledger } from '@/components/certificate/Ledger'
+import { Tags } from '@/components/certificate/Tags'
 import { getCertificateQueryPathAndInput } from '@/components/certificate/utils'
 import { Heading1 } from '@/components/heading-1'
 import { HtmlView } from '@/components/html-view'
@@ -20,7 +21,6 @@ import { Layout } from '@/components/layout'
 import { LikeButton } from '@/components/like-button'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
-import { Tags } from '@/components/certificate/Tags'
 
 const CertificatePage: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()

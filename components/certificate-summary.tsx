@@ -18,8 +18,8 @@ import { InferQueryOutput } from '@/lib/trpc'
 import { Card } from '@mantine/core'
 import * as Tooltip from '@radix-ui/react-tooltip'
 
-import { Heading2 } from './heading-2'
 import { Tags } from './certificate/Tags'
+import { Heading2 } from './heading-2'
 
 export type CertificateSummaryProps = {
   certificate: InferQueryOutput<'certificate.feed'>['certificates'][number]

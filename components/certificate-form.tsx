@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
+import { useIntercom } from 'react-use-intercom'
 
 import { Button } from '@/components/button'
 import { ButtonLink } from '@/components/button-link'
@@ -9,12 +10,12 @@ import { TextField } from '@/components/text-field'
 import { BondingCurve } from '@/lib/auction'
 import { SHARE_COUNT } from '@/lib/constants'
 import { useLeaveConfirm } from '@/lib/form'
+import { TAGS } from '@/lib/tags'
 import { num } from '@/lib/text'
 import { Accordion, SimpleGrid, Switch } from '@mantine/core'
-import { IMMultiSelect } from './multi-select'
-import { TAGS } from '@/lib/tags'
 import { Prisma } from '@prisma/client'
-import { useIntercom } from 'react-use-intercom'
+
+import { IMMultiSelect } from './multi-select'
 
 const DESCRIPTION_PROMPTS = (
   <>
@@ -93,16 +94,22 @@ export function CertificateForm({
 
   const { isSubmitSuccessful } = formState
 
-  const { show } = useIntercom();
+  const { show } = useIntercom()
   const TagDescription = (text: string) => {
-    const [messageText, linkText, endText] = text.split(/<[a][^>]*>(.+?)<\/[a]>/)
+    const [messageText, linkText, endText] = text.split(
+      /<[a][^>]*>(.+?)<\/[a]>/
+    )
 
-    return <p>{messageText}<a
-      style={{fontWeight: 'bold'}}
-      href="#/"
-      onClick={() => show()}
-    >{linkText}</a>{endText}</p>;
-  };
+    return (
+      <p>
+        {messageText}
+        <a style={{ fontWeight: 'bold' }} href="#/" onClick={() => show()}>
+          {linkText}
+        </a>
+        {endText}
+      </p>
+    )
+  }
 
   React.useEffect(() => {
     if (isSubmitSuccessful) {
@@ -183,8 +190,14 @@ export function CertificateForm({
           'Please select all that apply or <a>leave us feedback</a> if you can’t find suitable tags for your field and type of work so we can add them.'
         )}
         placeholder="Pick all that apply"
-        data={TAGS.map(tag => ({value: tag.value, label: tag.label, group: tag.group}))}
-        onChange={(value) => Array.isArray(value) ? setValue('tags', value.join(',')) : null}
+        data={TAGS.map((tag) => ({
+          value: tag.value,
+          label: tag.label,
+          group: tag.group,
+        }))}
+        onChange={(value) =>
+          Array.isArray(value) ? setValue('tags', value.join(',')) : null
+        }
         defaultValue={getValues().tags ? getValues().tags.split(',') : []}
       />
 
