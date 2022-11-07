@@ -77,6 +77,9 @@ export const serverEnv = {
     CLOUDINARY_API_SECRET: cloudinaryParser({ allowEmpty: true, default: '' }),
     ENABLE_SLACK_POSTING: bool({ default: false }),
     SLACK_WEBHOOK_URL: slackParser({ allowEmpty: true, default: '' }),
-    ROLLBAR_SERVER_TOKEN: rollbarParser({ allowEmpty: false, default: '' }),
+    ROLLBAR_SERVER_TOKEN: rollbarParser({
+      allowEmpty: false,
+      devDefault: process.env.NODE_ENV,
+    }),
   }),
 }
