@@ -1,7 +1,7 @@
 import * as React from 'react'
 
-import { Footer } from '@/components/footer'
-import { Header } from '@/components/header'
+import { AppFooter } from '@/components/footer'
+import { Header as AppHeader } from '@/components/header'
 import {
   Menu,
   MenuButton,
@@ -10,7 +10,7 @@ import {
   MenuItems,
   MenuItemsContent,
 } from '@/components/menu'
-import { NavbarSimple } from '@/components/navbar'
+import { AppNavbar } from '@/components/navbar'
 import { AppShell } from '@mantine/core'
 
 type LayoutProps = {
@@ -21,15 +21,11 @@ export function Layout({ children }: LayoutProps) {
   return (
     <>
       <AppShell
-        navbar={<NavbarSimple />}
-        header={<Header />}
-        footer={
-          <div className="py-20">
-            <Footer />
-          </div>
-        }
+        navbar={<AppNavbar />}
+        header={<AppHeader />}
+        footer={<AppFooter />}
       >
-        <main>{children}</main>
+        {children}
       </AppShell>
     </>
   )

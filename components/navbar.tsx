@@ -97,7 +97,7 @@ const data = [
   { link: '', label: 'Help & support', icon: LifebuoyIcon },
 ]
 
-export function NavbarSimple() {
+export function AppNavbar() {
   const { classes, cx } = useStyles()
   const [active, setActive] = useState('Billing')
 
@@ -119,10 +119,8 @@ export function NavbarSimple() {
   ))
 
   return (
-    <Navbar width={{ sm: 250 }} p="md" className="pt-12 sticky top-0 z-auto">
-      <Navbar.Section grow>
-        <div className="mt-12">{links}</div>
-      </Navbar.Section>
+    <Navbar width={{ sm: 250 }}>
+      <Navbar.Section className="m-4">{links}</Navbar.Section>
     </Navbar>
   )
 }
