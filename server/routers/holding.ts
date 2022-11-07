@@ -1,13 +1,14 @@
 import { z } from 'zod'
 
 import { Prisma } from '@prisma/client'
+import { TRPCError } from '@trpc/server'
 
 import { createProtectedRouter } from '../create-protected-router'
 
 export const holdingRouter = createProtectedRouter()
   .query('feed', {
     input: z.object({
-      certificateId: z.number(),
+      certificateId: z.string().min(1),
     }),
     async resolve({ input, ctx }) {
       const holdings = await ctx.prisma.holding.findMany({
@@ -25,6 +26,8 @@ export const holdingRouter = createProtectedRouter()
           size: true,
           cost: true,
           valuation: true,
+          target: true,
+          sellTransactions: { where: { state: 'PENDING' } },
         },
       })
 
@@ -34,18 +37,22 @@ export const holdingRouter = createProtectedRouter()
   .mutation('edit', {
     input: z.object({
       id: z.number(),
-      valuation: z.string(),
+      valuation: z.instanceof(Prisma.Decimal),
+      target: z.instanceof(Prisma.Decimal),
     }),
-    async resolve({ input: { id, valuation: valuation_ }, ctx }) {
-      const valuation = new Prisma.Decimal(valuation_)
-      // updateMany only to make the userId condition work – should still always be 0 or 1
-      await ctx.prisma.holding.updateMany({
+    async resolve({ input: { id, valuation, target }, ctx }) {
+      const one = new Prisma.Decimal(1)
+      if (valuation < one) {
+        throw new TRPCError({ code: 'BAD_REQUEST' })
+      }
+
+      await ctx.prisma.holding.update({
         where: {
           id,
-          userId: ctx.session.user.id,
         },
         data: {
           valuation,
+          target,
         },
       })
     },

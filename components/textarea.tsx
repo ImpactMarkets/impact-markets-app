@@ -1,5 +1,7 @@
-import { classNames } from '@/lib/classnames'
 import * as React from 'react'
+
+import { classNames } from '@/lib/classnames'
+
 import { Label } from './label'
 
 export type TextareaOwnProps = {

@@ -12,15 +12,12 @@ export function Author({ author }: AuthorProps) {
     <div className="relative inline-flex items-center gap-2">
       <Link href={`/profile/${author.id}`}>
         <a className="relative inline-flex">
-          <span className="hidden sm:flex">
-            <Avatar name={author.name!} src={author.image} />
-          </span>
-          <span className="flex sm:hidden">
+          <span className="flex">
             <Avatar name={author.name!} src={author.image} size="sm" />
           </span>
         </a>
       </Link>
-      <div className="flex-1 text-sm sm:text-base">
+      <div className="flex-1">
         <div>
           <Link href={`/profile/${author.id}`}>
             <a className="font-medium transition-colors hover:text-blue">

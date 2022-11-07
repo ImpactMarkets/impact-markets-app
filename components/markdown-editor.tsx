@@ -498,12 +498,13 @@ function SuggestionResult({
     highlight: () => void
     select: () => void
     selected: any
-    useHighlighted: () => Boolean
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    useHighlighted: () => boolean | Boolean // Boolean due to dependency on use-item-list
   }
   suggestionResult: SuggestionResult
 }) {
   const ref = React.useRef<HTMLLIElement>(null)
-  const { id, index, highlight, select, useHighlighted } = useItem({
+  const { id, highlight, select, useHighlighted } = useItem({
     ref,
     value: suggestionResult,
   })

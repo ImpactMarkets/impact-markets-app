@@ -20,7 +20,7 @@ export function ConfirmDeleteCommentDialog({
   isOpen,
   onClose,
 }: {
-  certificateId: number
+  certificateId: string
   commentId: number
   isOpen: boolean
   onClose: () => void
@@ -34,7 +34,7 @@ export function ConfirmDeleteCommentDialog({
       )
     },
     onError: (error) => {
-      toast.error(`Something went wrong: ${error.message}`)
+      toast.error(<pre>{error.message}</pre>)
     },
   })
 

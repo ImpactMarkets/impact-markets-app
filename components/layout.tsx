@@ -2,9 +2,9 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 
-import { AppFooter } from '@/components/footer'
-import { Header as AppHeader } from '@/components/header'
-import { AppNavbar } from '@/components/navbar'
+import { Footer } from '@/components/footer'
+import { Header } from '@/components/header'
+import { Navbar } from '@/components/navbar'
 import { AppShell } from '@mantine/core'
 
 type LayoutProps = {
@@ -31,9 +31,9 @@ export function Layout({ children }: LayoutProps) {
   return (
     <>
       <AppShell
-        navbar={<AppNavbar hidden={!opened} />}
-        header={<AppHeader opened={opened} setOpened={setOpened} />}
-        footer={<AppFooter />}
+        navbar={<Navbar hidden={!opened} />}
+        header={<Header opened={opened} setOpened={setOpened} />}
+        footer={<Footer />}
       >
         {children}
       </AppShell>

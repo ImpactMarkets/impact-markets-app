@@ -195,10 +195,15 @@ function TransactionFeed({ user }: ProfileComponentProps) {
     return null
   }
 
-  return <Transactions userId={user.id} />
+  return (
+    <>
+      <h2 className="text-lg font-bold my-6">Pending transactions</h2>
+      <Transactions userId={user.id} showCertificates />
+    </>
+  )
 }
 
-function CertificateFeed({ user }: ProfileComponentProps) {
+function CertificateFeed({ user: _ }: ProfileComponentProps) {
   const { data: session } = useSession()
   const router = useRouter()
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
@@ -395,7 +400,7 @@ function EditProfileDialog({
       )
     },
     onError: (error) => {
-      toast.error(`Something went wrong: ${error.message}`)
+      toast.error(<pre>{error.message}</pre>)
     },
   })
 
@@ -468,7 +473,7 @@ function UpdateAvatarDialog({
       window.location.reload()
     },
     onError: (error) => {
-      toast.error(`Something went wrong: ${error.message}`)
+      toast.error(<pre>{error.message}</pre>)
     },
   })
   const uploadImageMutation = useMutation(

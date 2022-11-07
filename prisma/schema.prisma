@@ -95,29 +95,28 @@ model VerificationToken {
 }
 
 model Certificate {
-  id          Int                @id @default(autoincrement())
-  cuid        String?            @default(cuid())
-  title       String             @db.VarChar(255)
-  content     String
+  id             String             @id @default(cuid())
+  oldId          Int?               @unique
+  title          String             @db.VarChar(255)
+  content        String
   // Is it optimal to prerender the MD to HTML?
-  contentHtml String
-  hidden      Boolean            @default(false)
-  unique      Boolean            @default(true)
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
-  authorId    String
-  likedBy     LikedCertificate[]
-  comments    Comment[]
+  contentHtml    String
+  counterfactual String             @default("")
+  hidden         Boolean            @default(true)
+  unique         Boolean            @default(true)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  authorId       String
+  likedBy        LikedCertificate[]
+  comments       Comment[]
 
   // TODO: Move these to CertificateVersion to enable versioning
   attributedImpactVersion String
-  proof                   String    @default("")
-  location                String    @default("")
-  rights                  Right     @default(RETROACTIVE_FUNDING)
+  proof                   String   @default("")
+  location                String   @default("")
+  rights                  Right    @default(RETROACTIVE_FUNDING)
   actionStart             DateTime
   actionEnd               DateTime
-  impactStart             DateTime?
-  impactEnd               DateTime?
   tags                    String?
 
   author   User      @relation(fields: [authorId], references: [id], onDelete: Restrict)
@@ -127,7 +126,7 @@ model Certificate {
 }
 
 model LikedCertificate {
-  certificateId Int
+  certificateId String
   userId        String
   createdAt     DateTime @default(now())
 
@@ -141,13 +140,14 @@ model LikedCertificate {
 
 model Holding {
   id            Int         @id @default(autoincrement())
-  certificateId Int
+  certificateId String
   userId        String
   type          HoldingType @default(OWNERSHIP)
 
   size      Decimal @default(0)
   cost      Decimal @default(0) // Only needed for the potential future reward mode
-  valuation Decimal @default(0) // Minimum valuation for offers
+  valuation Decimal @default(1) // Minimum valuation for offers
+  target    Decimal @default(100000)
 
   certificate      Certificate   @relation(fields: [certificateId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   user             User          @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
@@ -166,7 +166,7 @@ model Comment {
   contentHtml   String
   createdAt     DateTime @default(now())
   authorId      String
-  certificateId Int
+  certificateId String
 
   author      User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
   certificate Certificate @relation(fields: [certificateId], references: [id], onDelete: Cascade)

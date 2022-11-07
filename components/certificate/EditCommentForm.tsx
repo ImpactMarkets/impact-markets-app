@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 
 import { Button } from '@/components/button'
 import { MarkdownEditor } from '@/components/markdown-editor'
-import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc'
+import { InferQueryOutput, trpc } from '@/lib/trpc'
 
 import { CommentFormData, getCertificateQueryPathAndInput } from './utils'
 
@@ -13,7 +13,7 @@ export function EditCommentForm({
   comment,
   onDone,
 }: {
-  certificateId: number
+  certificateId: string
   comment: InferQueryOutput<'certificate.detail'>['comments'][number]
   onDone: () => void
 }) {
@@ -25,7 +25,7 @@ export function EditCommentForm({
       )
     },
     onError: (error) => {
-      toast.error(`Something went wrong: ${error.message}`)
+      toast.error(<pre>{error.message}</pre>)
     },
   })
   const { control, handleSubmit } = useForm<CommentFormData>({

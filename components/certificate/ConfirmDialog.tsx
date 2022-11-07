@@ -1,4 +1,3 @@
-import { useSession } from 'next-auth/react'
 import * as React from 'react'
 import toast from 'react-hot-toast'
 
@@ -11,33 +10,30 @@ import {
   DialogDescription,
   DialogTitle,
 } from '@/components/dialog'
-import { trpc } from '@/lib/trpc'
+import { num } from '@/lib/text'
+import { InferQueryOutput, trpc } from '@/lib/trpc'
 
 export function ConfirmDialog({
-  transactionId,
+  transaction,
   certificateId,
   isOpen,
   onClose,
 }: {
-  transactionId: number
-  certificateId?: number
+  transaction: InferQueryOutput<'transaction.feed'>[0]
+  certificateId?: string
   isOpen: boolean
   onClose: () => void
 }) {
-  const { data: session } = useSession()
   const confirmRef = React.useRef<HTMLButtonElement>(null)
   const utils = trpc.useContext()
   const confirmTransactionMutation = trpc.useMutation('transaction.confirm', {
     onSuccess: () => {
       certificateId &&
         utils.invalidateQueries(['holding.feed', { certificateId }])
-      utils.invalidateQueries([
-        'transaction.feed',
-        { userId: session!.user.id },
-      ])
+      utils.invalidateQueries(['transaction.feed'])
     },
     onError: (error) => {
-      toast.error(`Something went wrong: ${error.message}`)
+      toast.error(<pre>{error.message}</pre>)
     },
   })
 
@@ -46,7 +42,8 @@ export function ConfirmDialog({
       <DialogContent>
         <DialogTitle>Confirm transaction</DialogTitle>
         <DialogDescription className="mt-6">
-          Do you want to confirm that you have received this transaction?
+          Do you want to confirm that you have received the payment of $
+          {num(transaction.cost, 2)} from {transaction.buyingHolding.user.name}?
         </DialogDescription>
         <DialogCloseButton onClick={onClose} />
       </DialogContent>
@@ -57,7 +54,7 @@ export function ConfirmDialog({
           isLoading={confirmTransactionMutation.isLoading}
           loadingChildren="Confirming transaction"
           onClick={() => {
-            confirmTransactionMutation.mutate(transactionId, {
+            confirmTransactionMutation.mutate(transaction.id, {
               onSuccess: () => onClose(),
             })
           }}
@@ -65,7 +62,7 @@ export function ConfirmDialog({
           Confirm transaction
         </Button>
         <Button variant="secondary" onClick={onClose} ref={confirmRef}>
-          Confirm
+          Close
         </Button>
       </DialogActions>
     </Dialog>

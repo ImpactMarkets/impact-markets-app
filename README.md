@@ -8,11 +8,20 @@ This is a simple tool that allows members to issue certificates. Features includ
 
 - Node.js
 
-  Note: Node versions > 16 can currently cause this [segmentation fault](https://github.com/prisma/prisma/issues/10649).
+  Node versions > 16 can currently cause this [segmentation fault](https://github.com/prisma/prisma/issues/10649).
+
+  The Node version required is specified in `package.json` and `.nvmrc`.
+
+  To use the correct version, install `nvm`, then run those commands:
+
+  ```sh
+  nvm install
+  nvm use
+  ```
 
 - docker-compose
 
-  Linux Mint: `apt install docker-compose`
+  Linux Mint: `sudo apt install docker-compose`
 
 ### Install project dependencies
 
@@ -38,13 +47,13 @@ GOOGLE_CLIENT_SECRET=
 - Start the database
 
 ```bash
-docker-compose up -d
+sudo docker-compose up -d
 ```
 
 - Create the database schema:
 
 ```bash
-DATABASE_URL=postgresql://im-app:empty@127.0.0.1/im-app npx prisma migrate deploy
+npx prisma migrate deploy
 ```
 
 ### Launch the app

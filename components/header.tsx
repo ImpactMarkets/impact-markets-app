@@ -78,7 +78,7 @@ export function Header({ opened, setOpened }: HeaderProps) {
             </MenuItems>
           </Menu>
 
-          <ButtonLink href="/new">
+          <ButtonLink href="/new" variant="highlight">
             <span className="sm:hidden">New</span>
             <span className="hidden sm:block shrink-0">New certificate</span>
           </ButtonLink>

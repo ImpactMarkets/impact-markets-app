@@ -12,8 +12,7 @@ import { CertificateMenu } from '@/components/certificate/CertificateMenu'
 import { Comment } from '@/components/certificate/Comment'
 import { Labels } from '@/components/certificate/Labels'
 import { Ledger } from '@/components/certificate/Ledger'
-import { ProofTemplate } from '@/components/certificate/ProofTemplate'
-import { Transactions } from '@/components/certificate/Transactions'
+import { Tags } from '@/components/certificate/Tags'
 import { getCertificateQueryPathAndInput } from '@/components/certificate/utils'
 import { Heading1 } from '@/components/heading-1'
 import { HtmlView } from '@/components/html-view'
@@ -28,11 +27,11 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
   const utils = trpc.useContext()
   const certificateQueryPathAndInput = getCertificateQueryPathAndInput(
-    Number(router.query.id)
+    String(router.query.id)
   )
   const certificateQuery = trpc.useQuery(certificateQueryPathAndInput)
   const likeMutation = trpc.useMutation(['certificate.like'], {
-    onMutate: async (likedCertificateId) => {
+    onMutate: async () => {
       await utils.cancelQuery(certificateQueryPathAndInput)
 
       const previousCertificate = utils.getQueryData(
@@ -61,7 +60,7 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
     },
   })
   const unlikeMutation = trpc.useMutation(['certificate.unlike'], {
-    onMutate: async (unlikedCertificateId) => {
+    onMutate: async () => {
       await utils.cancelQuery(certificateQueryPathAndInput)
 
       const previousCertificate = utils.getQueryData(
@@ -90,7 +89,11 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
   })
 
   if (certificateQuery.data) {
-    const isUserAdmin = session!.user.role === 'ADMIN'
+    if (!isNaN(Number(router.query.id))) {
+      // Redirect from old to new certificate URLs
+      router.push('/certificate/' + certificateQuery.data.id)
+    }
+    const isUserAdmin = session?.user.role === 'ADMIN'
     const certificateBelongsToUser =
       certificateQuery.data.author.id === session!.user.id
 
@@ -104,8 +107,8 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
           <div className="pb-12">
             {certificateQuery.data.hidden && (
               <Banner className="mb-6">
-                This certificate has been hidden and is only visible to
-                administrators.
+                This certificate will remain hidden until it’s published by the
+                curators.
               </Banner>
             )}
 
@@ -127,13 +130,11 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
               <Labels queryData={certificateQuery.data} />
             </div>
             <div className="my-6">
-              <Ledger certificateId={Number(router.query.id)} />
+              <Tags queryData={certificateQuery.data} />
             </div>
-            {certificateBelongsToUser && (
-              <div className="my-6">
-                <ProofTemplate queryData={certificateQuery.data} />
-              </div>
-            )}
+            <div className="my-6">
+              <Ledger certificateId={String(router.query.id)} />
+            </div>
             <HtmlView
               html={certificateQuery.data.contentHtml}
               className="mt-8"

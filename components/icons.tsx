@@ -36,6 +36,7 @@ export function HomeIcon(props: IconProps) {
       fill="none"
       strokeLinecap="round"
       strokeLinejoin="round"
+      {...props}
     >
       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
       <polyline points="5 12 3 12 12 3 21 12 19 12"></polyline>
@@ -58,6 +59,7 @@ export function StoreIcon(props: IconProps) {
       fill="none"
       strokeLinecap="round"
       strokeLinejoin="round"
+      {...props}
     >
       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
       <line x1="3" y1="21" x2="21" y2="21"></line>
@@ -82,6 +84,7 @@ export function BoltIcon(props: IconProps) {
       fill="none"
       strokeLinecap="round"
       strokeLinejoin="round"
+      {...props}
     >
       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
       <polyline points="13 3 13 10 19 10 11 21 11 14 5 14 13 3"></polyline>
@@ -102,6 +105,7 @@ export function FileIcon(props: IconProps) {
       fill="none"
       strokeLinecap="round"
       strokeLinejoin="round"
+      {...props}
     >
       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
       <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
@@ -123,6 +127,7 @@ export function LifebuoyIcon(props: IconProps) {
       fill="none"
       strokeLinecap="round"
       strokeLinejoin="round"
+      {...props}
     >
       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
       <circle cx="12" cy="12" r="4"></circle>

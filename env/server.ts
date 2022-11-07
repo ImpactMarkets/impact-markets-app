@@ -1,11 +1,5 @@
-import {
-  bool,
-  envsafe,
-  invalidEnvError,
-  makeValidator,
-  str,
-  url,
-} from 'envsafe'
+import { bool, envsafe, invalidEnvError, makeValidator, str } from 'envsafe'
+
 import { browserEnv } from './browser'
 
 if (process.browser) {
@@ -49,6 +43,13 @@ const slackParser = makeValidator<string>((input) => {
   return input
 })
 
+const rollbarParser = makeValidator<string>((input) => {
+  if (process.env.ROLLBAR_SERVER_TOKEN && input === '') {
+    throw invalidEnvError('rollbar server config', input)
+  }
+  return input
+})
+
 export const serverEnv = {
   ...browserEnv,
   ...envsafe({
@@ -76,5 +77,6 @@ export const serverEnv = {
     CLOUDINARY_API_SECRET: cloudinaryParser({ allowEmpty: true, default: '' }),
     ENABLE_SLACK_POSTING: bool({ default: false }),
     SLACK_WEBHOOK_URL: slackParser({ allowEmpty: true, default: '' }),
+    ROLLBAR_SERVER_TOKEN: rollbarParser({ allowEmpty: false, default: '' }),
   }),
 }

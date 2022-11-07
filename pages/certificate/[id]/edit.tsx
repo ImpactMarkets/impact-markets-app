@@ -14,11 +14,11 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
   const certificateQuery = trpc.useQuery([
     'certificate.detail',
-    { id: Number(router.query.id) },
+    { id: String(router.query.id) },
   ])
   const editCertificateMutation = trpc.useMutation('certificate.edit', {
     onError: (error) => {
-      toast.error(`Something went wrong: ${error.message}`)
+      toast.error(<pre>{error.message}</pre>)
     },
   })
 
@@ -40,8 +40,10 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
               <CertificateForm
                 isSubmitting={editCertificateMutation.isLoading}
                 defaultValues={{
+                  id: certificateQuery.data.id,
                   title: certificateQuery.data.title,
                   content: certificateQuery.data.content,
+                  counterfactual: certificateQuery.data.counterfactual,
                   attributedImpactVersion:
                     certificateQuery.data.attributedImpactVersion,
                   proof: certificateQuery.data.proof || '',
@@ -53,8 +55,6 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
                   actionEnd: certificateQuery.data.actionEnd
                     .toISOString()
                     .slice(0, 10),
-                  impactStart: certificateQuery.data.impactStart,
-                  impactEnd: certificateQuery.data.impactEnd,
                   tags: certificateQuery.data.tags || '',
                 }}
                 backTo={`/certificate/${certificateQuery.data.id}`}
@@ -65,12 +65,13 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
                       data: {
                         title: values.title,
                         content: values.content,
+                        counterfactual: values.counterfactual,
                         attributedImpactVersion: values.attributedImpactVersion,
                         proof: values.proof,
                         location: values.location || '',
                         rights: values.rights,
-                        actionStart: values.actionStart,
-                        actionEnd: values.actionEnd,
+                        actionStart: new Date(values.actionStart),
+                        actionEnd: new Date(values.actionEnd),
                         tags: values.tags,
                       },
                     },

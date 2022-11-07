@@ -12,13 +12,7 @@ import {
   DialogTitle,
 } from '@/components/dialog'
 import { IconButton } from '@/components/icon-button'
-import {
-  DotsIcon,
-  EditIcon,
-  EyeClosedIcon,
-  EyeIcon,
-  TrashIcon,
-} from '@/components/icons'
+import { DotsIcon, EditIcon, EyeClosedIcon, EyeIcon } from '@/components/icons'
 import {
   Menu as BaseMenu,
   MenuButton,
@@ -32,8 +26,8 @@ import { getCertificateQueryPathAndInput } from './utils'
 
 type CertificateMenuProps = {
   queryData: InferQueryOutput<'certificate.detail'>
-  isUserAdmin: Boolean
-  certificateBelongsToUser: Boolean
+  isUserAdmin: boolean
+  certificateBelongsToUser: boolean
 }
 
 export const CertificateMenu = ({
@@ -43,8 +37,6 @@ export const CertificateMenu = ({
 }: CertificateMenuProps) => {
   const router = useRouter()
 
-  const [isConfirmDeleteDialogOpen, setIsConfirmDeleteDialogOpen] =
-    React.useState(false)
   const [isConfirmHideDialogOpen, setIsConfirmHideDialogOpen] =
     React.useState(false)
   const [isConfirmUnhideDialogOpen, setIsConfirmUnhideDialogOpen] =
@@ -60,10 +52,6 @@ export const CertificateMenu = ({
 
   function handleEdit() {
     router.push(`/certificate/${queryData?.id}/edit`)
-  }
-
-  function handleDelete() {
-    setIsConfirmDeleteDialogOpen(true)
   }
 
   if (!(certificateBelongsToUser || isUserAdmin)) {
@@ -89,9 +77,6 @@ export const CertificateMenu = ({
               {certificateBelongsToUser && (
                 <>
                   <MenuItemButton onClick={handleEdit}>Edit</MenuItemButton>
-                  <MenuItemButton className="!text-red" onClick={handleDelete}>
-                    Delete
-                  </MenuItemButton>
                 </>
               )}
             </MenuItemsContent>
@@ -114,28 +99,11 @@ export const CertificateMenu = ({
             </IconButton>
           ))}
         {certificateBelongsToUser && (
-          <>
-            <IconButton variant="secondary" title="Edit" onClick={handleEdit}>
-              <EditIcon className="w-4 h-4" />
-            </IconButton>
-            <IconButton
-              variant="secondary"
-              title="Delete"
-              onClick={handleDelete}
-            >
-              <TrashIcon className="w-4 h-4 text-red" />
-            </IconButton>
-          </>
+          <IconButton variant="secondary" title="Edit" onClick={handleEdit}>
+            <EditIcon className="w-4 h-4" />
+          </IconButton>
         )}
       </div>
-
-      <ConfirmDeleteDialog
-        certificateId={queryData.id}
-        isOpen={isConfirmDeleteDialogOpen}
-        onClose={() => {
-          setIsConfirmDeleteDialogOpen(false)
-        }}
-      />
 
       <ConfirmHideDialog
         certificateId={queryData.id}
@@ -161,7 +129,7 @@ function ConfirmHideDialog({
   isOpen,
   onClose,
 }: {
-  certificateId: number
+  certificateId: string
   isOpen: boolean
   onClose: () => void
 }) {
@@ -174,7 +142,7 @@ function ConfirmHideDialog({
       )
     },
     onError: (error) => {
-      toast.error(`Something went wrong: ${error.message}`)
+      toast.error(<pre>{error.message}</pre>)
     },
   })
 
@@ -183,7 +151,7 @@ function ConfirmHideDialog({
       <DialogContent>
         <DialogTitle>Hide certificate</DialogTitle>
         <DialogDescription className="mt-6">
-          Are you sure you want to hide this certificate?
+          Are you sure you want to publish this certificate?
         </DialogDescription>
         <DialogCloseButton onClick={onClose} />
       </DialogContent>
@@ -216,7 +184,7 @@ function ConfirmUnhideDialog({
   isOpen,
   onClose,
 }: {
-  certificateId: number
+  certificateId: string
   isOpen: boolean
   onClose: () => void
 }) {
@@ -229,7 +197,7 @@ function ConfirmUnhideDialog({
       )
     },
     onError: (error) => {
-      toast.error(`Something went wrong: ${error.message}`)
+      toast.error(<pre>{error.message}</pre>)
     },
   })
 
@@ -238,7 +206,7 @@ function ConfirmUnhideDialog({
       <DialogContent>
         <DialogTitle>Unhide certificate</DialogTitle>
         <DialogDescription className="mt-6">
-          Are you sure you want to unhide this certificate?
+          Are you sure you want to unpublish this certificate?
         </DialogDescription>
         <DialogCloseButton onClick={onClose} />
       </DialogContent>
@@ -257,54 +225,6 @@ function ConfirmUnhideDialog({
           }}
         >
           Unhide certificate
-        </Button>
-        <Button variant="secondary" onClick={onClose} ref={cancelRef}>
-          Cancel
-        </Button>
-      </DialogActions>
-    </Dialog>
-  )
-}
-
-function ConfirmDeleteDialog({
-  certificateId,
-  isOpen,
-  onClose,
-}: {
-  certificateId: number
-  isOpen: boolean
-  onClose: () => void
-}) {
-  const cancelRef = React.useRef<HTMLButtonElement>(null)
-  const router = useRouter()
-  const deleteCertificateMutation = trpc.useMutation('certificate.delete', {
-    onError: (error) => {
-      toast.error(`Something went wrong: ${error.message}`)
-    },
-  })
-
-  return (
-    <Dialog isOpen={isOpen} onClose={onClose} initialFocus={cancelRef}>
-      <DialogContent>
-        <DialogTitle>Delete certificate</DialogTitle>
-        <DialogDescription className="mt-6">
-          Are you sure you want to delete this certificate?
-        </DialogDescription>
-        <DialogCloseButton onClick={onClose} />
-      </DialogContent>
-      <DialogActions>
-        <Button
-          variant="secondary"
-          className="!text-red"
-          isLoading={deleteCertificateMutation.isLoading}
-          loadingChildren="Deleting certificate"
-          onClick={() => {
-            deleteCertificateMutation.mutate(certificateId, {
-              onSuccess: () => router.push('/'),
-            })
-          }}
-        >
-          Delete certificate
         </Button>
         <Button variant="secondary" onClick={onClose} ref={cancelRef}>
           Cancel

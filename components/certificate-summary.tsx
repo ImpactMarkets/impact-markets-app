@@ -15,9 +15,10 @@ import {
 import { MAX_LIKED_BY_SHOWN } from '@/components/like-button'
 import { classNames } from '@/lib/classnames'
 import { InferQueryOutput } from '@/lib/trpc'
-import { Badge, Button, Card, Group, Image, Text } from '@mantine/core'
+import { Card } from '@mantine/core'
 import * as Tooltip from '@radix-ui/react-tooltip'
 
+import { Tags } from './certificate/Tags'
 import { Heading2 } from './heading-2'
 
 export type CertificateSummaryProps = {
@@ -30,8 +31,6 @@ export type CertificateSummaryProps = {
 export function CertificateSummary({
   certificate,
   hideAuthor = false,
-  onLike,
-  onUnlike,
 }: CertificateSummaryProps) {
   const contentDocument = React.useMemo(
     () => new DOMParser().parseFromString(certificate.contentHtml, 'text/html'),
@@ -75,11 +74,14 @@ export function CertificateSummary({
       <div>
         {certificate.hidden && (
           <Banner className="mb-6">
-            This certificate has been hidden and is only visible to
-            administrators.
+            This certificate will remain hidden until it’s published by the
+            curators.
           </Banner>
         )}
         <div className={classNames(certificate.hidden ? 'opacity-50' : '')}>
+          <div className="my-6">
+            <Tags queryData={certificate} />
+          </div>
           <Link href={`/certificate/${certificate.id}`}>
             <a>
               <Heading2>{certificate.title}</Heading2>

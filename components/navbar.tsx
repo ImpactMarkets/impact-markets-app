@@ -1,7 +1,6 @@
 import Link from 'next/link'
-import { useState } from 'react'
+import { useRouter } from 'next/router'
 
-import { Logo } from '@/components/icons'
 import {
   BoltIcon,
   FileIcon,
@@ -9,7 +8,7 @@ import {
   LifebuoyIcon,
   StoreIcon,
 } from '@/components/icons'
-import { Code, Group, Navbar, createStyles } from '@mantine/core'
+import { Navbar as MantineNavbar, createStyles } from '@mantine/core'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
@@ -90,41 +89,39 @@ const useStyles = createStyles((theme, _params, getRef) => {
 })
 
 const data = [
-  { link: '', label: 'Home', icon: HomeIcon },
-  { link: '', label: 'Funders & prizes', icon: StoreIcon },
-  { link: '', label: 'Why impact markets?', icon: BoltIcon },
-  { link: '', label: 'Rules & terms', icon: FileIcon },
-  { link: '', label: 'Help & support', icon: LifebuoyIcon },
+  { link: '/', label: 'Home', icon: HomeIcon },
+  { link: '/page/funders', label: 'Funders & prizes', icon: StoreIcon },
+  { link: '/page/why', label: 'Why impact markets?', icon: BoltIcon },
+  { link: '/page/rules', label: 'Rules & terms', icon: FileIcon },
+  { link: '/page/support', label: 'Help & support', icon: LifebuoyIcon },
 ]
 
 interface NavbarProps {
   hidden: boolean
 }
 
-export function AppNavbar({ hidden }: NavbarProps) {
+export function Navbar({ hidden }: NavbarProps) {
   const { classes, cx } = useStyles()
-  const [active, setActive] = useState('Billing')
+  const router = useRouter()
 
   const links = data.map((item) => (
-    <a
-      className={cx(classes.link, {
-        [classes.linkActive]: item.label === active,
-      })}
-      href={item.link}
-      key={item.label}
-      onClick={(event) => {
-        event.preventDefault()
-        setActive(item.label)
-      }}
-    >
-      <item.icon className={classes.linkIcon} stroke="1.5" />
-      <span>{item.label}</span>
-    </a>
+    <Link href={item.link} key={item.label}>
+      <div
+        className={
+          cx(classes.link, {
+            [classes.linkActive]: item.link === router.pathname,
+          }) + ' flex text-sm items-center cursor-pointer'
+        }
+      >
+        <item.icon className={classes.linkIcon} />
+        <span>{item.label}</span>
+      </div>
+    </Link>
   ))
 
   return (
-    <Navbar width={{ sm: 250 }} hidden={hidden}>
-      <Navbar.Section className="m-4">{links}</Navbar.Section>
-    </Navbar>
+    <MantineNavbar width={{ sm: 250 }} hidden={hidden}>
+      <MantineNavbar.Section className="m-4">{links}</MantineNavbar.Section>
+    </MantineNavbar>
   )
 }

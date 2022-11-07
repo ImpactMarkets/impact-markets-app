@@ -3,5 +3,13 @@
   "singleQuote": true,
   "importOrder": ["^components/(.*)$", "^[@]", "^[./]"],
   "importOrderSeparation": true,
-  "importOrderSortSpecifiers": true
+  "importOrderSortSpecifiers": true,
+  "overrides": [
+    {
+      "files": "*.ts",
+      "options": {
+        "importOrderParserPlugins": ["typescript"]
+      }
+    }
+  ]
 }

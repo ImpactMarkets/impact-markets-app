@@ -12,9 +12,14 @@ import {
   DialogTitle,
 } from '@/components/dialog'
 import { TextField } from '@/components/text-field'
+import { BondingCurve } from '@/lib/auction'
+import { SHARE_COUNT } from '@/lib/constants'
+import { num } from '@/lib/text'
 import { trpc } from '@/lib/trpc'
+import { Accordion } from '@mantine/core'
 import { Prisma } from '@prisma/client'
 
+import { Banner } from '../banner'
 import { SwitchField } from '../switch-field'
 
 type BuyFormData = {
@@ -31,17 +36,20 @@ export function BuyDialog({
 }: {
   holding: {
     id: number
-    certificateId: number
+    certificateId: string
     size: Prisma.Decimal
+    valuation: Prisma.Decimal
+    target: Prisma.Decimal
+    user: {
+      name: string | null
+    }
   }
-  reservedSize: number
+  reservedSize: Prisma.Decimal
   isOpen: boolean
   onClose: () => void
 }) {
-  const { register, handleSubmit, reset } = useForm<BuyFormData>({
+  const { register, handleSubmit, reset, watch } = useForm<BuyFormData>({
     defaultValues: {
-      size: new Prisma.Decimal('0.000'),
-      cost: new Prisma.Decimal('0.00'),
       consume: false,
     },
   })
@@ -59,7 +67,7 @@ export function BuyDialog({
       ])
     },
     onError: (error) => {
-      toast.error(`Something went wrong: ${error.message}`)
+      toast.error(<pre>{error.message}</pre>)
     },
   })
 
@@ -72,8 +80,7 @@ export function BuyDialog({
     transactionMutation.mutate(
       {
         sellingHolding: holding,
-        size: String(data.size),
-        cost: String(data.cost),
+        size: new Prisma.Decimal(data.size),
         consume: data.consume,
       },
       {
@@ -82,34 +89,108 @@ export function BuyDialog({
     )
   }
 
+  const watchSize = watch('size')
+  const zero = new Prisma.Decimal(0)
+
+  const bondingCurve = new BondingCurve(holding.target)
+
+  const startingValuation = bondingCurve.valuationAt(
+    bondingCurve.fractionAt(holding.valuation).plus(reservedSize)
+  )
+  const newValuation = bondingCurve.valuationAt(
+    bondingCurve
+      .fractionAt(holding.valuation)
+      .plus(reservedSize)
+      .plus(new Prisma.Decimal(watchSize || zero))
+  )
+  const cost = bondingCurve
+    .costOfSize(
+      holding.valuation,
+      new Prisma.Decimal(watchSize || zero),
+      reservedSize
+    )
+    .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP)
+
   return (
     <Dialog isOpen={isOpen} onClose={handleClose}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
           <DialogTitle>Buy</DialogTitle>
           <div className="mt-6 space-y-6">
+            <p className="text-sm">
+              Please contact the current owner {holding.user.name || ''} to
+              agree on a payment method.
+            </p>
+            {/* Not using NumberInput because onChange is called with only the value,
+                not the field element */}
             <TextField
-              {...register('size', { required: true })}
+              {...register('size', {
+                required: true,
+                shouldUnregister: true,
+                setValueAs: (value) => value / SHARE_COUNT,
+              })}
               label="Size"
+              description={
+                <span>
+                  Shares in the certificate (max.{' '}
+                  {num(holding.size.minus(reservedSize).times(SHARE_COUNT))})
+                </span>
+              }
+              rightSection="shares"
+              classNames={{ rightSection: 'w-20' }}
               type="number"
-              step="0.001"
-              min="0.001"
-              max={+holding.size - reservedSize}
+              step="1"
+              min="1"
+              max={holding.size
+                .minus(reservedSize)
+                .times(SHARE_COUNT)
+                .toNumber()}
               required
             />
-            {/* Validate minimum valuation */}
-            <TextField
-              {...register('cost', { required: true })}
-              label="Cost"
-              type="number"
-              step="0.01"
-              required
-            />
-            <SwitchField
-              {...register('consume')}
-              label="Consume immediately"
-              info="You will never be able to resell shares that you have consumed."
-            />
+            <table className="text-sm mx-auto">
+              <tbody>
+                <tr>
+                  <td className="text-right pr-4">Starting valuation:</td>
+                  <td className="text-right pr-4">
+                    ${num(startingValuation, 2)}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="text-right pr-4">New valuation:</td>
+                  <td className="text-right pr-4">${num(newValuation, 2)}</td>
+                </tr>
+                <tr>
+                  <td className="text-right font-bold pr-4">Cost:</td>
+                  <td className="text-right font-bold pr-4">${num(cost, 2)}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <Accordion variant="separated" className="my-6">
+              <Accordion.Item value="advanced-options">
+                <Accordion.Control>Advanced options</Accordion.Control>
+                <Accordion.Panel className="text-sm">
+                  <SwitchField
+                    {...register('consume', { shouldUnregister: true })}
+                    label="Consume immediately"
+                    info="You will never be able to resell shares that you have consumed."
+                  />
+                </Accordion.Panel>
+              </Accordion.Item>
+            </Accordion>
+
+            {watchSize ? (
+              <Banner className="text-sm px-4 py-3 my-5">
+                When you click “Buy,” you’ll have one week to send{' '}
+                {holding.user.name || ''} ${num(cost, 2)} or to cancel the
+                transaction.
+              </Banner>
+            ) : (
+              ''
+            )}
+            <Banner className="text-sm px-4 py-3 my-5">
+              Make sure that you trust the recipient to confirm the transaction!
+            </Banner>
           </div>
           <DialogCloseButton onClick={handleClose} />
         </DialogContent>
@@ -118,6 +199,8 @@ export function BuyDialog({
             type="submit"
             isLoading={transactionMutation.isLoading}
             loadingChildren="Saving"
+            variant="highlight"
+            disabled={!watchSize}
           >
             Buy
           </Button>

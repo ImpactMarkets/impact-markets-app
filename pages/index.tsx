@@ -7,7 +7,6 @@ import * as React from 'react'
 import type { CertificateSummaryProps } from '@/components/certificate-summary'
 import { CertificateSummarySkeleton } from '@/components/certificate-summary-skeleton'
 import { Layout } from '@/components/layout'
-import { AppNavbar } from '@/components/navbar'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
@@ -108,7 +107,7 @@ const Home: NextPageWithAuthAndLayout = () => {
             There are no published certificates to show yet.
           </div>
         ) : (
-          <div className="flow-root mt-8">
+          <div className="flow-root">
             <ul className="my-5 divide-y divide-transparent">
               {feedQuery.data.certificates.map((certificate) => (
                 <li key={certificate.id} className="py-6">
