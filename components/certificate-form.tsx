@@ -11,7 +11,10 @@ import { SHARE_COUNT } from '@/lib/constants'
 import { useLeaveConfirm } from '@/lib/form'
 import { num } from '@/lib/text'
 import { Accordion, SimpleGrid, Switch } from '@mantine/core'
+import { IMMultiSelect } from './multi-select'
+import { TAGS } from '@/lib/tags'
 import { Prisma } from '@prisma/client'
+import { useIntercom } from 'react-use-intercom'
 
 const DESCRIPTION_PROMPTS = (
   <>
@@ -81,6 +84,7 @@ export function CertificateForm({
     reset,
     handleSubmit,
     watch,
+    setValue,
   } = useForm<FormData>({
     defaultValues,
   })
@@ -88,6 +92,17 @@ export function CertificateForm({
   useLeaveConfirm({ formState })
 
   const { isSubmitSuccessful } = formState
+
+  const { show } = useIntercom();
+  const TagDescription = (text: string) => {
+    const [messageText, linkText, endText] = text.split(/<[a][^>]*>(.+?)<\/[a]>/)
+
+    return <p>{messageText}<a
+      style={{fontWeight: 'bold'}}
+      href="#/"
+      onClick={() => show()}
+    >{linkText}</a>{endText}</p>;
+  };
 
   React.useEffect(() => {
     if (isSubmitSuccessful) {
@@ -160,6 +175,17 @@ export function CertificateForm({
         description="What would you have done (or what would you do) if there were no offer of retroactive funding?"
         info="This is not displayed publicly"
         className="my-6"
+      />
+      <IMMultiSelect
+        {...register('tags')}
+        label="Tags"
+        description={TagDescription(
+          'Please select all that apply or <a>leave us feedback</a> if you can’t find suitable tags for your field and type of work so we can add them.'
+        )}
+        placeholder="Pick all that apply"
+        data={TAGS.map(tag => ({value: tag.value, label: tag.label, group: tag.group}))}
+        onChange={(value) => Array.isArray(value) ? setValue('tags', value.join(',')) : null}
+        defaultValue={getValues().tags ? getValues().tags.split(',') : []}
       />
 
       <div className="mt-6">

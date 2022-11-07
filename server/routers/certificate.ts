@@ -41,6 +41,7 @@ export const certificateRouter = createProtectedRouter()
           contentHtml: true,
           createdAt: true,
           hidden: true,
+          tags: true,
           author: {
             select: {
               id: true,

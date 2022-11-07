@@ -64,7 +64,7 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
                 rights: 'RETROACTIVE_FUNDING',
                 actionStart: new Date(values.actionStart),
                 actionEnd: new Date(values.actionEnd),
-                tags: '',
+                tags: values.tags,
                 valuation: new Prisma.Decimal(
                   values.valuation || DEFAULT_VALUATION
                 ),
