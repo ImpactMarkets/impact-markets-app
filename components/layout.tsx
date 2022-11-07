@@ -1,15 +1,8 @@
 import * as React from 'react'
+import { useState } from 'react'
 
 import { AppFooter } from '@/components/footer'
 import { Header as AppHeader } from '@/components/header'
-import {
-  Menu,
-  MenuButton,
-  MenuItemButton,
-  MenuItemLink,
-  MenuItems,
-  MenuItemsContent,
-} from '@/components/menu'
 import { AppNavbar } from '@/components/navbar'
 import { AppShell } from '@mantine/core'
 
@@ -18,11 +11,13 @@ type LayoutProps = {
 }
 
 export function Layout({ children }: LayoutProps) {
+  const [opened, setOpened] = useState<boolean>(false)
+
   return (
     <>
       <AppShell
-        navbar={<AppNavbar />}
-        header={<AppHeader />}
+        navbar={<AppNavbar hidden={!opened} />}
+        header={<AppHeader opened={opened} setOpened={setOpened} />}
         footer={<AppFooter />}
       >
         {children}

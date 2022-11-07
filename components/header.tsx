@@ -15,20 +15,38 @@ import {
   MenuItemsContent,
 } from '@/components/menu'
 import { SearchDialog } from '@/components/search-dialog'
-import { Header as MantineHeader } from '@mantine/core'
+import { Burger, Header as MantineHeader, MediaQuery } from '@mantine/core'
 
-export function Header() {
+interface HeaderProps {
+  opened: boolean
+  setOpened: (f: (opened: boolean) => boolean) => void
+}
+
+export function Header({ opened, setOpened }: HeaderProps) {
   const [isSearchDialogOpen, setIsSearchDialogOpen] = React.useState(false)
   const { data: session } = useSession()
 
   return (
-    <MantineHeader height={100}>
+    <MantineHeader
+      // TODO: Find why {{base: 50, md: 100}} does not work
+      height={100}
+    >
       <div className="flex justify-between items-center h-full px-5">
-        <Link href="/">
-          <a>
-            <Logo className="w-auto h-[64px]" />
-          </a>
-        </Link>
+        <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
+          <Burger
+            opened={opened}
+            onClick={() => setOpened((o) => !o)}
+            size="sm"
+            mr="xl"
+          />
+        </MediaQuery>
+        <div>
+          <Link href="/">
+            <a>
+              <Logo className="w-auto h-[48px] md:h-[64px]" />
+            </a>
+          </Link>
+        </div>
         <div className="flex items-center gap-x-3">
           <IconButton
             variant="secondary"

@@ -97,7 +97,11 @@ const data = [
   { link: '', label: 'Help & support', icon: LifebuoyIcon },
 ]
 
-export function AppNavbar() {
+interface NavbarProps {
+  hidden: boolean
+}
+
+export function AppNavbar({ hidden }: NavbarProps) {
   const { classes, cx } = useStyles()
   const [active, setActive] = useState('Billing')
 
@@ -119,7 +123,7 @@ export function AppNavbar() {
   ))
 
   return (
-    <Navbar width={{ sm: 250 }}>
+    <Navbar width={{ sm: 250 }} hidden={hidden}>
       <Navbar.Section className="m-4">{links}</Navbar.Section>
     </Navbar>
   )
