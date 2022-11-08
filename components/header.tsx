@@ -1,19 +1,9 @@
-import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import * as React from 'react'
 
-import { Avatar } from '@/components/avatar'
 import { ButtonLink } from '@/components/button-link'
 import { IconButton } from '@/components/icon-button'
 import { Logo, SearchIcon } from '@/components/icons'
-import {
-  Menu,
-  MenuButton,
-  MenuItemButton,
-  MenuItemLink,
-  MenuItems,
-  MenuItemsContent,
-} from '@/components/menu'
 import { SearchDialog } from '@/components/search-dialog'
 import { Burger, Header as MantineHeader, MediaQuery } from '@mantine/core'
 
@@ -24,7 +14,6 @@ interface HeaderProps {
 
 export function Header({ opened, setOpened }: HeaderProps) {
   const [isSearchDialogOpen, setIsSearchDialogOpen] = React.useState(false)
-  const { data: session } = useSession()
 
   return (
     <MantineHeader
@@ -56,27 +45,6 @@ export function Header({ opened, setOpened }: HeaderProps) {
           >
             <SearchIcon className="w-4 h-4" />
           </IconButton>
-
-          <Menu>
-            <MenuButton className="relative inline-flex rounded-full focus-ring">
-              <Avatar
-                name={session!.user.name}
-                src={session!.user.image}
-                size="sm"
-              />
-            </MenuButton>
-
-            <MenuItems className="w-48">
-              <MenuItemsContent>
-                <MenuItemLink href={`/profile/${session!.user.id}`}>
-                  Profile
-                </MenuItemLink>
-                <MenuItemButton onClick={() => signOut()}>
-                  Log out
-                </MenuItemButton>
-              </MenuItemsContent>
-            </MenuItems>
-          </Menu>
 
           <ButtonLink href="/new" variant="highlight">
             <span className="sm:hidden">New</span>
