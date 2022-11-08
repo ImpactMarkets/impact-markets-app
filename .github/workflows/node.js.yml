@@ -27,5 +27,5 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - run: npm install typescript
-      - run: npx pretty-quick --staged
+      - run: npx prettier --check '**/*.{ts,tsx,json,html,css}'
       - run: npx tsc --checkJs
