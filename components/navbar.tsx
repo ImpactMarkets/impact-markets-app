@@ -10,6 +10,8 @@ import {
 } from '@/components/icons'
 import { Navbar as MantineNavbar, createStyles } from '@mantine/core'
 
+import { User } from './user'
+
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
   return {
@@ -121,7 +123,12 @@ export function Navbar({ hidden }: NavbarProps) {
 
   return (
     <MantineNavbar width={{ sm: 250 }} hidden={hidden}>
-      <MantineNavbar.Section className="m-4">{links}</MantineNavbar.Section>
+      <MantineNavbar.Section grow className="m-4">
+        {links}
+      </MantineNavbar.Section>
+      <MantineNavbar.Section>
+        <User />
+      </MantineNavbar.Section>
     </MantineNavbar>
   )
 }
