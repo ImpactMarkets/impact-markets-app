@@ -79,9 +79,11 @@ export function CertificateSummary({
           </Banner>
         )}
         <div className={classNames(certificate.hidden ? 'opacity-50' : '')}>
-          <div className="my-6">
-            <Tags queryData={certificate} />
-          </div>
+          {certificate.tags && (
+            <div className="my-6">
+              <Tags queryData={certificate} />
+            </div>
+          )}
           <Link href={`/certificate/${certificate.id}`}>
             <a>
               <Heading2>{certificate.title}</Heading2>
