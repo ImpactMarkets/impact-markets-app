@@ -61,9 +61,7 @@ export const serverEnv = {
     NEXTAUTH_SECRET: str({
       devDefault: 'xxx',
     }),
-    AUTH_PROVIDER: str({
-      choices: ['github', 'okta', 'google'],
-    }),
+    MOCK_LOGIN: bool({ default: false }),
     GOOGLE_CLIENT_ID: googleParser({ allowEmpty: true, default: '' }),
     GOOGLE_CLIENT_SECRET: googleParser({ allowEmpty: true, default: '' }),
     GITHUB_ID: githubParser({ allowEmpty: true, default: '' }),

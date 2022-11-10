@@ -1,112 +1,51 @@
 import type { NextAuthOptions } from 'next-auth'
-import GithubProvider from 'next-auth/providers/github'
+import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
-import OktaProvider from 'next-auth/providers/okta'
 
 import { serverEnv } from '@/env/server'
 import { prisma } from '@/lib/prisma'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { Role } from '@prisma/client'
 
+// Helpful example: https://github.com/mikemajara/nextjs-prisma-next-auth-credentials/blob/main/pages/api/auth/%5B...nextauth%5D.ts
+
 export const authOptions: NextAuthOptions = {
+  // debug: true,
   adapter: PrismaAdapter(prisma),
+  secret: serverEnv.NEXTAUTH_SECRET,
+  session: { strategy: 'jwt' },
   providers: [
-    ...(serverEnv.AUTH_PROVIDER === 'github'
-      ? [
-          GithubProvider({
-            clientId: serverEnv.GITHUB_ID,
-            clientSecret: serverEnv.GITHUB_SECRET,
-            authorization:
-              'https://github.com/login/oauth/authorize?scope=read:user+user:email+read:org',
-            userinfo: {
-              url: 'https://api.github.com/user',
-              async request({ client, tokens }) {
-                // Get base profile
-                // FIXME: Why are different types clashing here ? Version conflict ?
-                const profile = await client.userinfo(tokens as any)
-
-                // If user has email hidden, get their primary email from the GitHub API
-                if (!profile.email) {
-                  const emails = await (
-                    await fetch('https://api.github.com/user/emails', {
-                      headers: {
-                        Authorization: `token ${tokens.access_token}`,
-                      },
-                    })
-                  ).json()
-
-                  if (emails?.length > 0) {
-                    // Get primary email
-                    profile.email = emails.find(
-                      (email: any) => email.primary
-                    )?.email
-                    // And if for some reason it doesn't exist, just use the first
-                    if (!profile.email) profile.email = emails[0].email
-                  }
-                }
-
-                const userOrgs = await (
-                  await fetch('https://api.github.com/user/orgs', {
-                    headers: { Authorization: `token ${tokens.access_token}` },
-                  })
-                ).json()
-
-                // Set flag to deny signIn if allowed org is not found in the user organizations
-                if (
-                  !userOrgs.find(
-                    (org: any) => org.login === serverEnv.GITHUB_ALLOWED_ORG
-                  )
-                ) {
-                  profile.notAllowed = true
-                }
-
-                return profile
-              },
-            },
-          }),
-        ]
-      : []),
-    ...(serverEnv.AUTH_PROVIDER === 'okta'
-      ? [
-          OktaProvider({
-            clientId: serverEnv.OKTA_CLIENT_ID!,
-            clientSecret: serverEnv.OKTA_CLIENT_SECRET!,
-            issuer: serverEnv.OKTA_ISSUER!,
-          }),
-        ]
-      : []),
-    ...(serverEnv.AUTH_PROVIDER === 'google'
-      ? [
-          GoogleProvider({
-            clientId: serverEnv.GOOGLE_CLIENT_ID,
-            clientSecret: serverEnv.GOOGLE_CLIENT_SECRET,
-          }),
-        ]
-      : []),
+    GoogleProvider({
+      clientId: serverEnv.GOOGLE_CLIENT_ID,
+      clientSecret: serverEnv.GOOGLE_CLIENT_SECRET,
+    }),
   ],
   callbacks: {
-    async signIn({ profile }) {
-      if (profile.notAllowed) {
-        return false
-      }
-
-      return true
-    },
-    async session({ session, user }) {
+    // TODO: Use signIn to handle blocking users
+    session: async ({ session, user, token }) => {
       return {
         ...session,
         user: {
           ...session.user,
-          id: user.id,
-          role: user.role,
+          id: (user || token).id,
+          role: (user || token).role,
         },
       }
     },
   },
-  pages: {
-    signIn: '/sign-in',
-  },
-  secret: serverEnv.NEXTAUTH_SECRET,
+}
+
+if (serverEnv.MOCK_LOGIN) {
+  authOptions.providers.push(
+    CredentialsProvider({
+      credentials: { password: { label: 'Password', type: 'password' } },
+      async authorize() {
+        return await prisma.user.findUniqueOrThrow({
+          where: { email: 'impactmarkets.io@gmail.com' },
+        })
+      },
+    })
+  )
 }
 
 declare module 'next-auth' {
