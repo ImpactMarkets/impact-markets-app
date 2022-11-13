@@ -2,11 +2,9 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import * as React from 'react'
-import { Bar } from 'react-chartjs-2'
 import { FaHeart, FaRegHeart } from 'react-icons/fa'
 
 import { Banner } from '@/components/banner'
-import { ListIcon } from '@/components/icons'
 import {
   ChevronRightIcon,
   HeartFilledIcon,
