@@ -52,7 +52,6 @@
     "nodemailer": "^6.8.0",
     "persona": "^4.6.0",
     "react": "^18.2.0",
-    "react-apexcharts-2": "^1.0.0",
     "react-beforeunload": "^2.5.3",
     "react-detect-click-outside": "^1.1.7",
     "react-div-100vh": "^0.7.0",
