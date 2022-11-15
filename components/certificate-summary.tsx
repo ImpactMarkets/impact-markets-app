@@ -51,7 +51,7 @@ function Left({ certificate }: CertificateSummaryProps) {
   }
 
   return (
-    <div className="max-w-[546px] min-w-[546px] w-[546px]">
+    <div className="grow">
       {certificate.tags && (
         <div className="mb-6">
           <Tags queryData={certificate} />
@@ -80,7 +80,7 @@ function Right({ certificate }: CertificateSummaryProps) {
   const likeCount = certificate.likedBy.length
 
   return (
-    <div className="flex flex-col justify-between">
+    <div className="flex flex-col justify-between max-w-[140px] min-w-[140px] w-[140px]">
       <div className="mt-4">
         <Author author={certificate.author} />
       </div>
@@ -156,7 +156,7 @@ export const CertificateSummary = ({
     )}
     <div
       className={classNames(
-        'flex justify-between items-stretch',
+        'flex items-stretch',
         certificate.hidden ? 'opacity-50' : ''
       )}
     >
