@@ -1,7 +1,6 @@
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import * as React from 'react'
-import { FaHeart, FaRegHeart } from 'react-icons/fa'
 
 import { Banner } from '@/components/banner'
 import { HoldingsChart } from '@/components/holdings-chart'
@@ -17,12 +16,11 @@ import { Tags } from './certificate/Tags'
 import { Date } from './date'
 import { Heading2 } from './heading-2'
 import { HtmlView } from './html-view'
-import { MockListIcon } from './list-icon'
 
 export type CertificateSummaryProps = {
   certificate: InferQueryOutput<'certificate.feed'>['certificates'][number]
-  onLike: () => void
-  onUnlike: () => void
+  onLike?: () => void
+  onUnlike?: () => void
 }
 
 function Left({ certificate }: CertificateSummaryProps) {
@@ -158,7 +156,7 @@ export const CertificateSummary = ({
     )}
     <div
       className={classNames(
-        'flex items-center justify-between items-stretch',
+        'flex justify-between items-stretch',
         certificate.hidden ? 'opacity-50' : ''
       )}
     >
