@@ -20,7 +20,7 @@ export function Author({ author }: AuthorProps) {
       <div className="flex-1">
         <div>
           <Link href={`/profile/${author.id}`}>
-            <a className="font-medium transition-colors hover:text-blue">
+            <a className="font-medium text-sm transition-colors hover:text-blue">
               {author.name}
             </a>
           </Link>
