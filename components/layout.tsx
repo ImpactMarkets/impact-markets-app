@@ -89,7 +89,7 @@ export function Layout({ children }: LayoutProps) {
 
             <ButtonLink href="/new" variant="highlight">
               <span className="sm:hidden">New</span>
-              <span className="hidden sm:block shrink-0">New certificate</span>
+              <span className="hidden sm:block shrink-0">New project</span>
             </ButtonLink>
           </div>
         </header>
