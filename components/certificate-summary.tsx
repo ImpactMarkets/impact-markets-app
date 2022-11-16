@@ -59,7 +59,7 @@ function Left({ certificate }: CertificateSummaryProps) {
       )}
       <div className={classNames(certificate.hidden ? 'opacity-50' : '')}>
         <Link href={`/certificate/${certificate.id}`}>
-          <Heading2>{certificate.title}</Heading2>
+          <Heading2 className="cursor-pointer">{certificate.title}</Heading2>
         </Link>
         <Date date={certificate.createdAt} />
         <HtmlView html={cert_summary} className="mt-2" />
