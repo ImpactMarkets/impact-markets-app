@@ -10,7 +10,7 @@ import { Role } from '@prisma/client'
 // Helpful example: https://github.com/mikemajara/nextjs-prisma-next-auth-credentials/blob/main/pages/api/auth/%5B...nextauth%5D.ts
 
 export const authOptions: NextAuthOptions = {
-  // debug: true,
+  debug: serverEnv.DEBUG,
   adapter: PrismaAdapter(prisma),
   secret: serverEnv.NEXTAUTH_SECRET,
   session: { strategy: 'jwt' },
