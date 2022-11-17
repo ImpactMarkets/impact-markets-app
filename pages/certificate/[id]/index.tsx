@@ -15,6 +15,7 @@ import { Ledger } from '@/components/certificate/Ledger'
 import { Tags } from '@/components/certificate/Tags'
 import { getCertificateQueryPathAndInput } from '@/components/certificate/utils'
 import { Heading1 } from '@/components/heading-1'
+import { HoldingsChart } from '@/components/holdings-chart'
 import { HtmlView } from '@/components/html-view'
 import { MessageIcon } from '@/components/icons'
 import { Layout } from '@/components/layout'
@@ -99,9 +100,6 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
 
     return (
       <>
-        <div className="my-6">
-          <Tags queryData={certificateQuery.data} />
-        </div>
         <Head>
           <title>{certificateQuery.data.title} – Impact Markets</title>
         </Head>
@@ -130,7 +128,10 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
               />
             </div>
             <div className="my-6">
-              <Labels queryData={certificateQuery.data} />
+              <Tags queryData={certificateQuery.data} />
+            </div>
+            <div className="flex items-center gap-12 mt-6">
+              <HoldingsChart certificate={certificateQuery.data} />
             </div>
             <div className="my-6">
               <Ledger certificateId={String(router.query.id)} />
@@ -139,6 +140,9 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
               html={certificateQuery.data.contentHtml}
               className="mt-8"
             />
+            <div className="my-6">
+              <Labels queryData={certificateQuery.data} />
+            </div>
             <div className="flex gap-4 mt-6">
               <LikeButton
                 likedBy={certificateQuery.data.likedBy}
