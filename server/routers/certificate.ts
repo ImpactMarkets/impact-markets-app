@@ -49,6 +49,17 @@ export const certificateRouter = createProtectedRouter()
               image: true,
             },
           },
+          issuers: {
+            select: {
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                  image: true,
+                },
+              },
+            },
+          },
           likedBy: {
             orderBy: {
               createdAt: 'asc',
@@ -110,6 +121,17 @@ export const certificateRouter = createProtectedRouter()
               id: true,
               name: true,
               image: true,
+            },
+          },
+          issuers: {
+            select: {
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                  image: true,
+                },
+              },
             },
           },
           likedBy: {

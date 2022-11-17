@@ -83,7 +83,8 @@ model User {
   comments         Comment[]
   role             Role               @default(USER)
 
-  holdings Holding[]
+  holdings           Holding[]
+  issuedCertificates CertificateIssuer[]
 }
 
 model VerificationToken {
@@ -119,8 +120,9 @@ model Certificate {
   actionEnd               DateTime
   tags                    String?
 
-  author   User      @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  author   User                @relation(fields: [authorId], references: [id], onDelete: Restrict)
   holdings Holding[]
+  issuers  CertificateIssuer[]
 
   @@index([authorId])
 }
@@ -129,6 +131,18 @@ model LikedCertificate {
   certificateId String
   userId        String
   createdAt     DateTime @default(now())
+
+  certificate Certificate @relation(fields: [certificateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([certificateId, userId])
+  @@index([certificateId])
+  @@index([userId])
+}
+
+model CertificateIssuer {
+  certificateId String
+  userId        String
 
   certificate Certificate @relation(fields: [certificateId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   user        User        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)

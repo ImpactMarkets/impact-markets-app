@@ -294,7 +294,6 @@ function CertificateFeed({ user: _ }: ProfileComponentProps) {
               {profileFeedQuery.data.certificates.map((certificate) => (
                 <li key={certificate.id} className="py-10">
                   <CertificateSummary
-                    hideAuthor
                     certificate={certificate}
                     onLike={() => {
                       likeMutation.mutate(certificate.id)
@@ -327,7 +326,7 @@ function CertificateFeed({ user: _ }: ProfileComponentProps) {
       <ul className="-my-12 divide-y divide-primary">
         {[...Array(3)].map((_, idx) => (
           <li key={idx} className="py-10">
-            <CertificateSummarySkeleton hideAuthor />
+            <CertificateSummarySkeleton />
           </li>
         ))}
       </ul>

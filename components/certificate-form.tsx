@@ -103,7 +103,7 @@ export function CertificateForm({
     return (
       <p>
         {messageText}
-        <a style={{ fontWeight: 'bold' }} href="#/" onClick={() => show()}>
+        <a className="font-bold" href="#/" onClick={() => show()}>
           {linkText}
         </a>
         {endText}

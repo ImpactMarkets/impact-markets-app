@@ -61,6 +61,7 @@ export const serverEnv = {
     NEXTAUTH_SECRET: str({
       devDefault: 'xxx',
     }),
+    DEBUG: bool({ default: false }),
     MOCK_LOGIN: bool({ default: false }),
     GOOGLE_CLIENT_ID: googleParser({ allowEmpty: true, default: '' }),
     GOOGLE_CLIENT_SECRET: googleParser({ allowEmpty: true, default: '' }),
