@@ -99,6 +99,9 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
 
     return (
       <>
+        <div className="my-6">
+          <Tags queryData={certificateQuery.data} />
+        </div>
         <Head>
           <title>{certificateQuery.data.title} – Impact Markets</title>
         </Head>
@@ -128,9 +131,6 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
             </div>
             <div className="my-6">
               <Labels queryData={certificateQuery.data} />
-            </div>
-            <div className="my-6">
-              <Tags queryData={certificateQuery.data} />
             </div>
             <div className="my-6">
               <Ledger certificateId={String(router.query.id)} />
