@@ -9,7 +9,7 @@ services:
       - POSTGRES_USER=im-app
       - POSTGRES_PASSWORD=empty
     ports:
-      - '127.0.0.1:5432:54321'
+      - '127.0.0.1:54321:5432'
 
 volumes:
   postgres-data:
