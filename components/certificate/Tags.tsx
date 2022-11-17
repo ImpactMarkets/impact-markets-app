@@ -18,7 +18,7 @@ export const Tags = ({ queryData }: TagsProps) => (
           tag && (
             <span
               key={index}
-              className="border text-primary border-secondary bg-primary font-bold text-sm py-1 px-2 mr-1 mb-1 rounded"
+              className="border text-highlight border-secondary bg-primary font-bold text-xs px-1 mr-1 mb-1 rounded"
               style={{
                 backgroundColor: tag.color,
               }}
