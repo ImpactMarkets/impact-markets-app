@@ -1,3 +1,4 @@
+import * as fp from 'lodash/fp'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import * as React from 'react'
@@ -13,6 +14,7 @@ import * as Tooltip from '@radix-ui/react-tooltip'
 
 import { Author } from './author'
 import { Tags } from './certificate/Tags'
+import { sortAuthorFirst } from './certificate/utils'
 import { Date } from './date'
 import { Heading2 } from './heading-2'
 import { HtmlView } from './html-view'
@@ -81,8 +83,16 @@ function Right({ certificate }: CertificateSummaryProps) {
 
   return (
     <div className="flex flex-col justify-between max-w-[140px] min-w-[140px] w-[140px]">
-      <div className="mt-4">
-        <Author author={certificate.author} />
+      <div>
+        {fp.flow(
+          fp.map('user'),
+          sortAuthorFirst(certificate.author),
+          fp.map((user) => (
+            <div key={user.id} className="mt-4">
+              <Author author={user} />
+            </div>
+          ))
+        )(certificate.issuers)}
       </div>
       <div className="flex justify-around h-8">
         <Tooltip.Provider>
