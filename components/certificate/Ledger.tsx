@@ -23,6 +23,7 @@ const Holding = ({
   holding: InferQueryOutput<'holding.feed'>[0]
   userId: string
 }) => {
+  const { data: session } = useSession()
   const [isBuyDialogOpen, setIsBuyDialogOpen] = React.useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false)
   const reservedSize = holding.sellTransactions.reduce(
@@ -41,48 +42,51 @@ const Holding = ({
         <>${num(holding.valuation, 0)}</>
       </td>
       <td className="text-right px-2">
-        {holding.user.id === userId ? (
-          <>
-            <ButtonLink
-              href="#"
-              variant="secondary"
-              className="h-6"
-              onClick={() => {
-                setIsEditDialogOpen(true)
-              }}
-            >
-              <span className="block shrink-0">Edit</span>
-            </ButtonLink>
-            <EditDialog
-              holding={holding}
-              isOpen={isEditDialogOpen}
-              onClose={() => {
-                setIsEditDialogOpen(false)
-              }}
-            />
-          </>
-        ) : (
-          <>
-            <ButtonLink
-              href="#"
-              variant="highlight"
-              className="h-6"
-              onClick={() => {
-                setIsBuyDialogOpen(true)
-              }}
-            >
-              <span className="block shrink-0">Buy</span>
-            </ButtonLink>
-            <BuyDialog
-              holding={holding}
-              reservedSize={reservedSize}
-              isOpen={isBuyDialogOpen}
-              onClose={() => {
-                setIsBuyDialogOpen(false)
-              }}
-            />
-          </>
-        )}
+        <div className="flex gap-1">
+          {(session?.user.role === 'ADMIN' || holding.user.id === userId) && (
+            <>
+              <ButtonLink
+                href="#"
+                variant="secondary"
+                className="h-6"
+                onClick={() => {
+                  setIsEditDialogOpen(true)
+                }}
+              >
+                <span className="block shrink-0">Edit</span>
+              </ButtonLink>
+              <EditDialog
+                holding={holding}
+                isOpen={isEditDialogOpen}
+                onClose={() => {
+                  setIsEditDialogOpen(false)
+                }}
+              />
+            </>
+          )}
+          {holding.user.id !== userId && (
+            <>
+              <ButtonLink
+                href="#"
+                variant="highlight"
+                className="h-6"
+                onClick={() => {
+                  setIsBuyDialogOpen(true)
+                }}
+              >
+                <span className="block shrink-0">Buy</span>
+              </ButtonLink>
+              <BuyDialog
+                holding={holding}
+                reservedSize={reservedSize}
+                isOpen={isBuyDialogOpen}
+                onClose={() => {
+                  setIsBuyDialogOpen(false)
+                }}
+              />
+            </>
+          )}
+        </div>
       </td>
     </tr>
   )
