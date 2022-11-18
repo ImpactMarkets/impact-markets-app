@@ -37,7 +37,7 @@ export function HoldingsChart({ certificate }: HoldingsChartProps) {
         ? `${num(valueAvailable, 0)}%`
         : '',
       tooltip: `${num(valueAvailable, 0)}% available for purchase`,
-      value: valueAvailable,
+      value: valueAvailable.toNumber(),
       color: '#47d6ab',
     },
     {
@@ -47,7 +47,7 @@ export function HoldingsChart({ certificate }: HoldingsChartProps) {
         ? `${num(valueReserved, 0)}%`
         : '',
       tooltip: `${num(valueReserved, 0)}% reserved by buyers`,
-      value: valueReserved,
+      value: valueReserved.toNumber(),
       color: '#AAAAAA',
     },
     {
@@ -60,7 +60,7 @@ export function HoldingsChart({ certificate }: HoldingsChartProps) {
         valueConsumed,
         0
       )}% consumed and permanently off the market`,
-      value: valueConsumed,
+      value: valueConsumed.toNumber(),
       color: '#4fcdf7',
     },
   ]
