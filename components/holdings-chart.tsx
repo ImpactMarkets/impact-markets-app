@@ -1,3 +1,4 @@
+import { num } from '@/lib/text'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
 import { Progress } from '@mantine/core'
 import { Prisma } from '@prisma/client'
@@ -24,42 +25,41 @@ export function HoldingsChart({ certificate }: HoldingsChartProps) {
         (aggregator, holding) => holding.size.plus(aggregator),
         new Prisma.Decimal(0)
       )
-  const valueConsumed = totalSize('CONSUMPTION').times(100).toNumber()
-  const valueReserved = totalSize('RESERVATION').times(100).toNumber()
-  const valueAvailable =
-    totalSize('OWNERSHIP').times(100).toNumber() - valueReserved
+  const valueConsumed = totalSize('CONSUMPTION').times(100)
+  const valueReserved = totalSize('RESERVATION').times(100)
+  const valueAvailable = totalSize('OWNERSHIP').times(100).minus(valueReserved)
 
   const sections = [
     {
-      label:
-        valueAvailable >= 20
-          ? `${valueAvailable}% available`
-          : valueAvailable >= 10
-          ? `${valueAvailable}%`
-          : '',
-      tooltip: `${valueAvailable}% available for purchase`,
+      label: valueAvailable.gte(20)
+        ? `${num(valueAvailable, 0)}% available`
+        : valueAvailable.gte(10)
+        ? `${num(valueAvailable, 0)}%`
+        : '',
+      tooltip: `${num(valueAvailable, 0)}% available for purchase`,
       value: valueAvailable,
       color: '#47d6ab',
     },
     {
-      label:
-        valueReserved >= 20
-          ? `${valueReserved}% reserved`
-          : valueReserved >= 10
-          ? `${valueReserved}%`
-          : '',
-      tooltip: `${valueReserved}% reserved by buyers`,
+      label: valueReserved.gte(20)
+        ? `${num(valueReserved, 0)}% reserved`
+        : valueReserved.gte(10)
+        ? `${num(valueReserved, 0)}%`
+        : '',
+      tooltip: `${num(valueReserved, 0)}% reserved by buyers`,
       value: valueReserved,
       color: '#AAAAAA',
     },
     {
-      label:
-        valueConsumed >= 20
-          ? `${valueConsumed}% consumed`
-          : valueConsumed >= 10
-          ? `${valueConsumed}%`
-          : '',
-      tooltip: `${valueConsumed}% consumed and permanently off the market`,
+      label: valueConsumed.gte(20)
+        ? `${num(valueConsumed, 0)}% consumed`
+        : valueConsumed.gte(10)
+        ? `${num(valueConsumed, 0)}%`
+        : '',
+      tooltip: `${num(
+        valueConsumed,
+        0
+      )}% consumed and permanently off the market`,
       value: valueConsumed,
       color: '#4fcdf7',
     },
@@ -68,7 +68,7 @@ export function HoldingsChart({ certificate }: HoldingsChartProps) {
   return (
     <Progress
       sections={sections}
-      classNames={{ label: 'text-sm', root: 'w-full h-8' }}
+      classNames={{ label: 'text-sm', root: 'w-full h-8 rounded' }}
     />
   )
 }
