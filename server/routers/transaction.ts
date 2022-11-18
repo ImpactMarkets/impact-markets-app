@@ -142,11 +142,24 @@ export const transactionRouter = createProtectedRouter()
       })
 
       await ctx.prisma.$transaction([
+        // Update the size of the selling holding
         ctx.prisma.holding.update({
           where: { id: transaction.sellingHoldingId },
           data: {
             size: { decrement: transaction.size },
             cost: { decrement: transaction.cost },
+          },
+        }),
+        // Update the valuation of all holdings of the same certificate
+        // Not doing this would require issuers to pay attention all the time; doing this when a
+        // transaction is created would introduce more complexity around updating and reverting
+        // valuations in view of transactions against different holdings of the same certificate.
+        ctx.prisma.holding.updateMany({
+          where: {
+            certificateId: transaction.sellingHolding.certificateId,
+            type: 'OWNERSHIP',
+          },
+          data: {
             valuation: transaction.buyingHolding.valuation,
           },
         }),
