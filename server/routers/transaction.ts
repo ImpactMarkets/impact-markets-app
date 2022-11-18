@@ -70,6 +70,7 @@ export const transactionRouter = createProtectedRouter()
       })
 
       const reservedSize = Prisma.Decimal.sum(
+        0,
         ...holding.sellTransactions.map((transaction) => transaction.size)
       )
 
