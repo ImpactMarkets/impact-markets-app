@@ -69,9 +69,8 @@ export const transactionRouter = createProtectedRouter()
         include: { sellTransactions: { where: { state: 'PENDING' } } },
       })
 
-      const reservedSize = holding.sellTransactions.reduce(
-        (aggregator, transaction) => transaction.size.plus(aggregator),
-        new Prisma.Decimal(0)
+      const reservedSize = Prisma.Decimal.sum(
+        ...holding.sellTransactions.map((transaction) => transaction.size)
       )
 
       const zero = new Prisma.Decimal(0)
