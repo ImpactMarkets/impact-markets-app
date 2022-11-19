@@ -32,7 +32,7 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
           <title>Edit {certificateQuery.data.title} – Impact Markets</title>
         </Head>
 
-        {certificateBelongsToUser ? (
+        {session!.user.role === 'ADMIN' || certificateBelongsToUser ? (
           <>
             <Heading1>Edit “{certificateQuery.data.title}”</Heading1>
 
