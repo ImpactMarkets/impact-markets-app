@@ -175,7 +175,7 @@ export const certificateRouter = createProtectedRouter()
       })
 
       const certificateBelongsToUser =
-        certificate?.author.id === ctx.session!.user.id
+        certificate?.author.id === ctx.session?.user.id
 
       if (
         !certificate ||

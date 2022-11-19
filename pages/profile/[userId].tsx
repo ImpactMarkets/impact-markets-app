@@ -92,7 +92,7 @@ function ProfileInfo({ user }: ProfileComponentProps) {
     React.useState(false)
 
   if (user) {
-    const profileBelongsToUser = user.id === session!.user.id
+    const profileBelongsToUser = user.id === session?.user.id
 
     return (
       <>
@@ -189,7 +189,7 @@ function ProfileInfo({ user }: ProfileComponentProps) {
 function TransactionFeed({ user }: ProfileComponentProps) {
   const { data: session } = useSession()
 
-  if (user?.id !== session!.user.id && session!.user.role !== 'ADMIN') {
+  if (user?.id !== session?.user.id && session?.user.role !== 'ADMIN') {
     return null
   }
 
@@ -202,10 +202,8 @@ function TransactionFeed({ user }: ProfileComponentProps) {
 }
 
 function CertificateFeed({ user: _ }: ProfileComponentProps) {
-  const { data: session } = useSession()
   const router = useRouter()
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
-  const utils = trpc.useContext()
   const profileFeedQueryPathAndInput: InferQueryPathAndInput<'certificate.feed'> =
     [
       'certificate.feed',

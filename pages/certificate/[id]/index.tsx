@@ -96,7 +96,7 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
     }
     const isUserAdmin = session?.user.role === 'ADMIN'
     const certificateBelongsToUser =
-      certificateQuery.data.author.id === session!.user.id
+      certificateQuery.data.author.id === session?.user.id
 
     return (
       <>
@@ -178,19 +178,21 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
                 ))}
               </ul>
             )}
-            <div className="flex items-start gap-2 sm:gap-4">
-              <span className="hidden sm:inline-block">
-                <Avatar name={session!.user.name} src={session!.user.image} />
-              </span>
-              <span className="inline-block sm:hidden">
-                <Avatar
-                  name={session!.user.name}
-                  src={session!.user.image}
-                  size="sm"
-                />
-              </span>
-              <AddCommentForm certificateId={certificateQuery.data.id} />
-            </div>
+            {session && (
+              <div className="flex items-start gap-2 sm:gap-4">
+                <span className="hidden sm:inline-block">
+                  <Avatar name={session!.user.name} src={session!.user.image} />
+                </span>
+                <span className="inline-block sm:hidden">
+                  <Avatar
+                    name={session!.user.name}
+                    src={session!.user.image}
+                    size="sm"
+                  />
+                </span>
+                <AddCommentForm certificateId={certificateQuery.data.id} />
+              </div>
+            )}
           </div>
         </div>
       </>

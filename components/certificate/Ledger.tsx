@@ -21,7 +21,7 @@ const Holding = ({
   userId,
 }: {
   holding: InferQueryOutput<'holding.feed'>[0]
-  userId: string
+  userId?: string
 }) => {
   const { data: session } = useSession()
   const [isBuyDialogOpen, setIsBuyDialogOpen] = React.useState(false)
@@ -43,7 +43,8 @@ const Holding = ({
       </td>
       <td className="text-right px-2">
         <div className="flex gap-1">
-          {(session?.user.role === 'ADMIN' || holding.user.id === userId) && (
+          {((session && session?.user.role === 'ADMIN') ||
+            holding.user.id === userId) && (
             <>
               <ButtonLink
                 href="#"
@@ -64,7 +65,7 @@ const Holding = ({
               />
             </>
           )}
-          {holding.user.id !== userId && (
+          {session && holding.user.id !== userId && (
             <>
               <ButtonLink
                 href="#"
