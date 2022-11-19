@@ -13,6 +13,10 @@ export const authOptions: NextAuthOptions = {
   debug: serverEnv.DEBUG,
   adapter: PrismaAdapter(prisma),
   secret: serverEnv.NEXTAUTH_SECRET,
+  theme: {
+    colorScheme: 'light',
+    logo: '/images/logo-light.svg',
+  },
   providers: [
     GoogleProvider({
       clientId: serverEnv.GOOGLE_CLIENT_ID,

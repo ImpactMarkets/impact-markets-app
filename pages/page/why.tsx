@@ -18,8 +18,6 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
   )
 }
 
-WhyImpactMarkets.auth = true
-
 WhyImpactMarkets.getLayout = function getLayout(page: React.ReactElement) {
   return <Layout>{page}</Layout>
 }

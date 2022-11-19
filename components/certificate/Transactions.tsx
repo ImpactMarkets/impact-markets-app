@@ -44,7 +44,7 @@ const Transaction = ({
         </div>
       </td>
       {showCertificates && (
-        <td className="text-left max-w-xs overflow-ellipsis">
+        <td className="text-left max-w-xs pl-5 overflow-ellipsis">
           <Link
             href={`/certificate/${transaction.sellingHolding.certificate.id}`}
           >
@@ -140,7 +140,9 @@ export const Transactions = ({
         <thead>
           <tr>
             <th className="text-left whitespace-nowrap">Buyer</th>
-            {showCertificates && <th className="text-left">Certificate</th>}
+            {showCertificates && (
+              <th className="text-left pl-5">Certificate</th>
+            )}
             <th className="text-right pl-5">Shares</th>
             <th className="text-right pl-5">Cost</th>
           </tr>

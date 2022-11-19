@@ -60,6 +60,13 @@ export const certificateRouter = createProtectedRouter()
               },
             },
           },
+          holdings: {
+            select: {
+              id: true,
+              type: true,
+              size: true,
+            },
+          },
           likedBy: {
             orderBy: {
               createdAt: 'asc',
@@ -175,7 +182,7 @@ export const certificateRouter = createProtectedRouter()
       })
 
       const certificateBelongsToUser =
-        certificate?.author.id === ctx.session!.user.id
+        certificate?.author.id === ctx.session?.user.id
 
       if (
         !certificate ||

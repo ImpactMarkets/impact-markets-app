@@ -101,9 +101,9 @@ export const permissionMiddleware: MiddlewareFunction = async ({
   // Permissions
 
   const permissions = {
-    'certificate.feed': isAuthenticated,
-    'certificate.detail': isAuthenticated,
-    'certificate.search': isAuthenticated,
+    'certificate.feed': () => true,
+    'certificate.detail': () => true,
+    'certificate.search': () => true,
     'certificate.add': isAuthenticated,
     'certificate.edit': () =>
       isAuthenticated() && (isAdmin() || certificateBelongsToUser()),
@@ -116,7 +116,7 @@ export const permissionMiddleware: MiddlewareFunction = async ({
       isAuthenticated() && (isAdmin() || commentBelongsToUser()),
     'comment.delete': () =>
       isAuthenticated() && (isAdmin() || commentBelongsToUser()),
-    'holding.feed': isAuthenticated,
+    'holding.feed': () => true,
     'holding.edit': () =>
       isAuthenticated() && (isAdmin() || holdingBelongsToUser()),
     'transaction.feed': isAuthenticated,
@@ -128,7 +128,7 @@ export const permissionMiddleware: MiddlewareFunction = async ({
       (isAdmin() ||
         buyingHoldingBelongsToUser() ||
         sellingHoldingBelongsToUser()),
-    'user.profile': isAuthenticated,
+    'user.profile': () => true,
     'user.edit': isAuthenticated, // Always edits the same user
     'user.update-avatar': isAuthenticated, // Always edits the same user
     'user.mentionList': isAuthenticated,
