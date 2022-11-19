@@ -213,69 +213,6 @@ function CertificateFeed({ user: _ }: ProfileComponentProps) {
       },
     ]
   const profileFeedQuery = trpc.useQuery(profileFeedQueryPathAndInput)
-  const likeMutation = trpc.useMutation(['certificate.like'], {
-    onMutate: async (likedCertificateId) => {
-      await utils.cancelQuery(profileFeedQueryPathAndInput)
-
-      const previousQuery = utils.getQueryData(profileFeedQueryPathAndInput)
-
-      if (previousQuery) {
-        utils.setQueryData(profileFeedQueryPathAndInput, {
-          ...previousQuery,
-          certificates: previousQuery.certificates.map((certificate) =>
-            certificate.id === likedCertificateId
-              ? {
-                  ...certificate,
-                  likedBy: [
-                    ...certificate.likedBy,
-                    {
-                      user: { id: session!.user.id, name: session!.user.name },
-                    },
-                  ],
-                }
-              : certificate
-          ),
-        })
-      }
-
-      return { previousQuery }
-    },
-    onError: (err, id, context: any) => {
-      if (context?.previousQuery) {
-        utils.setQueryData(profileFeedQueryPathAndInput, context.previousQuery)
-      }
-    },
-  })
-  const unlikeMutation = trpc.useMutation(['certificate.unlike'], {
-    onMutate: async (unlikedCertificateId) => {
-      await utils.cancelQuery(profileFeedQueryPathAndInput)
-
-      const previousQuery = utils.getQueryData(profileFeedQueryPathAndInput)
-
-      if (previousQuery) {
-        utils.setQueryData(profileFeedQueryPathAndInput, {
-          ...previousQuery,
-          certificates: previousQuery.certificates.map((certificate) =>
-            certificate.id === unlikedCertificateId
-              ? {
-                  ...certificate,
-                  likedBy: certificate.likedBy.filter(
-                    (item) => item.user.id !== session!.user.id
-                  ),
-                }
-              : certificate
-          ),
-        })
-      }
-
-      return { previousQuery }
-    },
-    onError: (err, id, context: any) => {
-      if (context?.previousQuery) {
-        utils.setQueryData(profileFeedQueryPathAndInput, context.previousQuery)
-      }
-    },
-  })
 
   if (profileFeedQuery.data) {
     return (
@@ -289,15 +226,7 @@ function CertificateFeed({ user: _ }: ProfileComponentProps) {
             <ul className="-my-12 divide-y divide-primary">
               {profileFeedQuery.data.certificates.map((certificate) => (
                 <li key={certificate.id} className="py-10">
-                  <CertificateSummary
-                    certificate={certificate}
-                    onLike={() => {
-                      likeMutation.mutate(certificate.id)
-                    }}
-                    onUnlike={() => {
-                      unlikeMutation.mutate(certificate.id)
-                    }}
-                  />
+                  <CertificateSummary certificate={certificate} />
                 </li>
               ))}
             </ul>

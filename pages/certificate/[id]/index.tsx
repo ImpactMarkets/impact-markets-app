@@ -6,7 +6,6 @@ import * as React from 'react'
 import { AuthorWithDate } from '@/components/author-with-date'
 import { Avatar } from '@/components/avatar'
 import { Banner } from '@/components/banner'
-import { ButtonLink } from '@/components/button-link'
 import { AddCommentForm } from '@/components/certificate/AddCommentForm'
 import { CertificateMenu } from '@/components/certificate/CertificateMenu'
 import { Comment } from '@/components/certificate/Comment'
@@ -14,6 +13,7 @@ import { Labels } from '@/components/certificate/Labels'
 import { Ledger } from '@/components/certificate/Ledger'
 import { Tags } from '@/components/certificate/Tags'
 import { getCertificateQueryPathAndInput } from '@/components/certificate/utils'
+import { CommentButton } from '@/components/comment-button'
 import { Heading1 } from '@/components/heading-1'
 import { HtmlView } from '@/components/html-view'
 import { Layout } from '@/components/layout'
@@ -140,6 +140,7 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
             </div>
             <div className="flex gap-4 mt-6">
               <LikeButton
+                disabled={!session}
                 likedBy={certificateQuery.data.likedBy}
                 onLike={() => {
                   likeMutation.mutate(certificateQuery.data.id)
@@ -148,15 +149,12 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
                   unlikeMutation.mutate(certificateQuery.data.id)
                 }}
               />
-              <ButtonLink
+              <CommentButton
+                commentCount={certificateQuery.data._count.comments}
                 href={`/certificate/${certificateQuery.data.id}#comments`}
                 variant="secondary"
-              >
-                <MessageIcon className="w-4 h-4 text-secondary" />
-                <span className="ml-1.5">
-                  {certificateQuery.data._count.comments}
-                </span>
-              </ButtonLink>
+                disabled={!session}
+              />
             </div>
           </div>
 

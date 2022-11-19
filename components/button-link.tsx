@@ -3,7 +3,7 @@ import * as React from 'react'
 
 import { ButtonVariant, buttonClasses } from '@/components/button'
 
-type ButtonLinkProps = {
+export type ButtonLinkProps = {
   variant?: ButtonVariant
   responsive?: boolean
 } & Omit<React.ComponentPropsWithoutRef<'a'>, 'href'> &
