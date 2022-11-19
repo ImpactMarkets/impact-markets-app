@@ -28,8 +28,6 @@ const HelpAndSupportPage: NextPageWithAuthAndLayout = () => {
   )
 }
 
-HelpAndSupportPage.auth = true
-
 HelpAndSupportPage.getLayout = function getLayout(page: React.ReactElement) {
   return <Layout>{page}</Layout>
 }

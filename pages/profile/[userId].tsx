@@ -79,8 +79,6 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
   return null
 }
 
-ProfilePage.auth = true
-
 ProfilePage.getLayout = function getLayout(page: React.ReactElement) {
   return <Layout>{page}</Layout>
 }

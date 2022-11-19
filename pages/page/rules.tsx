@@ -18,8 +18,6 @@ const RulesAndTerms: NextPageWithAuthAndLayout = () => {
   )
 }
 
-RulesAndTerms.auth = true
-
 RulesAndTerms.getLayout = function getLayout(page: React.ReactElement) {
   return <Layout>{page}</Layout>
 }

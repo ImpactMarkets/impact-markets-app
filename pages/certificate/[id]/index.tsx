@@ -235,8 +235,6 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
   )
 }
 
-CertificatePage.auth = true
-
 CertificatePage.getLayout = function getLayout(page: React.ReactElement) {
   return <Layout>{page}</Layout>
 }
