@@ -60,6 +60,13 @@ export const certificateRouter = createProtectedRouter()
               },
             },
           },
+          holdings: {
+            select: {
+              id: true,
+              type: true,
+              size: true,
+            },
+          },
           likedBy: {
             orderBy: {
               createdAt: 'asc',

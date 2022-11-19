@@ -15,9 +15,7 @@ import { Ledger } from '@/components/certificate/Ledger'
 import { Tags } from '@/components/certificate/Tags'
 import { getCertificateQueryPathAndInput } from '@/components/certificate/utils'
 import { Heading1 } from '@/components/heading-1'
-import { HoldingsChart } from '@/components/holdings-chart'
 import { HtmlView } from '@/components/html-view'
-import { MessageIcon } from '@/components/icons'
 import { Layout } from '@/components/layout'
 import { LikeButton } from '@/components/like-button'
 import { trpc } from '@/lib/trpc'
@@ -129,9 +127,6 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
             </div>
             <div className="my-6">
               <Tags queryData={certificateQuery.data} />
-            </div>
-            <div className="flex items-center gap-12 mt-6">
-              <HoldingsChart certificate={certificateQuery.data} />
             </div>
             <div className="my-6">
               <Ledger certificateId={String(router.query.id)} />

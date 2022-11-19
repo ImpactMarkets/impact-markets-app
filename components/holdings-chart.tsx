@@ -1,23 +1,15 @@
 import { num } from '@/lib/text'
-import { InferQueryOutput, trpc } from '@/lib/trpc'
+import { InferQueryOutput } from '@/lib/trpc'
 import { Progress } from '@mantine/core'
 import { Prisma } from '@prisma/client'
 
 interface HoldingsChartProps {
-  certificate:
-    | InferQueryOutput<'certificate.detail'>
-    | InferQueryOutput<'certificate.feed'>['certificates'][number]
+  holdings:
+    | InferQueryOutput<'holding.feed'>
+    | InferQueryOutput<'certificate.feed'>['certificates'][number]['holdings']
 }
 
-export function HoldingsChart({ certificate }: HoldingsChartProps) {
-  const holdingsQuery = trpc.useQuery([
-    'holding.feed',
-    {
-      certificateId: certificate.id,
-    },
-  ])
-  const holdings = holdingsQuery.data || []
-
+export function HoldingsChart({ holdings }: HoldingsChartProps) {
   const totalSize = (type: 'OWNERSHIP' | 'RESERVATION' | 'CONSUMPTION') =>
     holdings
       .filter((holding) => holding.type === type)
