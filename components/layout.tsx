@@ -1,4 +1,4 @@
-import { signOut, useSession } from 'next-auth/react'
+import { signIn, signOut, useSession } from 'next-auth/react'
 import * as React from 'react'
 
 import { Avatar } from '@/components/avatar'
@@ -16,6 +16,7 @@ import {
 } from '@/components/menu'
 import { SearchDialog } from '@/components/search-dialog'
 
+import { Button } from './button'
 import { NavbarSimple } from './navbar'
 
 type LayoutProps = {
@@ -25,9 +26,6 @@ type LayoutProps = {
 export function Layout({ children }: LayoutProps) {
   const { data: session } = useSession()
   const [isSearchDialogOpen, setIsSearchDialogOpen] = React.useState(false)
-  {
-    /* const { theme, themes, setTheme } = useTheme() */
-  }
 
   return (
     <div className="flex relative max-w-7xl m-auto">
@@ -44,53 +42,46 @@ export function Layout({ children }: LayoutProps) {
               <SearchIcon className="w-4 h-4" />
             </IconButton>
 
-            <Menu>
-              <MenuButton className="relative inline-flex rounded-full group focus-ring">
-                <Avatar
-                  name={session!.user.name}
-                  src={session!.user.image}
-                  size="sm"
-                />
-              </MenuButton>
+            {session ? (
+              <>
+                <Menu>
+                  <MenuButton className="relative inline-flex rounded-full group focus-ring">
+                    <Avatar
+                      name={session!.user.name}
+                      src={session!.user.image}
+                      size="sm"
+                    />
+                  </MenuButton>
 
-              <MenuItems className="w-48">
-                <MenuItemsContent>
-                  <MenuItemLink href={`/profile/${session!.user.id}`}>
-                    Profile
-                  </MenuItemLink>
-                  <MenuItemButton onClick={() => signOut()}>
-                    Log out
-                  </MenuItemButton>
-                </MenuItemsContent>
-                {/*
-                  <div className="flex items-center gap-4 px-4 py-3 rounded-b bg-secondary">
-                    <Label htmlFor="theme" className="text-sm">
-                      Theme
-                    </Label>
-                    <select
-                      id="theme"
-                      name="theme"
-                      value={theme}
-                      onChange={(event) => {
-                        setTheme(event.target.value)
-                      }}
-                      className="block w-full py-1.5 text-xs border rounded shadow-sm bg-primary border-secondary"
-                    >
-                      {themes.map((theme) => (
-                        <option key={theme} value={theme}>
-                          {capitalize(theme)}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                */}
-              </MenuItems>
-            </Menu>
+                  <MenuItems className="w-48">
+                    <MenuItemsContent>
+                      <MenuItemLink href={`/profile/${session!.user.id}`}>
+                        Profile
+                      </MenuItemLink>
+                      <MenuItemButton onClick={() => signOut()}>
+                        Log out
+                      </MenuItemButton>
+                    </MenuItemsContent>
+                  </MenuItems>
+                </Menu>
 
-            <ButtonLink href="/new" variant="highlight">
-              <span className="sm:hidden">New</span>
-              <span className="hidden sm:block shrink-0">New project</span>
-            </ButtonLink>
+                <ButtonLink href="/new" variant="highlight">
+                  <span className="sm:hidden">New</span>
+                  <span className="hidden sm:block shrink-0">New project</span>
+                </ButtonLink>
+              </>
+            ) : (
+              <Menu>
+                <div className="inline-flex gap-1">
+                  <Button onClick={() => signIn()} variant="secondary">
+                    Log in
+                  </Button>
+                  <Button onClick={() => signIn()} variant="highlight">
+                    Sign up
+                  </Button>
+                </div>
+              </Menu>
+            )}
           </div>
         </header>
 
