@@ -84,9 +84,9 @@ export const transactionRouter = createProtectedRouter()
         .costOfSize(holding.valuation, size, reservedSize)
         .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP)
       const valuation = bondingCurve
-        .valuationAt(
+        .valuationAtFraction(
           bondingCurve
-            .fractionAt(holding.valuation)
+            .fractionAtValuation(holding.valuation)
             .plus(reservedSize)
             .plus(size)
         )
