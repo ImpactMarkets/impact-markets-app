@@ -175,6 +175,7 @@ export const certificateRouter = createProtectedRouter()
                   id: true,
                   name: true,
                   image: true,
+                  email: true,
                 },
               },
             },
@@ -272,6 +273,7 @@ export const certificateRouter = createProtectedRouter()
       actionStart: z.date(),
       actionEnd: z.date(),
       tags: z.string(),
+      issuerEmails: z.string(),
       valuation: z.instanceof(Prisma.Decimal),
       target: z.instanceof(Prisma.Decimal),
     }),
@@ -308,6 +310,18 @@ export const certificateRouter = createProtectedRouter()
           target: input.target,
         },
       })
+      const issuerEmails = input.issuerEmails
+        .split(',')
+        .concat([ctx.session!.user.email])
+      const issuers = await ctx.prisma.user.findMany({
+        where: { email: { in: issuerEmails } },
+      })
+      await ctx.prisma.certificateIssuer.createMany({
+        data: issuers.map((issuer) => {
+          return { certificateId: certificate.id, userId: issuer.id }
+        }),
+        skipDuplicates: true,
+      })
 
       await postToSlackIfEnabled({
         certificate,
@@ -330,6 +344,7 @@ export const certificateRouter = createProtectedRouter()
         rights: z.string(),
         actionStart: z.date(),
         actionEnd: z.date(),
+        issuerEmails: z.string(),
         tags: z.string(),
       }),
     }),
@@ -351,6 +366,25 @@ export const certificateRouter = createProtectedRouter()
           tags: data.tags,
         },
       })
+
+      const issuerEmails = input.data.issuerEmails
+        .split(',')
+        .concat([ctx.session!.user.email])
+      // Delete all existing certificateIssuer associations for this certificate, and create new ones based on the input.
+      const issuers = await ctx.prisma.user.findMany({
+        where: { email: { in: issuerEmails } },
+      })
+      ctx.prisma.$transaction([
+        ctx.prisma.certificateIssuer.deleteMany({
+          where: { certificateId: updatedCertificate.id },
+        }),
+        ctx.prisma.certificateIssuer.createMany({
+          data: issuers.map((issuer) => {
+            return { certificateId: updatedCertificate.id, userId: issuer.id }
+          }),
+          skipDuplicates: true,
+        }),
+      ])
 
       return updatedCertificate
     },
