@@ -73,10 +73,7 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
                         rights: values.rights,
                         actionStart: new Date(values.actionStart),
                         actionEnd: new Date(values.actionEnd),
-                        issuerEmails: (values.issuerEmails || '').replace(
-                          /\s+/g,
-                          ''
-                        ),
+                        issuerEmails: values.issuerEmails || '',
                         tags: values.tags,
                       },
                     },
