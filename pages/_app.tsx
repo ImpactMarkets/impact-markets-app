@@ -1,6 +1,7 @@
 import { SessionProvider, signIn, useSession } from 'next-auth/react'
 import { ThemeProvider } from 'next-themes'
 import type { AppProps } from 'next/app'
+import { useRouter } from 'next/router'
 import * as React from 'react'
 import { Toaster } from 'react-hot-toast'
 import { IntercomProvider } from 'react-use-intercom'
@@ -9,7 +10,8 @@ import { browserEnv } from '@/env/browser'
 import { transformer } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { AppRouter } from '@/server/routers/_app'
-import { MantineProvider } from '@mantine/core'
+import { LoadingOverlay, MantineProvider } from '@mantine/core'
+import { Provider as RollbarProvider } from '@rollbar/react'
 import { httpBatchLink } from '@trpc/client/links/httpBatchLink'
 import { loggerLink } from '@trpc/client/links/loggerLink'
 import { withTRPC } from '@trpc/next'
@@ -25,34 +27,55 @@ function MyApp({
   Component,
   pageProps: { session, ...pageProps },
 }: AppPropsWithAuthAndLayout) {
+  const router = useRouter()
   const getLayout = Component.getLayout ?? ((page) => page)
+  const rollbarConfig = {
+    accessToken: browserEnv.NEXT_PUBLIC_ROLLBAR_CLIENT_TOKEN,
+    captureUncaught: true,
+    captureUnhandledRejections: true,
+    payload: {
+      client: {
+        javascript: {
+          source_map_enabled: true,
+        },
+      },
+      environment: process.env.NODE_ENV,
+    },
+  }
+
+  // https://github.com/vercel/next.js/discussions/11484#discussioncomment-356055
+  if (!router.isReady) {
+    return <LoadingOverlay visible />
+  }
 
   return (
-    <IntercomProvider appId={browserEnv.NEXT_PUBLIC_INTERCOM_APP_ID} autoBoot>
-      <MantineProvider withGlobalStyles withNormalizeCSS>
-        <SessionProvider session={session} refetchOnWindowFocus={false}>
-          <ThemeProvider
-            forcedTheme="light"
-            attribute="class"
-            disableTransitionOnChange
-          >
-            {Component.auth ? (
-              <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
-            ) : (
-              getLayout(<Component {...pageProps} />)
-            )}
-            <Toaster
-              toastOptions={{
-                className: 'text-xs',
-                style: {
-                  maxWidth: '100%',
-                },
-              }}
-            />
-          </ThemeProvider>
-        </SessionProvider>
-      </MantineProvider>
-    </IntercomProvider>
+    <RollbarProvider config={rollbarConfig}>
+      <IntercomProvider appId={browserEnv.NEXT_PUBLIC_INTERCOM_APP_ID} autoBoot>
+        <MantineProvider withGlobalStyles withNormalizeCSS>
+          <SessionProvider session={session} refetchOnWindowFocus={false}>
+            <ThemeProvider
+              forcedTheme="light"
+              attribute="class"
+              disableTransitionOnChange
+            >
+              {Component.auth ? (
+                <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
+              ) : (
+                getLayout(<Component {...pageProps} />)
+              )}
+              <Toaster
+                toastOptions={{
+                  className: 'text-xs',
+                  style: {
+                    maxWidth: '100%',
+                  },
+                }}
+              />
+            </ThemeProvider>
+          </SessionProvider>
+        </MantineProvider>
+      </IntercomProvider>
+    </RollbarProvider>
   )
 }
 

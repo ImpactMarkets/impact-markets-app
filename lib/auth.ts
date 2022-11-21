@@ -1,116 +1,72 @@
-import type { NextAuthOptions } from 'next-auth'
-import GithubProvider from 'next-auth/providers/github'
+import type { DefaultSession, NextAuthOptions, Session } from 'next-auth'
+import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
-import OktaProvider from 'next-auth/providers/okta'
 
 import { serverEnv } from '@/env/server'
 import { prisma } from '@/lib/prisma'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { Role } from '@prisma/client'
 
+// Helpful example: https://github.com/mikemajara/nextjs-prisma-next-auth-credentials/blob/main/pages/api/auth/%5B...nextauth%5D.ts
+
 export const authOptions: NextAuthOptions = {
+  debug: serverEnv.DEBUG,
   adapter: PrismaAdapter(prisma),
+  secret: serverEnv.NEXTAUTH_SECRET,
+  theme: {
+    colorScheme: 'light',
+    logo: '/images/logo-light.svg',
+  },
   providers: [
-    ...(serverEnv.AUTH_PROVIDER === 'github'
-      ? [
-          GithubProvider({
-            clientId: serverEnv.GITHUB_ID,
-            clientSecret: serverEnv.GITHUB_SECRET,
-            authorization:
-              'https://github.com/login/oauth/authorize?scope=read:user+user:email+read:org',
-            userinfo: {
-              url: 'https://api.github.com/user',
-              async request({ client, tokens }) {
-                // Get base profile
-                // FIXME: Why are different types clashing here ? Version conflict ?
-                const profile = await client.userinfo(tokens as any)
-
-                // If user has email hidden, get their primary email from the GitHub API
-                if (!profile.email) {
-                  const emails = await (
-                    await fetch('https://api.github.com/user/emails', {
-                      headers: {
-                        Authorization: `token ${tokens.access_token}`,
-                      },
-                    })
-                  ).json()
-
-                  if (emails?.length > 0) {
-                    // Get primary email
-                    profile.email = emails.find(
-                      (email: any) => email.primary
-                    )?.email
-                    // And if for some reason it doesn't exist, just use the first
-                    if (!profile.email) profile.email = emails[0].email
-                  }
-                }
-
-                const userOrgs = await (
-                  await fetch('https://api.github.com/user/orgs', {
-                    headers: { Authorization: `token ${tokens.access_token}` },
-                  })
-                ).json()
-
-                // Set flag to deny signIn if allowed org is not found in the user organizations
-                if (
-                  !userOrgs.find(
-                    (org: any) => org.login === serverEnv.GITHUB_ALLOWED_ORG
-                  )
-                ) {
-                  profile.notAllowed = true
-                }
-
-                return profile
-              },
-            },
-          }),
-        ]
-      : []),
-    ...(serverEnv.AUTH_PROVIDER === 'okta'
-      ? [
-          OktaProvider({
-            clientId: serverEnv.OKTA_CLIENT_ID!,
-            clientSecret: serverEnv.OKTA_CLIENT_SECRET!,
-            issuer: serverEnv.OKTA_ISSUER!,
-          }),
-        ]
-      : []),
-    ...(serverEnv.AUTH_PROVIDER === 'google'
-      ? [
-          GoogleProvider({
-            clientId: serverEnv.GOOGLE_CLIENT_ID,
-            clientSecret: serverEnv.GOOGLE_CLIENT_SECRET,
-          }),
-        ]
-      : []),
+    GoogleProvider({
+      clientId: serverEnv.GOOGLE_CLIENT_ID,
+      clientSecret: serverEnv.GOOGLE_CLIENT_SECRET,
+    }),
   ],
   callbacks: {
-    async signIn({ profile }) {
-      if (profile.notAllowed) {
-        return false
-      }
-
-      return true
-    },
-    async session({ session, user }) {
+    // TODO: Use signIn to handle blocking of users
+    session: async ({ session, token, user }) => {
       return {
         ...session,
         user: {
           ...session.user,
-          id: user.id,
-          role: user.role,
+          id: (user || token).id,
+          role: (user || token).role,
+          image: (user || token).image,
+          email: (user || token).email,
         },
-      }
+      } as Session
     },
   },
-  pages: {
-    signIn: '/sign-in',
-  },
-  secret: serverEnv.NEXTAUTH_SECRET,
+}
+
+if (serverEnv.MOCK_LOGIN) {
+  // TODO: I couldn’t get the DB-based mock login to work, so I’m using this
+  authOptions.session = { strategy: 'jwt' }
+  authOptions.providers.push(
+    CredentialsProvider({
+      name: 'Mock Login',
+      credentials: {},
+      authorize: async () => ({}),
+    })
+  )
+  authOptions.callbacks!.jwt = async ({ token }) => {
+    const email = 'mock.user@example.com'
+    const name = 'Mock User'
+    const image = 'http://localhost:3000/images/logo-min-light.png'
+    const role = Role.USER
+    const user = await prisma.user.upsert({
+      select: { id: true, name: true, role: true, image: true, email: true },
+      where: { email },
+      create: { email, name, image, role },
+      update: { email, name, image, role },
+    })
+    return { ...token, ...user }
+  }
 }
 
 declare module 'next-auth' {
-  interface Session {
+  interface Session extends DefaultSession {
     user: {
       id: string
       name: string
@@ -118,6 +74,7 @@ declare module 'next-auth' {
       image?: string | null
       role: Role
     }
+    expires: string
   }
 
   interface User {

@@ -44,7 +44,7 @@ const Transaction = ({
         </div>
       </td>
       {showCertificates && (
-        <td className="text-left max-w-xs overflow-ellipsis">
+        <td className="text-left max-w-xs pl-5 overflow-ellipsis">
           <Link
             href={`/certificate/${transaction.sellingHolding.certificate.id}`}
           >
@@ -60,51 +60,53 @@ const Transaction = ({
       </td>
       <td className="text-right pl-5">${num(transaction.cost, 2)}</td>
       <td className="text-right px-2">
-        {(session?.user.role === 'ADMIN' ||
-          transaction.buyingHolding.user.id === userId) && (
-          <div>
-            <ButtonLink
-              href="#"
-              onClick={() => {
-                setIsCancelDialogOpen(true)
-              }}
-              variant="secondary"
-              className="h-6"
-            >
-              <span className="block shrink-0">Cancel</span>
-            </ButtonLink>
-            <CancelDialog
-              transaction={transaction}
-              certificateId={certificateId}
-              isOpen={isCancelDialogOpen}
-              onClose={() => {
-                setIsCancelDialogOpen(false)
-              }}
-            />
-          </div>
-        )}
-        {(session?.user.role === 'ADMIN' ||
-          transaction.sellingHolding.user.id === userId) && (
-          <div>
-            <ButtonLink
-              href="#"
-              onClick={() => {
-                setIsConfirmDialogOpen(true)
-              }}
-              className="h-6"
-            >
-              <span className="block shrink-0">Confirm</span>
-            </ButtonLink>
-            <ConfirmDialog
-              transaction={transaction}
-              certificateId={certificateId}
-              isOpen={isConfirmDialogOpen}
-              onClose={() => {
-                setIsConfirmDialogOpen(false)
-              }}
-            />
-          </div>
-        )}
+        <div className="flex gap-1">
+          {(session?.user.role === 'ADMIN' ||
+            transaction.buyingHolding.user.id === userId) && (
+            <div>
+              <ButtonLink
+                href="#"
+                onClick={() => {
+                  setIsCancelDialogOpen(true)
+                }}
+                variant="secondary"
+                className="h-6"
+              >
+                <span className="block shrink-0">Cancel</span>
+              </ButtonLink>
+              <CancelDialog
+                transaction={transaction}
+                certificateId={certificateId}
+                isOpen={isCancelDialogOpen}
+                onClose={() => {
+                  setIsCancelDialogOpen(false)
+                }}
+              />
+            </div>
+          )}
+          {(session?.user.role === 'ADMIN' ||
+            transaction.sellingHolding.user.id === userId) && (
+            <div>
+              <ButtonLink
+                href="#"
+                onClick={() => {
+                  setIsConfirmDialogOpen(true)
+                }}
+                className="h-6"
+              >
+                <span className="block shrink-0">Confirm</span>
+              </ButtonLink>
+              <ConfirmDialog
+                transaction={transaction}
+                certificateId={certificateId}
+                isOpen={isConfirmDialogOpen}
+                onClose={() => {
+                  setIsConfirmDialogOpen(false)
+                }}
+              />
+            </div>
+          )}
+        </div>
       </td>
     </tr>
   )
@@ -138,7 +140,9 @@ export const Transactions = ({
         <thead>
           <tr>
             <th className="text-left whitespace-nowrap">Buyer</th>
-            {showCertificates && <th className="text-left">Certificate</th>}
+            {showCertificates && (
+              <th className="text-left pl-5">Certificate</th>
+            )}
             <th className="text-right pl-5">Shares</th>
             <th className="text-right pl-5">Cost</th>
           </tr>

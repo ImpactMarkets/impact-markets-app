@@ -152,8 +152,6 @@ const Home: NextPageWithAuthAndLayout = () => {
   )
 }
 
-Home.auth = true
-
 Home.getLayout = function getLayout(page: React.ReactElement) {
   return <Layout>{page}</Layout>
 }

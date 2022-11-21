@@ -7,7 +7,9 @@ type DateProps = {
 export function Date({ date }: DateProps) {
   return (
     <time dateTime={date.toISOString()} title={date.toISOString()}>
-      {formatDistanceToNow(date)} ago
+      <span className="text-gray-500 text-sm">
+        {formatDistanceToNow(date)} ago
+      </span>
     </time>
   )
 }

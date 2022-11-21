@@ -24,10 +24,10 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
   return (
     <>
       <Head>
-        <title>New Certificate</title>
+        <title>New Project</title>
       </Head>
 
-      <Heading1>New certificate</Heading1>
+      <Heading1>New project</Heading1>
 
       <div className="mt-6">
         <CertificateForm

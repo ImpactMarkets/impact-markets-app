@@ -15,8 +15,8 @@ import { browserEnv } from '@/env/browser'
 import { classNames } from '@/lib/classnames'
 import {
   getSuggestionData,
-  handleUploadImages,
   markdownToHtml,
+  uploadImageCommandHandler,
 } from '@/lib/editor'
 import { trpc } from '@/lib/trpc'
 import { Switch } from '@headlessui/react'
@@ -281,7 +281,7 @@ export function MarkdownEditor({
 
                   event.preventDefault()
 
-                  handleUploadImages(event.currentTarget, imageFiles)
+                  uploadImageCommandHandler(event.currentTarget, imageFiles)
                 }
               }}
               onDrop={(event) => {
@@ -302,7 +302,7 @@ export function MarkdownEditor({
 
                   event.preventDefault()
 
-                  handleUploadImages(event.currentTarget, imageFiles)
+                  uploadImageCommandHandler(event.currentTarget, imageFiles)
                 }
               }}
               className="block w-full rounded shadow-sm bg-secondary border-secondary focus-ring"

@@ -74,10 +74,8 @@ export const CertificateMenu = ({
                 ) : (
                   <MenuItemButton onClick={handleHide}>Hide</MenuItemButton>
                 ))}
-              {certificateBelongsToUser && (
-                <>
-                  <MenuItemButton onClick={handleEdit}>Edit</MenuItemButton>
-                </>
+              {(isUserAdmin || certificateBelongsToUser) && (
+                <MenuItemButton onClick={handleEdit}>Edit</MenuItemButton>
               )}
             </MenuItemsContent>
           </MenuItems>
@@ -98,7 +96,7 @@ export const CertificateMenu = ({
               <EyeClosedIcon className="w-4 h-4" />
             </IconButton>
           ))}
-        {certificateBelongsToUser && (
+        {(isUserAdmin || certificateBelongsToUser) && (
           <IconButton variant="secondary" title="Edit" onClick={handleEdit}>
             <EditIcon className="w-4 h-4" />
           </IconButton>

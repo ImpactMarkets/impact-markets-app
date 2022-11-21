@@ -6,7 +6,6 @@ import * as React from 'react'
 import { AuthorWithDate } from '@/components/author-with-date'
 import { Avatar } from '@/components/avatar'
 import { Banner } from '@/components/banner'
-import { ButtonLink } from '@/components/button-link'
 import { AddCommentForm } from '@/components/certificate/AddCommentForm'
 import { CertificateMenu } from '@/components/certificate/CertificateMenu'
 import { Comment } from '@/components/certificate/Comment'
@@ -14,9 +13,9 @@ import { Labels } from '@/components/certificate/Labels'
 import { Ledger } from '@/components/certificate/Ledger'
 import { Tags } from '@/components/certificate/Tags'
 import { getCertificateQueryPathAndInput } from '@/components/certificate/utils'
+import { CommentButton } from '@/components/comment-button'
 import { Heading1 } from '@/components/heading-1'
 import { HtmlView } from '@/components/html-view'
-import { MessageIcon } from '@/components/icons'
 import { Layout } from '@/components/layout'
 import { LikeButton } from '@/components/like-button'
 import { trpc } from '@/lib/trpc'
@@ -95,7 +94,7 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
     }
     const isUserAdmin = session?.user.role === 'ADMIN'
     const certificateBelongsToUser =
-      certificateQuery.data.author.id === session!.user.id
+      certificateQuery.data.author.id === session?.user.id
 
     return (
       <>
@@ -127,9 +126,6 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
               />
             </div>
             <div className="my-6">
-              <Labels queryData={certificateQuery.data} />
-            </div>
-            <div className="my-6">
               <Tags queryData={certificateQuery.data} />
             </div>
             <div className="my-6">
@@ -139,8 +135,12 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
               html={certificateQuery.data.contentHtml}
               className="mt-8"
             />
+            <div className="my-6">
+              <Labels queryData={certificateQuery.data} />
+            </div>
             <div className="flex gap-4 mt-6">
               <LikeButton
+                disabled={!session}
                 likedBy={certificateQuery.data.likedBy}
                 onLike={() => {
                   likeMutation.mutate(certificateQuery.data.id)
@@ -149,15 +149,12 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
                   unlikeMutation.mutate(certificateQuery.data.id)
                 }}
               />
-              <ButtonLink
+              <CommentButton
+                commentCount={certificateQuery.data._count.comments}
                 href={`/certificate/${certificateQuery.data.id}#comments`}
                 variant="secondary"
-              >
-                <MessageIcon className="w-4 h-4 text-secondary" />
-                <span className="ml-1.5">
-                  {certificateQuery.data._count.comments}
-                </span>
-              </ButtonLink>
+                disabled={!session}
+              />
             </div>
           </div>
 
@@ -174,19 +171,21 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
                 ))}
               </ul>
             )}
-            <div className="flex items-start gap-2 sm:gap-4">
-              <span className="hidden sm:inline-block">
-                <Avatar name={session!.user.name} src={session!.user.image} />
-              </span>
-              <span className="inline-block sm:hidden">
-                <Avatar
-                  name={session!.user.name}
-                  src={session!.user.image}
-                  size="sm"
-                />
-              </span>
-              <AddCommentForm certificateId={certificateQuery.data.id} />
-            </div>
+            {session && (
+              <div className="flex items-start gap-2 sm:gap-4">
+                <span className="hidden sm:inline-block">
+                  <Avatar name={session!.user.name} src={session!.user.image} />
+                </span>
+                <span className="inline-block sm:hidden">
+                  <Avatar
+                    name={session!.user.name}
+                    src={session!.user.image}
+                    size="sm"
+                  />
+                </span>
+                <AddCommentForm certificateId={certificateQuery.data.id} />
+              </div>
+            )}
           </div>
         </div>
       </>
@@ -230,8 +229,6 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
     </div>
   )
 }
-
-CertificatePage.auth = true
 
 CertificatePage.getLayout = function getLayout(page: React.ReactElement) {
   return <Layout>{page}</Layout>

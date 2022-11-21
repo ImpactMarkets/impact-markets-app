@@ -16,7 +16,7 @@ import { BondingCurve } from '@/lib/auction'
 import { SHARE_COUNT } from '@/lib/constants'
 import { num } from '@/lib/text'
 import { trpc } from '@/lib/trpc'
-import { Accordion } from '@mantine/core'
+import { Accordion, Tabs } from '@mantine/core'
 import { Prisma } from '@prisma/client'
 
 import { Banner } from '../banner'
@@ -48,11 +48,12 @@ export function BuyDialog({
   isOpen: boolean
   onClose: () => void
 }) {
-  const { register, handleSubmit, reset, watch } = useForm<BuyFormData>({
-    defaultValues: {
-      consume: false,
-    },
-  })
+  const { register, handleSubmit, reset, setValue, watch } =
+    useForm<BuyFormData>({
+      defaultValues: {
+        consume: false,
+      },
+    })
   const utils = trpc.useContext()
   const { data: session } = useSession()
   const transactionMutation = trpc.useMutation('transaction.add', {
@@ -90,26 +91,44 @@ export function BuyDialog({
   }
 
   const watchSize = watch('size')
+  const watchCost = watch('cost')
   const zero = new Prisma.Decimal(0)
 
   const bondingCurve = new BondingCurve(holding.target)
 
-  const startingValuation = bondingCurve.valuationAt(
-    bondingCurve.fractionAt(holding.valuation).plus(reservedSize)
-  )
-  const newValuation = bondingCurve.valuationAt(
+  const costOfSize = (size: Prisma.Decimal) =>
     bondingCurve
-      .fractionAt(holding.valuation)
+      .costOfSize(
+        holding.valuation,
+        new Prisma.Decimal(size || zero),
+        reservedSize
+      )
+      .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP)
+  const sharesOfCost = (cost: Prisma.Decimal) =>
+    bondingCurve
+      .sizeOfCost(
+        holding.valuation,
+        new Prisma.Decimal(cost || zero),
+        reservedSize
+      )
+      .times(SHARE_COUNT)
+      .toDecimalPlaces(0, Prisma.Decimal.ROUND_DOWN)
+
+  const startingValuation = bondingCurve.valuationAtFraction(
+    bondingCurve.fractionAtValuation(holding.valuation).plus(reservedSize)
+  )
+  const newValuation = bondingCurve.valuationAtFraction(
+    bondingCurve
+      .fractionAtValuation(holding.valuation)
       .plus(reservedSize)
       .plus(new Prisma.Decimal(watchSize || zero))
   )
-  const cost = bondingCurve
-    .costOfSize(
-      holding.valuation,
-      new Prisma.Decimal(watchSize || zero),
-      reservedSize
-    )
-    .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP)
+  const maxCost = bondingCurve.costBetweenFractions(
+    bondingCurve.fractionAtValuation(holding.valuation).plus(reservedSize),
+    holding.size
+  )
+  const cost = costOfSize(watchSize)
+  const shares = sharesOfCost(watchCost)
 
   return (
     <Dialog isOpen={isOpen} onClose={handleClose}>
@@ -121,33 +140,89 @@ export function BuyDialog({
               Please contact the current owner {holding.user.name || ''} to
               agree on a payment method.
             </p>
-            {/* Not using NumberInput because onChange is called with only the value,
+            <Tabs defaultValue="shares">
+              <Tabs.List>
+                <Tabs.Tab value="shares">Enter shares</Tabs.Tab>
+                <Tabs.Tab value="cost">Enter USD</Tabs.Tab>
+              </Tabs.List>
+
+              <Tabs.Panel value="shares" pt="xs">
+                {/* Not using NumberInput because onChange is called with only the value,
                 not the field element */}
-            <TextField
-              {...register('size', {
-                required: true,
-                shouldUnregister: true,
-                setValueAs: (value) => value / SHARE_COUNT,
-              })}
-              label="Size"
-              description={
-                <span>
-                  Shares in the certificate (max.{' '}
-                  {num(holding.size.minus(reservedSize).times(SHARE_COUNT))})
-                </span>
-              }
-              rightSection="shares"
-              classNames={{ rightSection: 'w-20' }}
-              type="number"
-              step="1"
-              min="1"
-              max={holding.size
-                .minus(reservedSize)
-                .times(SHARE_COUNT)
-                .toNumber()}
-              required
-            />
-            <table className="text-sm mx-auto">
+                <div className="mt-3">
+                  <TextField
+                    {...register('size', {
+                      shouldUnregister: true,
+                      setValueAs: (value) => value / SHARE_COUNT,
+                      onChange: (event) =>
+                        setValue(
+                          'cost',
+                          costOfSize(
+                            new Prisma.Decimal(
+                              event.target.valueAsNumber / SHARE_COUNT
+                            )
+                          )
+                        ),
+                    })}
+                    label="Size"
+                    description={
+                      <span>
+                        Shares in the certificate (max.{' '}
+                        {num(
+                          holding.size.minus(reservedSize).times(SHARE_COUNT)
+                        )}
+                        )
+                      </span>
+                    }
+                    rightSection="shares"
+                    classNames={{ rightSection: 'w-20' }}
+                    type="number"
+                    step="1"
+                    min="1"
+                    max={holding.size
+                      .minus(reservedSize)
+                      .times(SHARE_COUNT)
+                      .toNumber()}
+                    required
+                  />
+                </div>
+              </Tabs.Panel>
+
+              <Tabs.Panel value="cost" pt="xs">
+                {/* Not using NumberInput because onChange is called with only the value,
+                not the field element */}
+                <div className="mt-3">
+                  <TextField
+                    {...register('cost', {
+                      shouldUnregister: true,
+                      onChange: (event) =>
+                        setValue(
+                          'size',
+                          sharesOfCost(
+                            new Prisma.Decimal(event.target.valueAsNumber)
+                          )
+                        ),
+                    })}
+                    label="Cost"
+                    description={
+                      <span>
+                        USD you want to pay for Shares in the certificate (max.
+                        ${num(maxCost, 2)})
+                      </span>
+                    }
+                    rightSection="USD"
+                    classNames={{ rightSection: 'w-20' }}
+                    type="number"
+                    step="0.01"
+                    min="1"
+                    max={maxCost.toNumber()}
+                    required
+                  />
+                </div>
+              </Tabs.Panel>
+            </Tabs>
+
+            <table className="text-sm mx-auto mt-6">
               <tbody>
                 <tr>
                   <td className="text-right pr-4">Starting valuation:</td>
@@ -158,6 +233,12 @@ export function BuyDialog({
                 <tr>
                   <td className="text-right pr-4">New valuation:</td>
                   <td className="text-right pr-4">${num(newValuation, 2)}</td>
+                </tr>
+                <tr>
+                  <td className="text-right font-bold pr-4">Shares:</td>
+                  <td className="text-right font-bold pr-4">
+                    {num(shares, 0)}
+                  </td>
                 </tr>
                 <tr>
                   <td className="text-right font-bold pr-4">Cost:</td>

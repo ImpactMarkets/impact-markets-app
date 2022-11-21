@@ -61,9 +61,8 @@ export const serverEnv = {
     NEXTAUTH_SECRET: str({
       devDefault: 'xxx',
     }),
-    AUTH_PROVIDER: str({
-      choices: ['github', 'okta', 'google'],
-    }),
+    DEBUG: bool({ default: false }),
+    MOCK_LOGIN: bool({ default: false }),
     GOOGLE_CLIENT_ID: googleParser({ allowEmpty: true, default: '' }),
     GOOGLE_CLIENT_SECRET: googleParser({ allowEmpty: true, default: '' }),
     GITHUB_ID: githubParser({ allowEmpty: true, default: '' }),
@@ -77,6 +76,9 @@ export const serverEnv = {
     CLOUDINARY_API_SECRET: cloudinaryParser({ allowEmpty: true, default: '' }),
     ENABLE_SLACK_POSTING: bool({ default: false }),
     SLACK_WEBHOOK_URL: slackParser({ allowEmpty: true, default: '' }),
-    ROLLBAR_SERVER_TOKEN: rollbarParser({ allowEmpty: false, default: '' }),
+    ROLLBAR_SERVER_TOKEN: rollbarParser({
+      allowEmpty: false,
+      devDefault: process.env.NODE_ENV,
+    }),
   }),
 }
