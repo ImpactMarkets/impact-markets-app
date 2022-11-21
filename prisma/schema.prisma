@@ -110,6 +110,7 @@ model Certificate {
   authorId       String
   likedBy        LikedCertificate[]
   comments       Comment[]
+  issuerEmails   String?
 
   // TODO: Move these to CertificateVersion to enable versioning
   attributedImpactVersion String
