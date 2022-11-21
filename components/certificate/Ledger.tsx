@@ -14,7 +14,7 @@ import { HoldingsChart } from '../holdings-chart'
 import { Transactions } from './Transactions'
 
 type LedgerProps = {
-  certificateId: string
+  certificate: InferQueryOutput<'certificate.detail'>
 }
 
 const Holding = ({
@@ -94,11 +94,11 @@ const Holding = ({
   )
 }
 
-export const Ledger = ({ certificateId }: LedgerProps) => {
+export const Ledger = ({ certificate }: LedgerProps) => {
   const holdingsQuery = trpc.useQuery([
     'holding.feed',
     {
-      certificateId,
+      certificateId: certificate.id,
     },
   ])
   const holdings = holdingsQuery.data || []
@@ -115,7 +115,7 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
   return (
     <>
       <div className="flex items-center gap-12 my-6">
-        <HoldingsChart holdings={holdings} />
+        <HoldingsChart holdings={holdings} issuers={certificate.issuers} />
       </div>
       <div className="flex w-full gap-6 justify-between items-start text-sm flex-col md:flex-row">
         {holdings.some((holding) => holding.type === 'OWNERSHIP') && (
@@ -181,7 +181,7 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
         )}
         {session && (
           <Transactions
-            certificateId={certificateId}
+            certificateId={certificate.id}
             userId={session!.user.id}
           />
         )}
