@@ -123,6 +123,7 @@ export const certificateRouter = createProtectedRouter()
           actionStart: true,
           actionEnd: true,
           tags: true,
+          issuerEmails: true,
           author: {
             select: {
               id: true,
@@ -234,6 +235,7 @@ export const certificateRouter = createProtectedRouter()
       actionStart: z.date(),
       actionEnd: z.date(),
       tags: z.string(),
+      issuerEmails: z.string(),
       valuation: z.instanceof(Prisma.Decimal),
       target: z.instanceof(Prisma.Decimal),
     }),
@@ -252,6 +254,7 @@ export const certificateRouter = createProtectedRouter()
           actionStart: input.actionStart,
           actionEnd: input.actionEnd,
           tags: input.tags,
+          issuerEmails: input.issuerEmails,
           author: {
             connect: {
               id: ctx.session!.user.id,
@@ -292,6 +295,7 @@ export const certificateRouter = createProtectedRouter()
         rights: z.string(),
         actionStart: z.date(),
         actionEnd: z.date(),
+        issuerEmails: z.string(),
         tags: z.string(),
       }),
     }),
@@ -310,6 +314,7 @@ export const certificateRouter = createProtectedRouter()
           rights: 'RETROACTIVE_FUNDING',
           actionStart: data.actionStart,
           actionEnd: data.actionEnd,
+          issuerEmails: data.issuerEmails,
           tags: data.tags,
         },
       })

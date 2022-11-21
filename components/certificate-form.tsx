@@ -57,6 +57,7 @@ type FormData = {
   actionStart: string
   actionEnd: string
   tags: string
+  issuerEmails?: string
   // These defaults are set for new forms but not for editing
   valuation?: Prisma.Decimal
   target?: Prisma.Decimal
@@ -325,6 +326,13 @@ export function CertificateForm({
                 starting and target valuation.
               </div>
             )}
+
+            <TextField
+              {...register('issuerEmails')}
+              label="Issuers' email addresses"
+              description="For multiple issuers, enter the addresses separated by commas, for example: 'alice@gmail.com, bob@gmail.com'"
+              className="mt-6"
+            />
 
             <TextField
               {...register('attributedImpactVersion', { required: true })}
