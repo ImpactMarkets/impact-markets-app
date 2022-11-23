@@ -63,6 +63,14 @@ jobs:
         run: npm ci
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+      - name: Set up environment variables for the test env
+        run: cp .env.test .env
+      - name: Start the test database
+        run: docker-compose -f docker-compose.test.yaml up -d
+      - name: Create the database schema
+        run: npx prisma migrate deploy
+      - name: Launch the app
+        run: npm run dev &
       - name: Run Playwright tests
         run: npm run test:e2e
       - uses: actions/upload-artifact@v3
