@@ -1,3 +1,4 @@
+import { signIn, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import * as React from 'react'
 
@@ -7,12 +8,15 @@ import { Logo, SearchIcon } from '@/components/icons'
 import { SearchDialog } from '@/components/search-dialog'
 import { Burger, Header as MantineHeader, MediaQuery } from '@mantine/core'
 
+import { Button } from './button'
+
 interface HeaderProps {
   opened: boolean
   setOpened: (f: (opened: boolean) => boolean) => void
 }
 
 export function Header({ opened, setOpened }: HeaderProps) {
+  const { data: session } = useSession()
   const [isSearchDialogOpen, setIsSearchDialogOpen] = React.useState(false)
 
   return (
@@ -46,10 +50,29 @@ export function Header({ opened, setOpened }: HeaderProps) {
             <SearchIcon className="w-4 h-4" />
           </IconButton>
 
-          <ButtonLink href="/new" variant="highlight">
-            <span className="sm:hidden">New</span>
-            <span className="hidden sm:block shrink-0">New certificate</span>
-          </ButtonLink>
+          {session ? (
+            <ButtonLink href="/new" variant="highlight">
+              <span className="sm:hidden">New</span>
+              <span className="hidden sm:block shrink-0">New certificate</span>
+            </ButtonLink>
+          ) : (
+            <>
+              <Button
+                onClick={() => signIn()}
+                variant="secondary"
+                className="hidden md:block"
+              >
+                Log in
+              </Button>
+              <Button
+                onClick={() => signIn()}
+                variant="highlight"
+                className="hidden md:block"
+              >
+                Sign up
+              </Button>
+            </>
+          )}
         </div>
       </div>
       <SearchDialog
