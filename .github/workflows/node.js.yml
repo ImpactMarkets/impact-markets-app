@@ -69,8 +69,6 @@ jobs:
         run: docker-compose -f docker-compose.test.yaml up -d
       - name: Create the database schema
         run: npx prisma migrate deploy
-      - name: Launch the app
-        run: npm run dev &
       - name: Run Playwright tests
         run: npm run test:e2e
       - uses: actions/upload-artifact@v3
