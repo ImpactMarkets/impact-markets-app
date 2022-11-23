@@ -1,4 +1,4 @@
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -29,6 +29,7 @@ import { browserEnv } from '@/env/browser'
 import { uploadImage } from '@/lib/cloudinary'
 import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
+import { Button as MantineButton } from '@mantine/core'
 
 const CertificateSummary = dynamic<CertificateSummaryProps>(
   () =>
@@ -133,7 +134,7 @@ function ProfileInfo({ user }: ProfileComponentProps) {
           </div>
 
           {profileBelongsToUser && (
-            <div className="ml-auto mr-10">
+            <div className="ml-auto mr-10 flex items-center gap-2">
               <IconButton
                 variant="secondary"
                 onClick={() => {
@@ -142,6 +143,9 @@ function ProfileInfo({ user }: ProfileComponentProps) {
               >
                 <EditIcon className="w-4 h-4" />
               </IconButton>
+              <MantineButton color="red" onClick={() => signOut()}>
+                Disconnect
+              </MantineButton>
             </div>
           )}
 
