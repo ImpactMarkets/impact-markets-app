@@ -108,9 +108,9 @@ const Home: NextPageWithAuthAndLayout = () => {
           </div>
         ) : (
           <div className="flow-root">
-            <ul className="my-5 divide-y divide-transparent">
+            <ul className="divide-y divide-transparent">
               {feedQuery.data.certificates.map((certificate) => (
-                <li key={certificate.id} className="py-6">
+                <li key={certificate.id} className="pb-6">
                   <CertificateSummary
                     certificate={certificate}
                     onLike={() => {

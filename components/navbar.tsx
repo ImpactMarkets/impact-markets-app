@@ -112,7 +112,12 @@ export function Navbar({ hidden }: NavbarProps) {
   ))
 
   return (
-    <MantineNavbar width={{ sm: 250 }} hidden={hidden} hiddenBreakpoint="sm">
+    <MantineNavbar
+      width={{ sm: 250 }}
+      withBorder={false}
+      hidden={hidden}
+      hiddenBreakpoint="sm"
+    >
       <MantineNavbar.Section grow className="m-4">
         {links}
       </MantineNavbar.Section>

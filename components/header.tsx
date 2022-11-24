@@ -23,6 +23,7 @@ export function Header({ opened, setOpened }: HeaderProps) {
     <MantineHeader
       // TODO: Find why {{base: 50, md: 100}} does not work
       height={100}
+      withBorder={false}
     >
       <div className="flex justify-between items-center h-full px-5">
         <MediaQuery largerThan="sm" styles={{ display: 'none' }}>

@@ -25,7 +25,7 @@ export function User() {
   }
 
   return (
-    <Box className="border-t">
+    <Box>
       <Link href={`/profile/${session!.user.id}`}>
         <a className="w-full block p-3 hover:bg-gray-50">
           <div className="flex gap-4 items-center">
