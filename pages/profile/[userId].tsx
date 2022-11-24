@@ -144,7 +144,7 @@ function ProfileInfo({ user }: ProfileComponentProps) {
                 <EditIcon className="w-4 h-4" />
               </IconButton>
               <MantineButton color="red" onClick={() => signOut()}>
-                Disconnect
+                Sign out
               </MantineButton>
             </div>
           )}
