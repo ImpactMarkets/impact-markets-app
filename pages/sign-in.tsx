@@ -8,7 +8,6 @@ import Head from 'next/head'
 import Div100vh from 'react-div-100vh'
 
 import { Button } from '@/components/button'
-import { Footer } from '@/components/footer'
 import { Logo } from '@/components/icons'
 import { authOptions } from '@/lib/auth'
 
@@ -36,9 +35,6 @@ const SignIn = ({
                   </Button>
                 </div>
               ))}
-            </div>
-            <div className="-mt-4 md:mt-0 w-screen left-1/2 transform -translate-x-1/2 absolute sm:w-[434px] lg:w-[646px] xl:w-[862px] auth-footer">
-              <Footer />
             </div>
           </div>
         </main>

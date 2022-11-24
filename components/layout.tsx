@@ -2,7 +2,6 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 
-import { Footer } from '@/components/footer'
 import { Header } from '@/components/header'
 import { Navbar } from '@/components/navbar'
 import { AppShell } from '@mantine/core'
@@ -33,7 +32,6 @@ export function Layout({ children }: LayoutProps) {
       <AppShell
         navbar={<Navbar hidden={!opened} />}
         header={<Header opened={opened} setOpened={setOpened} />}
-        footer={<Footer />}
       >
         {children}
       </AppShell>
