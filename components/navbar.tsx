@@ -1,6 +1,9 @@
+import mixpanel from 'mixpanel-browser'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 
+// import axios from 'axios'
 import { Logo } from '@/components/icons'
 import {
   BoltIcon,
@@ -10,6 +13,9 @@ import {
   StoreIcon,
 } from '@/components/icons'
 import { Group, Navbar, createStyles } from '@mantine/core'
+
+const mixpanelToken = process.env.MIXPANEL_AUTH_TOKEN || ''
+mixpanel.init(mixpanelToken, { debug: true })
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
@@ -100,6 +106,20 @@ const data = [
 export function NavbarSimple() {
   const { classes, cx } = useStyles()
   const router = useRouter()
+  const [ip, setIP] = useState('')
+
+  //creating function to load ip address from the API
+  const getData = async () => {
+    // const res = await axios.get('https://geolocation-db.com/json/')
+    // console.log(res.data);
+    // setIP(res.data.IPv4)
+    return 'test'
+  }
+
+  useEffect(() => {
+    //passing getData method to the lifecycle method
+    getData()
+  }, [])
 
   const links = data.map((item) => (
     <Link href={item.link} key={item.label}>
@@ -109,6 +129,18 @@ export function NavbarSimple() {
             [classes.linkActive]: item.link === router.pathname,
           }) + ' flex text-sm items-center cursor-pointer'
         }
+        onClick={() => {
+          console.log(item.label)
+          // console.log(mixpanel.track);
+          try {
+            mixpanel.track('Click - ' + item.label, {
+              source: '',
+              'Opted out of email': true,
+            })
+          } catch (error) {
+            console.log('error: ' + error)
+          }
+        }}
       >
         <item.icon className={classes.linkIcon} />
         <span>{item.label}</span>
@@ -121,7 +153,11 @@ export function NavbarSimple() {
       <Navbar.Section grow>
         <Group className="mb-6" position="apart">
           <Link href="/">
-            <a>
+            <a
+              onClick={() => {
+                console.log('Home button')
+              }}
+            >
               <Logo className="w-auto h-[64px]" />
             </a>
           </Link>
