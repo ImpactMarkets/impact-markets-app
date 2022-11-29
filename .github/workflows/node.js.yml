@@ -5,9 +5,9 @@ name: Tests, style checks, and type checks
 
 on:
   push:
-    branches: ['main', 'beta', 'development', 'test-system']
+    branches: '**'
   pull_request:
-    branches: ['main', 'beta', 'development', 'test-system']
+    branches: '**'
 
 jobs:
   test-unit:
