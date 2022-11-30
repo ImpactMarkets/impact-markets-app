@@ -1,4 +1,5 @@
 import mixpanel from 'mixpanel-browser'
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
@@ -104,6 +105,7 @@ const data = [
 ]
 
 export function NavbarSimple() {
+  const { data: session } = useSession()
   const { classes, cx } = useStyles()
   const router = useRouter()
   const [ip, setIP] = useState('')
@@ -132,10 +134,11 @@ export function NavbarSimple() {
         onClick={() => {
           console.log(item.label)
           // console.log(mixpanel.track);
+          console.log('current user: ' + session?.user.id)
           try {
             mixpanel.track('Click - ' + item.label, {
-              source: '',
-              'Opted out of email': true,
+              user: session?.user.id,
+              datetime: Date(),
             })
           } catch (error) {
             console.log('error: ' + error)
