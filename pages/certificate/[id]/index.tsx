@@ -108,6 +108,7 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
     const isUserAdmin = session?.user.role === 'ADMIN'
     const certificateBelongsToUser =
       certificateQuery.data.author.id === session?.user.id
+    const isActive = certificateQuery.data.actionEnd > new Date()
 
     return (
       <>
@@ -142,7 +143,7 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
               <Tags queryData={certificateQuery.data} />
             </div>
             <div className="my-6">
-              <Ledger certificateId={certificateId} />
+              <Ledger certificateId={certificateId} isActive={isActive} />
             </div>
             <HtmlView
               html={certificateQuery.data.contentHtml}

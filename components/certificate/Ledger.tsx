@@ -15,14 +15,17 @@ import { Transactions } from './Transactions'
 
 type LedgerProps = {
   certificateId: string
+  isActive: boolean
 }
 
 const Holding = ({
   holding,
   userId,
+  isActive,
 }: {
   holding: InferQueryOutput<'holding.feed'>[0]
   userId?: string
+  isActive: boolean
 }) => {
   const { data: session } = useSession()
   const [isBuyDialogOpen, setIsBuyDialogOpen] = React.useState(false)
@@ -76,11 +79,14 @@ const Holding = ({
                   setIsBuyDialogOpen(true)
                 }}
               >
-                <span className="block shrink-0">Buy</span>
+                <span className="block shrink-0">
+                  {isActive ? 'Donate' : 'Buy'}
+                </span>
               </ButtonLink>
               <BuyDialog
                 holding={holding}
                 reservedSize={reservedSize}
+                isActive={isActive}
                 isOpen={isBuyDialogOpen}
                 onClose={() => {
                   setIsBuyDialogOpen(false)
@@ -94,7 +100,7 @@ const Holding = ({
   )
 }
 
-export const Ledger = ({ certificateId }: LedgerProps) => {
+export const Ledger = ({ certificateId, isActive }: LedgerProps) => {
   const holdingsQuery = trpc.useQuery([
     'holding.feed',
     {
@@ -136,6 +142,7 @@ export const Ledger = ({ certificateId }: LedgerProps) => {
                       key={holding.id}
                       holding={holding}
                       userId={session?.user.id}
+                      isActive={isActive}
                     />
                   ))}
                 <tr key="Reservation">
