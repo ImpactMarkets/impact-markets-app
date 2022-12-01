@@ -2,7 +2,6 @@ import mixpanel from 'mixpanel-browser'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
 
 // import axios from 'axios'
 import { Logo } from '@/components/icons'
