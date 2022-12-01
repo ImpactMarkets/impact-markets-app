@@ -108,20 +108,6 @@ export function NavbarSimple() {
   const { data: session } = useSession()
   const { classes, cx } = useStyles()
   const router = useRouter()
-  const [ip, setIP] = useState('')
-
-  //creating function to load ip address from the API
-  const getData = async () => {
-    // const res = await axios.get('https://geolocation-db.com/json/')
-    // console.log(res.data);
-    // setIP(res.data.IPv4)
-    return 'test'
-  }
-
-  useEffect(() => {
-    //passing getData method to the lifecycle method
-    getData()
-  }, [])
 
   const links = data.map((item) => (
     <Link href={item.link} key={item.label}>
@@ -156,11 +142,7 @@ export function NavbarSimple() {
       <Navbar.Section grow>
         <Group className="mb-6" position="apart">
           <Link href="/">
-            <a
-              onClick={() => {
-                console.log('Home button')
-              }}
-            >
+            <a>
               <Logo className="w-auto h-[64px]" />
             </a>
           </Link>
