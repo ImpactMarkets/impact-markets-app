@@ -403,10 +403,8 @@ export function CertificateForm({
         </div>
         <div>
           <a
-            href="https://airtable.com/shrXCFWdrzgG9jWn3"
-            target="_blank"
-            rel="noreferrer"
-            className="text-sm font-medium transition-colors hover:text-blue hover:underline"
+            onClick={show}
+            className="text-sm font-medium transition-colors cursor-pointer hover:text-blue hover:underline"
           >
             🗣️ Do you have any feedback or tips for us?
           </a>
