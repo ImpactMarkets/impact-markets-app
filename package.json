@@ -41,6 +41,8 @@
     "csstype": "^3.1.0",
     "cuid": "^2.1.8",
     "date-fns": "^2.29.1",
+    "dotenv": "^16.0.3",
+    "dotenv-cli": "^6.0.0",
     "envsafe": "^2.0.3",
     "gemoji": "^7.1.0",
     "isomorphic-dompurify": "^0.20.0",
