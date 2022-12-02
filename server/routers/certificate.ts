@@ -15,16 +15,25 @@ export const certificateRouter = createProtectedRouter()
         take: z.number().min(1).max(50).optional(),
         skip: z.number().min(1).optional(),
         authorId: z.string().optional(),
+        filterTags: z.string().optional(),
       })
       .optional(),
     async resolve({ input, ctx }) {
       const take = input?.take ?? 50
       const skip = input?.skip
+      const baseQuery: Array<Prisma.CertificateWhereInput> | undefined =
+        ctx.session?.user.role === 'ADMIN'
+          ? undefined
+          : [{ hidden: false }, { authorId: ctx.session?.user.id }]
       const where = {
-        OR:
-          ctx.session?.user.role === 'ADMIN'
-            ? undefined
-            : [{ hidden: false }, { authorId: ctx.session?.user.id }],
+        OR: baseQuery,
+        AND: input?.filterTags
+          ? input.filterTags.split(',').map((tag) => ({
+              tags: {
+                contains: tag.toLowerCase(),
+              },
+            }))
+          : undefined,
         authorId: input?.authorId,
       }
 

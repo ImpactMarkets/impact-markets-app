@@ -4,6 +4,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
+import { CertificateFilters } from '@/components/certificate-filters'
 import type { CertificateSummaryProps } from '@/components/certificate-summary'
 import { CertificateSummarySkeleton } from '@/components/certificate-summary-skeleton'
 import { Layout } from '@/components/layout'
@@ -26,9 +27,13 @@ const Home: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
   const utils = trpc.useContext()
+  const [filterTags, setFilterTags] = React.useState('')
   const feedQueryPathAndInput: InferQueryPathAndInput<'certificate.feed'> = [
     'certificate.feed',
-    getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
+    {
+      ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
+      filterTags,
+    },
   ]
   const feedQuery = trpc.useQuery(feedQueryPathAndInput)
   const likeMutation = trpc.useMutation(['certificate.like'], {
@@ -102,6 +107,10 @@ const Home: NextPageWithAuthAndLayout = () => {
           <title>Impact Markets</title>
         </Head>
 
+        <CertificateFilters
+          onUpdate={(tags) => setFilterTags(tags)}
+          defaultValue={filterTags}
+        />
         {feedQuery.data.certificateCount === 0 ? (
           <div className="text-center text-secondary border rounded py-20 px-10">
             There are no published certificates to show yet.
