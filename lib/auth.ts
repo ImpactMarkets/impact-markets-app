@@ -53,7 +53,7 @@ if (serverEnv.MOCK_LOGIN) {
   authOptions.callbacks!.jwt = async ({ token }) => {
     const email = 'mock.user@example.com'
     const name = 'Mock User'
-    const image = 'http://localhost:3000/images/logo-min-light.png'
+    const image = serverEnv.NEXTAUTH_URL + '/images/logo-min-light.png'
     const role = Role.USER
     const user = await prisma.user.upsert({
       select: { id: true, name: true, role: true, image: true, email: true },
