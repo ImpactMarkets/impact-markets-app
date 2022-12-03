@@ -121,9 +121,9 @@ export function NavbarSimple() {
       <Navbar.Section grow>
         <Group className="mb-6" position="apart">
           <Link href="/">
-            <a>
-              <Logo className="w-auto h-[64px]" />
-            </a>
+            <span>
+              <Logo className="w-auto h-[64px] cursor-pointer" />
+            </span>
           </Link>
         </Group>
         <div className="mt-12">{links}</div>
