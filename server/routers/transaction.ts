@@ -1,3 +1,4 @@
+import { Certificate } from 'crypto'
 import { z } from 'zod'
 
 import { BondingCurve } from '@/lib/auction'
@@ -63,11 +64,19 @@ export const transactionRouter = createProtectedRouter()
       })
       return schema.parse(input)
     },
-    async resolve({ ctx, input: { sellingHolding, size, consume } }) {
+    async resolve({ ctx, input: { sellingHolding, size, consume: consume_ } }) {
       const holding = await ctx.prisma.holding.findUniqueOrThrow({
         where: { id: sellingHolding.id },
-        include: { sellTransactions: { where: { state: 'PENDING' } } },
+        include: {
+          sellTransactions: { where: { state: 'PENDING' } },
+          certificate: true,
+        },
       })
+
+      // Force consumption if the project is active
+      // TODO: Once we have investors, they’ll be able to buy even if the project is active
+      const isActive = holding.certificate.actionEnd > new Date()
+      const consume = isActive || consume_
 
       const reservedSize = Prisma.Decimal.sum(
         0,
