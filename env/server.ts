@@ -58,7 +58,7 @@ export const serverEnv = {
       allowEmpty: true,
       devDefault: 'http://localhost:3000',
     }),
-    NEXTAUTH_URL: str(),
+    FRONTEND_URL: str(),
     NEXTAUTH_SECRET: str({
       devDefault: 'xxx',
     }),
