@@ -1,3 +1,4 @@
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
@@ -9,7 +10,10 @@ import {
   LifebuoyIcon,
   StoreIcon,
 } from '@/components/icons'
-import { Group, Navbar, createStyles } from '@mantine/core'
+import { trpc } from '@/lib/trpc'
+import { Group, Navbar, Switch, createStyles } from '@mantine/core'
+
+import refreshSession from './utils'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
@@ -100,6 +104,11 @@ const data = [
 export function NavbarSimple() {
   const { classes, cx } = useStyles()
   const router = useRouter()
+  const { data: session } = useSession()
+
+  const preferencesMutation = trpc.useMutation(['user.preferences'], {
+    onSuccess: refreshSession,
+  })
 
   const links = data.map((item) => (
     <Link href={item.link} key={item.label}>
@@ -116,6 +125,22 @@ export function NavbarSimple() {
     </Link>
   ))
 
+  let preferences = null
+  if (session) {
+    preferences = (
+      <Switch
+        label="Detail view"
+        classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
+        checked={session.user.prefersDetailView}
+        onChange={(event) => {
+          preferencesMutation.mutate({
+            prefersDetailView: event.target.checked,
+          })
+        }}
+      />
+    )
+  }
+
   return (
     <Navbar width={{ sm: 250 }} p="md" className="pt-12 sticky top-0 z-auto">
       <Navbar.Section grow>
@@ -127,6 +152,7 @@ export function NavbarSimple() {
           </Link>
         </Group>
         <div className="mt-12">{links}</div>
+        <div className="mt-12">{preferences}</div>
       </Navbar.Section>
     </Navbar>
   )

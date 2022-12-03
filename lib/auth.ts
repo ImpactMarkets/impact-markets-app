@@ -34,6 +34,7 @@ export const authOptions: NextAuthOptions = {
           role: (user || token).role,
           image: (user || token).image,
           email: (user || token).email,
+          prefersDetailView: (user || token).prefersDetailView,
         },
       } as Session
     },
@@ -56,7 +57,14 @@ if (serverEnv.MOCK_LOGIN) {
     const image = 'http://localhost:3000/images/logo-min-light.png'
     const role = Role.USER
     const user = await prisma.user.upsert({
-      select: { id: true, name: true, role: true, image: true, email: true },
+      select: {
+        id: true,
+        name: true,
+        role: true,
+        image: true,
+        email: true,
+        prefersDetailView: true,
+      },
       where: { email },
       create: { email, name, image, role },
       update: { email, name, image, role },
@@ -73,6 +81,7 @@ declare module 'next-auth' {
       email: string
       image?: string | null
       role: Role
+      prefersDetailView: boolean
     }
     expires: string
   }
