@@ -3,9 +3,11 @@ import * as React from 'react'
 
 import { BuyDialog } from '@/components/certificate/BuyDialog'
 import { EditDialog } from '@/components/certificate/EditDialog'
+import { classNames } from '@/lib/classnames'
 import { SHARE_COUNT } from '@/lib/constants'
 import { num } from '@/lib/text'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
+import { Tabs } from '@mantine/core'
 import { Prisma } from '@prisma/client'
 
 import { Author } from '../author'
@@ -22,10 +24,12 @@ const Holding = ({
   holding,
   userId,
   isActive,
+  simplified = false,
 }: {
   holding: InferQueryOutput<'holding.feed'>[0]
   userId?: string
   isActive: boolean
+  simplified: boolean
 }) => {
   const { data: session } = useSession()
   const [isBuyDialogOpen, setIsBuyDialogOpen] = React.useState(false)
@@ -36,16 +40,22 @@ const Holding = ({
   )
   return (
     <tr key={holding.user.id + holding.type}>
-      <td className="text-left" key="owner">
+      <td className="text-sm text-left flex" key="owner">
         <Author author={holding.user} />
       </td>
-      <td className="text-right" key="size">
+      <td
+        className={classNames('text-sm text-right', simplified && 'hidden')}
+        key="size"
+      >
         {num(holding.size.times(SHARE_COUNT))}
       </td>
-      <td className="text-right" key="valuation">
+      <td
+        className={classNames('text-sm text-right', simplified && 'hidden')}
+        key="valuation"
+      >
         <>${num(holding.valuation, 0)}</>
       </td>
-      <td className="text-right px-2">
+      <td className="text-sm text-right px-2">
         <div className="flex gap-1">
           {((session && session?.user.role === 'ADMIN') ||
             holding.user.id === userId) && (
@@ -110,6 +120,8 @@ export const Ledger = ({ certificateId, isActive }: LedgerProps) => {
   const holdings = holdingsQuery.data || []
 
   const { data: session } = useSession()
+  const { prefersDetailView } = session?.user || {}
+  const simplified = !prefersDetailView
 
   const totalReservedSize = holdings
     .filter((holding) => holding.type === 'RESERVATION')
@@ -123,76 +135,118 @@ export const Ledger = ({ certificateId, isActive }: LedgerProps) => {
       <div className="flex items-center gap-12 my-6">
         <HoldingsChart holdings={holdings} />
       </div>
-      <div className="flex w-full gap-6 justify-between items-start text-sm flex-col md:flex-row">
-        {holdings.some((holding) => holding.type === 'OWNERSHIP') && (
-          <div className="flex-auto max-w-sm">
-            <table className="table-auto w-full">
-              <thead>
-                <tr>
-                  <th className="text-left">Owners</th>
-                  <th className="text-right">Shares</th>
-                  <th className="text-right">Valuation</th>
-                </tr>
-              </thead>
-              <tbody>
-                {holdings
-                  .filter((holding) => holding.type === 'OWNERSHIP')
-                  .map((holding) => (
-                    <Holding
-                      key={holding.id}
-                      holding={holding}
-                      userId={session?.user.id}
-                      isActive={isActive}
-                    />
-                  ))}
-                <tr key="Reservation">
-                  <td className="text-left pl-11 h-9" key="owner">
-                    Reserved
-                  </td>
-                  <td className="text-right" key="size">
-                    {num(totalReservedSize.times(SHARE_COUNT))}
-                  </td>
-                  <td className="text-right" key="valuation">
-                    –
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        )}
-        {holdings.some((holding) => holding.type === 'CONSUMPTION') && (
-          <div className="flex-auto relative max-w-xs">
-            <table className="table-auto w-full">
-              <thead>
-                <tr>
-                  <th className="text-left">Consumed</th>
-                  <th className="text-right"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {holdings
-                  .filter((holding) => holding.type === 'CONSUMPTION')
-                  .map((holding) => (
-                    <tr key={holding.user.id + holding.type}>
-                      <td className="text-left" key="owner">
-                        {holding.user.name}
-                      </td>
-                      <td className="text-right" key="size">
-                        {num(holding.size.times(SHARE_COUNT))}
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+
+      <Tabs defaultValue="owners">
         {session && (
-          <Transactions
-            certificateId={certificateId}
-            userId={session!.user.id}
-          />
+          <Tabs.List>
+            <Tabs.Tab value="owners">Owners and consumers</Tabs.Tab>
+            <Tabs.Tab value="transactions">Pending transactions</Tabs.Tab>
+          </Tabs.List>
         )}
-      </div>
+
+        <Tabs.Panel value="owners" pt="xs">
+          <div className="flex flex-wrap items-start justify-center w-full">
+            {holdings.some((holding) => holding.type === 'OWNERSHIP') && (
+              <table className="table-auto w-2/3">
+                <thead>
+                  <tr className="h-10">
+                    <th className="text-sm text-left">Owners</th>
+                    <th
+                      className={classNames(
+                        'text-sm text-right',
+                        simplified && 'hidden'
+                      )}
+                    >
+                      Shares
+                    </th>
+                    <th
+                      className={classNames(
+                        'text-sm text-right',
+                        simplified && 'hidden'
+                      )}
+                    >
+                      Valuation
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {holdings
+                    .filter((holding) => holding.type === 'OWNERSHIP')
+                    .map((holding) => (
+                      <Holding
+                        key={holding.id}
+                        holding={holding}
+                        userId={session?.user.id}
+                        isActive={isActive}
+                        simplified={simplified}
+                      />
+                    ))}
+                  <tr
+                    key="Reservation"
+                    className={classNames(simplified && 'hidden')}
+                  >
+                    <td className="text-left text-sm h-10" key="owner">
+                      Reserved
+                    </td>
+                    <td className="text-sm text-right" key="size">
+                      {num(totalReservedSize.times(SHARE_COUNT))}
+                    </td>
+                    <td className="text-sm text-right" key="valuation">
+                      –
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            )}
+            {holdings.some((holding) => holding.type === 'CONSUMPTION') && (
+              <table className="table-auto w-1/3">
+                <thead>
+                  <tr className="h-10">
+                    <th className="text-sm text-left">Consumers</th>
+                    <th
+                      className={classNames(
+                        'text-sm text-right',
+                        simplified && 'hidden'
+                      )}
+                    >
+                      Shares
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {holdings
+                    .filter((holding) => holding.type === 'CONSUMPTION')
+                    .map((holding) => (
+                      <tr key={holding.user.id + holding.type}>
+                        <td className="text-sm text-left" key="owner">
+                          <Author author={holding.user} />
+                        </td>
+                        <td
+                          className={classNames(
+                            'text-sm text-right',
+                            simplified && 'hidden'
+                          )}
+                          key="size"
+                        >
+                          {num(holding.size.times(SHARE_COUNT))}
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        </Tabs.Panel>
+        {session && (
+          <Tabs.Panel value="transactions" pt="xs">
+            <Transactions
+              certificateId={certificateId}
+              userId={session!.user.id}
+              simplified={simplified}
+            />
+          </Tabs.Panel>
+        )}
+      </Tabs>
     </>
   )
 }

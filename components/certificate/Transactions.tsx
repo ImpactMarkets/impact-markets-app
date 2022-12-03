@@ -2,6 +2,7 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import * as React from 'react'
 
+import { classNames } from '@/lib/classnames'
 import { SHARE_COUNT } from '@/lib/constants'
 import { num } from '@/lib/text'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
@@ -11,22 +12,18 @@ import { ButtonLink } from '../button-link'
 import { CancelDialog } from './CancelDialog'
 import { ConfirmDialog } from './ConfirmDialog'
 
-export type TransactionsFormData = {
-  userId: string
-  certificateId?: string
-  showCertificates?: boolean
-}
-
 const Transaction = ({
   transaction,
   userId,
   certificateId,
   showCertificates = false,
+  simplified = false,
 }: {
   transaction: InferQueryOutput<'transaction.feed'>[0]
   userId: string
   certificateId?: string
   showCertificates?: boolean
+  simplified?: boolean
 }) => {
   const [isCancelDialogOpen, setIsCancelDialogOpen] = React.useState(false)
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = React.useState(false)
@@ -43,23 +40,26 @@ const Transaction = ({
           />
         </div>
       </td>
-      {showCertificates && (
-        <td className="text-left max-w-xs pl-5 overflow-ellipsis">
-          <Link
-            href={`/certificate/${transaction.sellingHolding.certificate.id}`}
-          >
-            {transaction.sellingHolding.certificate.title}
-          </Link>
-        </td>
-      )}
       <td
-        className="text-right pl-5 underline underline-offset-1 decoration-dotted"
-        title={transaction.consume ? 'To be consumed' : 'To be owned'}
+        className={classNames(
+          'text-left max-w-xs pl-5 overflow-ellipsis',
+          showCertificates ? null : 'hidden'
+        )}
       >
+        <Link
+          href={`/certificate/${transaction.sellingHolding.certificate.id}`}
+        >
+          {transaction.sellingHolding.certificate.title}
+        </Link>
+      </td>
+      <td className={classNames('text-left pl-5', simplified && 'hidden')}>
+        {transaction.consume ? 'Consumption' : 'Purchase'}
+      </td>
+      <td className={classNames('text-right pl-5', simplified && 'hidden')}>
         {num(transaction.size.times(SHARE_COUNT))}
       </td>
       <td className="text-right pl-5">${num(transaction.cost, 2)}</td>
-      <td className="text-right px-2">
+      <td className="text-right pl-5 px-2">
         <div className="flex gap-1">
           {(session?.user.role === 'ADMIN' ||
             transaction.buyingHolding.user.id === userId) && (
@@ -92,6 +92,7 @@ const Transaction = ({
                 onClick={() => {
                   setIsConfirmDialogOpen(true)
                 }}
+                variant="highlight"
                 className="h-6"
               >
                 <span className="block shrink-0">Confirm</span>
@@ -116,7 +117,13 @@ export const Transactions = ({
   userId,
   certificateId,
   showCertificates = false,
-}: TransactionsFormData) => {
+  simplified = false,
+}: {
+  userId: string
+  certificateId?: string
+  showCertificates?: boolean
+  simplified?: boolean
+}) => {
   const transactionQuery = trpc.useQuery([
     'transaction.feed',
     {
@@ -135,16 +142,30 @@ export const Transactions = ({
   }
 
   return (
-    <div className="flex flex-col justify-center text-sm">
-      <table>
+    <div className="text-sm">
+      <table className="w-3/4 m-auto">
         <thead>
           <tr>
-            <th className="text-left whitespace-nowrap">Buyer</th>
-            {showCertificates && (
-              <th className="text-left pl-5">Certificate</th>
-            )}
-            <th className="text-right pl-5">Shares</th>
-            <th className="text-right pl-5">Cost</th>
+            <th className="text-left whitespace-nowrap">User</th>
+            <th
+              className={classNames(
+                'text-left pl-5',
+                showCertificates ? null : 'hidden'
+              )}
+            >
+              Certificate
+            </th>
+            <th
+              className={classNames('text-left pl-5', simplified && 'hidden')}
+            >
+              Type
+            </th>
+            <th
+              className={classNames('text-right pl-5', simplified && 'hidden')}
+            >
+              Shares
+            </th>
+            <th className="text-right pl-5">Payment</th>
           </tr>
         </thead>
         <tbody>
@@ -155,6 +176,7 @@ export const Transactions = ({
               userId={userId}
               certificateId={certificateId}
               showCertificates={showCertificates}
+              simplified={simplified}
             />
           ))}
         </tbody>

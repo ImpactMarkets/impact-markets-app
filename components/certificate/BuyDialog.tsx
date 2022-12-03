@@ -59,6 +59,7 @@ export function BuyDialog({
     })
   const utils = trpc.useContext()
   const { data: session } = useSession()
+  const simplified = !session!.user.prefersDetailView
   const transactionMutation = trpc.useMutation('transaction.add', {
     onSuccess: () => {
       utils.invalidateQueries([
@@ -144,10 +145,12 @@ export function BuyDialog({
               agree on a payment method.
             </p>
             <Tabs defaultValue="cost">
-              <Tabs.List>
-                <Tabs.Tab value="cost">Enter USD</Tabs.Tab>
-                <Tabs.Tab value="shares">Enter shares</Tabs.Tab>
-              </Tabs.List>
+              {simplified ? null : (
+                <Tabs.List>
+                  <Tabs.Tab value="cost">Enter USD</Tabs.Tab>
+                  <Tabs.Tab value="shares">Enter shares</Tabs.Tab>
+                </Tabs.List>
+              )}
 
               <Tabs.Panel value="cost" pt="xs">
                 {/* Not using NumberInput because onChange is called with only the value,
@@ -164,12 +167,14 @@ export function BuyDialog({
                           )
                         ),
                     })}
-                    label="Cost"
+                    label="Payment"
                     description={
-                      <span>
-                        USD you want to pay for shares in the certificate (max.
-                        ${num(maxCost, 2)})
-                      </span>
+                      simplified ? null : (
+                        <span>
+                          USD you want to pay for shares in the certificate
+                          (max. ${num(maxCost, 2)})
+                        </span>
+                      )
                     }
                     rightSection="USD"
                     classNames={{ rightSection: 'w-20' }}
@@ -225,7 +230,12 @@ export function BuyDialog({
               </Tabs.Panel>
             </Tabs>
 
-            <table className="text-sm mx-auto mt-6">
+            <table
+              className={classNames(
+                'text-sm mx-auto mt-6',
+                simplified && 'hidden'
+              )}
+            >
               <tbody>
                 <tr>
                   <td className="text-right pr-4">Starting valuation:</td>
@@ -252,7 +262,10 @@ export function BuyDialog({
 
             <Accordion
               variant="separated"
-              className={classNames('my-6', isActive ? 'hidden' : null)}
+              className={classNames(
+                'my-6',
+                isActive || simplified ? 'hidden' : null
+              )}
             >
               <Accordion.Item value="advanced-options">
                 <Accordion.Control>Advanced options</Accordion.Control>
