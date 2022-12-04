@@ -20,7 +20,7 @@ export function CertificateFilters(props: CertificateFiltersProps) {
     <Flex align="center">
       <IMMultiSelect
         ref={tagsMultiSelect}
-        placeholder="Pick all that apply"
+        placeholder="Filter by tags"
         data={TAGS.map((tag) => ({
           value: tag.value,
           label: tag.label,
@@ -33,6 +33,10 @@ export function CertificateFilters(props: CertificateFiltersProps) {
           }
         }}
         value={value}
+        classNames={{
+          input: 'bg-none !border-gray-300',
+          searchInput: '!border-gray-300',
+        }}
       />
       <Button
         variant="subtle"
