@@ -14,6 +14,6 @@ export const browserEnv = envsafe({
   NEXT_PUBLIC_ROLLBAR_CLIENT_TOKEN: str({
     input: process.env.NEXT_PUBLIC_ROLLBAR_CLIENT_TOKEN,
     allowEmpty: false,
-    devDefault: process.env.NODE_ENV,
+    devDefault: 'foobar',
   }),
 })
