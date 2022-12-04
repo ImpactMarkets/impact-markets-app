@@ -8,6 +8,24 @@ import { TRPCError } from '@trpc/server'
 
 import { createProtectedRouter } from '../create-protected-router'
 
+const getOrderBy = (
+  orderBy: string | undefined
+):
+  | Prisma.Enumerable<Prisma.CertificateOrderByWithRelationAndSearchRelevanceInput>
+  | undefined => {
+  if (!orderBy) {
+    return { createdAt: 'desc' }
+  }
+
+  if (orderBy === 'actionStart') {
+    return { actionStart: 'desc' }
+  }
+
+  if (orderBy === 'actionEnd') {
+    return { actionEnd: 'desc' }
+  }
+}
+
 export const certificateRouter = createProtectedRouter()
   .query('feed', {
     input: z
@@ -16,6 +34,7 @@ export const certificateRouter = createProtectedRouter()
         skip: z.number().min(1).optional(),
         authorId: z.string().optional(),
         filterTags: z.string().optional(),
+        orderBy: z.string().optional(),
       })
       .optional(),
     async resolve({ input, ctx }) {
@@ -40,9 +59,7 @@ export const certificateRouter = createProtectedRouter()
       const certificates = await ctx.prisma.certificate.findMany({
         take,
         skip,
-        orderBy: {
-          createdAt: 'desc',
-        },
+        orderBy: getOrderBy(input?.orderBy),
         where,
         select: {
           id: true,

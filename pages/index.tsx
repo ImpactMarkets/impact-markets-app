@@ -28,11 +28,13 @@ const Home: NextPageWithAuthAndLayout = () => {
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
   const utils = trpc.useContext()
   const [filterTags, setFilterTags] = React.useState('')
+  const [orderBy, setOrderBy] = React.useState('')
   const feedQueryPathAndInput: InferQueryPathAndInput<'certificate.feed'> = [
     'certificate.feed',
     {
       ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
       filterTags,
+      orderBy,
     },
   ]
   const feedQuery = trpc.useQuery(feedQueryPathAndInput)
@@ -108,11 +110,13 @@ const Home: NextPageWithAuthAndLayout = () => {
         </Head>
 
         <CertificateFilters
-          onUpdate={(tags) => setFilterTags(tags)}
-          defaultValue={filterTags}
+          onFilterTagsUpdate={(tags) => setFilterTags(tags)}
+          onOrderByUpdate={(orderBy) => setOrderBy(orderBy)}
+          defaultFilterTagValue={filterTags}
+          defaultOrderByValue={orderBy}
         />
         {feedQuery.data.certificateCount === 0 ? (
-          <div className="text-center text-secondary border rounded py-20 px-10">
+          <div className="text-center text-secondary border rounded my-10 py-20 px-10">
             There are no published certificates to show yet.
           </div>
         ) : (

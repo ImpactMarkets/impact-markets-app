@@ -4,20 +4,26 @@ import { TAGS } from '@/lib/tags'
 import { Button, Flex } from '@mantine/core'
 
 import { IMMultiSelect } from './multi-select'
+import { IMSelect } from './select'
 
 export type CertificateFiltersProps = {
-  onUpdate: (tags: string) => void
-  defaultValue: string
+  onFilterTagsUpdate: (tags: string) => void
+  onOrderByUpdate: (sort: string) => void
+  defaultFilterTagValue: string
+  defaultOrderByValue: string
 }
 
 export function CertificateFilters(props: CertificateFiltersProps) {
   const tagsMultiSelect = React.useRef<HTMLInputElement>(null)
-  const [value, setValue] = useState<string[] | undefined>(
-    props.defaultValue.split(',')
+  const [filterTags, setFilterTags] = useState<string[] | undefined>(
+    props.defaultFilterTagValue.split(',')
+  )
+  const [orderBy, setOrderBy] = useState<string | undefined>(
+    props.defaultOrderByValue
   )
 
   return (
-    <Flex align="center">
+    <Flex gap={{ base: 'sm' }} align="center">
       <IMMultiSelect
         ref={tagsMultiSelect}
         placeholder="Pick all that apply"
@@ -28,19 +34,37 @@ export function CertificateFilters(props: CertificateFiltersProps) {
         }))}
         onChange={(value) => {
           if (Array.isArray(value)) {
-            setValue(value)
-            props.onUpdate(value.join(','))
+            setFilterTags(value)
+            props.onFilterTagsUpdate(value.join(','))
           }
         }}
-        value={value}
+        value={filterTags}
+      />
+      <IMSelect
+        placeholder="Sort by:"
+        data={[
+          { value: 'actionStart', label: 'Action Period Start' },
+          { value: 'actionEnd', label: 'Action Period End' },
+          //{ value: 'holdings', label: 'Shares Bought' },
+          //{ value: 'investment', label: 'Total Investment' },
+        ]}
+        onChange={(value) => {
+          if (typeof value === 'string') {
+            setOrderBy(value)
+            props.onOrderByUpdate(value)
+          }
+        }}
+        value={orderBy}
       />
       <Button
         variant="subtle"
         radius="xs"
         size="xs"
         onClick={() => {
-          setValue(undefined)
-          props.onUpdate('')
+          setFilterTags(undefined)
+          setOrderBy(undefined)
+          props.onFilterTagsUpdate('')
+          props.onOrderByUpdate('')
         }}
       >
         Clear all
