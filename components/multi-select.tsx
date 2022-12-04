@@ -17,7 +17,7 @@ type IMTextFieldProps = MultiSelectOwnProps &
 export const IMMultiSelect = React.forwardRef<
   HTMLInputElement,
   IMTextFieldProps
->(({ label, info, id, name, className, classNames, ...rest }, forwardedRef) => {
+>(({ label, info, id, name, className, sx, ...rest }, forwardedRef) => {
   return (
     <div className={className}>
       {label && (
@@ -32,11 +32,6 @@ export const IMMultiSelect = React.forwardRef<
         id={id || name}
         name={name}
         aria-label={label as string}
-        classNames={{
-          input:
-            'block w-full py-1 rounded shadow-sm bg-secondary border-secondary focus-ring im-multiselect',
-          ...classNames,
-        }}
         sx={{
           'div > input::placeholder': {
             fontSize: 12,
@@ -47,6 +42,7 @@ export const IMMultiSelect = React.forwardRef<
             lineHeight: '0.2rem',
             height: 16,
           },
+          ...sx,
         }}
       />
     </div>
