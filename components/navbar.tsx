@@ -117,9 +117,6 @@ export function NavbarSimple() {
           }) + ' flex text-sm items-center cursor-pointer'
         }
         onClick={() => {
-          console.log(item.label)
-          // console.log(mixpanel.track);
-          console.log('current user: ' + session?.user.id)
           try {
             mixpanel.track('Click - ' + item.label, {
               user: session?.user.id,
