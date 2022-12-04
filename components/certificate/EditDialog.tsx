@@ -12,7 +12,7 @@ import {
 } from '@/components/dialog'
 import { TextField } from '@/components/text-field'
 import { BondingCurve } from '@/lib/auction'
-import { SHARE_COUNT } from '@/lib/constants'
+import { DEFAULT_TARGET, DEFAULT_VALUATION, SHARE_COUNT } from '@/lib/constants'
 import { num } from '@/lib/text'
 import { trpc } from '@/lib/trpc'
 import { Prisma } from '@prisma/client'
@@ -45,8 +45,6 @@ export function EditDialog({
   })
   const watchValuation = watch('valuation')
   const watchTarget = watch('target')
-  const one = new Prisma.Decimal(1)
-  const aLot = new Prisma.Decimal(1e5)
 
   const utils = trpc.useContext()
   const transactionMutation = trpc.useMutation('holding.edit', {
@@ -120,7 +118,11 @@ export function EditDialog({
               <tr>
                 <td className="text-right pr-4">Current valuation:</td>
                 <td className="text-right pr-4">
-                  ${num(holding.size.times(watchValuation || one), 0)}
+                  $
+                  {num(
+                    holding.size.times(watchValuation || DEFAULT_VALUATION),
+                    0
+                  )}
                 </td>
               </tr>
               <tr>
@@ -128,9 +130,11 @@ export function EditDialog({
                 <td className="text-right pr-4">
                   $
                   {num(
-                    new BondingCurve(new Prisma.Decimal(watchTarget || aLot))
+                    new BondingCurve(
+                      new Prisma.Decimal(watchTarget || DEFAULT_TARGET)
+                    )
                       .valuationOfSize(
-                        new Prisma.Decimal(watchValuation || one),
+                        new Prisma.Decimal(watchValuation || DEFAULT_VALUATION),
                         holding.size
                       )
                       .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP),
@@ -143,9 +147,11 @@ export function EditDialog({
                 <td className="text-right pr-4">
                   $
                   {num(
-                    new BondingCurve(new Prisma.Decimal(watchTarget || aLot))
+                    new BondingCurve(
+                      new Prisma.Decimal(watchTarget || DEFAULT_TARGET)
+                    )
                       .costOfSize(
-                        new Prisma.Decimal(watchValuation || one),
+                        new Prisma.Decimal(watchValuation || DEFAULT_VALUATION),
                         holding.size
                       )
                       .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP),
