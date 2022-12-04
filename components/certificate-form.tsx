@@ -1,3 +1,4 @@
+import { useSession } from 'next-auth/react'
 import * as React from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useIntercom } from 'react-use-intercom'
@@ -95,6 +96,9 @@ export function CertificateForm({
   const { isSubmitSuccessful } = formState
 
   const { show } = useIntercom()
+
+  const { data: session } = useSession()
+
   const TagDescription = (text: string) => {
     const [messageText, linkText, endText] = text.split(
       /<[a][^>]*>(.+?)<\/[a]>/
@@ -175,30 +179,6 @@ export function CertificateForm({
           required
         />
       </SimpleGrid>
-      <TextField
-        {...register('counterfactual')}
-        label="Counterfactual"
-        description="What would you have done (or what would you do) if there were no offer of retroactive funding?"
-        info="This is not displayed publicly"
-        className="my-6"
-      />
-      <IMMultiSelect
-        {...register('tags')}
-        label="Tags"
-        description={TagDescription(
-          'Please select all that apply or <a>leave us feedback</a> if you can’t find suitable tags for your field and type of work so we can add them.'
-        )}
-        placeholder="Pick all that apply"
-        data={TAGS.map((tag) => ({
-          value: tag.value,
-          label: tag.label,
-          group: tag.group,
-        }))}
-        onChange={(value) =>
-          Array.isArray(value) ? setValue('tags', value.join(',')) : null
-        }
-        defaultValue={getValues().tags ? getValues().tags.split(',') : []}
-      />
 
       <div className="mt-6">
         <Controller
@@ -229,8 +209,53 @@ export function CertificateForm({
         </a>
       </div>
 
+      <p className="mt-2 mb-2 text-sm">I confirm that:</p>
+      <Switch
+        label="I will never sell these rights (or parts thereof) more than once"
+        classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
+        defaultChecked={!isNew}
+        required
+      />
+      <Switch
+        label="I am happy for this record to be publicly accessible forever"
+        classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
+        defaultChecked={!isNew}
+        required
+      />
       <Accordion variant="separated" className="my-6">
-        <Accordion.Item value="advanced-options">
+        <Accordion.Item value="optional-fields">
+          <Accordion.Control>Optional fields</Accordion.Control>
+          <Accordion.Panel className="text-sm">
+            <TextField
+              {...register('counterfactual')}
+              label="Counterfactual"
+              description="What would you have done (or what would you do) if there were no offer of retroactive funding?"
+              info="This is not displayed publicly"
+              className="my-6"
+            />
+            <IMMultiSelect
+              {...register('tags')}
+              label="Tags"
+              description={TagDescription(
+                'Please select all that apply or <a>leave us feedback</a> if you can’t find suitable tags for your field and type of work so we can add them.'
+              )}
+              placeholder="Pick all that apply"
+              data={TAGS.map((tag) => ({
+                value: tag.value,
+                label: tag.label,
+                group: tag.group,
+              }))}
+              onChange={(value) =>
+                Array.isArray(value) ? setValue('tags', value.join(',')) : null
+              }
+              defaultValue={getValues().tags ? getValues().tags.split(',') : []}
+            />
+          </Accordion.Panel>
+        </Accordion.Item>
+        <Accordion.Item
+          value="advanced-options"
+          className={session!.user.prefersDetailView ? '' : 'hidden'}
+        >
           <Accordion.Control>Advanced options</Accordion.Control>
           <Accordion.Panel className="text-sm">
             {isNew ? (
@@ -371,20 +396,6 @@ export function CertificateForm({
           </Accordion.Panel>
         </Accordion.Item>
       </Accordion>
-
-      <p className="mt-2 mb-2 text-sm">I confirm that:</p>
-      <Switch
-        label="I will never sell these rights more than once"
-        classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
-        defaultChecked={!isNew}
-        required
-      />
-      <Switch
-        label="I am happy for this record to be publicly accessible forever"
-        classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
-        defaultChecked={!isNew}
-        required
-      />
 
       <p className="my-6 text-sm">
         When you submit your certificate, you can still edit it, and it will
