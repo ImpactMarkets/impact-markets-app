@@ -107,10 +107,12 @@ const Home: NextPageWithAuthAndLayout = () => {
           <title>Impact Markets</title>
         </Head>
 
-        <CertificateFilters
-          onUpdate={(tags) => setFilterTags(tags)}
-          defaultValue={filterTags}
-        />
+        <div className="mt-12">
+          <CertificateFilters
+            onUpdate={(tags) => setFilterTags(tags)}
+            defaultValue={filterTags}
+          />
+        </div>
         {feedQuery.data.certificateCount === 0 ? (
           <div className="text-center text-secondary border rounded py-20 px-10">
             There are no published certificates to show yet.
