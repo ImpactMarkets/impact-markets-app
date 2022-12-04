@@ -8,7 +8,7 @@ import { MarkdownIcon } from '@/components/icons'
 import { MarkdownEditor } from '@/components/markdown-editor'
 import { TextField } from '@/components/text-field'
 import { BondingCurve } from '@/lib/auction'
-import { SHARE_COUNT } from '@/lib/constants'
+import { DEFAULT_TARGET, DEFAULT_VALUATION, SHARE_COUNT } from '@/lib/constants'
 import { useLeaveConfirm } from '@/lib/form'
 import { TAGS } from '@/lib/tags'
 import { num } from '@/lib/text'
@@ -118,7 +118,6 @@ export function CertificateForm({
   }, [isSubmitSuccessful, reset, getValues])
 
   const one = new Prisma.Decimal(1)
-  const aLot = new Prisma.Decimal(1e5)
   const watchValuation = watch('valuation')
   const watchTarget = watch('target')
   const watchTitle = watch('title')
@@ -287,9 +286,11 @@ export function CertificateForm({
                         $
                         {num(
                           new BondingCurve(
-                            new Prisma.Decimal(watchTarget || aLot)
+                            new Prisma.Decimal(watchTarget || DEFAULT_TARGET)
                           ).valuationOfSize(
-                            new Prisma.Decimal(watchValuation || one),
+                            new Prisma.Decimal(
+                              watchValuation || DEFAULT_VALUATION
+                            ),
                             one
                           ),
                           0
@@ -302,9 +303,11 @@ export function CertificateForm({
                         $
                         {num(
                           new BondingCurve(
-                            new Prisma.Decimal(watchTarget || aLot)
+                            new Prisma.Decimal(watchTarget || DEFAULT_TARGET)
                           ).costOfSize(
-                            new Prisma.Decimal(watchValuation || one),
+                            new Prisma.Decimal(
+                              watchValuation || DEFAULT_VALUATION
+                            ),
                             one
                           ),
                           0

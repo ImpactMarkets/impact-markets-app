@@ -1,7 +1,9 @@
+import mixpanel from 'mixpanel-browser'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
+// import axios from 'axios'
 import { Logo } from '@/components/icons'
 import {
   BoltIcon,
@@ -14,6 +16,9 @@ import { trpc } from '@/lib/trpc'
 import { Group, Navbar, Switch, createStyles } from '@mantine/core'
 
 import refreshSession from './utils'
+
+const mixpanelToken = process.env.MIXPANEL_AUTH_TOKEN || ''
+mixpanel.init(mixpanelToken, { debug: true })
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
@@ -102,9 +107,9 @@ const data = [
 ]
 
 export function NavbarSimple() {
+  const { data: session } = useSession()
   const { classes, cx } = useStyles()
   const router = useRouter()
-  const { data: session } = useSession()
 
   const preferencesMutation = trpc.useMutation(['user.preferences'], {
     onSuccess: refreshSession,
@@ -118,6 +123,16 @@ export function NavbarSimple() {
             [classes.linkActive]: item.link === router.pathname,
           }) + ' flex text-sm items-center cursor-pointer'
         }
+        onClick={() => {
+          try {
+            mixpanel.track('Click - ' + item.label, {
+              user: session?.user.id,
+              datetime: Date(),
+            })
+          } catch (error) {
+            console.log('error: ' + error)
+          }
+        }}
       >
         <item.icon className={classes.linkIcon} />
         <span>{item.label}</span>
