@@ -138,7 +138,7 @@ export const Transactions = ({
   }
 
   if (!transactionQuery.data?.length) {
-    return null
+    return <div className="w-full text-center">No pending transactions</div>
   }
 
   return (
