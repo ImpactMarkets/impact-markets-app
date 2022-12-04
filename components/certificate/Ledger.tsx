@@ -139,7 +139,7 @@ export const Ledger = ({ certificateId, isActive }: LedgerProps) => {
       <Tabs defaultValue="owners">
         {session && (
           <Tabs.List>
-            <Tabs.Tab value="owners">Owners and consumers</Tabs.Tab>
+            <Tabs.Tab value="owners">Owners and donors</Tabs.Tab>
             <Tabs.Tab value="transactions">Pending transactions</Tabs.Tab>
           </Tabs.List>
         )}
@@ -202,7 +202,7 @@ export const Ledger = ({ certificateId, isActive }: LedgerProps) => {
               <table className="table-auto w-1/3">
                 <thead>
                   <tr className="h-10">
-                    <th className="text-sm text-left">Consumers</th>
+                    <th className="text-sm text-left">Donors</th>
                     <th
                       className={classNames(
                         'text-sm text-right',
