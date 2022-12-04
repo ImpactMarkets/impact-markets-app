@@ -5,8 +5,7 @@ const counterfactualText = 'I would be sitting around doing nothing.'
 const descriptionText = 'Just a random description.'
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('http://localhost:3001/')
-  await page.click('text=Log in')
+  await page.goto('http://localhost:3001/api/auth/signin')
   await page.click('text=Sign in with Mock Login')
 })
 
