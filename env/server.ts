@@ -58,9 +58,8 @@ export const serverEnv = {
       allowEmpty: true,
       devDefault: 'http://localhost:3000',
     }),
-    FRONTEND_URL: str(),
     NEXTAUTH_SECRET: str({
-      devDefault: 'xxx',
+      devDefault: 'foobar',
     }),
     DEBUG: bool({ default: false }),
     MOCK_LOGIN: bool({ default: false }),
@@ -79,7 +78,7 @@ export const serverEnv = {
     SLACK_WEBHOOK_URL: slackParser({ allowEmpty: true, default: '' }),
     ROLLBAR_SERVER_TOKEN: rollbarParser({
       allowEmpty: false,
-      devDefault: process.env.NODE_ENV,
+      devDefault: 'foobar',
     }),
   }),
 }
