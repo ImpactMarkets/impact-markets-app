@@ -6,7 +6,6 @@ import { Button } from '@/components/button'
 import { Logo } from '@/components/icons'
 import {
   Burger,
-  Center,
   Container,
   Group,
   Header,
@@ -14,7 +13,6 @@ import {
   createStyles,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { IconChevronDown } from '@tabler/icons'
 
 const HEADER_HEIGHT = 60
 
@@ -116,7 +114,3 @@ export function Landing_Header() {
     </Header>
   )
 }
-
-/*export function LandingHeader() {
-  return <div>THIS IS A HEADER</div>
-}*/
