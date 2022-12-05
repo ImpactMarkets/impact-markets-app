@@ -1,6 +1,7 @@
 import Head from 'next/head'
 
 import { Heading1 } from '@/components/heading-1'
+import { HeroText } from '@/components/herotext'
 import { Layout } from '@/components/layout'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
@@ -10,10 +11,7 @@ const LandingPage: NextPageWithAuthAndLayout = () => {
       <Head>
         <title>Impact Markets</title>
       </Head>
-
-      <Heading1>Landing page</Heading1>
-
-      <div className="mt-6">Landing page</div>
+      <HeroText></HeroText>
     </div>
   )
 }

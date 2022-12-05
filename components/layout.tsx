@@ -32,7 +32,6 @@ export function Layout({ children }: LayoutProps) {
     <div className="flex relative max-w-7xl m-auto">
       <NavbarSimple></NavbarSimple>
       <div className="px-6 w-full mx-auto flex flex-col min-h-screen">
-        <HeroText></HeroText>
         <header className="flex items-center justify-end mt-6 mb-6 pt-4 gap-4 h-16">
           <div className="flex items-center gap-2 md:gap-4">
             <IconButton
