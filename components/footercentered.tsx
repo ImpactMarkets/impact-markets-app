@@ -15,6 +15,7 @@ const useStyles = createStyles((theme) => ({
     borderTop: `1px solid ${
       theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2]
     }`,
+    maxWidth: 600,
   },
 
   inner: {
@@ -43,10 +44,10 @@ interface FooterCenteredProps {
 export function FooterCentered() {
   const { classes } = useStyles()
 
-  // TODO hardcode other links
   const links = [
-    { link: '/terms', label: 'Terms' },
-    { link: '/link2', label: 'Link2' },
+    { label: 'Terms', link: '/terms' },
+    { label: 'Blog', link: 'https://impactmarkets.substack.com/' },
+    { label: 'Discord', link: 'https://discord.gg/7zMNNDSxWv' },
   ]
 
   const items = links.map((link) => <Link href={link.link}>{link.label}</Link>)
@@ -54,20 +55,14 @@ export function FooterCentered() {
   return (
     <div className={classes.footer}>
       <div className={classes.inner}>
-        <Logo className="w-[200px]" />
-
+        Good Exchange, PBC
         <Group className={classes.links}>{items}</Group>
-
         <Group spacing="xs" position="right" noWrap>
-          <ActionIcon size="lg" variant="default" radius="xl">
-            <IconBrandTwitter size={18} stroke={1.5} />
-          </ActionIcon>
-          <ActionIcon size="lg" variant="default" radius="xl">
-            <IconBrandYoutube size={18} stroke={1.5} />
-          </ActionIcon>
-          <ActionIcon size="lg" variant="default" radius="xl">
-            <IconBrandInstagram size={18} stroke={1.5} />
-          </ActionIcon>
+          <Link href="https://www.youtube.com/watch?v=NTIAdn0Oms8">
+            <ActionIcon size="lg" variant="default" radius="xl">
+              <IconBrandYoutube size={18} stroke={1.5} />
+            </ActionIcon>
+          </Link>
         </Group>
       </div>
     </div>
