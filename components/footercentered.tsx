@@ -44,7 +44,10 @@ export function FooterCentered() {
   const { classes } = useStyles()
 
   // TODO hardcode other links
-  const links = [{ link: '/terms', label: 'Terms of service' }]
+  const links = [
+    { link: '/terms', label: 'Terms' },
+    { link: '/link2', label: 'Link2' },
+  ]
 
   const items = links.map((link) => <Link href={link.link}>{link.label}</Link>)
 
