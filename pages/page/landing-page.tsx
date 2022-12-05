@@ -1,5 +1,6 @@
 import Head from 'next/head'
 
+import { FooterCentered } from '@/components/footercentered'
 import { HeroText } from '@/components/herotext'
 import { Landing_Header } from '@/components/landingpage/header'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
@@ -12,6 +13,7 @@ const LandingPage: NextPageWithAuthAndLayout = () => {
       </Head>
       <Landing_Header></Landing_Header>
       <HeroText></HeroText>
+      <FooterCentered></FooterCentered>
     </div>
   )
 }
