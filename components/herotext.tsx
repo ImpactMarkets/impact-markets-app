@@ -1,4 +1,5 @@
-import { Button, Container, Text, Title, createStyles } from '@mantine/core'
+import { Button } from '@/components/button'
+import { Container, Text, Title, createStyles } from '@mantine/core'
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -113,17 +114,10 @@ export function HeroText() {
         </Container>
 
         <div className={classes.controls}>
-          <Button
-            className={classes.control}
-            size="lg"
-            variant="default"
-            color="gray"
-          >
+          <Button className={classes.control} color="gray">
             Book a demo
           </Button>
-          <Button className={classes.control} size="lg">
-            Purchase a license
-          </Button>
+          <Button className={classes.control}>Purchase a license</Button>
         </div>
       </div>
     </Container>
