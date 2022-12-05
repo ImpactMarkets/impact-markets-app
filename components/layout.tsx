@@ -3,7 +3,8 @@ import * as React from 'react'
 
 import { Avatar } from '@/components/avatar'
 import { ButtonLink } from '@/components/button-link'
-import { Footer } from '@/components/footer'
+import { FooterCentered } from '@/components/footercentered'
+import { HeroText } from '@/components/herotext'
 import { IconButton } from '@/components/icon-button'
 import { SearchIcon } from '@/components/icons'
 import {
@@ -88,7 +89,7 @@ export function Layout({ children }: LayoutProps) {
         <main>{children}</main>
 
         <div className="py-5 mt-auto">
-          <Footer />
+          <FooterCentered />
         </div>
 
         <SearchDialog
