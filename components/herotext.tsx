@@ -100,7 +100,7 @@ export function HeroText() {
         <Title className={classes.title}>
           Automated AI{' '}
           <Text component="span" className={classes.highlight} inherit>
-            code reviews
+            Impact markets
           </Text>{' '}
           for any stack
         </Title>
@@ -114,10 +114,10 @@ export function HeroText() {
         </Container>
 
         <div className={classes.controls}>
-          <Button className={classes.control} color="gray">
-            Book a demo
+          <Button className={classes.control}>Learn more</Button>
+          <Button className={classes.control} variant="highlight">
+            Explore Markets
           </Button>
-          <Button className={classes.control}>Purchase a license</Button>
         </div>
       </div>
     </Container>
