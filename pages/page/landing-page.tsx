@@ -1,7 +1,7 @@
 import Head from 'next/head'
 
 import { Heading1 } from '@/components/heading-1'
-import { Layout } from '@/components/layout'
+import { Header } from '@/components/landingpage/header'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
 const LandingPage: NextPageWithAuthAndLayout = () => {
@@ -11,15 +11,13 @@ const LandingPage: NextPageWithAuthAndLayout = () => {
         <title>Impact Markets</title>
       </Head>
 
+      <Header></Header>
+
       <Heading1>Landing page</Heading1>
 
       <div className="mt-6">Landing page</div>
     </div>
   )
-}
-
-LandingPage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout>{page}</Layout>
 }
 
 export default LandingPage
