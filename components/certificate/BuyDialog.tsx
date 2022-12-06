@@ -17,7 +17,7 @@ import { classNames } from '@/lib/classnames'
 import { SHARE_COUNT } from '@/lib/constants'
 import { num } from '@/lib/text'
 import { trpc } from '@/lib/trpc'
-import { Accordion, Tabs } from '@mantine/core'
+import { Accordion, Switch, Tabs } from '@mantine/core'
 import { Prisma } from '@prisma/client'
 
 import { Banner } from '../banner'
@@ -272,11 +272,14 @@ export function BuyDialog({
               <Accordion.Item value="advanced-options">
                 <Accordion.Control>Advanced options</Accordion.Control>
                 <Accordion.Panel className="text-sm">
-                  <SwitchField
+                  <Switch
                     {...register('consume', { shouldUnregister: true })}
                     label="Consume immediately"
                     description="You will never be able to resell shares that you have consumed. Think of it as a donation."
                     classNames={{
+                      input: 'rounded-full !bg-auto !bg-left',
+                      label: 'text-red',
+                    }}
                   />
                 </Accordion.Panel>
               </Accordion.Item>
