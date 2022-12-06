@@ -169,7 +169,9 @@ export function BuyDialog({
                     })}
                     label="Payment"
                     description={
-                      simplified ? null : (
+                      simplified ? (
+                        'How much would you like to spend?'
+                      ) : (
                         <span>
                           USD you want to pay for shares in the certificate
                           (max. ${num(maxCost, 2)})
@@ -273,7 +275,8 @@ export function BuyDialog({
                   <SwitchField
                     {...register('consume', { shouldUnregister: true })}
                     label="Consume immediately"
-                    info="You will never be able to resell shares that you have consumed."
+                    description="You will never be able to resell shares that you have consumed. Think of it as a donation."
+                    classNames={{
                   />
                 </Accordion.Panel>
               </Accordion.Item>
