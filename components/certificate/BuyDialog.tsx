@@ -138,7 +138,16 @@ export function BuyDialog({
     <Dialog isOpen={isOpen} onClose={handleClose}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
-          <DialogTitle>{isActive ? 'Donate' : 'Buy'}</DialogTitle>
+          <DialogTitle>
+            {isActive ? (
+              <span>
+                Donate
+                <InfoTooltip text="Are you an accredited investor and would you like to buy and sell shares in this project? Contact us to prove your accredited investor status." />
+              </span>
+            ) : (
+              <span>Buy</span>
+            )}
+          </DialogTitle>
           <div className="mt-6 space-y-6">
             <p className="text-sm">
               Please contact the current owner {holding.user.name || ''} to
@@ -272,6 +281,9 @@ export function BuyDialog({
               <Accordion.Item value="advanced-options">
                 <Accordion.Control>Advanced options</Accordion.Control>
                 <Accordion.Panel className="text-sm">
+                  <p className="mb-6">
+                    Change only if you know exactly what you’re doing.
+                  </p>
                   <Switch
                     {...register('consume', { shouldUnregister: true })}
                     label="Consume immediately"
