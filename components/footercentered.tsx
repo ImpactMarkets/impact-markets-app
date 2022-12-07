@@ -1,21 +1,16 @@
-import Link, { LinkProps } from 'next/link'
+import Link from 'next/link'
 import * as React from 'react'
 
-import { Logo } from '@/components/icons'
-import { ActionIcon, Anchor, Group, createStyles } from '@mantine/core'
-import {
-  IconBrandInstagram,
-  IconBrandTwitter,
-  IconBrandYoutube,
-} from '@tabler/icons'
+import { ActionIcon, Group, createStyles } from '@mantine/core'
+import { IconBrandYoutube } from '@tabler/icons'
 
 const useStyles = createStyles((theme) => ({
   footer: {
-    marginTop: 120,
+    marginTop: 20,
     borderTop: `1px solid ${
       theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2]
     }`,
-    padding: 100,
+    padding: 20,
   },
 
   inner: {
@@ -50,7 +45,11 @@ export function FooterCentered() {
     { label: 'Discord', link: 'https://discord.gg/7zMNNDSxWv' },
   ]
 
-  const items = links.map((link) => <Link href={link.link}>{link.label}</Link>)
+  const items = links.map((link) => (
+    <Link key={link.link} href={link.link}>
+      {link.label}
+    </Link>
+  ))
 
   return (
     <div className={classes.footer}>

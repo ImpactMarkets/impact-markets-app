@@ -1,10 +1,12 @@
 import { Button } from '@/components/button'
 import { Container, Text, Title, createStyles } from '@mantine/core'
 
+import { ButtonLink } from './button-link'
+
 const useStyles = createStyles((theme) => ({
   wrapper: {
     position: 'relative',
-    paddingTop: 120,
+    paddingTop: 0,
     paddingBottom: 80,
 
     '@media (max-width: 755px)': {
@@ -98,26 +100,26 @@ export function HeroText() {
     <Container className={classes.wrapper} size={1400}>
       <div className={classes.inner}>
         <Title className={classes.title}>
-          Automated AI{' '}
-          <Text component="span" className={classes.highlight} inherit>
-            Impact markets
-          </Text>{' '}
-          for any stack
+          Fund, trade, and accelerate
+          <div>
+            <Text component="span" className={classes.highlight} inherit>
+              public goods
+            </Text>
+          </div>
         </Title>
 
         <Container p={0} size={600}>
           <Text size="lg" color="dimmed" className={classes.description}>
-            Build more reliable software with AI companion. AI is also trained
-            to detect lazy developers who do nothing and just complain on
-            Twitter.
+            Speculate and invest on the impact of altruistic projects. Align
+            incentives using profit to build a better future.
           </Text>
         </Container>
 
         <div className={classes.controls}>
-          <Button className={classes.control}>Learn more</Button>
-          <Button className={classes.control} variant="highlight">
+          <Button className="mr-2">What?</Button>
+          <ButtonLink className={classes.control} variant="highlight" href="/">
             Explore Markets
-          </Button>
+          </ButtonLink>
         </div>
       </div>
     </Container>
