@@ -2,6 +2,7 @@ import { Certificate } from 'crypto'
 import { z } from 'zod'
 
 import { BondingCurve } from '@/lib/auction'
+import { TARGET_FRACTION } from '@/lib/constants'
 import { Prisma, TransactionState } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
@@ -100,6 +101,7 @@ export const transactionRouter = createProtectedRouter()
             .plus(size)
         )
         .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP)
+      const target = valuation.times(holding.size).times(TARGET_FRACTION)
 
       // This is a bit confusing b/c our model and the database feature are both called tranactions
       const transaction = await ctx.prisma.$transaction(async (prisma) => {
@@ -115,6 +117,7 @@ export const transactionRouter = createProtectedRouter()
             size: { increment: size },
             cost: { increment: cost },
             valuation,
+            target,
           },
           create: {
             certificateId: sellingHolding.certificateId,
@@ -123,6 +126,7 @@ export const transactionRouter = createProtectedRouter()
             size,
             cost,
             valuation,
+            target,
           },
         })
         const transaction = await prisma.transaction.create({
@@ -192,6 +196,7 @@ export const transactionRouter = createProtectedRouter()
             size: { increment: transaction.size },
             cost: { increment: transaction.cost },
             valuation: transaction.buyingHolding.valuation,
+            target: transaction.buyingHolding.target,
           },
           create: {
             certificateId: transaction.sellingHolding.certificateId,
@@ -200,6 +205,7 @@ export const transactionRouter = createProtectedRouter()
             size: transaction.size,
             cost: transaction.cost,
             valuation: transaction.buyingHolding.valuation,
+            target: transaction.buyingHolding.target,
           },
         }),
         ctx.prisma.transaction.update({
