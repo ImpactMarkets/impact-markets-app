@@ -155,36 +155,27 @@ export const transactionRouter = createProtectedRouter()
         },
       })
 
-      await ctx.prisma.$transaction([
+      await ctx.prisma.$transaction(async (tx) => {
         // Update the size of the selling holding
-        ctx.prisma.holding.update({
+        await tx.holding.update({
           where: { id: transaction.sellingHoldingId },
           data: {
             size: { decrement: transaction.size },
             cost: { decrement: transaction.cost },
           },
-        }),
+        })
+
         // Update the valuation of all holdings of the same certificate
         // Not doing this would require issuers to pay attention all the time; doing this when a
         // transaction is created would introduce more complexity around updating and reverting
         // valuations in view of transactions against different holdings of the same certificate.
-        ctx.prisma.holding.updateMany({
-          where: {
-            certificateId: transaction.sellingHolding.certificateId,
-            type: 'OWNERSHIP',
-          },
-          data: {
-            valuation: transaction.buyingHolding.valuation,
-          },
-        }),
-        ctx.prisma.holding.update({
-          where: { id: transaction.buyingHoldingId },
-          data: {
-            size: { decrement: transaction.size },
-            cost: { decrement: transaction.cost },
-          },
-        }),
-        ctx.prisma.holding.upsert({
+
+        // The buyer might already have a holding, so we can either (1) check whether that’s the
+        // case and update the existing holding and delete the reservation holding (if empty) or
+        // otherwise flip the reservation holding to an ownership holding, or (2) use the handy
+        // upsert method to create/update the ownership holding, and then get rid of the reservation
+        // holding (if empty) in both cases. We’re going with option 2 here.
+        const nonReservationBuyingHolding = await tx.holding.upsert({
           where: {
             certificateId_userId_type: {
               certificateId: transaction.sellingHolding.certificateId,
@@ -207,17 +198,33 @@ export const transactionRouter = createProtectedRouter()
             valuation: transaction.buyingHolding.valuation,
             target: transaction.buyingHolding.target,
           },
-        }),
-        ctx.prisma.transaction.update({
+        })
+
+        // Remove from the reservation holding what we’ve added to the ownership/consumption holding
+        await tx.holding.update({
+          where: { id: transaction.buyingHoldingId },
+          data: {
+            size: { decrement: transaction.size },
+            cost: { decrement: transaction.cost },
+          },
+        })
+
+        // Switch the completed transaction over to the new buying holding
+        await tx.transaction.update({
           where: { id: transaction.id },
           data: {
+            buyingHoldingId: nonReservationBuyingHolding.id,
             state: 'CONFIRMED',
           },
-        }),
-        ctx.prisma.holding.deleteMany({
-          where: { size: 0, type: { in: ['RESERVATION', 'OWNERSHIP'] } },
-        }),
-      ])
+        })
+
+        // The old reservation holding might be empty now, so we can get rid of it. But we keep
+        // possibly empty selling holdings because they’re associated with transactions we don’t
+        // want to lose.
+        await tx.holding.deleteMany({
+          where: { size: 0, type: 'RESERVATION' },
+        })
+      })
 
       return id
     },
@@ -234,6 +241,7 @@ export const transactionRouter = createProtectedRouter()
       })
 
       await ctx.prisma.$transaction([
+        // There might be several transactions against the same buying holding, see above
         ctx.prisma.holding.update({
           where: { id: transaction.buyingHoldingId },
           data: {
@@ -244,11 +252,8 @@ export const transactionRouter = createProtectedRouter()
         ctx.prisma.transaction.update({
           where: { id: transaction.id },
           data: {
-            state: 'CONFIRMED',
+            state: 'REJECTED',
           },
-        }),
-        ctx.prisma.holding.deleteMany({
-          where: { size: 0, type: { in: ['RESERVATION', 'OWNERSHIP'] } },
         }),
       ])
 

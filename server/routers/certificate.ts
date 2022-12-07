@@ -66,6 +66,7 @@ export const certificateRouter = createProtectedRouter()
               type: true,
               size: true,
             },
+            where: { size: { gt: 0 } },
           },
           likedBy: {
             orderBy: {
