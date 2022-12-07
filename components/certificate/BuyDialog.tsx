@@ -21,7 +21,7 @@ import { Accordion, Switch, Tabs } from '@mantine/core'
 import { Prisma } from '@prisma/client'
 
 import { Banner } from '../banner'
-import { SwitchField } from '../switch-field'
+import { InfoTooltip } from '../info-tooltip'
 
 type BuyFormData = {
   size: Prisma.Decimal
@@ -118,8 +118,9 @@ export function BuyDialog({
       .times(SHARE_COUNT)
       .toDecimalPlaces(0, Prisma.Decimal.ROUND_DOWN)
 
+  const valuationFraction = bondingCurve.fractionAtValuation(holding.valuation)
   const startingValuation = bondingCurve.valuationAtFraction(
-    bondingCurve.fractionAtValuation(holding.valuation).plus(reservedSize)
+    valuationFraction.plus(reservedSize)
   )
   const newValuation = bondingCurve.valuationAtFraction(
     bondingCurve
@@ -128,8 +129,8 @@ export function BuyDialog({
       .plus(new Prisma.Decimal(watchSize || zero))
   )
   const maxCost = bondingCurve.costBetweenFractions(
-    bondingCurve.fractionAtValuation(holding.valuation).plus(reservedSize),
-    holding.size
+    valuationFraction.plus(reservedSize),
+    valuationFraction.plus(holding.size)
   )
   const cost = costOfSize(watchSize)
   const shares = sharesOfCost(watchCost)
