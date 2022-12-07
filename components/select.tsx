@@ -44,6 +44,10 @@ export const IMSelect = React.forwardRef<HTMLInputElement, IMTextFieldProps>(
               fontSize: 14,
               lineHeight: '0.2rem',
               height: 16,
+              minWidth: 0,
+            },
+            'div > input:focus': {
+              boxShadow: 'none',
             },
           }}
         />

@@ -41,6 +41,10 @@ export const IMMultiSelect = React.forwardRef<
             fontSize: 14,
             lineHeight: '0.2rem',
             height: 16,
+            minWidth: 0,
+          },
+          'div > input:focus': {
+            boxShadow: 'none',
           },
           ...sx,
         }}

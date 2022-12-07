@@ -40,8 +40,8 @@ export function CertificateFilters(props: CertificateFiltersProps) {
         }}
         value={filterTags}
         classNames={{
-          input: 'bg-none !border-gray-300',
-          searchInput: '!border-gray-300',
+          input: 'bg-none border-0',
+          searchInput: 'border-0',
         }}
       />
       <IMSelect
@@ -59,6 +59,9 @@ export function CertificateFilters(props: CertificateFiltersProps) {
           }
         }}
         value={orderBy}
+        classNames={{
+          input: 'bg-none border-0',
+        }}
       />
       <Button
         variant="subtle"
