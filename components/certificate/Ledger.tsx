@@ -34,12 +34,20 @@ const Holding = ({
   const { data: session } = useSession()
   const [isBuyDialogOpen, setIsBuyDialogOpen] = React.useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false)
+
+  // Fresh keys to force re-mounting of the dialogs
+  // https://stackoverflow.com/a/66772917/678861
+  const [childKey, setChildKey] = React.useState(1)
+  React.useEffect(() => {
+    setChildKey((prev) => prev + 1)
+  }, [isBuyDialogOpen, isEditDialogOpen])
+
   const reservedSize = holding.sellTransactions.reduce(
     (aggregator, transaction) => transaction.size.plus(aggregator),
     new Prisma.Decimal(0)
   )
   return (
-    <tr key={holding.user.id + holding.type}>
+    <tr key={holding.user.id + holding.type + childKey}>
       <td className="text-sm text-left flex" key="owner">
         <Author author={holding.user} />
       </td>
