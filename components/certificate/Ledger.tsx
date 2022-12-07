@@ -46,6 +46,14 @@ const Holding = ({
     (aggregator, transaction) => transaction.size.plus(aggregator),
     new Prisma.Decimal(0)
   )
+  // Show the edit button only if (1) the viewer is logged in, (2) the viewer wants to see details,
+  // and (3) the viewer is admin or the specified user is the owner of the holding. The specified
+  // user might be different from the viewer on the profile pages.
+  const showEditButton =
+    session &&
+    !simplified &&
+    (session!.user.role === 'ADMIN' || holding.user.id === userId)
+  const showBuyButton = session && holding.user.id !== userId
   return (
     <tr key={holding.user.id + holding.type + childKey}>
       <td className="text-sm text-left flex" key="owner">
@@ -65,8 +73,7 @@ const Holding = ({
       </td>
       <td className="text-sm text-right px-2">
         <div className="flex gap-1">
-          {((session && session?.user.role === 'ADMIN') ||
-            holding.user.id === userId) && (
+          {showEditButton && (
             <>
               <ButtonLink
                 href="#"
@@ -87,7 +94,7 @@ const Holding = ({
               />
             </>
           )}
-          {session && holding.user.id !== userId && (
+          {showBuyButton && (
             <>
               <ButtonLink
                 href="#"
