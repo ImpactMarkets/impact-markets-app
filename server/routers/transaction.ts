@@ -1,4 +1,3 @@
-import { Certificate } from 'crypto'
 import { z } from 'zod'
 
 import { BondingCurve } from '@/lib/auction'
@@ -169,6 +168,17 @@ export const transactionRouter = createProtectedRouter()
         // Not doing this would require issuers to pay attention all the time; doing this when a
         // transaction is created would introduce more complexity around updating and reverting
         // valuations in view of transactions against different holdings of the same certificate.
+        // https://github.com/prisma/prisma/issues/5761
+        // https://stackoverflow.com/questions/72660562/execute-postgresql-function-in-prisma-without-using-queryraw
+        await tx.$queryRaw(
+          Prisma.sql`
+            UPDATE "Holding"
+            SET "valuation" = greatest("valuation", ${transaction.buyingHolding.valuation}),
+                "target" = greatest("target", ${transaction.buyingHolding.target})
+            WHERE "certificateId" = ${transaction.sellingHolding.certificateId}
+              AND "type" = 'OWNERSHIP'
+        `
+        )
 
         // The buyer might already have a holding, so we can either (1) check whether that’s the
         // case and update the existing holding and delete the reservation holding (if empty) or
