@@ -179,35 +179,6 @@ export function CertificateForm({
           required
         />
       </SimpleGrid>
-      <TextField
-        {...register('counterfactual')}
-        label="Counterfactual"
-        description="What would you have done (or what would you do) if there were no offer of retroactive funding?"
-        info="This is not displayed publicly"
-        className="my-6"
-      />
-      <IMMultiSelect
-        {...register('tags')}
-        label="Tags"
-        description={TagDescription(
-          'Please select all that apply or <a>leave us feedback</a> if you can’t find suitable tags for your field and type of work so we can add them.'
-        )}
-        placeholder="Pick all that apply"
-        data={TAGS.map((tag) => ({
-          value: tag.value,
-          label: tag.label,
-          group: tag.group,
-        }))}
-        onChange={(value) =>
-          Array.isArray(value) ? setValue('tags', value.join(',')) : null
-        }
-        defaultValue={getValues().tags ? getValues().tags.split(',') : []}
-        classNames={{
-          input:
-            'block w-full rounded shadow-sm bg-secondary ring-transparent border-secondary im-multiselect',
-          searchInput: 'bg-transparent',
-        }}
-      />
 
       <div className="mt-6">
         <Controller
