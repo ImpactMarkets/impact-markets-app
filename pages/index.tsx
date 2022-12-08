@@ -9,6 +9,7 @@ import type { CertificateSummaryProps } from '@/components/certificate-summary'
 import { CertificateSummarySkeleton } from '@/components/certificate-summary-skeleton'
 import { Layout } from '@/components/layout'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
+import { CertSortKey } from '@/lib/constants'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
@@ -28,7 +29,7 @@ const Home: NextPageWithAuthAndLayout = () => {
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
   const utils = trpc.useContext()
   const [filterTags, setFilterTags] = React.useState('')
-  const [orderBy, setOrderBy] = React.useState('')
+  const [orderBy, setOrderBy] = React.useState('' as CertSortKey)
   const feedQueryPathAndInput: InferQueryPathAndInput<'certificate.feed'> = [
     'certificate.feed',
     {
@@ -112,7 +113,7 @@ const Home: NextPageWithAuthAndLayout = () => {
         <div className="mt-12">
           <CertificateFilters
             onFilterTagsUpdate={(tags) => setFilterTags(tags)}
-            onOrderByUpdate={(orderBy) => setOrderBy(orderBy)}
+            onOrderByUpdate={(orderBy: CertSortKey) => setOrderBy(orderBy)}
             defaultFilterTagValue={filterTags}
             defaultOrderByValue={orderBy}
           />

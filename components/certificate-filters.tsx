@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+import { CERT_SORT_KEYS, CertSortKey } from '@/lib/constants'
 import { TAGS } from '@/lib/tags'
 import { Button, Flex } from '@mantine/core'
 
@@ -8,7 +9,7 @@ import { IMSelect } from './select'
 
 export type CertificateFiltersProps = {
   onFilterTagsUpdate: (tags: string) => void
-  onOrderByUpdate: (sort: string) => void
+  onOrderByUpdate: (sort: CertSortKey) => void
   defaultFilterTagValue: string
   defaultOrderByValue: string
 }
@@ -21,6 +22,14 @@ export function CertificateFilters(props: CertificateFiltersProps) {
   const [orderBy, setOrderBy] = useState<string | undefined>(
     props.defaultOrderByValue
   )
+  const sortOptions: Array<{ value: CertSortKey; label: string }> = [
+    { value: 'actionStart', label: 'Start of work' },
+    { value: 'actionEnd', label: 'End of work' },
+    { value: 'supporterCount', label: 'Supporters' },
+    // Not currently supported:
+    // { value: 'holdings', label: 'Shares Bought' },
+    // { value: 'investment', label: 'Total Investment' },
+  ]
 
   return (
     <Flex gap={{ base: 'sm' }} align="center">
@@ -46,16 +55,11 @@ export function CertificateFilters(props: CertificateFiltersProps) {
       />
       <IMSelect
         placeholder="Sort by:"
-        data={[
-          { value: 'actionStart', label: 'Action Period Start' },
-          { value: 'actionEnd', label: 'Action Period End' },
-          //{ value: 'holdings', label: 'Shares Bought' },
-          //{ value: 'investment', label: 'Total Investment' },
-        ]}
+        data={sortOptions}
         onChange={(value) => {
-          if (typeof value === 'string') {
-            setOrderBy(value)
-            props.onOrderByUpdate(value)
+          if (CERT_SORT_KEYS.includes(value as CertSortKey)) {
+            setOrderBy(value as CertSortKey)
+            props.onOrderByUpdate(value as CertSortKey)
           }
         }}
         value={orderBy}

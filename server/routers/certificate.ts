@@ -1,6 +1,7 @@
 import slugify from 'slugify'
 import { z } from 'zod'
 
+import { CERT_SORT_KEYS, CertSortKey } from '@/lib/constants'
 import { markdownToHtml } from '@/lib/editor'
 import { postToSlackIfEnabled } from '@/lib/slack'
 import { Prisma } from '@prisma/client'
@@ -9,21 +10,29 @@ import { TRPCError } from '@trpc/server'
 import { createProtectedRouter } from '../create-protected-router'
 
 const getOrderBy = (
-  orderBy: string | undefined
+  orderByKey: CertSortKey | undefined
 ):
   | Prisma.Enumerable<Prisma.CertificateOrderByWithRelationAndSearchRelevanceInput>
   | undefined => {
+  const orderOptions = {
+    actionStart: { actionStart: Prisma.SortOrder.desc },
+    actionEnd: { actionEnd: Prisma.SortOrder.desc },
+    supporterCount: {
+      holdings: {
+        // Sadly not supported:
+        // where: {
+        //   size: { gt: 0 },
+        //   type: { in: ['OWNERSHIP', 'CONSUMPTION'] },
+        // },
+        _count: Prisma.SortOrder.desc,
+      },
+    },
+  }
+  const orderBy = orderByKey && orderOptions[orderByKey]
   if (!orderBy) {
-    return { createdAt: 'desc' }
+    return { createdAt: Prisma.SortOrder.desc }
   }
-
-  if (orderBy === 'actionStart') {
-    return { actionStart: 'desc' }
-  }
-
-  if (orderBy === 'actionEnd') {
-    return { actionEnd: 'desc' }
-  }
+  return orderBy
 }
 
 export const certificateRouter = createProtectedRouter()
@@ -34,7 +43,7 @@ export const certificateRouter = createProtectedRouter()
         skip: z.number().min(1).optional(),
         authorId: z.string().optional(),
         filterTags: z.string().optional(),
-        orderBy: z.string().optional(),
+        orderBy: z.enum(CERT_SORT_KEYS).optional(),
       })
       .optional(),
     async resolve({ input, ctx }) {
