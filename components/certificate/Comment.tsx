@@ -30,7 +30,7 @@ export function Comment({
   const [isConfirmDeleteDialogOpen, setIsConfirmDeleteDialogOpen] =
     React.useState(false)
 
-  const commentBelongsToUser = comment.author.id === session!.user.id
+  const commentBelongsToUser = comment.author.id === session?.user.id
 
   if (isEditing) {
     return (

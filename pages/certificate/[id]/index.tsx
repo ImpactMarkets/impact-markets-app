@@ -20,14 +20,27 @@ import { Layout } from '@/components/layout'
 import { LikeButton } from '@/components/like-button'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
+import { LoadingOverlay } from '@mantine/core'
 
-const CertificatePage: NextPageWithAuthAndLayout = () => {
-  const { data: session } = useSession()
+// TODO: Maybe this could be made into a generic component ?
+const CertificatePageWrapper: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
+
+  if (!router.isReady) {
+    return <LoadingOverlay visible />
+  } else if (typeof router.query.id !== 'string') {
+    return <p>Invalid certificate id: {router.query.id}</p>
+  } else {
+    return <CertificatePage certificateId={router.query.id} />
+  }
+}
+
+function CertificatePage({ certificateId }: { certificateId: string }) {
+  const router = useRouter()
+  const { data: session } = useSession()
   const utils = trpc.useContext()
-  const certificateQueryPathAndInput = getCertificateQueryPathAndInput(
-    String(router.query.id)
-  )
+  const certificateQueryPathAndInput =
+    getCertificateQueryPathAndInput(certificateId)
   const certificateQuery = trpc.useQuery(certificateQueryPathAndInput)
   const certificate = certificateQuery.data
   const likeMutation = trpc.useMutation(['certificate.like'], {
@@ -89,7 +102,7 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
   })
 
   if (certificate) {
-    if (!isNaN(Number(router.query.id))) {
+    if (!isNaN(Number(certificateId))) {
       // Redirect from old to new certificate URLs
       router.push('/certificate/' + certificate.id)
     }
@@ -224,8 +237,10 @@ const CertificatePage: NextPageWithAuthAndLayout = () => {
   )
 }
 
-CertificatePage.getLayout = function getLayout(page: React.ReactElement) {
+CertificatePageWrapper.getLayout = function getLayout(
+  page: React.ReactElement
+) {
   return <Layout>{page}</Layout>
 }
 
-export default CertificatePage
+export default CertificatePageWrapper

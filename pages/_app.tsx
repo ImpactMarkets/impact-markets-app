@@ -1,7 +1,6 @@
 import { SessionProvider, signIn, useSession } from 'next-auth/react'
 import { ThemeProvider } from 'next-themes'
 import type { AppProps } from 'next/app'
-import { useRouter } from 'next/router'
 import * as React from 'react'
 import { Toaster } from 'react-hot-toast'
 import { IntercomProvider } from 'react-use-intercom'
@@ -10,7 +9,7 @@ import { browserEnv } from '@/env/browser'
 import { transformer } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { AppRouter } from '@/server/routers/_app'
-import { LoadingOverlay, MantineProvider } from '@mantine/core'
+import { MantineProvider } from '@mantine/core'
 import { Provider as RollbarProvider } from '@rollbar/react'
 import { httpBatchLink } from '@trpc/client/links/httpBatchLink'
 import { loggerLink } from '@trpc/client/links/loggerLink'
@@ -27,10 +26,10 @@ function MyApp({
   Component,
   pageProps: { session, ...pageProps },
 }: AppPropsWithAuthAndLayout) {
-  const router = useRouter()
   const getLayout = Component.getLayout ?? ((page) => page)
   const rollbarConfig = {
     accessToken: browserEnv.NEXT_PUBLIC_ROLLBAR_CLIENT_TOKEN,
+    enabled: process.env.NODE_ENV === 'production',
     captureUncaught: true,
     captureUnhandledRejections: true,
     payload: {
@@ -41,11 +40,6 @@ function MyApp({
       },
       environment: process.env.NODE_ENV,
     },
-  }
-
-  // https://github.com/vercel/next.js/discussions/11484#discussioncomment-356055
-  if (!router.isReady) {
-    return <LoadingOverlay visible />
   }
 
   return (
