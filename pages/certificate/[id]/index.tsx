@@ -42,6 +42,7 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
   const certificateQueryPathAndInput =
     getCertificateQueryPathAndInput(certificateId)
   const certificateQuery = trpc.useQuery(certificateQueryPathAndInput)
+  const certificate = certificateQuery.data
   const likeMutation = trpc.useMutation(['certificate.like'], {
     onMutate: async () => {
       await utils.cancelQuery(certificateQueryPathAndInput)
@@ -100,24 +101,23 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
     },
   })
 
-  if (certificateQuery.data) {
+  if (certificate) {
     if (!isNaN(Number(certificateId))) {
       // Redirect from old to new certificate URLs
-      router.push('/certificate/' + certificateQuery.data.id)
+      router.push('/certificate/' + certificate.id)
     }
     const isUserAdmin = session?.user.role === 'ADMIN'
-    const certificateBelongsToUser =
-      certificateQuery.data.author.id === session?.user.id
+    const certificateBelongsToUser = certificate.author.id === session?.user.id
 
     return (
       <>
         <Head>
-          <title>{certificateQuery.data.title} – Impact Markets</title>
+          <title>{certificate.title} – Impact Markets</title>
         </Head>
 
         <div className="divide-y divide-primary">
           <div className="pb-12">
-            {certificateQuery.data.hidden && (
+            {certificate.hidden && (
               <Banner className="mb-6">
                 This certificate will remain hidden until it’s published by the
                 curators.
@@ -125,46 +125,43 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
             )}
 
             <div className="flex items-center justify-between gap-4">
-              <Heading1>{certificateQuery.data.title}</Heading1>
+              <Heading1>{certificate.title}</Heading1>
               <CertificateMenu
-                queryData={certificateQuery.data}
+                queryData={certificate}
                 isUserAdmin={isUserAdmin}
                 certificateBelongsToUser={certificateBelongsToUser}
               />
             </div>
             <div className="my-6">
               <AuthorWithDate
-                author={certificateQuery.data.author}
-                date={certificateQuery.data.createdAt}
+                author={certificate.author}
+                date={certificate.createdAt}
               />
             </div>
             <div className="my-6">
-              <Tags queryData={certificateQuery.data} />
+              <Tags queryData={certificate} />
             </div>
             <div className="my-6">
-              <Ledger certificateId={certificateId} />
+              <Ledger certificate={certificate} />
             </div>
-            <HtmlView
-              html={certificateQuery.data.contentHtml}
-              className="mt-8"
-            />
+            <HtmlView html={certificate.contentHtml} className="mt-8" />
             <div className="my-6">
-              <Labels queryData={certificateQuery.data} />
+              <Labels queryData={certificate} />
             </div>
             <div className="flex gap-4 mt-6">
               <LikeButton
                 disabled={!session}
-                likedBy={certificateQuery.data.likedBy}
+                likedBy={certificate.likedBy}
                 onLike={() => {
-                  likeMutation.mutate(certificateQuery.data.id)
+                  likeMutation.mutate(certificate.id)
                 }}
                 onUnlike={() => {
-                  unlikeMutation.mutate(certificateQuery.data.id)
+                  unlikeMutation.mutate(certificate.id)
                 }}
               />
               <CommentButton
-                commentCount={certificateQuery.data._count.comments}
-                href={`/certificate/${certificateQuery.data.id}#comments`}
+                commentCount={certificate._count.comments}
+                href={`/certificate/${certificate.id}#comments`}
                 variant="secondary"
                 disabled={!session}
               />
@@ -172,14 +169,11 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
           </div>
 
           <div id="comments" className="pt-12 space-y-12">
-            {certificateQuery.data.comments.length > 0 && (
+            {certificate.comments.length > 0 && (
               <ul className="space-y-12">
-                {certificateQuery.data.comments.map((comment) => (
+                {certificate.comments.map((comment) => (
                   <li key={comment.id}>
-                    <Comment
-                      certificateId={certificateQuery.data.id}
-                      comment={comment}
-                    />
+                    <Comment certificateId={certificate.id} comment={comment} />
                   </li>
                 ))}
               </ul>
@@ -196,7 +190,7 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
                     size="sm"
                   />
                 </span>
-                <AddCommentForm certificateId={certificateQuery.data.id} />
+                <AddCommentForm certificateId={certificate.id} />
               </div>
             )}
           </div>

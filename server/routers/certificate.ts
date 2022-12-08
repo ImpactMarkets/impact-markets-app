@@ -100,6 +100,8 @@ export const certificateRouter = createProtectedRouter()
               id: true,
               type: true,
               size: true,
+              user: true,
+              sellTransactions: { where: { state: 'PENDING' } },
             },
           },
           likedBy: {
