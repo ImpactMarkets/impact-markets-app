@@ -84,7 +84,7 @@ export function HoldingsChart({ holdings, issuers }: HoldingsChartProps) {
     },
     {
       label: valueAvailableFromInvestors.gte(20)
-        ? `${num(valueAvailableFromInvestors, 0)}% available`
+        ? `${num(valueAvailableFromInvestors, 0)}% circulating`
         : valueAvailableFromInvestors.gte(10)
         ? `${num(valueAvailableFromInvestors, 0)}%`
         : '',
@@ -119,8 +119,6 @@ export function HoldingsChart({ holdings, issuers }: HoldingsChartProps) {
       color: '#4fcdf7',
     },
   ]
-
-  console.log(sections)
 
   return (
     <Progress
