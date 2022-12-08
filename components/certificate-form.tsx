@@ -198,6 +198,11 @@ export function CertificateForm({
           Array.isArray(value) ? setValue('tags', value.join(',')) : null
         }
         defaultValue={getValues().tags ? getValues().tags.split(',') : []}
+        classNames={{
+          input:
+            'block w-full rounded shadow-sm bg-secondary ring-transparent border-secondary im-multiselect',
+          searchInput: 'bg-transparent',
+        }}
       />
 
       <div className="mt-6">

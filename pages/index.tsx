@@ -4,10 +4,12 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
+import { CertificateFilters } from '@/components/certificate-filters'
 import type { CertificateSummaryProps } from '@/components/certificate-summary'
 import { CertificateSummarySkeleton } from '@/components/certificate-summary-skeleton'
 import { Layout } from '@/components/layout'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
+import { CertSortKey } from '@/lib/constants'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
@@ -26,9 +28,15 @@ const Home: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
   const utils = trpc.useContext()
+  const [filterTags, setFilterTags] = React.useState('')
+  const [orderBy, setOrderBy] = React.useState('' as CertSortKey)
   const feedQueryPathAndInput: InferQueryPathAndInput<'certificate.feed'> = [
     'certificate.feed',
-    getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
+    {
+      ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
+      filterTags,
+      orderBy,
+    },
   ]
   const feedQuery = trpc.useQuery(feedQueryPathAndInput)
   const likeMutation = trpc.useMutation(['certificate.like'], {
@@ -102,8 +110,16 @@ const Home: NextPageWithAuthAndLayout = () => {
           <title>Impact Markets</title>
         </Head>
 
+        <div className="mt-12">
+          <CertificateFilters
+            onFilterTagsUpdate={(tags) => setFilterTags(tags)}
+            onOrderByUpdate={(orderBy: CertSortKey) => setOrderBy(orderBy)}
+            defaultFilterTagValue={filterTags}
+            defaultOrderByValue={orderBy}
+          />
+        </div>
         {feedQuery.data.certificateCount === 0 ? (
-          <div className="text-center text-secondary border rounded py-20 px-10">
+          <div className="text-center text-secondary border rounded my-10 py-20 px-10">
             There are no published certificates to show yet.
           </div>
         ) : (
