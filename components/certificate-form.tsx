@@ -10,7 +10,6 @@ import { MarkdownEditor } from '@/components/markdown-editor'
 import { TextField } from '@/components/text-field'
 import { BondingCurve } from '@/lib/auction'
 import { DEFAULT_TARGET, DEFAULT_VALUATION, SHARE_COUNT } from '@/lib/constants'
-import { useLeaveConfirm } from '@/lib/form'
 import { TAGS } from '@/lib/tags'
 import { num } from '@/lib/text'
 import { Accordion, SimpleGrid, Switch } from '@mantine/core'
@@ -91,7 +90,8 @@ export function CertificateForm({
     defaultValues,
   })
 
-  useLeaveConfirm({ formState })
+  // FIXME: Doesn’t work reliably in webkit browsers, thinks the submission were a route change
+  // useLeaveConfirm({ formState })
 
   const { isSubmitSuccessful } = formState
 
