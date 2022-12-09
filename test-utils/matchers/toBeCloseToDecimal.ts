@@ -6,12 +6,17 @@ import { Prisma } from '@prisma/client'
 // A custom matcher to make jest support closeness comparisons on Prisma.Decimal objects.
 // See https://jestjs.io/docs/expect#expectextendmatchers
 const toBeCloseToDecimal: MatcherFunction<
-  [expected: Prisma.Decimal, precision?: number]
-> = function (
-  received: Prisma.Decimal,
-  expected: Prisma.Decimal,
-  precision: number = 5
-) {
+  [expected: unknown, precision?: number]
+> = function (received_, expected_, precision = 5) {
+  if (
+    received_ instanceof Prisma.Decimal ||
+    expected_ instanceof Prisma.Decimal
+  ) {
+    throw new Error('Parameters received and expected must be of Decimal type')
+  }
+  const expected = expected_ as Prisma.Decimal
+  const received = received_ as Prisma.Decimal
+
   const options = {
     comment: 'Check if two Prisma.Decimal objects are close in value',
     isNot: this.isNot,
