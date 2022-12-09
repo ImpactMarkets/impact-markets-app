@@ -1,4 +1,6 @@
+import { useSession } from 'next-auth/react'
 import * as React from 'react'
+import { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useIntercom } from 'react-use-intercom'
 
@@ -129,6 +131,15 @@ export function CertificateForm({
   const watchTarget = watch('target')
   const watchTitle = watch('title')
 
+  const { data: session } = useSession()
+  const [issuerEmailsData, setIssuerEmailsData] = useState(
+    (getValues().issuerEmails || session!.user.email)
+      .split(',')
+      .map((email) => {
+        return { value: email, label: email }
+      })
+  )
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <TextField
@@ -196,6 +207,7 @@ export function CertificateForm({
           'Please select all that apply or <a>leave us feedback</a> if you can’t find suitable tags for your field and type of work so we can add them.'
         )}
         placeholder="Pick all that apply"
+        searchable
         data={TAGS.map((tag) => ({
           value: tag.value,
           label: tag.label,
@@ -330,6 +342,39 @@ export function CertificateForm({
                 Please go through the edit function of your holding to change
                 starting and target valuation.
               </div>
+            )}
+
+            <IMMultiSelect
+              {...register('issuerEmails', {
+                validate: (value) => isListOfEmails(value),
+              })}
+              label="Issuers' email addresses"
+              description="Please enter the exact email addresses that you and the other issuers use on this platform."
+              className="mt-6"
+              data={issuerEmailsData}
+              onChange={(value) => {
+                Array.isArray(value)
+                  ? setValue('issuerEmails', value.join(','))
+                  : null
+              }}
+              defaultValue={
+                getValues().issuerEmails
+                  ? getValues().issuerEmails.split(',')
+                  : [session!.user.email]
+              }
+              searchable // allows typing
+              creatable
+              getCreateLabel={(query) => `+ Add ${query}`}
+              onCreate={(query) => {
+                const item = { value: query, label: query }
+                setIssuerEmailsData((current) => [...current, item])
+                return item
+              }}
+            />
+            {formState.errors.issuerEmails && (
+              <p className="text-red">
+                {isListOfEmailsValidationMessage(getValues('issuerEmails'))}
+              </p>
             )}
 
             <TextField
