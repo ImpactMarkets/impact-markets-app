@@ -22,6 +22,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+      - run: npm install typescript
       - run: npm run test:unit
 
   test-e2e:
