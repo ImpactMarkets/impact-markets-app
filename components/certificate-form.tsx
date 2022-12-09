@@ -349,7 +349,7 @@ export function CertificateForm({
                 validate: (value) => isListOfEmails(value),
               })}
               label="Issuers' email addresses"
-              description="Please enter all the email addresses of the issuers of this certificate."
+              description="Please enter the exact email addresses that you and the other issuers use on this platform."
               className="mt-6"
               data={issuerEmailsData}
               onChange={(value) => {

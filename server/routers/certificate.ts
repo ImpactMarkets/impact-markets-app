@@ -138,6 +138,7 @@ export const certificateRouter = createProtectedRouter()
                   id: true,
                   name: true,
                   image: true,
+                  email: true,
                 },
               },
             },
@@ -181,6 +182,14 @@ export const certificateRouter = createProtectedRouter()
           },
         },
       })
+
+      // Populate the `issuerEmails` field using the associated certificateIssuers
+      if (certificate) {
+        certificate.issuerEmails = certificate.issuers
+          .map((issuer) => issuer.user.email)
+          .filter((x) => x)
+          .join(',')
+      }
 
       const certificateBelongsToUser =
         certificate?.author.id === ctx.session?.user.id
@@ -254,7 +263,7 @@ export const certificateRouter = createProtectedRouter()
           actionStart: input.actionStart,
           actionEnd: input.actionEnd,
           tags: input.tags,
-          issuerEmails: input.issuerEmails,
+          issuerEmails: '', // Don't persist the issuerEmails input, as it would duplicate the certificateIssuers table, which is the source of truth.
           author: {
             connect: {
               id: ctx.session!.user.id,
@@ -271,6 +280,21 @@ export const certificateRouter = createProtectedRouter()
           cost: 0,
           valuation: input.valuation,
           target: input.target,
+        },
+      })
+      const issuers = await ctx.prisma.user.findMany({
+        where: { email: { in: input.issuerEmails.split(',') } },
+      })
+      await ctx.prisma.certificateIssuer.createMany({
+        data: issuers.map((issuer) => {
+          return { certificateId: certificate.id, userId: issuer.id }
+        }),
+        skipDuplicates: true,
+      })
+      await ctx.prisma.certificateIssuer.create({
+        data: {
+          certificateId: certificate.id,
+          userId: ctx.session!.user.id,
         },
       })
 
@@ -314,10 +338,32 @@ export const certificateRouter = createProtectedRouter()
           rights: 'RETROACTIVE_FUNDING',
           actionStart: data.actionStart,
           actionEnd: data.actionEnd,
-          issuerEmails: data.issuerEmails,
+          issuerEmails: '', // Don't persist the issuerEmails input, as it would duplicate the certificateIssuers table, which is the source of truth.
           tags: data.tags,
         },
       })
+
+      // Delete all existing certificateIssuer associations for this certificate, and create new ones based on the input.
+      const issuers = await ctx.prisma.user.findMany({
+        where: { email: { in: input.data.issuerEmails.split(',') } },
+      })
+      ctx.prisma.$transaction([
+        ctx.prisma.certificateIssuer.deleteMany({
+          where: { certificateId: updatedCertificate.id },
+        }),
+        ctx.prisma.certificateIssuer.createMany({
+          data: issuers.map((issuer) => {
+            return { certificateId: updatedCertificate.id, userId: issuer.id }
+          }),
+          skipDuplicates: true,
+        }),
+        ctx.prisma.certificateIssuer.create({
+          data: {
+            certificateId: updatedCertificate.id,
+            userId: ctx.session!.user.id,
+          },
+        }),
+      ])
 
       return updatedCertificate
     },
