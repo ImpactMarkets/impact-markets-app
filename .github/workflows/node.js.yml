@@ -62,7 +62,7 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Start the test database
-        run: docker-compose -f docker-compose.test.yaml up -d
+        run: docker-compose up -d
       - name: Create the database schema
         run: npx dotenv -e .env.test -- npx prisma migrate deploy
       - name: Run Playwright tests
