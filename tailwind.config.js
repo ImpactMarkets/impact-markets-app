@@ -97,6 +97,9 @@ module.exports = {
       },
     },
     extend: {
+      colors: {
+        'theme-blue': '#228be6',
+      },
       fontFamily: {
         sans: ['"Open Sans"', ...defaultTheme.fontFamily.sans],
         display: ['"Barlow Condensed"', ...defaultTheme.fontFamily.sans],
