@@ -408,6 +408,7 @@ export function CertificateForm({
             type="submit"
             isLoading={isSubmitting}
             loadingChildren={isNew ? 'Submitting' : 'Saving'}
+            data-testid="submit"
           >
             {isNew ? 'Submit' : 'Save'}
           </Button>
