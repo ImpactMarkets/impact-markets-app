@@ -378,21 +378,6 @@ export function CertificateForm({
             )}
 
             <TextField
-              {...register('issuerEmails', {
-                setValueAs: (value) => value.replace(/\s+/g, ''),
-                validate: (value) => isListOfEmails(value),
-              })}
-              label="Issuers' email addresses"
-              description="For multiple issuers, enter the addresses separated by commas, for example: 'alice@gmail.com, bob@gmail.com'"
-              className="mt-6"
-            />
-            {formState.errors.issuerEmails && (
-              <p className="text-red">
-                {isListOfEmailsValidationMessage(getValues('issuerEmails'))}
-              </p>
-            )}
-
-            <TextField
               {...register('attributedImpactVersion', { required: true })}
               label={
                 <span>
