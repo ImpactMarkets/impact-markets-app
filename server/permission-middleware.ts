@@ -131,6 +131,7 @@ export const permissionMiddleware: MiddlewareFunction = async ({
     'user.profile': () => true,
     'user.edit': isAuthenticated, // Always edits the same user
     'user.update-avatar': isAuthenticated, // Always edits the same user
+    'user.preferences': isAuthenticated, // Always edits the same user
     'user.mentionList': isAuthenticated,
   }
 

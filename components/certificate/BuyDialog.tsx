@@ -13,14 +13,15 @@ import {
 } from '@/components/dialog'
 import { TextField } from '@/components/text-field'
 import { BondingCurve } from '@/lib/auction'
+import { classNames } from '@/lib/classnames'
 import { SHARE_COUNT } from '@/lib/constants'
 import { num } from '@/lib/text'
 import { trpc } from '@/lib/trpc'
-import { Accordion, Tabs } from '@mantine/core'
+import { Accordion, Switch, Tabs } from '@mantine/core'
 import { Prisma } from '@prisma/client'
 
 import { Banner } from '../banner'
-import { SwitchField } from '../switch-field'
+import { InfoTooltip } from '../info-tooltip'
 
 type BuyFormData = {
   size: Prisma.Decimal
@@ -31,6 +32,7 @@ type BuyFormData = {
 export function BuyDialog({
   holding,
   reservedSize,
+  isActive,
   isOpen,
   onClose,
 }: {
@@ -45,6 +47,7 @@ export function BuyDialog({
     }
   }
   reservedSize: Prisma.Decimal
+  isActive: boolean
   isOpen: boolean
   onClose: () => void
 }) {
@@ -56,6 +59,7 @@ export function BuyDialog({
     })
   const utils = trpc.useContext()
   const { data: session } = useSession()
+  const simplified = !session!.user.prefersDetailView
   const transactionMutation = trpc.useMutation('transaction.add', {
     onSuccess: () => {
       utils.invalidateQueries([
@@ -114,8 +118,9 @@ export function BuyDialog({
       .times(SHARE_COUNT)
       .toDecimalPlaces(0, Prisma.Decimal.ROUND_DOWN)
 
+  const valuationFraction = bondingCurve.fractionAtValuation(holding.valuation)
   const startingValuation = bondingCurve.valuationAtFraction(
-    bondingCurve.fractionAtValuation(holding.valuation).plus(reservedSize)
+    valuationFraction.plus(reservedSize)
   )
   const newValuation = bondingCurve.valuationAtFraction(
     bondingCurve
@@ -124,8 +129,8 @@ export function BuyDialog({
       .plus(new Prisma.Decimal(watchSize || zero))
   )
   const maxCost = bondingCurve.costBetweenFractions(
-    bondingCurve.fractionAtValuation(holding.valuation).plus(reservedSize),
-    holding.size
+    valuationFraction.plus(reservedSize),
+    valuationFraction.plus(holding.size)
   )
   const cost = costOfSize(watchSize)
   const shares = sharesOfCost(watchCost)
@@ -134,17 +139,65 @@ export function BuyDialog({
     <Dialog isOpen={isOpen} onClose={handleClose}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
-          <DialogTitle>Buy</DialogTitle>
+          <DialogTitle>
+            {isActive ? (
+              <span>
+                Donate
+                <InfoTooltip text="Are you an accredited investor and would you like to buy and sell shares in this project? Contact us to prove your accredited investor status." />
+              </span>
+            ) : (
+              <span>Buy</span>
+            )}
+          </DialogTitle>
           <div className="mt-6 space-y-6">
             <p className="text-sm">
               Please contact the current owner {holding.user.name || ''} to
               agree on a payment method.
             </p>
-            <Tabs defaultValue="shares">
-              <Tabs.List>
-                <Tabs.Tab value="shares">Enter shares</Tabs.Tab>
-                <Tabs.Tab value="cost">Enter USD</Tabs.Tab>
-              </Tabs.List>
+            <Tabs defaultValue="cost">
+              {simplified ? null : (
+                <Tabs.List>
+                  <Tabs.Tab value="cost">Enter USD</Tabs.Tab>
+                  <Tabs.Tab value="shares">Enter shares</Tabs.Tab>
+                </Tabs.List>
+              )}
+
+              <Tabs.Panel value="cost" pt="xs">
+                {/* Not using NumberInput because onChange is called with only the value,
+                not the field element */}
+                <div className="mt-3">
+                  <TextField
+                    {...register('cost', {
+                      shouldUnregister: true,
+                      onChange: (event) =>
+                        setValue(
+                          'size',
+                          sharesOfCost(
+                            new Prisma.Decimal(event.target.valueAsNumber)
+                          )
+                        ),
+                    })}
+                    label="Payment"
+                    description={
+                      simplified ? (
+                        'How much would you like to spend?'
+                      ) : (
+                        <span>
+                          USD you want to pay for shares in the certificate
+                          (max. ${num(maxCost, 2)})
+                        </span>
+                      )
+                    }
+                    rightSection="USD"
+                    classNames={{ rightSection: 'w-20' }}
+                    type="number"
+                    step="0.01"
+                    min="1"
+                    max={maxCost.toNumber()}
+                    required
+                  />
+                </div>
+              </Tabs.Panel>
 
               <Tabs.Panel value="shares" pt="xs">
                 {/* Not using NumberInput because onChange is called with only the value,
@@ -187,42 +240,14 @@ export function BuyDialog({
                   />
                 </div>
               </Tabs.Panel>
-
-              <Tabs.Panel value="cost" pt="xs">
-                {/* Not using NumberInput because onChange is called with only the value,
-                not the field element */}
-                <div className="mt-3">
-                  <TextField
-                    {...register('cost', {
-                      shouldUnregister: true,
-                      onChange: (event) =>
-                        setValue(
-                          'size',
-                          sharesOfCost(
-                            new Prisma.Decimal(event.target.valueAsNumber)
-                          )
-                        ),
-                    })}
-                    label="Cost"
-                    description={
-                      <span>
-                        USD you want to pay for Shares in the certificate (max.
-                        ${num(maxCost, 2)})
-                      </span>
-                    }
-                    rightSection="USD"
-                    classNames={{ rightSection: 'w-20' }}
-                    type="number"
-                    step="0.01"
-                    min="1"
-                    max={maxCost.toNumber()}
-                    required
-                  />
-                </div>
-              </Tabs.Panel>
             </Tabs>
 
-            <table className="text-sm mx-auto mt-6">
+            <table
+              className={classNames(
+                'text-sm mx-auto mt-6',
+                simplified && 'hidden'
+              )}
+            >
               <tbody>
                 <tr>
                   <td className="text-right pr-4">Starting valuation:</td>
@@ -247,14 +272,27 @@ export function BuyDialog({
               </tbody>
             </table>
 
-            <Accordion variant="separated" className="my-6">
+            <Accordion
+              variant="separated"
+              className={classNames(
+                'my-6',
+                isActive || simplified ? 'hidden' : null
+              )}
+            >
               <Accordion.Item value="advanced-options">
                 <Accordion.Control>Advanced options</Accordion.Control>
                 <Accordion.Panel className="text-sm">
-                  <SwitchField
+                  <p className="mb-6">
+                    Change only if you know exactly what you’re doing.
+                  </p>
+                  <Switch
                     {...register('consume', { shouldUnregister: true })}
                     label="Consume immediately"
-                    info="You will never be able to resell shares that you have consumed."
+                    description="You will never be able to resell shares that you have consumed. Think of it as a donation."
+                    classNames={{
+                      input: 'rounded-full !bg-auto !bg-left',
+                      label: 'text-red',
+                    }}
                   />
                 </Accordion.Panel>
               </Accordion.Item>
@@ -262,9 +300,9 @@ export function BuyDialog({
 
             {watchSize ? (
               <Banner className="text-sm px-4 py-3 my-5">
-                When you click “Buy,” you’ll have one week to send{' '}
-                {holding.user.name || ''} ${num(cost, 2)} or to cancel the
-                transaction.
+                When you click “{isActive ? 'Donate' : 'Buy'},” you’ll have one
+                week to send {holding.user.name || ''} ${num(cost, 2)} or to
+                cancel the transaction.
               </Banner>
             ) : (
               ''
@@ -283,7 +321,7 @@ export function BuyDialog({
             variant="highlight"
             disabled={!watchSize}
           >
-            Buy
+            {isActive ? 'Donate' : 'Buy'}
           </Button>
           <Button variant="secondary" onClick={handleClose}>
             Cancel
