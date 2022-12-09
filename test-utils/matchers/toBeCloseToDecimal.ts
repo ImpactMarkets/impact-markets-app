@@ -9,8 +9,8 @@ const toBeCloseToDecimal: MatcherFunction<
   [expected: unknown, precision?: number]
 > = function (received_, expected_, precision = 5) {
   if (
-    received_ instanceof Prisma.Decimal ||
-    expected_ instanceof Prisma.Decimal
+    !(received_ instanceof Prisma.Decimal) ||
+    !(expected_ instanceof Prisma.Decimal)
   ) {
     throw new Error('Parameters received and expected must be of Decimal type')
   }
