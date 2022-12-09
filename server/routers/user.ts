@@ -64,6 +64,21 @@ export const userRouter = createProtectedRouter()
       return user
     },
   })
+  .mutation('preferences', {
+    input: z.object({
+      prefersDetailView: z.boolean(),
+    }),
+    async resolve({ input: { prefersDetailView }, ctx }) {
+      const user = await ctx.prisma.user.update({
+        where: { id: ctx.session!.user.id },
+        data: {
+          prefersDetailView: prefersDetailView,
+        },
+      })
+
+      return user
+    },
+  })
   .query('mentionList', {
     async resolve({ ctx }) {
       const users = await ctx.prisma.user.findMany({

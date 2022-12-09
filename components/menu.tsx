@@ -54,7 +54,7 @@ function NextLink({
 }: Omit<React.ComponentPropsWithoutRef<'a'>, 'href'> & LinkProps) {
   return (
     <Link href={href}>
-      <a {...rest}>{children}</a>
+      <span {...rest}>{children}</span>
     </Link>
   )
 }
@@ -68,7 +68,7 @@ function menuItemClasses({
 }) {
   return classNames(
     active && 'bg-secondary',
-    'block w-full text-left px-4 py-2 text-sm text-primary transition-colors',
+    'block w-full text-left px-4 py-2 text-sm text-primary transition-colors cursor-pointer',
     className
   )
 }

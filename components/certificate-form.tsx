@@ -1,3 +1,4 @@
+import { useSession } from 'next-auth/react'
 import * as React from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useIntercom } from 'react-use-intercom'
@@ -8,8 +9,7 @@ import { MarkdownIcon } from '@/components/icons'
 import { MarkdownEditor } from '@/components/markdown-editor'
 import { TextField } from '@/components/text-field'
 import { BondingCurve } from '@/lib/auction'
-import { SHARE_COUNT } from '@/lib/constants'
-import { useLeaveConfirm } from '@/lib/form'
+import { DEFAULT_TARGET, DEFAULT_VALUATION, SHARE_COUNT } from '@/lib/constants'
 import { TAGS } from '@/lib/tags'
 import { num } from '@/lib/text'
 import { Accordion, SimpleGrid, Switch } from '@mantine/core'
@@ -90,11 +90,15 @@ export function CertificateForm({
     defaultValues,
   })
 
-  useLeaveConfirm({ formState })
+  // FIXME: Doesn’t work reliably in webkit browsers, thinks the submission were a route change
+  // useLeaveConfirm({ formState })
 
   const { isSubmitSuccessful } = formState
 
   const { show } = useIntercom()
+
+  const { data: session } = useSession()
+
   const TagDescription = (text: string) => {
     const [messageText, linkText, endText] = text.split(
       /<[a][^>]*>(.+?)<\/[a]>/
@@ -118,7 +122,6 @@ export function CertificateForm({
   }, [isSubmitSuccessful, reset, getValues])
 
   const one = new Prisma.Decimal(1)
-  const aLot = new Prisma.Decimal(1e5)
   const watchValuation = watch('valuation')
   const watchTarget = watch('target')
   const watchTitle = watch('title')
@@ -176,30 +179,6 @@ export function CertificateForm({
           required
         />
       </SimpleGrid>
-      <TextField
-        {...register('counterfactual')}
-        label="Counterfactual"
-        description="What would you have done (or what would you do) if there were no offer of retroactive funding?"
-        info="This is not displayed publicly"
-        className="my-6"
-      />
-      <IMMultiSelect
-        {...register('tags')}
-        label="Tags"
-        description={TagDescription(
-          'Please select all that apply or <a>leave us feedback</a> if you can’t find suitable tags for your field and type of work so we can add them.'
-        )}
-        placeholder="Pick all that apply"
-        data={TAGS.map((tag) => ({
-          value: tag.value,
-          label: tag.label,
-          group: tag.group,
-        }))}
-        onChange={(value) =>
-          Array.isArray(value) ? setValue('tags', value.join(',')) : null
-        }
-        defaultValue={getValues().tags ? getValues().tags.split(',') : []}
-      />
 
       <div className="mt-6">
         <Controller
@@ -230,8 +209,53 @@ export function CertificateForm({
         </a>
       </div>
 
+      <p className="mt-2 mb-2 text-sm">I confirm that:</p>
+      <Switch
+        label="I will never sell these rights (or parts thereof) more than once"
+        classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
+        defaultChecked={!isNew}
+        required
+      />
+      <Switch
+        label="I am happy for this record to be publicly accessible forever"
+        classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
+        defaultChecked={!isNew}
+        required
+      />
       <Accordion variant="separated" className="my-6">
-        <Accordion.Item value="advanced-options">
+        <Accordion.Item value="optional-fields">
+          <Accordion.Control>Optional fields</Accordion.Control>
+          <Accordion.Panel className="text-sm">
+            <TextField
+              {...register('counterfactual')}
+              label="Counterfactual"
+              description="What would you have done (or what would you do) if there were no offer of retroactive funding?"
+              info="This is not displayed publicly"
+              className="my-6"
+            />
+            <IMMultiSelect
+              {...register('tags')}
+              label="Tags"
+              description={TagDescription(
+                'Please select all that apply or <a>leave us feedback</a> if you can’t find suitable tags for your field and type of work so we can add them.'
+              )}
+              placeholder="Pick all that apply"
+              data={TAGS.map((tag) => ({
+                value: tag.value,
+                label: tag.label,
+                group: tag.group,
+              }))}
+              onChange={(value) =>
+                Array.isArray(value) ? setValue('tags', value.join(',')) : null
+              }
+              defaultValue={getValues().tags ? getValues().tags.split(',') : []}
+            />
+          </Accordion.Panel>
+        </Accordion.Item>
+        <Accordion.Item
+          value="advanced-options"
+          className={session!.user.prefersDetailView ? '' : 'hidden'}
+        >
           <Accordion.Control>Advanced options</Accordion.Control>
           <Accordion.Panel className="text-sm">
             {isNew ? (
@@ -287,9 +311,11 @@ export function CertificateForm({
                         $
                         {num(
                           new BondingCurve(
-                            new Prisma.Decimal(watchTarget || aLot)
+                            new Prisma.Decimal(watchTarget || DEFAULT_TARGET)
                           ).valuationOfSize(
-                            new Prisma.Decimal(watchValuation || one),
+                            new Prisma.Decimal(
+                              watchValuation || DEFAULT_VALUATION
+                            ),
                             one
                           ),
                           0
@@ -302,9 +328,11 @@ export function CertificateForm({
                         $
                         {num(
                           new BondingCurve(
-                            new Prisma.Decimal(watchTarget || aLot)
+                            new Prisma.Decimal(watchTarget || DEFAULT_TARGET)
                           ).costOfSize(
-                            new Prisma.Decimal(watchValuation || one),
+                            new Prisma.Decimal(
+                              watchValuation || DEFAULT_VALUATION
+                            ),
                             one
                           ),
                           0
@@ -369,20 +397,6 @@ export function CertificateForm({
         </Accordion.Item>
       </Accordion>
 
-      <p className="mt-2 mb-2 text-sm">I confirm that:</p>
-      <Switch
-        label="I will never sell these rights more than once"
-        classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
-        defaultChecked={!isNew}
-        required
-      />
-      <Switch
-        label="I am happy for this record to be publicly accessible forever"
-        classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
-        defaultChecked={!isNew}
-        required
-      />
-
       <p className="my-6 text-sm">
         When you submit your certificate, you can still edit it, and it will
         remain hidden until a curator publishes it.
@@ -394,6 +408,7 @@ export function CertificateForm({
             type="submit"
             isLoading={isSubmitting}
             loadingChildren={isNew ? 'Submitting' : 'Saving'}
+            data-testid="submit"
           >
             {isNew ? 'Submit' : 'Save'}
           </Button>
@@ -403,10 +418,8 @@ export function CertificateForm({
         </div>
         <div>
           <a
-            href="https://airtable.com/shrXCFWdrzgG9jWn3"
-            target="_blank"
-            rel="noreferrer"
-            className="text-sm font-medium transition-colors hover:text-blue hover:underline"
+            onClick={show}
+            className="text-sm font-medium transition-colors cursor-pointer hover:text-blue hover:underline"
           >
             🗣️ Do you have any feedback or tips for us?
           </a>

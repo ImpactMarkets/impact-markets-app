@@ -4,13 +4,12 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity", "fullTextSearch", "fullTextIndex", "interactiveTransactions"]
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
-  provider             = "postgresql"
-  url                  = env("DATABASE_URL")
-  referentialIntegrity = "prisma"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 enum Role {
@@ -82,6 +81,9 @@ model User {
   likedCertificate LikedCertificate[]
   comments         Comment[]
   role             Role               @default(USER)
+
+  // This should only change the interface but not anything functionally
+  prefersDetailView Boolean @default(false)
 
   holdings           Holding[]
   issuedCertificates CertificateIssuer[]
@@ -161,7 +163,7 @@ model Holding {
   size      Decimal @default(0)
   cost      Decimal @default(0) // Only needed for the potential future reward mode
   valuation Decimal @default(1) // Minimum valuation for offers
-  target    Decimal @default(100000)
+  target    Decimal @default(1000000)
 
   certificate      Certificate   @relation(fields: [certificateId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   user             User          @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)

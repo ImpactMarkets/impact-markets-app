@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { BondingCurve } from '@/lib/auction'
+import { TARGET_FRACTION } from '@/lib/constants'
 import { Prisma, TransactionState } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
@@ -63,11 +64,19 @@ export const transactionRouter = createProtectedRouter()
       })
       return schema.parse(input)
     },
-    async resolve({ ctx, input: { sellingHolding, size, consume } }) {
+    async resolve({ ctx, input: { sellingHolding, size, consume: consume_ } }) {
       const holding = await ctx.prisma.holding.findUniqueOrThrow({
         where: { id: sellingHolding.id },
-        include: { sellTransactions: { where: { state: 'PENDING' } } },
+        include: {
+          sellTransactions: { where: { state: 'PENDING' } },
+          certificate: true,
+        },
       })
+
+      // Force consumption if the project is active
+      // TODO: Once we have investors, they’ll be able to buy even if the project is active
+      const isActive = holding.certificate.actionEnd > new Date()
+      const consume = isActive || consume_
 
       const reservedSize = Prisma.Decimal.sum(
         0,
@@ -91,6 +100,7 @@ export const transactionRouter = createProtectedRouter()
             .plus(size)
         )
         .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP)
+      const target = valuation.times(holding.size).times(TARGET_FRACTION)
 
       // This is a bit confusing b/c our model and the database feature are both called tranactions
       const transaction = await ctx.prisma.$transaction(async (prisma) => {
@@ -106,6 +116,7 @@ export const transactionRouter = createProtectedRouter()
             size: { increment: size },
             cost: { increment: cost },
             valuation,
+            target,
           },
           create: {
             certificateId: sellingHolding.certificateId,
@@ -114,6 +125,7 @@ export const transactionRouter = createProtectedRouter()
             size,
             cost,
             valuation,
+            target,
           },
         })
         const transaction = await prisma.transaction.create({
@@ -142,36 +154,38 @@ export const transactionRouter = createProtectedRouter()
         },
       })
 
-      await ctx.prisma.$transaction([
+      await ctx.prisma.$transaction(async (tx) => {
         // Update the size of the selling holding
-        ctx.prisma.holding.update({
+        await tx.holding.update({
           where: { id: transaction.sellingHoldingId },
           data: {
             size: { decrement: transaction.size },
             cost: { decrement: transaction.cost },
           },
-        }),
+        })
+
         // Update the valuation of all holdings of the same certificate
         // Not doing this would require issuers to pay attention all the time; doing this when a
         // transaction is created would introduce more complexity around updating and reverting
         // valuations in view of transactions against different holdings of the same certificate.
-        ctx.prisma.holding.updateMany({
-          where: {
-            certificateId: transaction.sellingHolding.certificateId,
-            type: 'OWNERSHIP',
-          },
-          data: {
-            valuation: transaction.buyingHolding.valuation,
-          },
-        }),
-        ctx.prisma.holding.update({
-          where: { id: transaction.buyingHoldingId },
-          data: {
-            size: { decrement: transaction.size },
-            cost: { decrement: transaction.cost },
-          },
-        }),
-        ctx.prisma.holding.upsert({
+        // https://github.com/prisma/prisma/issues/5761
+        // https://stackoverflow.com/questions/72660562/execute-postgresql-function-in-prisma-without-using-queryraw
+        await tx.$queryRaw(
+          Prisma.sql`
+            UPDATE "Holding"
+            SET "valuation" = greatest("valuation", ${transaction.buyingHolding.valuation}),
+                "target" = greatest("target", ${transaction.buyingHolding.target})
+            WHERE "certificateId" = ${transaction.sellingHolding.certificateId}
+              AND "type" = 'OWNERSHIP'
+        `
+        )
+
+        // The buyer might already have a holding, so we can either (1) check whether that’s the
+        // case and update the existing holding and delete the reservation holding (if empty) or
+        // otherwise flip the reservation holding to an ownership holding, or (2) use the handy
+        // upsert method to create/update the ownership holding, and then get rid of the reservation
+        // holding (if empty) in both cases. We’re going with option 2 here.
+        const nonReservationBuyingHolding = await tx.holding.upsert({
           where: {
             certificateId_userId_type: {
               certificateId: transaction.sellingHolding.certificateId,
@@ -183,6 +197,7 @@ export const transactionRouter = createProtectedRouter()
             size: { increment: transaction.size },
             cost: { increment: transaction.cost },
             valuation: transaction.buyingHolding.valuation,
+            target: transaction.buyingHolding.target,
           },
           create: {
             certificateId: transaction.sellingHolding.certificateId,
@@ -191,18 +206,35 @@ export const transactionRouter = createProtectedRouter()
             size: transaction.size,
             cost: transaction.cost,
             valuation: transaction.buyingHolding.valuation,
+            target: transaction.buyingHolding.target,
           },
-        }),
-        ctx.prisma.transaction.update({
+        })
+
+        // Remove from the reservation holding what we’ve added to the ownership/consumption holding
+        await tx.holding.update({
+          where: { id: transaction.buyingHoldingId },
+          data: {
+            size: { decrement: transaction.size },
+            cost: { decrement: transaction.cost },
+          },
+        })
+
+        // Switch the completed transaction over to the new buying holding
+        await tx.transaction.update({
           where: { id: transaction.id },
           data: {
+            buyingHoldingId: nonReservationBuyingHolding.id,
             state: 'CONFIRMED',
           },
-        }),
-        ctx.prisma.holding.deleteMany({
-          where: { size: 0, type: { in: ['RESERVATION', 'OWNERSHIP'] } },
-        }),
-      ])
+        })
+
+        // The old reservation holding might be empty now, so we can get rid of it. But we keep
+        // possibly empty selling holdings because they’re associated with transactions we don’t
+        // want to lose.
+        await tx.holding.deleteMany({
+          where: { size: 0, type: 'RESERVATION' },
+        })
+      })
 
       return id
     },
@@ -219,6 +251,7 @@ export const transactionRouter = createProtectedRouter()
       })
 
       await ctx.prisma.$transaction([
+        // There might be several transactions against the same buying holding, see above
         ctx.prisma.holding.update({
           where: { id: transaction.buyingHoldingId },
           data: {
@@ -229,11 +262,8 @@ export const transactionRouter = createProtectedRouter()
         ctx.prisma.transaction.update({
           where: { id: transaction.id },
           data: {
-            state: 'CONFIRMED',
+            state: 'REJECTED',
           },
-        }),
-        ctx.prisma.holding.deleteMany({
-          where: { size: 0, type: { in: ['RESERVATION', 'OWNERSHIP'] } },
         }),
       ])
 

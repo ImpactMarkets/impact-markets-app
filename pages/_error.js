@@ -11,10 +11,11 @@ function Error({ statusCode }) {
     </p>
   )
 }
+
 Error.getInitialProps = ({ req, res, err }) => {
   const statusCode = res ? res.statusCode : err ? err.statusCode : 404
   // Only require Rollbar (and environment variable) and report error if we're on the server
-  if (!process.browser) {
+  if (typeof window === 'undefined' && process.env.NODE_ENV === 'production') {
     console.log('Reporting error to Rollbar...')
 
     /* eslint-disable @typescript-eslint/no-var-requires */
@@ -35,4 +36,5 @@ Error.getInitialProps = ({ req, res, err }) => {
   }
   return { statusCode }
 }
+
 export default Error
