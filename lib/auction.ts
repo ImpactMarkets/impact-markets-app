@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client'
 
-export const TARGET_FRACTION = 0.9
+import { TARGET_FRACTION } from './constants'
 
 export class BondingCurve {
   target: Prisma.Decimal
