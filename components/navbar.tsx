@@ -12,7 +12,10 @@ import {
   LifebuoyIcon,
   StoreIcon,
 } from '@/components/icons'
-import { Group, Navbar, createStyles } from '@mantine/core'
+import { trpc } from '@/lib/trpc'
+import { Group, Navbar, Switch, createStyles } from '@mantine/core'
+
+import refreshSession from './utils'
 
 const mixpanelToken = process.env.MIXPANEL_AUTH_TOKEN || ''
 mixpanel.init(mixpanelToken, { debug: true })
@@ -108,6 +111,10 @@ export function NavbarSimple() {
   const { classes, cx } = useStyles()
   const router = useRouter()
 
+  const preferencesMutation = trpc.useMutation(['user.preferences'], {
+    onSuccess: refreshSession,
+  })
+
   const links = data.map((item) => (
     <Link href={item.link} key={item.label}>
       <div
@@ -133,17 +140,34 @@ export function NavbarSimple() {
     </Link>
   ))
 
+  let preferences = null
+  if (session) {
+    preferences = (
+      <Switch
+        label="Detail view"
+        classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
+        checked={session.user.prefersDetailView}
+        onChange={(event) => {
+          preferencesMutation.mutate({
+            prefersDetailView: event.target.checked,
+          })
+        }}
+      />
+    )
+  }
+
   return (
     <Navbar width={{ sm: 250 }} p="md" className="pt-12 sticky top-0 z-auto">
       <Navbar.Section grow>
         <Group className="mb-6" position="apart">
           <Link href="/">
-            <a>
-              <Logo className="w-auto h-[64px]" />
-            </a>
+            <span>
+              <Logo className="w-auto h-[64px] cursor-pointer" />
+            </span>
           </Link>
         </Group>
         <div className="mt-12">{links}</div>
+        <div className="mt-12">{preferences}</div>
       </Navbar.Section>
     </Navbar>
   )

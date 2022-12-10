@@ -107,14 +107,14 @@ export function HoldingsChart({ holdings, issuers }: HoldingsChartProps) {
     },
     {
       label: valueConsumed.gte(20)
-        ? `${num(valueConsumed, 0)}% consumed`
+        ? `${num(valueConsumed, 0)}% donated`
         : valueConsumed.gte(10)
         ? `${num(valueConsumed, 0)}%`
         : '',
       tooltip: `${num(
         valueConsumed,
         0
-      )}% consumed and permanently off the market`,
+      )}% donated/consumed and permanently off the market`,
       value: valueConsumed.toNumber(),
       color: '#4fcdf7',
     },

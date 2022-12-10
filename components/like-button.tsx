@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { Button } from '@/components/button'
 import { HeartFilledIcon, HeartIcon } from '@/components/icons'
 import { classNames } from '@/lib/classnames'
-import * as Tooltip from '@radix-ui/react-tooltip'
+import { Tooltip } from '@mantine/core'
 
 export const MAX_LIKED_BY_SHOWN = 50
 
@@ -121,43 +121,21 @@ export function LikeButton({
   }
 
   return (
-    <Tooltip.Provider>
-      <Tooltip.Root delayDuration={300}>
-        <Tooltip.Trigger
-          asChild
-          onClick={(event) => {
-            event.preventDefault()
-          }}
-          onMouseDown={(event) => {
-            event.preventDefault()
-          }}
-        >
-          {button}
-        </Tooltip.Trigger>
-        <Tooltip.Content
-          side="bottom"
-          sideOffset={4}
-          className={classNames(
-            'max-w-[260px] px-3 py-1.5 rounded shadow-lg bg-secondary-inverse text-secondary-inverse sm:max-w-sm',
-            likeCount === 0 && 'hidden'
-          )}
-        >
-          <p className="text-sm">
-            {likedBy
-              .slice(0, MAX_LIKED_BY_SHOWN)
-              .map((item) =>
-                item.user.id === session?.user.id ? 'You' : item.user.name
-              )
-              .join(', ')}
-            {likeCount > MAX_LIKED_BY_SHOWN &&
-              ` and ${likeCount - MAX_LIKED_BY_SHOWN} more`}
-          </p>
-          <Tooltip.Arrow
-            offset={22}
-            className="fill-gray-800 dark:fill-gray-50"
-          />
-        </Tooltip.Content>
-      </Tooltip.Root>
-    </Tooltip.Provider>
+    <Tooltip
+      label={
+        <p className="text-sm">
+          {likedBy
+            .slice(0, MAX_LIKED_BY_SHOWN)
+            .map((item) =>
+              item.user.id === session?.user.id ? 'You' : item.user.name
+            )
+            .join(', ')}
+          {likeCount > MAX_LIKED_BY_SHOWN &&
+            ` and ${likeCount - MAX_LIKED_BY_SHOWN} more`}
+        </p>
+      }
+    >
+      {button}
+    </Tooltip>
   )
 }

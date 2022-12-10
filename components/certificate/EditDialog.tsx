@@ -12,7 +12,12 @@ import {
 } from '@/components/dialog'
 import { TextField } from '@/components/text-field'
 import { BondingCurve } from '@/lib/auction'
-import { DEFAULT_TARGET, DEFAULT_VALUATION, SHARE_COUNT } from '@/lib/constants'
+import {
+  DEFAULT_TARGET,
+  DEFAULT_VALUATION,
+  SHARE_COUNT,
+  TARGET_FRACTION,
+} from '@/lib/constants'
 import { num } from '@/lib/text'
 import { trpc } from '@/lib/trpc'
 import { Prisma } from '@prisma/client'
@@ -43,8 +48,12 @@ export function EditDialog({
       target: holding.target,
     },
   })
-  const watchValuation = watch('valuation')
-  const watchTarget = watch('target')
+
+  // These *should* be Decimals but they aren’t, so we have to convert them.
+  const watchValuation = new Prisma.Decimal(
+    watch('valuation') || DEFAULT_VALUATION
+  )
+  const watchTarget = new Prisma.Decimal(watch('target') || DEFAULT_TARGET)
 
   const utils = trpc.useContext()
   const transactionMutation = trpc.useMutation('holding.edit', {
@@ -74,6 +83,18 @@ export function EditDialog({
     )
   }
 
+  // TODO: I’m a bit fuzzy on what’s happening here. I would’ve thought that a hypothetical min.
+  // target would be achieved if the bonding curve is close to flat, so with a very small positive
+  // k. So if it’s flat enough, valuation * size * 0.9 shouold approxiate the target. But that
+  // doesn’t make much sense because if it’s flat, it will never reach the valuation in the first
+  // place, and and since flatness is an approximation, it will in fact reach the valuation only
+  // at some very large fraction, where the slope is considerable again and the flatness
+  // approximation is meaningless. This is all very confusing. We also can’t just plug these
+  // numbers into the bonding curve because the slop changes based on the target, so that there’s
+  // a feedback loop. It always seems to tend toward some limit when I manually iterate it, but
+  // that’s about as far as I’ve gotten. I’m not sure what the right approach is here.
+  const minTarget = watchValuation.times(holding.size).times(TARGET_FRACTION)
+
   return (
     <Dialog isOpen={isOpen} onClose={handleClose}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -97,12 +118,15 @@ export function EditDialog({
             <TextField
               {...register('target', { required: true })}
               label="Fundraising target"
-              description="How much do you hope to raise?"
+              description={`How much do you hope to raise (min. $${num(
+                minTarget.ceil(),
+                0
+              )})?`}
               rightSection="USD"
               classNames={{ rightSection: 'w-16' }}
               type="number"
               step="0.01"
-              min="1"
+              min={minTarget.ceil().toNumber()}
               max="1e30"
               required
             />
@@ -117,26 +141,15 @@ export function EditDialog({
               </tr>
               <tr>
                 <td className="text-right pr-4">Current valuation:</td>
-                <td className="text-right pr-4">
-                  $
-                  {num(
-                    holding.size.times(watchValuation || DEFAULT_VALUATION),
-                    0
-                  )}
-                </td>
+                <td className="text-right pr-4">${num(watchValuation, 0)}</td>
               </tr>
               <tr>
                 <td className="text-right pr-4">Maximum valuation:</td>
                 <td className="text-right pr-4">
                   $
                   {num(
-                    new BondingCurve(
-                      new Prisma.Decimal(watchTarget || DEFAULT_TARGET)
-                    )
-                      .valuationOfSize(
-                        new Prisma.Decimal(watchValuation || DEFAULT_VALUATION),
-                        holding.size
-                      )
+                    new BondingCurve(watchTarget)
+                      .valuationOfSize(watchValuation, holding.size)
                       .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP),
                     0
                   )}
@@ -147,13 +160,8 @@ export function EditDialog({
                 <td className="text-right pr-4">
                   $
                   {num(
-                    new BondingCurve(
-                      new Prisma.Decimal(watchTarget || DEFAULT_TARGET)
-                    )
-                      .costOfSize(
-                        new Prisma.Decimal(watchValuation || DEFAULT_VALUATION),
-                        holding.size
-                      )
+                    new BondingCurve(watchTarget)
+                      .costOfSize(watchValuation, holding.size)
                       .toDecimalPlaces(2, Prisma.Decimal.ROUND_UP),
                     0
                   )}

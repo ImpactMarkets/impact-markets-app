@@ -49,8 +49,7 @@ export function ConfirmDialog({
       </DialogContent>
       <DialogActions>
         <Button
-          variant="secondary"
-          className="!text-red"
+          variant="highlight"
           isLoading={confirmTransactionMutation.isLoading}
           loadingChildren="Confirming transaction"
           onClick={() => {
