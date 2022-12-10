@@ -2,10 +2,10 @@ import Head from 'next/head'
 import Image from 'next/image'
 
 import { ButtonLink } from '@/components/button-link'
-import { FooterCentered } from '@/components/footercentered'
-import { HeroText } from '@/components/herotext'
-import { Landing_Header } from '@/components/landingpage/header'
-import { OneTwoThree } from '@/components/landingpage/one-two-three'
+import { CenteredFooter } from '@/components/centeredFooter'
+import { HeroText } from '@/components/hero-text'
+import { Landing_Header } from '@/components/landingPage/header'
+import { Pitches } from '@/components/landingPage/pitches'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { Card } from '@mantine/core'
 
@@ -18,7 +18,7 @@ const LandingPage: NextPageWithAuthAndLayout = () => {
       <Landing_Header></Landing_Header>
       <HeroText></HeroText>
       <div className="border"></div>
-      <OneTwoThree></OneTwoThree>
+      <Pitches></Pitches>
       <div className="border"></div>
       <div className="max-w-screen-lg m-auto items-center flex m-auto mb-20 mt-12">
         <div className="basis-full">
@@ -34,7 +34,7 @@ const LandingPage: NextPageWithAuthAndLayout = () => {
         </div>
         <div className="basis-full">
           <div className="text-xl font-bold mb-4">
-            It's like investing in X prize teams
+            It’s like investing in X prize teams
           </div>
           <div>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
@@ -49,7 +49,7 @@ const LandingPage: NextPageWithAuthAndLayout = () => {
       <div className="max-w-screen-lg m-auto flex items-center m-auto mb-20 mt-12">
         <div className="basis-full">
           <div className="text-xl font-bold mb-4">
-            It's like a startup ecosystem for altruistic projects
+            It’s like a startup ecosystem for altruistic projects
           </div>
           <div>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
@@ -102,7 +102,7 @@ const LandingPage: NextPageWithAuthAndLayout = () => {
           scrolling="no"
         ></iframe>
       </div>
-      <FooterCentered></FooterCentered>
+      <CenteredFooter></CenteredFooter>
     </div>
   )
 }

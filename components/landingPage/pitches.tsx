@@ -1,12 +1,5 @@
 import * as React from 'react'
 
-import { Heading1 } from '@/components/heading-1'
-
-/*
-export function OneTwoThree() {
-  return <div>Test 1</div>
-}
-*/
 import { Container, SimpleGrid, Text, createStyles } from '@mantine/core'
 import {
   IconHeart,
@@ -79,7 +72,7 @@ function Feature({
   )
 }
 
-const mockdata = [
+const features = [
   {
     icon: IconShovel,
     title: 'Creators',
@@ -100,8 +93,8 @@ const mockdata = [
   },
 ]
 
-export function OneTwoThree() {
-  const items = mockdata.map((item) => <Feature {...item} key={item.title} />)
+export function Pitches() {
+  const items = features.map((item) => <Feature {...item} key={item.title} />)
 
   return (
     <div className="max-w-[900px] mx-auto my-5 py-6">
