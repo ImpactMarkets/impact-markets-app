@@ -1,6 +1,7 @@
 import type { MatcherFunction } from 'expect'
 
 import { expect } from '@jest/globals'
+import { test } from '@jest/globals'
 import { Prisma } from '@prisma/client'
 
 import { BondingCurve, TARGET_FRACTION } from '../../../lib/auction'
