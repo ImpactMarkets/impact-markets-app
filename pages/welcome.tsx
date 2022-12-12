@@ -37,12 +37,7 @@ const LandingPage: NextPageWithAuthAndLayout = () => {
             It’s like investing in X prize teams
           </div>
           <div>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
-            congue mollis faucibus. Ut cursus libero et libero pulvinar, vel
-            mollis felis tempor. Vestibulum ac libero in est fermentum consequat
-            sit amet quis libero. Ut eu urna ligula. Morbi diam erat, vehicula
-            dignissim sapien vitae, facilisis finibus neque. Nullam nec neque
-            nec nibh feugiat hendrerit tristique ut massa.
+            Prize competitions already exist to induce people to achieve great things. An impact market adds a twist where impact investors can provide money to teams that have a shot at winning the prize, and if the team wins the prize then the investor gets some of the prize in proportion to how many shares they bought. This allows people to predict who will win the prize and help them get resources to achieve it more easily.
           </div>
         </div>
       </div>
@@ -52,12 +47,7 @@ const LandingPage: NextPageWithAuthAndLayout = () => {
             It’s like a startup ecosystem for altruistic projects
           </div>
           <div>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
-            congue mollis faucibus. Ut cursus libero et libero pulvinar, vel
-            mollis felis tempor. Vestibulum ac libero in est fermentum consequat
-            sit amet quis libero. Ut eu urna ligula. Morbi diam erat, vehicula
-            dignissim sapien vitae, facilisis finibus neque. Nullam nec neque
-            nec nibh feugiat hendrerit tristique ut massa.
+            We want to replicate the incentives of startup investment, where founders and employees have stock, and venture capitalists have enormous sums of money they can invest for stock as well. Good startups building a lot of value can exit via an IPO or acquisition, making their stockholders wealthy. We would like to build an ecosystem analogous to this for projects working on valuable things that don't have a profit mechanism that prices them in to the marketplace. Retroactively funding things after more information has come out about their effectiveness is one way to incentivize people doing the most valuable things for the world (we hope!).
           </div>
         </div>
         <div className="basis-full">
