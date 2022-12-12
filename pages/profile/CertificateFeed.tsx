@@ -37,7 +37,7 @@ export default function CertificateFeed({
   if (profileFeedQuery.data) {
     return (
       <>
-        <div className="flow-root mt-28">
+        <div className="flow-root mt-6">
           {profileFeedQuery.data.certificateCount === 0 ? (
             <div className="text-center text-secondary border rounded py-20 px-10">
               This user hasn&apos;t published any certificates yet.
@@ -63,11 +63,11 @@ export default function CertificateFeed({
   }
 
   if (profileFeedQuery.isError) {
-    return <div className="mt-28">Error: {profileFeedQuery.error.message}</div>
+    return <div className="mt-6">Error: {profileFeedQuery.error.message}</div>
   }
 
   return (
-    <div className="flow-root mt-28">
+    <div className="flow-root mt-6">
       <ul className="-my-12 divide-y divide-primary">
         {[...Array(3)].map((_, idx) => (
           <li key={idx} className="py-10">
