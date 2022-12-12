@@ -20,7 +20,7 @@ const HelpAndSupportPage: NextPageWithAuthAndLayout = () => {
           href="https://discord.gg/7zMNNDSxWv"
           rel="noopener noreferrer"
         >
-          <span className="underline">Discord</span>
+          <span className="link">Discord</span>
         </a>{' '}
         for help!
       </div>

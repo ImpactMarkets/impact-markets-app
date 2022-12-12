@@ -419,7 +419,7 @@ export function CertificateForm({
         <div>
           <a
             onClick={show}
-            className="text-sm font-medium transition-colors cursor-pointer hover:text-blue hover:underline"
+            className="text-sm font-medium transition-colors link"
           >
             🗣️ Do you have any feedback or tips for us?
           </a>

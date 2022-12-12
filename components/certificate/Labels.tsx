@@ -13,7 +13,7 @@ export const Labels = ({ queryData }: LabelsProps) => (
         href="https://impactmarkets.substack.com/i/64916368/impact-attribution-norm-formerly-attributed-impact"
         target="_blank"
         rel="noreferrer"
-        className="underline"
+        className="link"
       >
         Impact Attribution Norm
       </a>{' '}
