@@ -36,7 +36,6 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
           defaultValues={{
             id: cuid(),
             title: '',
-            proof: '',
             location: '',
             rights: '',
             tags: '',
@@ -59,7 +58,6 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
                 content: values.content,
                 counterfactual: values.counterfactual,
                 attributedImpactVersion: values.attributedImpactVersion,
-                proof: values.proof,
                 location: values.location || '',
                 rights: 'RETROACTIVE_FUNDING',
                 actionStart: new Date(values.actionStart),

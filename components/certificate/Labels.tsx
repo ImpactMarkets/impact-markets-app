@@ -19,16 +19,6 @@ export const Labels = ({ queryData }: LabelsProps) => (
       </a>{' '}
       v{queryData.attributedImpactVersion}
     </span>
-    <span className="border text-primary border-secondary bg-primary py-1 px-2 mr-1 mb-1 rounded">
-      <a
-        href={queryData.proof}
-        target="_blank"
-        rel="noreferrer"
-        className="underline"
-      >
-        Proof of ownership
-      </a>
-    </span>
     {queryData.location && (
       <span className="border text-primary border-secondary bg-primary py-1 px-2 mr-1 mb-1 rounded">
         {queryData.location}

@@ -51,7 +51,6 @@ type FormData = {
   content: string
   attributedImpactVersion: string
   counterfactual: string
-  proof: string
   location: string
   rights: string
   actionStart: string
@@ -124,7 +123,6 @@ export function CertificateForm({
   const one = new Prisma.Decimal(1)
   const watchValuation = watch('valuation')
   const watchTarget = watch('target')
-  const watchTitle = watch('title')
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -134,30 +132,6 @@ export function CertificateForm({
         description="What did you do (will you do), in a few words?"
         placeholder="An article on implications of Evidential Cooperation in Large Worlds for population ethics"
         autoFocus
-        required
-        className="my-6"
-      />
-      {/* TODO: Once we have CUIDs, we can generate one now and provide the link back */}
-      <TextField
-        {...register('proof', {})}
-        label="Proof of ownership"
-        description={
-          <span>
-            Please put this link to your certificate on a website or profile
-            that is clearly yours:{' '}
-            <a
-              href={window.location.origin + '/certificate/' + defaultValues.id}
-              target="_blank"
-              rel="noreferrer"
-              className="hover:underline font-mono"
-            >
-              {watchTitle || 'My certificate'}
-            </a>
-          </span>
-        }
-        info="Putting a link to your certificate on a website that only you can edit proves to readers on this page that you are really who you claim to be."
-        placeholder="https://forum.effectivealtruism.org/users/inga"
-        type="url"
         required
         className="my-6"
       />

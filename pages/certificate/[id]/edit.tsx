@@ -46,7 +46,6 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
                   counterfactual: certificateQuery.data.counterfactual,
                   attributedImpactVersion:
                     certificateQuery.data.attributedImpactVersion,
-                  proof: certificateQuery.data.proof || '',
                   location: certificateQuery.data.location || '',
                   rights: certificateQuery.data.rights,
                   actionStart: certificateQuery.data.actionStart
@@ -67,7 +66,6 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
                         content: values.content,
                         counterfactual: values.counterfactual,
                         attributedImpactVersion: values.attributedImpactVersion,
-                        proof: values.proof,
                         location: values.location || '',
                         rights: values.rights,
                         actionStart: new Date(values.actionStart),
