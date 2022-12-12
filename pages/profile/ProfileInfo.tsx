@@ -22,6 +22,7 @@ import { TextField } from '@/components/text-field'
 import { browserEnv } from '@/env/browser'
 import { uploadImage } from '@/lib/cloudinary'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
+import { IconAlertCircle, IconCreditCard, IconShieldLock } from '@tabler/icons'
 
 function DotPattern() {
   return (
@@ -58,6 +59,8 @@ function DotPattern() {
 type EditFormData = {
   name: string
   title: string | null
+  proofUrl: string | null
+  paymentUrl: string | null
 }
 
 function EditProfileDialog({
@@ -65,24 +68,22 @@ function EditProfileDialog({
   isOpen,
   onClose,
 }: {
-  user: {
-    name: string
-    title: string | null
-  }
+  user: InferQueryOutput<'user.profile'>
   isOpen: boolean
   onClose: () => void
 }) {
   const { register, handleSubmit, reset } = useForm<EditFormData>({
     defaultValues: {
-      name: user.name,
+      name: user.name || '',
       title: user.title,
+      proofUrl: user.proofUrl,
+      paymentUrl: user.paymentUrl,
     },
   })
   const router = useRouter()
   const utils = trpc.useContext()
   const editUserMutation = trpc.useMutation('user.edit', {
     onSuccess: () => {
-      window.location.reload()
       return utils.invalidateQueries([
         'user.profile',
         {
@@ -104,7 +105,9 @@ function EditProfileDialog({
     editUserMutation.mutate(
       {
         name: data.name,
-        title: data.title,
+        title: data.title || '',
+        proofUrl: data.proofUrl || '',
+        paymentUrl: data.paymentUrl || '',
       },
       {
         onSuccess: () => onClose(),
@@ -123,8 +126,40 @@ function EditProfileDialog({
               label="Name"
               required
             />
-
-            <TextField {...register('title')} label="Title" />
+            <TextField
+              {...register('title')}
+              label="Title"
+              placeholder="Lictor of Thrax"
+            />
+            <TextField
+              {...register('proofUrl', {})}
+              label="Proof link"
+              description={
+                <span>
+                  This is your profile link:{' '}
+                  <a
+                    href={window.location.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="link italic"
+                  >
+                    My impactmarkets.io profile
+                  </a>
+                  . Please put it on a personal page that is clearly yours and
+                  paste a link to that page below.
+                </span>
+              }
+              info="Putting a link to your certificate on a website that only you can edit proves to readers on this page that you are really who you claim to be."
+              placeholder="https://forum.effectivealtruism.org/users/inga"
+              type="url"
+              className="my-6"
+            />
+            <TextField
+              {...register('paymentUrl')}
+              label="Payment link"
+              placeholder="https://ko-fi.com/velvetillumnation"
+              description="Please enter a link to a page where people can pay you (e.g., PayPal, Stripe, Ko-Fi, etc.)"
+            />
           </div>
           <DialogCloseButton onClick={handleClose} />
         </DialogContent>
@@ -150,10 +185,7 @@ function UpdateAvatarDialog({
   isOpen,
   onClose,
 }: {
-  user: {
-    name: string
-    image: string | null
-  }
+  user: InferQueryOutput<'user.profile'>
   isOpen: boolean
   onClose: () => void
 }) {
@@ -189,7 +221,11 @@ function UpdateAvatarDialog({
         <DialogTitle>Update avatar</DialogTitle>
         <DialogCloseButton onClick={handleClose} />
         <div className="flex justify-center mt-8">
-          <Avatar name={user.name} src={uploadedImage} size="lg" />
+          <Avatar
+            name={user.name || 'Anonymous  Aardvark'}
+            src={uploadedImage}
+            size="lg"
+          />
         </div>
         <div className="grid grid-flow-col gap-6 mt-6">
           <div className="text-center">
@@ -292,6 +328,7 @@ function ProfileInfo({ user }: { user: InferQueryOutput<'user.profile'> }) {
 
   if (user) {
     const profileBelongsToUser = user.id === session?.user.id
+    const isAdmin = session?.user.role === 'ADMIN'
 
     return (
       <>
@@ -321,17 +358,40 @@ function ProfileInfo({ user }: { user: InferQueryOutput<'user.profile'> }) {
             )}
 
             <div className="flex-1">
-              <Heading1>{user.name}</Heading1>
+              <Heading1 className="whitespace-nowrap">
+                {user.name}{' '}
+                {user.proofUrl ? (
+                  <a
+                    href={user.proofUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Proof of identity supplied"
+                  >
+                    <IconShieldLock className="inline fill-green-500" />
+                  </a>
+                ) : (
+                  <span title="No proof of identity">
+                    <IconAlertCircle className="inline fill-yellow-200" />
+                  </span>
+                )}
+              </Heading1>
               {user.title && (
                 <p className="text-lg text-secondary">{user.title}</p>
               )}
-              {user.email && (
-                <p className="text-lg text-secondary">{user.email}</p>
+              {user.paymentUrl && (
+                <a
+                  className="text-lg text-secondary inline-block w-60 whitespace-nowrap overflow-hidden overflow-ellipsis"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={user.paymentUrl}
+                >
+                  <IconCreditCard className="inline" /> {user.paymentUrl}
+                </a>
               )}
             </div>
           </div>
 
-          {profileBelongsToUser && (
+          {(isAdmin || profileBelongsToUser) && (
             <div className="ml-auto mr-10">
               <IconButton
                 variant="secondary"
@@ -348,10 +408,7 @@ function ProfileInfo({ user }: { user: InferQueryOutput<'user.profile'> }) {
         </div>
 
         <EditProfileDialog
-          user={{
-            name: user.name!,
-            title: user.title,
-          }}
+          user={user}
           isOpen={isEditProfileDialogOpen}
           onClose={() => {
             setIsEditProfileDialogOpen(false)
@@ -360,10 +417,7 @@ function ProfileInfo({ user }: { user: InferQueryOutput<'user.profile'> }) {
 
         <UpdateAvatarDialog
           key={user.image}
-          user={{
-            name: user.name!,
-            image: user.image,
-          }}
+          user={user}
           isOpen={isUpdateAvatarDialogOpen}
           onClose={() => {
             setIsUpdateAvatarDialogOpen(false)
