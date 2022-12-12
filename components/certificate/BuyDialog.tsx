@@ -150,10 +150,6 @@ export function BuyDialog({
             )}
           </DialogTitle>
           <div className="mt-6 space-y-6">
-            <p className="text-sm">
-              Please contact the current owner {holding.user.name || ''} to
-              agree on a payment method.
-            </p>
             <Tabs defaultValue="cost">
               {simplified ? null : (
                 <Tabs.List>
@@ -307,8 +303,45 @@ export function BuyDialog({
             ) : (
               ''
             )}
-            <Banner className="text-sm px-4 py-3 my-5">
-              Make sure that you trust the recipient to confirm the transaction!
+            <Banner className="text-sm font-normal px-4 py-3 my-5">
+              <ol className="list-decimal list-outside m-2 ml-5">
+                <li>
+                  I’ve checked that{' '}
+                  <a
+                    href={`/profile/${holding.user.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="link"
+                  >
+                    {holding.user.name}
+                  </a>{' '}
+                  is who they claim to be.
+                </li>
+                <li>
+                  The{' '}
+                  <a
+                    href={holding.user.paymentUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="link"
+                  >
+                    proposed payment method
+                  </a>{' '}
+                  works for me.
+                </li>
+                <li>
+                  I trust{' '}
+                  <a
+                    href={`/profile/${holding.user.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="link"
+                  >
+                    {holding.user.name}
+                  </a>{' '}
+                  to confirm my transaction.
+                </li>
+              </ol>
             </Banner>
           </div>
           <DialogCloseButton onClick={handleClose} />
