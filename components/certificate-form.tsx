@@ -383,6 +383,11 @@ export function CertificateForm({
                   ? setValue('issuerEmails', value.join(','))
                   : null
               }}
+              onKeyPress={(event) => {
+                if (event.key === ' ') {
+                  event.preventDefault()
+                }
+              }}
               defaultValue={
                 getValues().issuerEmails
                   ? getValues().issuerEmails.split(',')
