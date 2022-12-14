@@ -20,7 +20,7 @@ const LandingPage: NextPageWithAuthAndLayout = () => {
       <div className="border"></div>
       <Pitches></Pitches>
       <div className="border"></div>
-      <div className="max-w-screen-lg m-auto items-center flex m-auto mb-20 mt-12">
+      <div className="max-w-screen-lg m-auto items-center flex mb-20 mt-12">
         <div className="basis-full">
           <Image
             src="/images/trophy.png"
@@ -37,17 +37,32 @@ const LandingPage: NextPageWithAuthAndLayout = () => {
             It’s like investing in X prize teams
           </div>
           <div>
-            Prize competitions already exist to induce people to achieve great things. An impact market adds a twist where impact investors can provide money to teams that have a shot at winning the prize, and if the team wins the prize then the investor gets some of the prize in proportion to how many shares they bought. This allows people to predict who will win the prize and help them get resources to achieve it more easily.
+            Prize competitions already exist to induce people to achieve great
+            things. An impact market adds a twist where impact investors can
+            provide money to teams that have a shot at winning the prize, and if
+            the team wins the prize then the investor gets some of the prize in
+            proportion to how many shares they bought. This allows people to
+            predict who will win the prize and help them get resources to
+            achieve it more easily.
           </div>
         </div>
       </div>
-      <div className="max-w-screen-lg m-auto flex items-center m-auto mb-20 mt-12">
+      <div className="max-w-screen-lg m-auto flex items-center mb-20 mt-12">
         <div className="basis-full">
           <div className="text-xl font-bold mb-4">
             It’s like a startup ecosystem for altruistic projects
           </div>
           <div>
-            We want to replicate the incentives of startup investment, where founders and employees have stock, and venture capitalists have enormous sums of money they can invest for stock as well. Good startups building a lot of value can exit via an IPO or acquisition, making their stockholders wealthy. We would like to build an ecosystem analogous to this for projects working on valuable things that don't have a profit mechanism that prices them in to the marketplace. Retroactively funding things after more information has come out about their effectiveness is one way to incentivize people doing the most valuable things for the world (we hope!).
+            We want to replicate the incentives of startup investment, where
+            founders and employees have stock, and venture capitalists have
+            enormous sums of money they can invest for stock as well. Good
+            startups building a lot of value can exit via an IPO or acquisition,
+            making their stockholders wealthy. We would like to build an
+            ecosystem analogous to this for projects working on valuable things
+            that don’t have a profit mechanism that prices them in to the
+            marketplace. Retroactively funding things after more information has
+            come out about their effectiveness is one way to incentivize people
+            doing the most valuable things for the world (we hope!).
           </div>
         </div>
         <div className="basis-full">
