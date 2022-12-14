@@ -66,7 +66,7 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
                 actionStart: new Date(values.actionStart),
                 actionEnd: new Date(values.actionEnd),
                 tags: values.tags,
-                issuerEmails: values.issuerEmails || '',
+                issuerEmails: values.issuerEmails,
                 valuation: new Prisma.Decimal(
                   values.valuation || DEFAULT_VALUATION
                 ),

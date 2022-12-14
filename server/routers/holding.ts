@@ -17,6 +17,7 @@ export const holdingRouter = createProtectedRouter()
         },
         where: {
           certificateId: input.certificateId,
+          size: { gt: 0 },
         },
         select: {
           id: true,

@@ -1,12 +1,39 @@
 import slugify from 'slugify'
 import { z } from 'zod'
 
+import { CERT_SORT_KEYS, CertSortKey } from '@/lib/constants'
 import { markdownToHtml } from '@/lib/editor'
 import { postToSlackIfEnabled } from '@/lib/slack'
 import { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
 import { createProtectedRouter } from '../create-protected-router'
+
+const getOrderBy = (
+  orderByKey: CertSortKey | undefined
+):
+  | Prisma.Enumerable<Prisma.CertificateOrderByWithRelationAndSearchRelevanceInput>
+  | undefined => {
+  const orderOptions = {
+    actionStart: { actionStart: Prisma.SortOrder.desc },
+    actionEnd: { actionEnd: Prisma.SortOrder.desc },
+    supporterCount: {
+      holdings: {
+        // Sadly not supported:
+        // where: {
+        //   size: { gt: 0 },
+        //   type: { in: ['OWNERSHIP', 'CONSUMPTION'] },
+        // },
+        _count: Prisma.SortOrder.desc,
+      },
+    },
+  }
+  const orderBy = orderByKey && orderOptions[orderByKey]
+  if (!orderBy) {
+    return { createdAt: Prisma.SortOrder.desc }
+  }
+  return orderBy
+}
 
 export const certificateRouter = createProtectedRouter()
   .query('feed', {
@@ -15,25 +42,33 @@ export const certificateRouter = createProtectedRouter()
         take: z.number().min(1).max(50).optional(),
         skip: z.number().min(1).optional(),
         authorId: z.string().optional(),
+        filterTags: z.string().optional(),
+        orderBy: z.enum(CERT_SORT_KEYS).optional(),
       })
       .optional(),
     async resolve({ input, ctx }) {
       const take = input?.take ?? 50
       const skip = input?.skip
+      const baseQuery: Array<Prisma.CertificateWhereInput> | undefined =
+        ctx.session?.user.role === 'ADMIN'
+          ? undefined
+          : [{ hidden: false }, { authorId: ctx.session?.user.id }]
       const where = {
-        OR:
-          ctx.session?.user.role === 'ADMIN'
-            ? undefined
-            : [{ hidden: false }, { authorId: ctx.session?.user.id }],
+        OR: baseQuery,
+        AND: input?.filterTags
+          ? input.filterTags.split(',').map((tag) => ({
+              tags: {
+                contains: tag.toLowerCase(),
+              },
+            }))
+          : undefined,
         authorId: input?.authorId,
       }
 
       const certificates = await ctx.prisma.certificate.findMany({
         take,
         skip,
-        orderBy: {
-          createdAt: 'desc',
-        },
+        orderBy: getOrderBy(input?.orderBy),
         where,
         select: {
           id: true,
@@ -65,7 +100,10 @@ export const certificateRouter = createProtectedRouter()
               id: true,
               type: true,
               size: true,
+              user: true,
+              sellTransactions: { where: { state: 'PENDING' } },
             },
+            where: { size: { gt: 0 } },
           },
           likedBy: {
             orderBy: {
@@ -282,20 +320,17 @@ export const certificateRouter = createProtectedRouter()
           target: input.target,
         },
       })
+      const issuerEmails = input.issuerEmails
+        .split(',')
+        .concat([ctx.session!.user.email])
       const issuers = await ctx.prisma.user.findMany({
-        where: { email: { in: input.issuerEmails.split(',') } },
+        where: { email: { in: issuerEmails } },
       })
       await ctx.prisma.certificateIssuer.createMany({
         data: issuers.map((issuer) => {
           return { certificateId: certificate.id, userId: issuer.id }
         }),
         skipDuplicates: true,
-      })
-      await ctx.prisma.certificateIssuer.create({
-        data: {
-          certificateId: certificate.id,
-          userId: ctx.session!.user.id,
-        },
       })
 
       await postToSlackIfEnabled({
@@ -343,9 +378,12 @@ export const certificateRouter = createProtectedRouter()
         },
       })
 
+      const issuerEmails = input.data.issuerEmails
+        .split(',')
+        .concat([ctx.session!.user.email])
       // Delete all existing certificateIssuer associations for this certificate, and create new ones based on the input.
       const issuers = await ctx.prisma.user.findMany({
-        where: { email: { in: input.data.issuerEmails.split(',') } },
+        where: { email: { in: issuerEmails } },
       })
       ctx.prisma.$transaction([
         ctx.prisma.certificateIssuer.deleteMany({
@@ -356,12 +394,6 @@ export const certificateRouter = createProtectedRouter()
             return { certificateId: updatedCertificate.id, userId: issuer.id }
           }),
           skipDuplicates: true,
-        }),
-        ctx.prisma.certificateIssuer.create({
-          data: {
-            certificateId: updatedCertificate.id,
-            userId: ctx.session!.user.id,
-          },
         }),
       ])
 
