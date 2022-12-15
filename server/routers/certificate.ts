@@ -235,16 +235,7 @@ export const certificateRouter = createProtectedRouter()
         })
       }
 
-      // Set the `issuerEmails` using the associated certificateIssuers
-      const issuerEmails = certificate.issuers
-        .map((issuer) => issuer.user.email)
-        .filter((x) => x)
-        .join(',')
-
-      return {
-        issuerEmails,
-        ...certificate,
-      }
+      return certificate
     },
   })
   .query('search', {
