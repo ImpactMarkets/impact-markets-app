@@ -161,7 +161,6 @@ export const certificateRouter = createProtectedRouter()
           actionStart: true,
           actionEnd: true,
           tags: true,
-          issuerEmails: true,
           author: {
             select: {
               id: true,
@@ -301,7 +300,6 @@ export const certificateRouter = createProtectedRouter()
           actionStart: input.actionStart,
           actionEnd: input.actionEnd,
           tags: input.tags,
-          issuerEmails: '', // Don't persist the issuerEmails input, as it would duplicate the certificateIssuers table, which is the source of truth.
           author: {
             connect: {
               id: ctx.session!.user.id,
@@ -373,7 +371,6 @@ export const certificateRouter = createProtectedRouter()
           rights: 'RETROACTIVE_FUNDING',
           actionStart: data.actionStart,
           actionEnd: data.actionEnd,
-          issuerEmails: '', // Don't persist the issuerEmails input, as it would duplicate the certificateIssuers table, which is the source of truth.
           tags: data.tags,
         },
       })
@@ -381,7 +378,8 @@ export const certificateRouter = createProtectedRouter()
       const issuerEmails = input.data.issuerEmails
         .split(',')
         .concat([ctx.session!.user.email])
-      // Delete all existing certificateIssuer associations for this certificate, and create new ones based on the input.
+      // Delete all existing certificateIssuer associations for this certificate, and create
+      // new ones based on the input
       const issuers = await ctx.prisma.user.findMany({
         where: { email: { in: issuerEmails } },
       })
