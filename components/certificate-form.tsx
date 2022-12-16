@@ -1,5 +1,6 @@
 import { useSession } from 'next-auth/react'
 import * as React from 'react'
+import { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useIntercom } from 'react-use-intercom'
 
@@ -12,6 +13,10 @@ import { BondingCurve } from '@/lib/auction'
 import { DEFAULT_TARGET, DEFAULT_VALUATION, SHARE_COUNT } from '@/lib/constants'
 import { TAGS } from '@/lib/tags'
 import { num } from '@/lib/text'
+import {
+  isListOfEmails,
+  isListOfEmailsValidationMessage,
+} from '@/lib/validations'
 import { Accordion, SimpleGrid, Switch } from '@mantine/core'
 import { Prisma } from '@prisma/client'
 
@@ -56,6 +61,7 @@ type FormData = {
   actionStart: string
   actionEnd: string
   tags: string
+  issuerEmails: string
   // These defaults are set for new forms but not for editing
   valuation?: Prisma.Decimal
   target?: Prisma.Decimal
@@ -86,6 +92,7 @@ export function CertificateForm({
     watch,
     setValue,
   } = useForm<FormData>({
+    mode: 'onSubmit',
     defaultValues,
   })
 
@@ -124,6 +131,14 @@ export function CertificateForm({
   const watchValuation = watch('valuation')
   const watchTarget = watch('target')
 
+  const [issuerEmailsData, setIssuerEmailsData] = useState(
+    (getValues().issuerEmails || session!.user.email)
+      .split(',')
+      .map((email) => {
+        return { value: email, label: email }
+      })
+  )
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <TextField
@@ -153,7 +168,6 @@ export function CertificateForm({
           required
         />
       </SimpleGrid>
-
       <div className="mt-6">
         <Controller
           name="content"
@@ -219,6 +233,7 @@ export function CertificateForm({
                 label: tag.label,
                 group: tag.group,
               }))}
+              searchable
               onChange={(value) =>
                 Array.isArray(value) ? setValue('tags', value.join(',')) : null
               }
@@ -326,6 +341,44 @@ export function CertificateForm({
                 Please go through the edit function of your holding to change
                 starting and target valuation.
               </div>
+            )}
+
+            <IMMultiSelect
+              {...register('issuerEmails', {
+                validate: (value) => isListOfEmails(value),
+              })}
+              label="Issuers' email addresses"
+              description="Please enter the exact email addresses that you and the other issuers use on this platform."
+              className="mt-6"
+              data={issuerEmailsData}
+              onChange={(value) => {
+                Array.isArray(value)
+                  ? setValue('issuerEmails', value.join(','))
+                  : null
+              }}
+              onKeyPress={(event) => {
+                if (event.key === ' ') {
+                  event.preventDefault()
+                }
+              }}
+              defaultValue={
+                getValues().issuerEmails
+                  ? getValues().issuerEmails.split(',')
+                  : [session!.user.email]
+              }
+              searchable // allows typing
+              creatable
+              getCreateLabel={(query) => `+ Add ${query}`}
+              onCreate={(query) => {
+                const item = { value: query, label: query }
+                setIssuerEmailsData((current) => [...current, item])
+                return item
+              }}
+            />
+            {formState.errors.issuerEmails && (
+              <p className="text-red">
+                {isListOfEmailsValidationMessage(getValues('issuerEmails'))}
+              </p>
             )}
 
             <TextField

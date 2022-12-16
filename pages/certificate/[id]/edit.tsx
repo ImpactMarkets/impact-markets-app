@@ -54,6 +54,11 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
                   actionEnd: certificateQuery.data.actionEnd
                     .toISOString()
                     .slice(0, 10),
+                  issuerEmails:
+                    certificateQuery.data.issuers
+                      .map((certficateIssuer) => certficateIssuer.user.email)
+                      .filter((x) => x)
+                      .join(',') || '',
                   tags: certificateQuery.data.tags || '',
                 }}
                 backTo={`/certificate/${certificateQuery.data.id}`}
@@ -70,6 +75,7 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
                         rights: values.rights,
                         actionStart: new Date(values.actionStart),
                         actionEnd: new Date(values.actionEnd),
+                        issuerEmails: values.issuerEmails,
                         tags: values.tags,
                       },
                     },

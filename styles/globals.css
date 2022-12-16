@@ -187,6 +187,10 @@ html {
     }
   }
 
+  .im-multiselect .mantine-MultiSelect-searchInput {
+    background-color: var(--color-gray-050);
+  }
+
   /* Hack because it doesn’t seem to work in Tailwind */
   .disabled {
     cursor: not-allowed;
