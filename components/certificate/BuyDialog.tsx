@@ -43,7 +43,9 @@ export function BuyDialog({
     valuation: Prisma.Decimal
     target: Prisma.Decimal
     user: {
+      id: string
       name: string | null
+      paymentUrl: string
     }
   }
   reservedSize: Prisma.Decimal
