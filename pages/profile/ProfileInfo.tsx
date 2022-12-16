@@ -22,6 +22,7 @@ import { TextField } from '@/components/text-field'
 import { browserEnv } from '@/env/browser'
 import { uploadImage } from '@/lib/cloudinary'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
+import { Tooltip } from '@mantine/core'
 import { IconAlertCircle, IconCreditCard, IconShieldLock } from '@tabler/icons'
 
 function DotPattern() {
@@ -328,7 +329,6 @@ function ProfileInfo({ user }: { user: InferQueryOutput<'user.profile'> }) {
 
   if (user) {
     const profileBelongsToUser = user.id === session?.user.id
-    const isAdmin = session?.user.role === 'ADMIN'
 
     return (
       <>
@@ -370,9 +370,11 @@ function ProfileInfo({ user }: { user: InferQueryOutput<'user.profile'> }) {
                     <IconShieldLock className="inline fill-green-500" />
                   </a>
                 ) : (
-                  <span title="No proof of identity">
-                    <IconAlertCircle className="inline fill-yellow-200" />
-                  </span>
+                  <Tooltip label="No proof of identity">
+                    <span>
+                      <IconAlertCircle className="inline fill-yellow-200" />
+                    </span>
+                  </Tooltip>
                 )}
               </Heading1>
               {user.title && (
@@ -391,7 +393,7 @@ function ProfileInfo({ user }: { user: InferQueryOutput<'user.profile'> }) {
             </div>
           </div>
 
-          {(isAdmin || profileBelongsToUser) && (
+          {profileBelongsToUser && (
             <div className="ml-auto mr-10">
               <IconButton
                 variant="secondary"

@@ -294,19 +294,10 @@ export function BuyDialog({
               </Accordion.Item>
             </Accordion>
 
-            {watchSize ? (
-              <Banner className="text-sm px-4 py-3 my-5">
-                When you click “{isActive ? 'Donate' : 'Buy'},” you’ll have one
-                week to send {holding.user.name || ''} ${num(cost, 2)} or to
-                cancel the transaction.
-              </Banner>
-            ) : (
-              ''
-            )}
             <Banner className="text-sm font-normal px-4 py-3 my-5">
               <ol className="list-decimal list-outside m-2 ml-5">
                 <li>
-                  I’ve checked that{' '}
+                  Is{' '}
                   <a
                     href={`/profile/${holding.user.id}`}
                     target="_blank"
@@ -315,37 +306,54 @@ export function BuyDialog({
                   >
                     {holding.user.name}
                   </a>{' '}
-                  is who they claim to be.
+                  who they claim to be?
                 </li>
                 <li>
-                  The{' '}
+                  Does their{' '}
                   <a
                     href={holding.user.paymentUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="link"
                   >
-                    proposed payment method
+                    payment method
                   </a>{' '}
-                  works for me.
+                  work for you?
                 </li>
-                <li>
-                  I trust{' '}
-                  <a
-                    href={`/profile/${holding.user.id}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="link"
-                  >
-                    {holding.user.name}
-                  </a>{' '}
-                  to confirm my transaction.
-                </li>
+                <li>Do you trust them to confirm your transaction?</li>
               </ol>
             </Banner>
+
+            {watchSize ? (
+              <Banner className="text-sm px-4 py-3 my-5">
+                When you click “{isActive ? 'Donate' : 'Buy'},” you’ll have one
+                week to send{' '}
+                <a
+                  href={`/profile/${holding.user.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link"
+                >
+                  {holding.user.name}
+                </a>{' '}
+                ${num(cost, 2)} or to cancel the transaction. You can find{' '}
+                <a
+                  href={holding.user.paymentUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link"
+                >
+                  their payment details here
+                </a>{' '}
+                and on their profile.
+              </Banner>
+            ) : (
+              ''
+            )}
           </div>
           <DialogCloseButton onClick={handleClose} />
         </DialogContent>
+
         <DialogActions>
           <Button
             type="submit"

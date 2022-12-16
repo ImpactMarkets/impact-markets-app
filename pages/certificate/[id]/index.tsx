@@ -127,8 +127,9 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
             )}
             {!certificate.author.proofUrl && (
               <Banner className="mb-6">
-                The author of this project has not yet entered proof of their
-                identity on their{' '}
+                {certificate.author.id === session?.user.id
+                  ? 'Please enter proof of your identity on your'
+                  : 'The author of this project has not yet entered proof of their'}{' '}
                 <Link href={`/profile/${certificate.author.id}`}>
                   <span className="link">user profile</span>
                 </Link>
@@ -137,8 +138,9 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
             )}
             {!certificate.author.paymentUrl && (
               <Banner className="mb-6">
-                The author of this project has not yet entered a payment link on
-                their{' '}
+                {certificate.author.id === session?.user.id
+                  ? 'Please enter a payment link on your'
+                  : 'The author of this project has not yet entered a payment link on their'}{' '}
                 <Link href={`/profile/${certificate.author.id}`}>
                   <span className="link">user profile</span>
                 </Link>
