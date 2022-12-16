@@ -110,11 +110,13 @@ const Holding = ({
                   {isActive ? 'Donate' : 'Buy'}
                 </span>
               </ButtonLink>
-              <Tooltip label="This user has not yet entered a payment method on their profile">
-                <span>
-                  <IconAlertCircle />
-                </span>
-              </Tooltip>
+              {!holding.user.paymentUrl && (
+                <Tooltip label="This user has not yet entered a payment method on their profile">
+                  <span>
+                    <IconAlertCircle />
+                  </span>
+                </Tooltip>
+              )}
               <BuyDialog
                 holding={holding}
                 reservedSize={reservedSize}
