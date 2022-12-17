@@ -28,13 +28,11 @@ export function Layout({ children }: LayoutProps) {
   })
 
   return (
-    <>
-      <AppShell
-        navbar={<Navbar hidden={!opened} />}
-        header={<Header opened={opened} setOpened={setOpened} />}
-      >
-        {children}
-      </AppShell>
-    </>
+    <AppShell
+      navbar={<Navbar hidden={!opened} />}
+      header={<Header opened={opened} setOpened={setOpened} />}
+    >
+      <div className="max-w-5xl m-auto">{children}</div>
+    </AppShell>
   )
 }
