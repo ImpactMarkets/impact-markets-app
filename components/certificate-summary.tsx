@@ -65,7 +65,10 @@ function Left({ certificate }: CertificateSummaryProps) {
         <HtmlView html={cert_summary} className="mt-2" />
       </div>
       <div className="flex items-center gap-12 mt-6">
-        <HoldingsChart holdings={certificate.holdings} />
+        <HoldingsChart
+          holdings={certificate.holdings}
+          issuers={certificate.issuers}
+        />
       </div>
     </div>
   )

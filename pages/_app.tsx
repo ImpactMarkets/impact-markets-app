@@ -33,6 +33,7 @@ function MyApp({
   const getLayout = Component.getLayout ?? ((page) => page)
   const rollbarConfig = {
     accessToken: browserEnv.NEXT_PUBLIC_ROLLBAR_CLIENT_TOKEN,
+    enabled: process.env.NODE_ENV === 'production',
     captureUncaught: true,
     captureUnhandledRejections: true,
     payload: {
@@ -53,7 +54,7 @@ function MyApp({
           withGlobalStyles
           withNormalizeCSS
         >
-          <SessionProvider session={session} refetchOnWindowFocus={false}>
+          <SessionProvider session={session} refetchOnWindowFocus>
             <ThemeProvider
               forcedTheme="light"
               attribute="class"

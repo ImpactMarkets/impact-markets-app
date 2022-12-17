@@ -1,3 +1,5 @@
+import mixpanel from 'mixpanel-browser'
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
@@ -8,9 +10,19 @@ import {
   LifebuoyIcon,
   StoreIcon,
 } from '@/components/icons'
-import { Navbar as MantineNavbar, createStyles } from '@mantine/core'
+import { trpc } from '@/lib/trpc'
+import {
+  Group,
+  Navbar as MantineNavbar,
+  Switch,
+  createStyles,
+} from '@mantine/core'
 
 import { User } from './user'
+import refreshSession from './utils'
+
+const mixpanelToken = process.env.MIXPANEL_AUTH_TOKEN || ''
+mixpanel.init(mixpanelToken, { debug: true })
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
@@ -93,8 +105,13 @@ interface NavbarProps {
 }
 
 export function Navbar({ hidden }: NavbarProps) {
+  const { data: session } = useSession()
   const { classes, cx } = useStyles()
   const router = useRouter()
+
+  const preferencesMutation = trpc.useMutation(['user.preferences'], {
+    onSuccess: refreshSession,
+  })
 
   const links = data.map((item) => (
     <Link href={item.link} key={item.label}>
@@ -104,12 +121,38 @@ export function Navbar({ hidden }: NavbarProps) {
             [classes.linkActive]: item.link === router.pathname,
           }) + ' flex text-sm items-center cursor-pointer'
         }
+        onClick={() => {
+          try {
+            mixpanel.track('Click - ' + item.label, {
+              user: session?.user.id,
+              datetime: Date(),
+            })
+          } catch (error) {
+            console.log('error: ' + error)
+          }
+        }}
       >
         <item.icon className={classes.linkIcon} />
         <span>{item.label}</span>
       </div>
     </Link>
   ))
+
+  let preferences = null
+  if (session) {
+    preferences = (
+      <Switch
+        label="Detail view"
+        classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
+        checked={session.user.prefersDetailView}
+        onChange={(event) => {
+          preferencesMutation.mutate({
+            prefersDetailView: event.target.checked,
+          })
+        }}
+      />
+    )
+  }
 
   return (
     <MantineNavbar

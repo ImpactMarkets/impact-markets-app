@@ -36,17 +36,18 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
           defaultValues={{
             id: cuid(),
             title: '',
+            content: '',
+            counterfactual: '',
             proof: '',
             location: '',
             rights: '',
-            tags: '',
-            counterfactual: '',
             attributedImpactVersion: ATTRIBUTED_IMPACT_RECOMMENDED_VERSION,
             actionStart: new Date().toISOString().slice(0, 10),
             actionEnd: new Date(new Date().getTime() + 1000 * 60 * 60 * 24)
               .toISOString()
               .slice(0, 10),
-            content: '',
+            tags: '',
+            issuerEmails: '',
             valuation: DEFAULT_VALUATION,
             target: DEFAULT_TARGET,
           }}
@@ -65,6 +66,7 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
                 actionStart: new Date(values.actionStart),
                 actionEnd: new Date(values.actionEnd),
                 tags: values.tags,
+                issuerEmails: values.issuerEmails,
                 valuation: new Prisma.Decimal(
                   values.valuation || DEFAULT_VALUATION
                 ),
