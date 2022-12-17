@@ -101,7 +101,7 @@ const config: PlaywrightTestConfig = {
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'next build --no-lint && next start',
+    command: 'next build && next start',
     url: 'http://localhost:3001',
     timeout: 5 * 60 * 1000,
   },

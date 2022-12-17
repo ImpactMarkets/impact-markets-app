@@ -47,7 +47,7 @@ GOOGLE_CLIENT_SECRET=
 - Start the database
 
 ```bash
-sudo docker-compose up -d
+docker-compose up -d
 ```
 
 - Create the database schema:

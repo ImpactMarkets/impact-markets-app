@@ -22,7 +22,14 @@ export const holdingRouter = createProtectedRouter()
         select: {
           id: true,
           certificateId: true,
-          user: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              paymentUrl: true,
+              image: true,
+            },
+          },
           type: true,
           size: true,
           cost: true,
