@@ -2,13 +2,12 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 
 import { Layout } from '@/components/layout'
+import CertificateFeed from '@/components/user/CertificateFeed'
+import ProfileInfo from '@/components/user/ProfileInfo'
+import TransactionFeed from '@/components/user/TransactionFeed'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { Tabs } from '@mantine/core'
-
-import CertificateFeed from './CertificateFeed'
-import ProfileInfo from './ProfileInfo'
-import TransactionFeed from './TransactionFeed'
 
 const ProfilePage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
