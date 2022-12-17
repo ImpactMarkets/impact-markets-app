@@ -11,12 +11,7 @@ import {
   StoreIcon,
 } from '@/components/icons'
 import { trpc } from '@/lib/trpc'
-import {
-  Group,
-  Navbar as MantineNavbar,
-  Switch,
-  createStyles,
-} from '@mantine/core'
+import { Navbar as MantineNavbar, Switch, createStyles } from '@mantine/core'
 
 import { User } from './user'
 import refreshSession from './utils'
@@ -163,6 +158,7 @@ export function Navbar({ hidden }: NavbarProps) {
     >
       <MantineNavbar.Section grow className="m-4">
         {links}
+        {preferences}
       </MantineNavbar.Section>
       <MantineNavbar.Section>
         <User />
