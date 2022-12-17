@@ -54,7 +54,7 @@ export function Header({ opened, setOpened }: HeaderProps) {
           {session ? (
             <ButtonLink href="/new" variant="highlight">
               <span className="sm:hidden">New</span>
-              <span className="hidden sm:block shrink-0">New certificate</span>
+              <span className="hidden sm:block shrink-0">New project</span>
             </ButtonLink>
           ) : (
             <>
