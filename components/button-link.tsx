@@ -6,6 +6,7 @@ import { ButtonVariant, buttonClasses } from '@/components/button'
 export type ButtonLinkProps = {
   variant?: ButtonVariant
   responsive?: boolean
+  disabled?: boolean
 } & Omit<React.ComponentPropsWithoutRef<'a'>, 'href'> &
   LinkProps
 
@@ -21,12 +22,28 @@ export const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
       prefetch,
       locale,
       className,
-      variant = 'primary',
       responsive,
-      ...rest
+      onClick,
+      children,
+      variant = 'primary',
+      disabled = false,
     },
     forwardedRef
   ) => {
+    if (disabled) {
+      return (
+        <span
+          className={buttonClasses({
+            className,
+            variant,
+            responsive,
+            disabled,
+          })}
+        >
+          {children}
+        </span>
+      )
+    }
     return (
       <Link
         href={href}
@@ -38,11 +55,17 @@ export const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
         prefetch={prefetch}
         locale={locale}
       >
-        <a
-          {...rest}
+        <span
+          onClick={onClick}
           ref={forwardedRef}
-          className={buttonClasses({ className, variant, responsive })}
-        />
+          className={buttonClasses({
+            className,
+            variant,
+            responsive,
+          })}
+        >
+          {children}
+        </span>
       </Link>
     )
   }

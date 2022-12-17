@@ -43,7 +43,9 @@ export function BuyDialog({
     valuation: Prisma.Decimal
     target: Prisma.Decimal
     user: {
+      id: string
       name: string | null
+      paymentUrl: string
     }
   }
   reservedSize: Prisma.Decimal
@@ -150,10 +152,6 @@ export function BuyDialog({
             )}
           </DialogTitle>
           <div className="mt-6 space-y-6">
-            <p className="text-sm">
-              Please contact the current owner {holding.user.name || ''} to
-              agree on a payment method.
-            </p>
             <Tabs defaultValue="cost">
               {simplified ? null : (
                 <Tabs.List>
@@ -298,21 +296,66 @@ export function BuyDialog({
               </Accordion.Item>
             </Accordion>
 
+            <Banner className="text-sm font-normal px-4 py-3 my-5">
+              <ol className="list-decimal list-outside m-2 ml-5">
+                <li>
+                  Is{' '}
+                  <a
+                    href={`/profile/${holding.user.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="link"
+                  >
+                    {holding.user.name}
+                  </a>{' '}
+                  who they claim to be?
+                </li>
+                <li>
+                  Does their{' '}
+                  <a
+                    href={holding.user.paymentUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="link"
+                  >
+                    payment method
+                  </a>{' '}
+                  work for you?
+                </li>
+                <li>Do you trust them to confirm your transaction?</li>
+              </ol>
+            </Banner>
+
             {watchSize ? (
               <Banner className="text-sm px-4 py-3 my-5">
                 When you click “{isActive ? 'Donate' : 'Buy'},” you’ll have one
-                week to send {holding.user.name || ''} ${num(cost, 2)} or to
-                cancel the transaction.
+                week to send{' '}
+                <a
+                  href={`/profile/${holding.user.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link"
+                >
+                  {holding.user.name}
+                </a>{' '}
+                ${num(cost, 2)} or to cancel the transaction. You can find{' '}
+                <a
+                  href={holding.user.paymentUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link"
+                >
+                  their payment details here
+                </a>{' '}
+                and on their profile.
               </Banner>
             ) : (
               ''
             )}
-            <Banner className="text-sm px-4 py-3 my-5">
-              Make sure that you trust the recipient to confirm the transaction!
-            </Banner>
           </div>
           <DialogCloseButton onClick={handleClose} />
         </DialogContent>
+
         <DialogActions>
           <Button
             type="submit"

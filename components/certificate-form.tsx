@@ -56,7 +56,6 @@ type FormData = {
   content: string
   attributedImpactVersion: string
   counterfactual: string
-  proof: string
   location: string
   rights: string
   actionStart: string
@@ -131,7 +130,6 @@ export function CertificateForm({
   const one = new Prisma.Decimal(1)
   const watchValuation = watch('valuation')
   const watchTarget = watch('target')
-  const watchTitle = watch('title')
 
   const [issuerEmailsData, setIssuerEmailsData] = useState(
     (getValues().issuerEmails || session!.user.email)
@@ -152,31 +150,6 @@ export function CertificateForm({
         required
         className="my-6"
       />
-      {/* TODO: Once we have CUIDs, we can generate one now and provide the link back */}
-      <TextField
-        {...register('proof', {})}
-        label="Proof of ownership"
-        description={
-          <span>
-            Please put this link to your certificate on a website or profile
-            that is clearly yours:{' '}
-            <a
-              href={window.location.origin + '/certificate/' + defaultValues.id}
-              target="_blank"
-              rel="noreferrer"
-              className="hover:underline font-mono"
-            >
-              {watchTitle || 'My certificate'}
-            </a>
-          </span>
-        }
-        info="Putting a link to your certificate on a website that only you can edit proves to readers on this page that you are really who you claim to be."
-        placeholder="https://forum.effectivealtruism.org/users/inga"
-        type="url"
-        required
-        className="my-6"
-      />
-
       <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
         <TextField
           {...register('actionStart', { required: true, valueAsDate: true })}
@@ -473,7 +446,7 @@ export function CertificateForm({
         <div>
           <a
             onClick={show}
-            className="text-sm font-medium transition-colors cursor-pointer hover:text-blue hover:underline"
+            className="text-sm font-medium transition-colors link"
           >
             🗣️ Do you have any feedback or tips for us?
           </a>

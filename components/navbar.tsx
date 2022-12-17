@@ -89,10 +89,10 @@ const useStyles = createStyles((theme, _params, getRef) => {
 
 const data = [
   { link: '/', label: 'Home', icon: HomeIcon },
-  { link: '/page/funders', label: 'Funders & prizes', icon: StoreIcon },
-  { link: '/page/why', label: 'Why impact markets?', icon: BoltIcon },
-  { link: '/page/rules', label: 'Rules & terms', icon: FileIcon },
-  { link: '/page/support', label: 'Help & support', icon: LifebuoyIcon },
+  { link: '/funders', label: 'Funders & prizes', icon: StoreIcon },
+  { link: '/why', label: 'Why impact markets?', icon: BoltIcon },
+  { link: '/rules', label: 'Rules & terms', icon: FileIcon },
+  { link: '/support', label: 'Help & support', icon: LifebuoyIcon },
 ]
 
 interface NavbarProps {

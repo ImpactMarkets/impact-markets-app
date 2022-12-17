@@ -18,6 +18,8 @@ export const userRouter = createProtectedRouter()
           name: true,
           image: true,
           title: true,
+          proofUrl: true,
+          paymentUrl: true,
           email: ctx.session?.user.role === 'ADMIN',
         },
       })
@@ -35,7 +37,9 @@ export const userRouter = createProtectedRouter()
   .mutation('edit', {
     input: z.object({
       name: z.string().min(1),
-      title: z.string().nullish(),
+      title: z.string().optional(),
+      proofUrl: z.string().optional(),
+      paymentUrl: z.string().optional(),
     }),
     async resolve({ ctx, input }) {
       const user = await ctx.prisma.user.update({
@@ -43,6 +47,8 @@ export const userRouter = createProtectedRouter()
         data: {
           name: input.name,
           title: input.title,
+          proofUrl: input.proofUrl,
+          paymentUrl: input.paymentUrl,
         },
       })
 

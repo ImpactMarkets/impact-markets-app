@@ -69,21 +69,23 @@ model Session {
 }
 
 model User {
-  id               String             @id @default(cuid())
-  name             String?
-  email            String?            @unique
-  emailVerified    DateTime?
-  image            String?
-  title            String?
+  id                String    @id @default(cuid())
+  name              String?
+  email             String?   @unique
+  emailVerified     DateTime?
+  image             String?
+  title             String?
+  role              Role      @default(USER)
+  proofUrl          String    @default("")
+  paymentUrl        String    @default("")
+  // This should only change the interface but not anything functionally
+  prefersDetailView Boolean   @default(false)
+
   accounts         Account[]
   sessions         Session[]
   certificates     Certificate[]
   likedCertificate LikedCertificate[]
   comments         Comment[]
-  role             Role               @default(USER)
-
-  // This should only change the interface but not anything functionally
-  prefersDetailView Boolean @default(false)
 
   holdings           Holding[]
   issuedCertificates CertificateIssuer[]
@@ -115,7 +117,6 @@ model Certificate {
 
   // TODO: Move these to CertificateVersion to enable versioning
   attributedImpactVersion String
-  proof                   String   @default("")
   location                String   @default("")
   rights                  Right    @default(RETROACTIVE_FUNDING)
   actionStart             DateTime

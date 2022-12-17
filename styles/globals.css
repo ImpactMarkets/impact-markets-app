@@ -203,4 +203,10 @@ html {
     @apply focus-visible:border-blue-500;
     @apply focus-visible:shadow-none;
   }
+
+  .link {
+    @apply hover:text-blue;
+    @apply cursor-pointer;
+    @apply underline;
+  }
 }

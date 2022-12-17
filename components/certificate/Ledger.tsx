@@ -7,8 +7,9 @@ import { classNames } from '@/lib/classnames'
 import { SHARE_COUNT } from '@/lib/constants'
 import { num } from '@/lib/text'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
-import { Tabs } from '@mantine/core'
+import { Tabs, Tooltip } from '@mantine/core'
 import { Prisma } from '@prisma/client'
+import { IconAlertCircle } from '@tabler/icons'
 
 import { Author } from '../author'
 import { ButtonLink } from '../button-link'
@@ -98,6 +99,7 @@ const Holding = ({
             <>
               <ButtonLink
                 href="#"
+                disabled={!holding.user.paymentUrl}
                 variant="highlight"
                 className="h-6"
                 onClick={() => {
@@ -108,6 +110,13 @@ const Holding = ({
                   {isActive ? 'Donate' : 'Buy'}
                 </span>
               </ButtonLink>
+              {!holding.user.paymentUrl && (
+                <Tooltip label="This user has not yet entered a payment method on their profile">
+                  <span>
+                    <IconAlertCircle />
+                  </span>
+                </Tooltip>
+              )}
               <BuyDialog
                 holding={holding}
                 reservedSize={reservedSize}

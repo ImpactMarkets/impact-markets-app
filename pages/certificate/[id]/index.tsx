@@ -1,5 +1,6 @@
 import { useSession } from 'next-auth/react'
 import Head from 'next/head'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
@@ -120,8 +121,30 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
           <div className="pb-12">
             {certificate.hidden && (
               <Banner className="mb-6">
-                This certificate will remain hidden until it’s published by the
+                This project will remain hidden until it’s published by the
                 curators.
+              </Banner>
+            )}
+            {!certificate.author.proofUrl && (
+              <Banner className="mb-6">
+                {certificate.author.id === session?.user.id
+                  ? 'Please enter proof of your identity on your'
+                  : 'The author of this project has not yet entered proof of their'}{' '}
+                <Link href={`/profile/${certificate.author.id}`}>
+                  <span className="link">user profile</span>
+                </Link>
+                .
+              </Banner>
+            )}
+            {!certificate.author.paymentUrl && (
+              <Banner className="mb-6">
+                {certificate.author.id === session?.user.id
+                  ? 'Please enter a payment link on your'
+                  : 'The author of this project has not yet entered a payment link on their'}{' '}
+                <Link href={`/profile/${certificate.author.id}`}>
+                  <span className="link">user profile</span>
+                </Link>
+                .
               </Banner>
             )}
 

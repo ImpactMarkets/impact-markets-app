@@ -1,12 +1,10 @@
 import { type Page, expect, test } from '@playwright/test'
 
-const proofText = 'https://forum.effectivealtruism.org'
 const counterfactualText = 'I would be sitting around doing nothing.'
 const descriptionText = 'Just a random description.'
 
 async function fillInDefaultValues(page: Page, titleText: string) {
   await page.getByRole('textbox', { name: 'title' }).fill(titleText)
-  await page.getByRole('textbox', { name: 'proof' }).fill(proofText)
 
   // TODO: start + end dates
   //await page.getByRole('textbox', { name: 'actionStart' }).fill(actionStartText)
@@ -63,10 +61,6 @@ test.describe('Create Certificate', () => {
     // Verify certificate values.
     await expect(page.getByRole('heading', { level: 1 })).toContainText(
       titleText
-    )
-    await expect(page.locator('text=Proof of ownership')).toHaveAttribute(
-      'href',
-      proofText
     )
     await page.locator('text=' + descriptionText).click() // Just clicking to verify it's there.
   })

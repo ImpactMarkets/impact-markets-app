@@ -11,6 +11,7 @@ const useStyles = createStyles((theme) => ({
       theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[2]
     }`,
     padding: 20,
+    fontSize: theme.fontSizes.sm,
   },
 
   inner: {
@@ -54,8 +55,8 @@ export function CenteredFooter() {
         <Group className={classes.links}>{items}</Group>
         <Group spacing="xs" position="right" noWrap>
           <Link href="https://www.youtube.com/watch?v=NTIAdn0Oms8">
-            <ActionIcon size="lg" variant="default" radius="xl">
-              <IconBrandYoutube size={18} stroke={1.5} />
+            <ActionIcon size="md" variant="default" radius="xl">
+              <IconBrandYoutube size={16} stroke={1.5} />
             </ActionIcon>
           </Link>
         </Group>
