@@ -17,7 +17,7 @@ import { Group, Navbar, Switch, createStyles } from '@mantine/core'
 
 import refreshSession from './utils'
 
-const mixpanelToken = process.env.NEXT_PUBLIC_MIXPANEL_AUTH_TOKEN
+const mixpanelToken = '72df418fabea292e7d85a8dc335634f1'
 mixpanel.init(mixpanelToken || '', { debug: true })
 
 const useStyles = createStyles((theme, _params, getRef) => {
