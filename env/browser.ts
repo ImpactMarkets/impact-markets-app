@@ -16,4 +16,8 @@ export const browserEnv = envsafe({
     allowEmpty: false,
     devDefault: 'foobar',
   }),
+  NEXT_PUBLIC_MIXPANEL_AUTH_TOKEN: str({
+    input: process.env.NEXT_PUBLIC_MIXPANEL_AUTH_TOKEN,
+    default: 'unspecified',
+  }),
 })
