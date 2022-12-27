@@ -3,7 +3,6 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-// import axios from 'axios'
 import { Logo } from '@/components/icons'
 import {
   BoltIcon,
@@ -12,13 +11,15 @@ import {
   LifebuoyIcon,
   StoreIcon,
 } from '@/components/icons'
+import { browserEnv } from '@/env/browser'
 import { trpc } from '@/lib/trpc'
 import { Group, Navbar, Switch, createStyles } from '@mantine/core'
 
 import refreshSession from './utils'
 
-const mixpanelToken = process.env.MIXPANEL_AUTH_TOKEN || ''
-mixpanel.init(mixpanelToken, { debug: true })
+mixpanel.init(browserEnv.NEXT_PUBLIC_MIXPANEL_TOKEN, {
+  debug: browserEnv.NEXT_PUBLIC_DEBUG,
+})
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
