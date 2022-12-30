@@ -10,14 +10,16 @@ import {
   LifebuoyIcon,
   StoreIcon,
 } from '@/components/icons'
+import { browserEnv } from '@/env/browser'
 import { trpc } from '@/lib/trpc'
 import { Navbar as MantineNavbar, Switch, createStyles } from '@mantine/core'
 
 import { User } from './user'
 import refreshSession from './utils'
 
-const mixpanelToken = process.env.MIXPANEL_AUTH_TOKEN || ''
-mixpanel.init(mixpanelToken, { debug: true })
+mixpanel.init(browserEnv.NEXT_PUBLIC_MIXPANEL_TOKEN, {
+  debug: browserEnv.NEXT_PUBLIC_DEBUG,
+})
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
