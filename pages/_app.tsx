@@ -9,7 +9,7 @@ import { browserEnv } from '@/env/browser'
 import { transformer } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { AppRouter } from '@/server/routers/_app'
-import { MantineProvider, createEmotionCache } from '@mantine/core'
+import { MantineProvider } from '@mantine/core'
 import { Provider as RollbarProvider } from '@rollbar/react'
 import { httpBatchLink } from '@trpc/client/links/httpBatchLink'
 import { loggerLink } from '@trpc/client/links/loggerLink'
@@ -21,10 +21,6 @@ import '../styles/globals.css'
 type AppPropsWithAuthAndLayout = AppProps & {
   Component: NextPageWithAuthAndLayout
 }
-
-// Mantine prepends its css by default and gets overriden by tailwind, causing style glitches
-// https://github.com/mantinedev/mantine/issues/2437#issuecomment-1245662598
-const appendCache = createEmotionCache({ key: 'mantine', prepend: false })
 
 function MyApp({
   Component,
@@ -49,11 +45,7 @@ function MyApp({
   return (
     <RollbarProvider config={rollbarConfig}>
       <IntercomProvider appId={browserEnv.NEXT_PUBLIC_INTERCOM_APP_ID} autoBoot>
-        <MantineProvider
-          emotionCache={appendCache}
-          withGlobalStyles
-          withNormalizeCSS
-        >
+        <MantineProvider withCSSVariables withGlobalStyles withNormalizeCSS>
           <SessionProvider session={session} refetchOnWindowFocus>
             <ThemeProvider
               forcedTheme="light"

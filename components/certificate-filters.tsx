@@ -49,8 +49,8 @@ export function CertificateFilters(props: CertificateFiltersProps) {
         }}
         value={filterTags}
         classNames={{
-          input: 'bg-none border-0',
-          searchInput: 'border-0',
+          input: 'bg-none border-none',
+          searchInput: 'border-none',
         }}
       />
       <IMSelect
@@ -64,7 +64,7 @@ export function CertificateFilters(props: CertificateFiltersProps) {
         }}
         value={orderBy}
         classNames={{
-          input: 'bg-none border-0',
+          input: 'bg-none border-none',
         }}
       />
       <Button
