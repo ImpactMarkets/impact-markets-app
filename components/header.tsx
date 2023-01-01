@@ -19,11 +19,15 @@ export function Header({ opened, setOpened }: HeaderProps) {
   const { data: session } = useSession()
   const [isSearchDialogOpen, setIsSearchDialogOpen] = React.useState(false)
 
+  // base/md thresholds are different between Mantine and Tailwind, so we make do with a bit of
+  // space at the top at some screen sizes
   return (
     <MantineHeader
-      // TODO: Find why {{base: 50, md: 100}} does not work
-      height={100}
+      classNames={{
+        root: 'h-[50px] max-h-[50px] md:h-[80px] md:max-h-[80px] z-[5]',
+      }}
       withBorder={false}
+      height={80}
     >
       <div className="flex justify-between items-center h-full px-5">
         <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
@@ -36,9 +40,7 @@ export function Header({ opened, setOpened }: HeaderProps) {
         </MediaQuery>
         <div>
           <Link href="/">
-            <a>
-              <Logo className="w-auto h-[48px] md:h-[64px]" />
-            </a>
+            <Logo className="w-auto h-[32px] md:h-[64px] cursor-pointer" />
           </Link>
         </div>
         <div className="flex items-center gap-x-3">

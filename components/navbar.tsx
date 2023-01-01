@@ -90,7 +90,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
 })
 
 const data = [
-  { link: '/', label: 'Home', icon: HomeIcon },
+  { link: '/', label: 'Projects', icon: HomeIcon },
   { link: '/funders', label: 'Funders & prizes', icon: StoreIcon },
   { link: '/why', label: 'Why impact markets?', icon: BoltIcon },
   { link: '/rules', label: 'Rules & terms', icon: FileIcon },
@@ -153,6 +153,7 @@ export function Navbar({ hidden }: NavbarProps) {
 
   return (
     <MantineNavbar
+      classNames={{ root: 'w-[250px] z-[5]' }}
       width={{ sm: 250 }}
       withBorder={false}
       hidden={hidden}
@@ -160,7 +161,7 @@ export function Navbar({ hidden }: NavbarProps) {
     >
       <MantineNavbar.Section grow className="m-4">
         {links}
-        {preferences}
+        <div className="mt-4">{preferences}</div>
       </MantineNavbar.Section>
       <MantineNavbar.Section>
         <User />
