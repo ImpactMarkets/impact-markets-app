@@ -15,7 +15,6 @@ import { sortAuthorFirst } from './certificate/utils'
 import { CommentButton } from './comment-button'
 import { Date } from './date'
 import { Heading2 } from './heading-2'
-import { HtmlView } from './html-view'
 
 export type CertificateSummaryProps = {
   certificate: InferQueryOutput<'certificate.feed'>['certificates'][number]
@@ -51,18 +50,19 @@ function Left({ certificate }: CertificateSummaryProps) {
   }
 
   return (
-    <div className="grow">
+    <div className="grow relative max-w-[calc(100%-140px)]">
       {certificate.tags && (
-        <div className="mb-6">
+        <div className="mb-6 max-h-10 overflow-hidden">
           <Tags queryData={certificate} />
         </div>
       )}
       <div className={classNames(certificate.hidden ? 'opacity-50' : '')}>
         <Link href={`/certificate/${certificate.id}`}>
-          <Heading2 className="cursor-pointer">{certificate.title}</Heading2>
+          <Heading2 className="cursor-pointer w-[95%] whitespace-nowrap text-ellipsis overflow-hidden">
+            {certificate.title}
+          </Heading2>
         </Link>
         <Date date={certificate.createdAt} />
-        <HtmlView html={cert_summary} className="mt-2" />
       </div>
       <div className="flex items-center gap-12 mt-6">
         <HoldingsChart
@@ -82,7 +82,7 @@ function Right({ certificate }: CertificateSummaryProps) {
           fp.map('user'),
           sortAuthorFirst(certificate.author),
           fp.map((user) => (
-            <div key={user.id} className="mt-4">
+            <div key={user.id} className="mb-4">
               <Author author={user} />
             </div>
           ))
