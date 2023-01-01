@@ -24,8 +24,8 @@ import { IMMultiSelect } from './multi-select'
 
 const DESCRIPTION_PROMPTS = (
   <>
-    <p className="mt-2">Please touch on the following points:</p>
-    <ol className="list-decimal list-outside m-2">
+    <p className="mt-2 ml-1">Please touch on the following points:</p>
+    <ol className="list-decimal list-outside m-6">
       <li className="mb-2">
         What is the action that this certificate is about?
       </li>
@@ -43,9 +43,11 @@ const DESCRIPTION_PROMPTS = (
         Was there ever a risk that the action might be harmful?
       </li>
 
-      <li>
+      <li className="mb-2">
         Who are all collaborators and how much have they each contributed?
       </li>
+
+      <li>Is this a submission to any particular contests?</li>
     </ol>
   </>
 )
