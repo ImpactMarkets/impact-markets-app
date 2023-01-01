@@ -129,7 +129,7 @@ export function LikeButton({
             .map((item) =>
               item.user.id === session?.user.id ? 'You' : item.user.name
             )
-            .join(', ')}
+            .join(', ') || 'No likes yet'}
           {likeCount > MAX_LIKED_BY_SHOWN &&
             ` and ${likeCount - MAX_LIKED_BY_SHOWN} more`}
         </p>
