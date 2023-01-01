@@ -32,7 +32,7 @@ export function Layout({ children }: LayoutProps) {
       navbar={<Navbar hidden={!opened} />}
       header={<Header opened={opened} setOpened={setOpened} />}
     >
-      <div className="max-w-5xl m-auto">{children}</div>
+      {children}
     </AppShell>
   )
 }
