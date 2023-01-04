@@ -9,6 +9,7 @@ export const commentRouter = createProtectedRouter()
     input: z.object({
       certificateId: z.string().min(1),
       content: z.string().min(1),
+      parentId: z.optional(z.number().int()),
     }),
     async resolve({ ctx, input }) {
       const comment = await ctx.prisma.comment.create({
@@ -25,6 +26,13 @@ export const commentRouter = createProtectedRouter()
               id: input.certificateId,
             },
           },
+          ...(input.parentId && {
+            parent: {
+              connect: {
+                id: input.parentId,
+              },
+            },
+          }),
         },
       })
 
