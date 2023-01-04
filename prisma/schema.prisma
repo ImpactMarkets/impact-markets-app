@@ -184,9 +184,12 @@ model Comment {
   createdAt     DateTime @default(now())
   authorId      String
   certificateId String
+  parentId      Int?
 
   author      User        @relation(fields: [authorId], references: [id], onDelete: Cascade)
   certificate Certificate @relation(fields: [certificateId], references: [id], onDelete: Cascade)
+  parent      Comment?    @relation("parentChildren", fields: [parentId], references: [id], onDelete: Cascade)
+  children    Comment[]   @relation("parentChildren")
 
   @@index([authorId])
   @@index([certificateId])
