@@ -8,19 +8,19 @@ import { InferQueryOutput, trpc } from '@/lib/trpc'
 
 import { CommentFormData, getCertificateQueryPathAndInput } from './utils'
 
-export function EditCommentForm({
+export function AddReplyForm({
   certificateId,
-  comment,
+  parent,
   onDone,
 }: {
   certificateId: string
-  comment:
+  parent:
     | InferQueryOutput<'certificate.detail'>['comments'][number]
     | InferQueryOutput<'certificate.detail'>['comments'][number]['children'][number]
   onDone: () => void
 }) {
   const utils = trpc.useContext()
-  const editCommentMutation = trpc.useMutation('comment.edit', {
+  const addReplyMutation = trpc.useMutation('comment.add', {
     onSuccess: () => {
       return utils.invalidateQueries(
         getCertificateQueryPathAndInput(certificateId)
@@ -30,19 +30,14 @@ export function EditCommentForm({
       toast.error(<pre>{error.message}</pre>)
     },
   })
-  const { control, handleSubmit } = useForm<CommentFormData>({
-    defaultValues: {
-      content: comment.content,
-    },
-  })
+  const { control, handleSubmit, reset } = useForm<CommentFormData>()
 
   const onSubmit: SubmitHandler<CommentFormData> = (data) => {
-    editCommentMutation.mutate(
+    addReplyMutation.mutate(
       {
-        id: comment.id,
-        data: {
-          content: data.content,
-        },
+        certificateId,
+        content: data.content,
+        parentId: parent?.id,
       },
       {
         onSuccess: () => onDone(),
@@ -62,7 +57,7 @@ export function EditCommentForm({
             onChange={field.onChange}
             onTriggerSubmit={handleSubmit(onSubmit)}
             required
-            placeholder="Comment"
+            placeholder="Reply"
             minRows={4}
             autoFocus
           />
@@ -71,10 +66,10 @@ export function EditCommentForm({
       <div className="flex gap-4 mt-4">
         <Button
           type="submit"
-          isLoading={editCommentMutation.isLoading}
-          loadingChildren="Updating comment"
+          isLoading={addReplyMutation.isLoading}
+          loadingChildren="Adding reply"
         >
-          Update comment
+          Add reply
         </Button>
         <Button variant="secondary" onClick={onDone}>
           Cancel

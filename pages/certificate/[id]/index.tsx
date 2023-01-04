@@ -198,6 +198,21 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
                 {certificate.comments.map((comment) => (
                   <li key={comment.id}>
                     <Comment certificateId={certificate.id} comment={comment} />
+
+                    <div id="replies" className="pt-12 pl-14 space-y-12">
+                      {comment.children.length > 0 && (
+                        <ul className="space-y-12">
+                          {comment.children.map((reply) => (
+                            <li key={reply.id}>
+                              <Comment
+                                certificateId={certificate.id}
+                                comment={reply}
+                              />
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
                   </li>
                 ))}
               </ul>

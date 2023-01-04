@@ -15,6 +15,7 @@ import {
 } from '@/components/menu'
 import { InferQueryOutput } from '@/lib/trpc'
 
+import { AddReplyForm } from './AddReplyForm'
 import { ConfirmDeleteCommentDialog } from './ConfirmDeleteCommentDialog'
 import { EditCommentForm } from './EditCommentForm'
 
@@ -23,10 +24,13 @@ export function Comment({
   comment,
 }: {
   certificateId: string
-  comment: InferQueryOutput<'certificate.detail'>['comments'][number]
+  comment:
+    | InferQueryOutput<'certificate.detail'>['comments'][number]
+    | InferQueryOutput<'certificate.detail'>['comments'][number]['children'][number]
 }) {
   const { data: session } = useSession()
   const [isEditing, setIsEditing] = React.useState(false)
+  const [isReplying, setIsReplying] = React.useState(false)
   const [isConfirmDeleteDialogOpen, setIsConfirmDeleteDialogOpen] =
     React.useState(false)
 
@@ -82,7 +86,46 @@ export function Comment({
 
       <div className="mt-4 pl-11 sm:pl-16">
         <HtmlView html={comment.contentHtml} />
+
+        {!comment.parent && !isReplying && (
+          <div className="text-secondary hover:text-blue text-gray-500 text-sm">
+            <button
+              type="submit"
+              onClick={() => {
+                setIsReplying(true)
+              }}
+            >
+              reply
+            </button>
+          </div>
+        )}
       </div>
+
+      {isReplying && (
+        <div id="replies" className="pt-12 pl-14 space-y-12">
+          {session && (
+            <div className="flex items-start gap-2 sm:gap-4">
+              <span className="hidden sm:inline-block">
+                <Avatar name={session!.user.name} src={session!.user.image} />
+              </span>
+              <span className="inline-block sm:hidden">
+                <Avatar
+                  name={session!.user.name}
+                  src={session!.user.image}
+                  size="sm"
+                />
+              </span>
+              <AddReplyForm
+                certificateId={certificateId}
+                parent={comment}
+                onDone={() => {
+                  setIsReplying(false)
+                }}
+              />
+            </div>
+          )}
+        </div>
+      )}
 
       <ConfirmDeleteCommentDialog
         certificateId={certificateId}
