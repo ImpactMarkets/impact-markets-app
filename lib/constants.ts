@@ -11,4 +11,4 @@ export const CERT_SORT_KEYS = [
   'supporterCount',
   '',
 ] as const
-export type CertSortKey = typeof CERT_SORT_KEYS[number]
+export type CertSortKey = (typeof CERT_SORT_KEYS)[number]
