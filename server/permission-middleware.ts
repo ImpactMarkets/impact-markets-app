@@ -128,6 +128,7 @@ export const permissionMiddleware: MiddlewareFunction = async ({
       (isAdmin() ||
         buyingHoldingBelongsToUser() ||
         sellingHoldingBelongsToUser()),
+    'user.ranking': () => true,
     'user.profile': () => true,
     'user.edit': isAuthenticated, // Always edits the same user
     'user.update-avatar': isAuthenticated, // Always edits the same user

@@ -1,10 +1,30 @@
 import { z } from 'zod'
 
+import { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
 import { createProtectedRouter } from '../create-protected-router'
 
 export const userRouter = createProtectedRouter()
+  .query('ranking', {
+    async resolve({ ctx }) {
+      const users: {
+        id: string
+        name: string
+        image: string
+        credits: Prisma.Decimal
+      }[] = await ctx.prisma.$queryRaw`
+        SELECT "User"."id", "User"."name", "User"."image", SUM("Certificate"."credits" * "Holding"."size") as "credits"
+        FROM "User"
+        JOIN "Holding" ON "User"."id" = "Holding"."userId"
+        JOIN "Certificate" ON "Holding"."certificateId" = "Certificate"."id"
+        WHERE "Certificate"."credits" > 0
+        GROUP BY "User"."id", "User"."name", "User"."image"
+        ORDER BY "credits" DESC;
+      `
+      return users
+    },
+  })
   .query('profile', {
     input: z.object({
       id: z.string(),

@@ -22,6 +22,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+      - run: npm install prettier @trivago/prettier-plugin-sort-imports
       - run: npx prettier --check '**/*.{ts,tsx,json,html,css}'
 
   test-unit:

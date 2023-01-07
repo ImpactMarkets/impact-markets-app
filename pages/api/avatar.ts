@@ -13,8 +13,8 @@ const COLOR_NAMES = [
 const COLOR_SHADES = [500, 600, 700, 800] as const
 
 const COLORS: Record<
-  typeof COLOR_NAMES[number],
-  Record<typeof COLOR_SHADES[number], string>
+  (typeof COLOR_NAMES)[number],
+  Record<(typeof COLOR_SHADES)[number], string>
 > = {
   red: {
     500: '#ff455d',
