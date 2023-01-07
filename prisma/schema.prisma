@@ -109,6 +109,7 @@ model Certificate {
   counterfactual String             @default("")
   hidden         Boolean            @default(true)
   unique         Boolean            @default(true)
+  credits        Decimal            @default(0)
   createdAt      DateTime           @default(now())
   updatedAt      DateTime           @updatedAt
   authorId       String
