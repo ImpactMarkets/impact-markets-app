@@ -67,32 +67,32 @@ const Ranking: NextPageWithAuthAndLayout = () => {
 
   return (
     <div className="animate-pulse">
-      <div className="flex items-center justify-between gap-4 mt-6">
+      <div className="flex items-center justify-center gap-4 mt-6">
         <table>
           <thead>
             <tr>
               <td>
-                <div className="w-8 h-4 bg-gray-200 rounded dark:bg-gray-700" />
+                <div className="pb-6 w-10 h-4 bg-gray-200 rounded dark:bg-gray-700" />
               </td>
               <td>
-                <div className="w-32 h-4 bg-gray-200 rounded dark:bg-gray-700" />
+                <div className="pb-6 w-64 h-4 bg-gray-200 rounded dark:bg-gray-700" />
               </td>
               <td>
-                <div className="w-24 h-4 bg-gray-200 rounded dark:bg-gray-700" />
+                <div className="pb-6 w-24 h-4 bg-gray-200 rounded dark:bg-gray-700" />
               </td>
             </tr>
           </thead>
           <tbody>
-            {[...Array(3)].map((_, idx) => (
+            {[...Array(10)].map((_, idx) => (
               <tr key={idx}>
                 <td>
-                  <div className="w-8 h-4 bg-gray-200 rounded dark:bg-gray-700" />
+                  <div className="w-8 h-8 bg-gray-200 rounded dark:bg-gray-700" />
                 </td>
                 <td>
-                  <div className="w-32 h-4 bg-gray-200 rounded dark:bg-gray-700" />
+                  <div className="w-60 h-12 bg-gray-200 rounded dark:bg-gray-700" />
                 </td>
                 <td>
-                  <div className="w-24 h-4 bg-gray-200 rounded dark:bg-gray-700" />
+                  <div className="w-24 h-8 bg-gray-200 rounded dark:bg-gray-700" />
                 </td>
               </tr>
             ))}
