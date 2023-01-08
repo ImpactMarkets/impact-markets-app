@@ -1,10 +1,10 @@
 import { useSession } from 'next-auth/react'
 import * as React from 'react'
 
-import { AuthorWithDate } from '@/components/author-with-date'
+import { AuthorWithDate } from '@/components/authorWithDate'
 import { Avatar } from '@/components/avatar'
-import { HtmlView } from '@/components/html-view'
-import { IconButton } from '@/components/icon-button'
+import { HtmlView } from '@/components/htmlView'
+import { IconButton } from '@/components/iconButton'
 import { DotsIcon } from '@/components/icons'
 import {
   Menu,
@@ -15,9 +15,9 @@ import {
 } from '@/components/menu'
 import { InferQueryOutput } from '@/lib/trpc'
 
-import { AddReplyForm } from './AddReplyForm'
-import { ConfirmDeleteCommentDialog } from './ConfirmDeleteCommentDialog'
-import { EditCommentForm } from './EditCommentForm'
+import { AddReplyForm } from './addReplyForm'
+import { ConfirmDeleteCommentDialog } from './confirmDeleteCommentDialog'
+import { EditCommentForm } from './editCommentForm'
 
 export function Comment({
   certificateId,

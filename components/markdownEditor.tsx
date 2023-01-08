@@ -9,7 +9,7 @@ import getCaretCoordinates from 'textarea-caret'
 import TextareaMarkdown, { TextareaMarkdownRef } from 'textarea-markdown-editor'
 import { ItemOptions, useItemList } from 'use-item-list'
 
-import { HtmlView } from '@/components/html-view'
+import { HtmlView } from '@/components/htmlView'
 import { BoldIcon, ItalicIcon, LinkIcon, ListIcon } from '@/components/icons'
 import { browserEnv } from '@/env/browser'
 import { classNames } from '@/lib/classnames'
@@ -21,7 +21,7 @@ import {
 import { trpc } from '@/lib/trpc'
 import { Switch } from '@headlessui/react'
 
-import { InfoTooltip } from './info-tooltip'
+import { InfoTooltip } from './infoTooltip'
 import { Label } from './label'
 
 type MarkdownEditorProps = {

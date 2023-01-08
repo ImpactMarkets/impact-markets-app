@@ -3,19 +3,19 @@ import Link from 'next/link'
 import * as React from 'react'
 
 import { Banner } from '@/components/banner'
-import { HoldingsChart } from '@/components/holdings-chart'
-import { LikeButton } from '@/components/like-button'
+import { HoldingsChart } from '@/components/holdingsChart'
+import { LikeButton } from '@/components/likeButton'
 import { classNames } from '@/lib/classnames'
 import { InferQueryOutput } from '@/lib/trpc'
 import { Card } from '@mantine/core'
 
 import { Author } from './author'
-import { Tags } from './certificate/Tags'
+import { Tags } from './certificate/tags'
 import { sortAuthorFirst } from './certificate/utils'
-import { CommentButton } from './comment-button'
+import { CommentButton } from './commentButton'
 import { Date } from './date'
-import { Heading2 } from './heading-2'
-import { HtmlView } from './html-view'
+import { Heading2 } from './heading2'
+import { HtmlView } from './htmlView'
 
 export type CertificateSummaryProps = {
   certificate: InferQueryOutput<'certificate.feed'>['certificates'][number]

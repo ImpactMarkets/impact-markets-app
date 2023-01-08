@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 
-import { ButtonLink } from '@/components/button-link'
+import { ButtonLink } from '@/components/buttonLink'
 import { ChevronLeftIcon, ChevronRightIcon } from '@/components/icons'
 
 type PaginationProps = {

@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { InfoTooltip } from './info-tooltip'
+import { InfoTooltip } from './infoTooltip'
 import { Label } from './label'
 
 export type SwitchFieldOwnProps = {

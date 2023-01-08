@@ -1,6 +1,6 @@
 import { superjson } from '@/lib/transformer'
 
-import { createRouter } from '../create-router'
+import { createRouter } from '../createRouter'
 import { certificateRouter } from './certificate'
 import { commentRouter } from './comment'
 import { holdingRouter } from './holding'

@@ -15,10 +15,10 @@ import {
   DialogContent,
   DialogTitle,
 } from '@/components/dialog'
-import { Heading1 } from '@/components/heading-1'
-import { IconButton } from '@/components/icon-button'
+import { Heading1 } from '@/components/heading1'
+import { IconButton } from '@/components/iconButton'
 import { EditIcon } from '@/components/icons'
-import { TextField } from '@/components/text-field'
+import { TextField } from '@/components/textField'
 import { browserEnv } from '@/env/browser'
 import { uploadImage } from '@/lib/cloudinary'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
@@ -319,7 +319,11 @@ function UpdateAvatarDialog({
   )
 }
 
-function ProfileInfo({ user }: { user: InferQueryOutput<'user.profile'> }) {
+export function ProfileInfo({
+  user,
+}: {
+  user: InferQueryOutput<'user.profile'>
+}) {
   const { data: session } = useSession()
 
   const [isEditProfileDialogOpen, setIsEditProfileDialogOpen] =
@@ -440,5 +444,3 @@ function ProfileInfo({ user }: { user: InferQueryOutput<'user.profile'> }) {
     </div>
   )
 }
-
-export default ProfileInfo

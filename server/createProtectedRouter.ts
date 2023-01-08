@@ -1,4 +1,4 @@
-import { permissionMiddleware } from './permission-middleware'
+import { permissionMiddleware } from './permissionMiddleware'
 import { router } from './router'
 
 export function createProtectedRouter() {

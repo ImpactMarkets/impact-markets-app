@@ -2,9 +2,9 @@ import { signIn, signOut, useSession } from 'next-auth/react'
 import * as React from 'react'
 
 import { Avatar } from '@/components/avatar'
-import { ButtonLink } from '@/components/button-link'
+import { ButtonLink } from '@/components/buttonLink'
 import { CenteredFooter } from '@/components/centeredFooter'
-import { IconButton } from '@/components/icon-button'
+import { IconButton } from '@/components/iconButton'
 import { SearchIcon } from '@/components/icons'
 import {
   Menu,
@@ -14,7 +14,7 @@ import {
   MenuItems,
   MenuItemsContent,
 } from '@/components/menu'
-import { SearchDialog } from '@/components/search-dialog'
+import { SearchDialog } from '@/components/searchDialog'
 
 import { Button } from './button'
 import { NavbarSimple } from './navbar'

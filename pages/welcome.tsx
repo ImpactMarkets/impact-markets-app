@@ -1,11 +1,11 @@
 import Head from 'next/head'
 import Image from 'next/image'
 
-import { ButtonLink } from '@/components/button-link'
+import { ButtonLink } from '@/components/buttonLink'
 import { CenteredFooter } from '@/components/centeredFooter'
-import { HeroText } from '@/components/hero-text'
-import { Landing_Header } from '@/components/landingPage/header'
-import { Pitches } from '@/components/landingPage/pitches'
+import { HeroText } from '@/components/heroText'
+import { Landing_Header } from '@/components/welcome/header'
+import { Pitches } from '@/components/welcome/pitches'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { Card } from '@mantine/core'
 
