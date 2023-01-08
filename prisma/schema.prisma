@@ -108,7 +108,7 @@ model Certificate {
   contentHtml    String
   counterfactual String             @default("")
   hidden         Boolean            @default(true)
-  unique         Boolean            @default(true)
+  unique         Boolean            @default(false)
   credits        Decimal            @default(0)
   createdAt      DateTime           @default(now())
   updatedAt      DateTime           @updatedAt

@@ -11,7 +11,7 @@ import {
   DialogContent,
   DialogTitle,
 } from '@/components/dialog'
-import { TextField } from '@/components/text-field'
+import { TextField } from '@/components/textField'
 import { BondingCurve } from '@/lib/auction'
 import { classNames } from '@/lib/classnames'
 import { SHARE_COUNT } from '@/lib/constants'
@@ -21,7 +21,7 @@ import { Accordion, Switch, Tabs } from '@mantine/core'
 import { Prisma } from '@prisma/client'
 
 import { Banner } from '../banner'
-import { InfoTooltip } from '../info-tooltip'
+import { InfoTooltip } from '../infoTooltip'
 
 type BuyFormData = {
   size: Prisma.Decimal

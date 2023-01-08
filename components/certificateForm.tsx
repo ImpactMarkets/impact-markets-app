@@ -5,10 +5,10 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useIntercom } from 'react-use-intercom'
 
 import { Button } from '@/components/button'
-import { ButtonLink } from '@/components/button-link'
+import { ButtonLink } from '@/components/buttonLink'
 import { MarkdownIcon } from '@/components/icons'
-import { MarkdownEditor } from '@/components/markdown-editor'
-import { TextField } from '@/components/text-field'
+import { MarkdownEditor } from '@/components/markdownEditor'
+import { TextField } from '@/components/textField'
 import { BondingCurve } from '@/lib/auction'
 import { DEFAULT_TARGET, DEFAULT_VALUATION, SHARE_COUNT } from '@/lib/constants'
 import { TAGS } from '@/lib/tags'
@@ -20,7 +20,7 @@ import {
 import { Accordion, SimpleGrid, Switch } from '@mantine/core'
 import { Prisma } from '@prisma/client'
 
-import { IMMultiSelect } from './multi-select'
+import { IMMultiSelect } from './multiSelect'
 
 const DESCRIPTION_PROMPTS = (
   <>

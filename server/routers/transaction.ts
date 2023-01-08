@@ -5,7 +5,7 @@ import { TARGET_FRACTION } from '@/lib/constants'
 import { Prisma, TransactionState } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
-import { createProtectedRouter } from '../create-protected-router'
+import { createProtectedRouter } from '../createProtectedRouter'
 
 export const transactionRouter = createProtectedRouter()
   .query('feed', {

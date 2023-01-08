@@ -10,7 +10,7 @@ import {
   DialogContent,
   DialogTitle,
 } from '@/components/dialog'
-import { TextField } from '@/components/text-field'
+import { TextField } from '@/components/textField'
 import { BondingCurve } from '@/lib/auction'
 import {
   DEFAULT_TARGET,

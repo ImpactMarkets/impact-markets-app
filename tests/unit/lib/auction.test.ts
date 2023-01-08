@@ -6,7 +6,7 @@ import { Prisma } from '@prisma/client'
 
 import { BondingCurve } from '../../../lib/auction'
 import { TARGET_FRACTION } from '../../../lib/constants'
-import '../../../test-utils/matchers/toBeCloseToDecimal'
+import '../../../testUtils/matchers/toBeCloseToDecimal'
 
 const { calculus } = require('numbers')
 

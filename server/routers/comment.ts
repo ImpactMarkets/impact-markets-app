@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { markdownToHtml } from '@/lib/editor'
 
-import { createProtectedRouter } from '../create-protected-router'
+import { createProtectedRouter } from '../createProtectedRouter'
 
 export const commentRouter = createProtectedRouter()
   .mutation('add', {

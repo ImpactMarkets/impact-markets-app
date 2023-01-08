@@ -1,10 +1,10 @@
 import { useSession } from 'next-auth/react'
 import * as React from 'react'
 
-import { Transactions } from '@/components/certificate/Transactions'
+import { Transactions } from '@/components/certificate/transactions'
 import { InferQueryOutput } from '@/lib/trpc'
 
-export default function TransactionFeed({
+export function TransactionFeed({
   user,
 }: {
   user: InferQueryOutput<'user.profile'>
