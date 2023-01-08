@@ -16,8 +16,8 @@
     "pretty": "prettier --write '**/*.{ts,tsx,json,html,css}'",
     "prepare": "husky install",
     "postinstall": "patch-package",
-    "deploy:beta": "ssh im-web2-app 'cd /opt/im-web2-app-beta && git pull && ./utils.sh deploy-beta'",
-    "deploy:prod": "ssh im-web2-app 'cd /opt/im-web2-app-prod && git pull && ./utils.sh deploy-prod'"
+    "deploy:staging": "ssh im-app 'cd /opt/im-app-beta && git pull && ./utils.sh deploy-beta'",
+    "deploy:prod": "ssh im-app 'cd /opt/im-app-prod && git pull && ./utils.sh deploy-prod'"
   },
   "dependencies": {
     "@emotion/react": "^11.10.0",
