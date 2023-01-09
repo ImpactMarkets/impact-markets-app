@@ -45,6 +45,7 @@
     "dotenv": "^16.0.3",
     "dotenv-cli": "^6.0.0",
     "envsafe": "^2.0.3",
+    "faunadb": "^4.7.1",
     "gemoji": "^7.1.0",
     "isomorphic-dompurify": "^0.20.0",
     "lodash": "^4.17.21",
