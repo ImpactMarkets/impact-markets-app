@@ -1,4 +1,4 @@
-export function CertificateSummarySkeleton() {
+export function summarySkeleton() {
   return (
     <div className="animate-pulse">
       <div className="w-3/4 h-8 bg-gray-200 rounded dark:bg-gray-700" />

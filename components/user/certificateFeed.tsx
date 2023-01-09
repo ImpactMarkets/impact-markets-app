@@ -3,8 +3,8 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 
 import type { CertificateSummaryProps } from '@/components/certificateSummary'
-import { CertificateSummarySkeleton } from '@/components/certificateSummarySkeleton'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
+import { CertificateSummarySkeleton } from '@/components/summarySkeleton'
 import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc'
 
 const CertificateSummary = dynamic<CertificateSummaryProps>(

@@ -15,9 +15,9 @@ import {
 } from '@/components/menu'
 import { InferQueryOutput } from '@/lib/trpc'
 
+import { ConfirmDeleteCommentDialog } from '../certificate/confirmDeleteCommentDialog'
+import { EditCommentForm } from '../certificate/editCommentForm'
 import { AddReplyForm } from './addReplyForm'
-import { ConfirmDeleteCommentDialog } from './confirmDeleteCommentDialog'
-import { EditCommentForm } from './editCommentForm'
 
 export function Comment({
   certificateId,

@@ -4,8 +4,8 @@ import { CERT_SORT_KEYS, CertSortKey } from '@/lib/constants'
 import { TAGS } from '@/lib/tags'
 import { Button, Flex } from '@mantine/core'
 
-import { IMMultiSelect } from './multiSelect'
-import { IMSelect } from './select'
+import { IMMultiSelect } from '../multiSelect'
+import { IMSelect } from '../select'
 
 export type CertificateFiltersProps = {
   onFilterTagsUpdate: (tags: string) => void

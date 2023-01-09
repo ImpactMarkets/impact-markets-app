@@ -40,6 +40,20 @@ export const permissionMiddleware: MiddlewareFunction = async ({
     return certificate?.authorId === ctx.session!.user.id
   }
 
+  const projectBelongsToUser = async () => {
+    interface projectInput {
+      id: string
+    }
+    const { id } = <projectInput>rawInput
+    const project = await ctx.prisma.project.findUnique({
+      where: { id },
+      select: {
+        authorId: true,
+      },
+    })
+    return project?.authorId === ctx.session!.user.id
+  }
+
   const commentBelongsToUser = async () => {
     interface commentInput {
       id: number
@@ -111,6 +125,16 @@ export const permissionMiddleware: MiddlewareFunction = async ({
     'certificate.unlike': isAuthenticated,
     'certificate.hide': isAdmin,
     'certificate.unhide': isAdmin,
+    'project.feed': () => true,
+    'project.detail': () => true,
+    'project.search': () => true,
+    'project.add': isAuthenticated,
+    'project.edit': () =>
+      isAuthenticated() && (isAdmin() || projectBelongsToUser()),
+    'project.like': isAuthenticated,
+    'project.unlike': isAuthenticated,
+    'project.hide': isAdmin,
+    'project.unhide': isAdmin,
     'comment.add': isAuthenticated,
     'comment.edit': () =>
       isAuthenticated() && (isAdmin() || commentBelongsToUser()),

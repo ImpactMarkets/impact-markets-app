@@ -4,23 +4,17 @@ import toast from 'react-hot-toast'
 
 import { Button } from '@/components/button'
 import { MarkdownEditor } from '@/components/markdownEditor'
-import { InferQueryOutput, trpc } from '@/lib/trpc'
+import { trpc } from '@/lib/trpc'
 
-import { CommentFormData, getCertificateQueryPathAndInput } from './utils'
+import {
+  CommentFormData,
+  getCertificateQueryPathAndInput,
+} from '../certificate/utils'
 
-export function AddReplyForm({
-  certificateId,
-  parent,
-  onDone,
-}: {
-  certificateId: string
-  parent:
-    | InferQueryOutput<'certificate.detail'>['comments'][number]
-    | InferQueryOutput<'certificate.detail'>['comments'][number]['children'][number]
-  onDone: () => void
-}) {
+export function AddCommentForm({ certificateId }: { certificateId: string }) {
+  const [markdownEditorKey, setMarkdownEditorKey] = React.useState(0)
   const utils = trpc.useContext()
-  const addReplyMutation = trpc.useMutation('comment.add', {
+  const addCommentMutation = trpc.useMutation('comment.add', {
     onSuccess: () => {
       return utils.invalidateQueries(
         getCertificateQueryPathAndInput(certificateId)
@@ -33,14 +27,16 @@ export function AddReplyForm({
   const { control, handleSubmit, reset } = useForm<CommentFormData>()
 
   const onSubmit: SubmitHandler<CommentFormData> = (data) => {
-    addReplyMutation.mutate(
+    addCommentMutation.mutate(
       {
         certificateId,
         content: data.content,
-        parentId: parent?.id,
       },
       {
-        onSuccess: () => onDone(),
+        onSuccess: () => {
+          reset({ content: '' })
+          setMarkdownEditorKey((markdownEditorKey) => markdownEditorKey + 1)
+        },
       }
     )
   }
@@ -53,26 +49,23 @@ export function AddReplyForm({
         rules={{ required: true }}
         render={({ field }) => (
           <MarkdownEditor
+            key={markdownEditorKey}
             value={field.value}
             onChange={field.onChange}
             onTriggerSubmit={handleSubmit(onSubmit)}
             required
-            placeholder="Reply"
+            placeholder="Comment"
             minRows={4}
-            autoFocus
           />
         )}
       />
-      <div className="flex gap-4 mt-4">
+      <div className="mt-4">
         <Button
           type="submit"
-          isLoading={addReplyMutation.isLoading}
-          loadingChildren="Adding reply"
+          isLoading={addCommentMutation.isLoading}
+          loadingChildren="Adding comment"
         >
-          Add reply
-        </Button>
-        <Button variant="secondary" onClick={onDone}>
-          Cancel
+          Add comment
         </Button>
       </div>
     </form>

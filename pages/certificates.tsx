@@ -4,17 +4,20 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
+import { CertificateFilters } from '@/components/certificate/certificateFilters'
+import type { CertificateSummaryProps } from '@/components/certificateSummary'
 import { Layout } from '@/components/layout'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
-import { ProjectFilters } from '@/components/projectFilters'
-import type { ProjectSummaryProps } from '@/components/projectSummary'
-import { ProjectSummarySkeleton } from '@/components/projectSummarySkeleton'
+import { CertificateSummarySkeleton } from '@/components/summarySkeleton'
 import { CertSortKey } from '@/lib/constants'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
-const ProjectSummary = dynamic<ProjectSummaryProps>(
-  () => import('@/components/projectSummary').then((mod) => mod.ProjectSummary),
+const CertificateSummary = dynamic<CertificateSummaryProps>(
+  () =>
+    import('@/components/certificateSummary').then(
+      (mod) => mod.CertificateSummary
+    ),
   { ssr: false }
 )
 
@@ -27,8 +30,8 @@ const Home: NextPageWithAuthAndLayout = () => {
   const utils = trpc.useContext()
   const [filterTags, setFilterTags] = React.useState('')
   const [orderBy, setOrderBy] = React.useState('' as CertSortKey)
-  const feedQueryPathAndInput: InferQueryPathAndInput<'project.feed'> = [
-    'project.feed',
+  const feedQueryPathAndInput: InferQueryPathAndInput<'certificate.feed'> = [
+    'certificate.feed',
     {
       ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
       filterTags,
@@ -36,8 +39,8 @@ const Home: NextPageWithAuthAndLayout = () => {
     },
   ]
   const feedQuery = trpc.useQuery(feedQueryPathAndInput)
-  const likeMutation = trpc.useMutation(['project.like'], {
-    onMutate: async (likedProjectId) => {
+  const likeMutation = trpc.useMutation(['certificate.like'], {
+    onMutate: async (likedCertificateId) => {
       await utils.cancelQuery(feedQueryPathAndInput)
 
       const previousQuery = utils.getQueryData(feedQueryPathAndInput)
@@ -45,18 +48,18 @@ const Home: NextPageWithAuthAndLayout = () => {
       if (previousQuery) {
         utils.setQueryData(feedQueryPathAndInput, {
           ...previousQuery,
-          projects: previousQuery.projects.map((project) =>
-            project.id === likedProjectId
+          certificates: previousQuery.certificates.map((certificate) =>
+            certificate.id === likedCertificateId
               ? {
-                  ...project,
+                  ...certificate,
                   likedBy: [
-                    ...project.likedBy,
+                    ...certificate.likedBy,
                     {
                       user: { id: session!.user.id, name: session!.user.name },
                     },
                   ],
                 }
-              : project
+              : certificate
           ),
         })
       }
@@ -69,8 +72,8 @@ const Home: NextPageWithAuthAndLayout = () => {
       }
     },
   })
-  const unlikeMutation = trpc.useMutation(['project.unlike'], {
-    onMutate: async (unlikedProjectId) => {
+  const unlikeMutation = trpc.useMutation(['certificate.unlike'], {
+    onMutate: async (unlikedCertificateId) => {
       await utils.cancelQuery(feedQueryPathAndInput)
 
       const previousQuery = utils.getQueryData(feedQueryPathAndInput)
@@ -78,15 +81,15 @@ const Home: NextPageWithAuthAndLayout = () => {
       if (previousQuery) {
         utils.setQueryData(feedQueryPathAndInput, {
           ...previousQuery,
-          projects: previousQuery.projects.map((project) =>
-            project.id === unlikedProjectId
+          certificates: previousQuery.certificates.map((certificate) =>
+            certificate.id === unlikedCertificateId
               ? {
-                  ...project,
-                  likedBy: project.likedBy.filter(
+                  ...certificate,
+                  likedBy: certificate.likedBy.filter(
                     (item) => item.user.id !== session!.user.id
                   ),
                 }
-              : project
+              : certificate
           ),
         })
       }
@@ -108,29 +111,29 @@ const Home: NextPageWithAuthAndLayout = () => {
         </Head>
 
         <div className="mt-12">
-          <ProjectFilters
+          <CertificateFilters
             onFilterTagsUpdate={(tags) => setFilterTags(tags)}
             onOrderByUpdate={(orderBy: CertSortKey) => setOrderBy(orderBy)}
             defaultFilterTagValue={filterTags}
             defaultOrderByValue={orderBy}
           />
         </div>
-        {feedQuery.data.projectCount === 0 ? (
+        {feedQuery.data.certificateCount === 0 ? (
           <div className="text-center text-secondary border rounded my-10 py-20 px-10">
-            There are no published projects to show yet.
+            There are no published certificates to show yet.
           </div>
         ) : (
           <div className="flow-root">
             <ul className="my-5 divide-y divide-transparent">
-              {feedQuery.data.projects.map((project) => (
-                <li key={project.id} className="py-6">
-                  <ProjectSummary
-                    project={project}
+              {feedQuery.data.certificates.map((certificate) => (
+                <li key={certificate.id} className="py-6">
+                  <CertificateSummary
+                    certificate={certificate}
                     onLike={() => {
-                      likeMutation.mutate(project.id)
+                      likeMutation.mutate(certificate.id)
                     }}
                     onUnlike={() => {
-                      unlikeMutation.mutate(project.id)
+                      unlikeMutation.mutate(certificate.id)
                     }}
                   />
                 </li>
@@ -140,7 +143,7 @@ const Home: NextPageWithAuthAndLayout = () => {
         )}
 
         <Pagination
-          itemCount={feedQuery.data.projectCount}
+          itemCount={feedQuery.data.certificateCount}
           itemsPerPage={ITEMS_PER_PAGE}
           currentPageNumber={currentPageNumber}
         />
@@ -157,7 +160,7 @@ const Home: NextPageWithAuthAndLayout = () => {
       <ul className="my-10 divide-y divide-transparent">
         {[...Array(3)].map((_, idx) => (
           <li key={idx} className="py-10">
-            <ProjectSummarySkeleton />
+            <CertificateSummarySkeleton />
           </li>
         ))}
       </ul>
