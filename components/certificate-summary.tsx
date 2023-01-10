@@ -50,7 +50,7 @@ function Left({ certificate }: CertificateSummaryProps) {
   }
 
   return (
-    <div className="grow relative max-w-[calc(100%-140px)]">
+    <div className="grow relative flex flex-col justify-between max-w-[calc(100%-140px-1rem)]">
       {certificate.tags && (
         <div className="mb-6 max-h-10 overflow-hidden">
           <Tags queryData={certificate} />
@@ -76,13 +76,13 @@ function Left({ certificate }: CertificateSummaryProps) {
 
 function Right({ certificate }: CertificateSummaryProps) {
   return (
-    <div className="flex flex-col justify-between max-w-[140px] min-w-[140px] w-[140px]">
+    <div className="flex flex-col justify-between ml-4 max-w-[140px] min-w-[140px] w-[140px]">
       <div>
         {fp.flow(
           fp.map('user'),
           sortAuthorFirst(certificate.author),
           fp.map((user) => (
-            <div key={user.id} className="mb-4">
+            <div key={user.id}>
               <Author author={user} />
             </div>
           ))
