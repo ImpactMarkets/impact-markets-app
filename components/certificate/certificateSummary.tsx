@@ -15,7 +15,6 @@ import { sortAuthorFirst } from './certificate/utils'
 import { CommentButton } from './commentButton'
 import { Date } from './date'
 import { Heading2 } from './heading2'
-import { HtmlView } from './htmlView'
 
 export type CertificateSummaryProps = {
   certificate: InferQueryOutput<'certificate.feed'>['certificates'][number]
@@ -51,18 +50,19 @@ function Left({ certificate }: CertificateSummaryProps) {
   }
 
   return (
-    <div className="grow">
+    <div className="grow relative flex flex-col justify-between max-w-[calc(100%-140px-1rem)]">
       {certificate.tags && (
-        <div className="mb-6">
+        <div className="mb-6 max-h-10 overflow-hidden">
           <Tags queryData={certificate} />
         </div>
       )}
       <div className={classNames(certificate.hidden ? 'opacity-50' : '')}>
         <Link href={`/certificate/${certificate.id}`}>
-          <Heading2 className="cursor-pointer">{certificate.title}</Heading2>
+          <Heading2 className="cursor-pointer w-[95%] whitespace-nowrap text-ellipsis overflow-hidden">
+            {certificate.title}
+          </Heading2>
         </Link>
         <Date date={certificate.createdAt} />
-        <HtmlView html={cert_summary} className="mt-2" />
       </div>
       <div className="flex items-center gap-12 mt-6">
         <HoldingsChart
@@ -76,13 +76,13 @@ function Left({ certificate }: CertificateSummaryProps) {
 
 function Right({ certificate }: CertificateSummaryProps) {
   return (
-    <div className="flex flex-col justify-between max-w-[140px] min-w-[140px] w-[140px]">
+    <div className="flex flex-col justify-between ml-4 max-w-[140px] min-w-[140px] w-[140px]">
       <div>
         {fp.flow(
           fp.map('user'),
           sortAuthorFirst(certificate.author),
           fp.map((user) => (
-            <div key={user.id} className="mt-4">
+            <div key={user.id}>
               <Author author={user} />
             </div>
           ))

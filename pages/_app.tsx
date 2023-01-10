@@ -45,7 +45,7 @@ function MyApp({
   return (
     <RollbarProvider config={rollbarConfig}>
       <IntercomProvider appId={browserEnv.NEXT_PUBLIC_INTERCOM_APP_ID} autoBoot>
-        <MantineProvider withGlobalStyles withNormalizeCSS>
+        <MantineProvider withCSSVariables withGlobalStyles withNormalizeCSS>
           <SessionProvider session={session} refetchOnWindowFocus>
             <ThemeProvider
               forcedTheme="light"
