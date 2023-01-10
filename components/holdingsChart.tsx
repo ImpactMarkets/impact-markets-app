@@ -70,7 +70,7 @@ export function HoldingsChart({ holdings, issuers }: HoldingsChartProps) {
 
   const sections = [
     {
-      label: valueAvailableFromIssuers.gte(20)
+      label: valueAvailableFromIssuers.gte(30)
         ? `${num(valueAvailableFromIssuers, 0)}% available`
         : valueAvailableFromIssuers.gte(10)
         ? `${num(valueAvailableFromIssuers, 0)}%`
@@ -83,7 +83,7 @@ export function HoldingsChart({ holdings, issuers }: HoldingsChartProps) {
       color: '#47d6ab',
     },
     {
-      label: valueAvailableFromInvestors.gte(20)
+      label: valueAvailableFromInvestors.gte(30)
         ? `${num(valueAvailableFromInvestors, 0)}% circulating`
         : valueAvailableFromInvestors.gte(10)
         ? `${num(valueAvailableFromInvestors, 0)}%`
@@ -96,7 +96,7 @@ export function HoldingsChart({ holdings, issuers }: HoldingsChartProps) {
       color: '#37c69b',
     },
     {
-      label: valueReserved.gte(20)
+      label: valueReserved.gte(30)
         ? `${num(valueReserved, 0)}% reserved`
         : valueReserved.gte(10)
         ? `${num(valueReserved, 0)}%`
@@ -106,7 +106,7 @@ export function HoldingsChart({ holdings, issuers }: HoldingsChartProps) {
       color: '#AAAAAA',
     },
     {
-      label: valueConsumed.gte(20)
+      label: valueConsumed.gte(30)
         ? `${num(valueConsumed, 0)}% donated`
         : valueConsumed.gte(10)
         ? `${num(valueConsumed, 0)}%`

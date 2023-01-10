@@ -98,7 +98,9 @@ export function Landing_Header() {
             className={classes.burger}
             size="sm"
           />
-          <Logo className="w-auto h-[64px]" />
+          <Link href="/">
+            <Logo className="w-auto h-[64px] cursor-pointer" />
+          </Link>
         </Group>
         <Group spacing={5} className={classes.links}>
           {items}

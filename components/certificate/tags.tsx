@@ -9,24 +9,25 @@ type TagsProps = {
     | InferQueryOutput<'certificate.feed'>['certificates'][number]
 }
 
-export const Tags = ({ queryData }: TagsProps) => (
-  <div className="flex flex-wrap">
-    {queryData.tags &&
-      queryData.tags.split(',').map((tagValue, index) => {
-        const tag = TAGS.find((elt) => elt.value === tagValue)
-        return (
-          tag && (
+export const Tags = ({ queryData }: TagsProps) => {
+  if (!queryData.tags) return null
+  const tags = queryData.tags.split(',')
+  return (
+    <div className="flex flex-wrap">
+      {TAGS.map(
+        ({ value, label, color }) =>
+          tags.includes(value) && (
             <span
-              key={index}
+              key={value}
               className="border text-highlight border-secondary bg-primary font-bold text-xs px-1 mr-1 mb-1 rounded"
               style={{
-                backgroundColor: tag.color,
+                backgroundColor: color,
               }}
             >
-              {tag.label}
+              {label}
             </span>
           )
-        )
-      })}
-  </div>
-)
+      )}
+    </div>
+  )
+}

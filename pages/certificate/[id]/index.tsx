@@ -129,7 +129,7 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
               <Banner className="mb-6">
                 {certificate.author.id === session?.user.id
                   ? 'Please enter proof of your identity on your'
-                  : 'The author of this project has not yet entered proof of their'}{' '}
+                  : 'The author of this project has not yet entered proof of their identity on their'}{' '}
                 <Link href={`/profile/${certificate.author.id}`}>
                   <span className="link">user profile</span>
                 </Link>

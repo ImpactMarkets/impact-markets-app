@@ -1,4 +1,4 @@
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as React from 'react'
@@ -23,6 +23,7 @@ import { browserEnv } from '@/env/browser'
 import { uploadImage } from '@/lib/cloudinary'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
 import { Tooltip } from '@mantine/core'
+import { Button as MantineButton } from '@mantine/core'
 import { IconAlertCircle, IconCreditCard, IconShieldLock } from '@tabler/icons'
 
 function DotPattern() {
@@ -340,7 +341,7 @@ export function ProfileInfo({
           <title>{user.name} – Impact Markets</title>
         </Head>
 
-        <div className="relative flex items-center gap-4 py-8 overflow-hidden">
+        <div className="relative flex items-start gap-4 py-8 overflow-hidden">
           <div className="flex items-center gap-8">
             {browserEnv.NEXT_PUBLIC_ENABLE_IMAGE_UPLOAD &&
             profileBelongsToUser ? (
@@ -398,7 +399,7 @@ export function ProfileInfo({
           </div>
 
           {profileBelongsToUser && (
-            <div className="ml-auto mr-10">
+            <div className="ml-auto mr-10 flex items-center gap-2">
               <IconButton
                 variant="secondary"
                 onClick={() => {
@@ -407,6 +408,9 @@ export function ProfileInfo({
               >
                 <EditIcon className="w-4 h-4" />
               </IconButton>
+              <MantineButton color="red" onClick={() => signOut()}>
+                Sign out
+              </MantineButton>
             </div>
           )}
 

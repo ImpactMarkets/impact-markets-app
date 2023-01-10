@@ -110,7 +110,7 @@ const Home: NextPageWithAuthAndLayout = () => {
           <title>Impact Markets</title>
         </Head>
 
-        <div className="mt-12">
+        <div className="mb-6">
           <CertificateFilters
             onFilterTagsUpdate={(tags) => setFilterTags(tags)}
             onOrderByUpdate={(orderBy: CertSortKey) => setOrderBy(orderBy)}
@@ -124,9 +124,12 @@ const Home: NextPageWithAuthAndLayout = () => {
           </div>
         ) : (
           <div className="flow-root">
-            <ul className="my-5 divide-y divide-transparent">
+            <ul className="divide-y divide-transparent flex flex-wrap gap-2">
               {feedQuery.data.certificates.map((certificate) => (
-                <li key={certificate.id} className="py-6">
+                <li
+                  key={certificate.id}
+                  className="w-full max-w-full xl:w-[49%] xl:max-w-[49%] 2xl:w-[32%] 2xl:max-w-[32%]"
+                >
                   <CertificateSummary
                     certificate={certificate}
                     onLike={() => {

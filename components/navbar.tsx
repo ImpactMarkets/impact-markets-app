@@ -3,10 +3,9 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import { Logo } from '@/components/icons'
 import { browserEnv } from '@/env/browser'
 import { trpc } from '@/lib/trpc'
-import { Group, Navbar, Switch, createStyles } from '@mantine/core'
+import { Navbar as MantineNavbar, Switch, createStyles } from '@mantine/core'
 import {
   IconBolt,
   IconBuildingStore,
@@ -16,6 +15,7 @@ import {
   IconTrophy,
 } from '@tabler/icons'
 
+import { User } from './user'
 import refreshSession from './utils'
 
 mixpanel.init(browserEnv.NEXT_PUBLIC_MIXPANEL_TOKEN, {
@@ -29,16 +29,6 @@ const useStyles = createStyles((theme, _params, getRef) => {
       paddingBottom: theme.spacing.md,
       marginBottom: theme.spacing.md * 1.5,
       borderBottom: `1px solid ${
-        theme.colorScheme === 'dark'
-          ? theme.colors.dark[4]
-          : theme.colors.gray[2]
-      }`,
-    },
-
-    footer: {
-      paddingTop: theme.spacing.md,
-      marginTop: theme.spacing.md,
-      borderTop: `1px solid ${
         theme.colorScheme === 'dark'
           ? theme.colors.dark[4]
           : theme.colors.gray[2]
@@ -109,7 +99,11 @@ const data = [
   { link: '/support', label: 'Help & support', icon: IconLifebuoy },
 ]
 
-export function NavbarSimple() {
+interface NavbarProps {
+  hidden: boolean
+}
+
+export function Navbar({ hidden }: NavbarProps) {
   const { data: session } = useSession()
   const { classes, cx } = useStyles()
   const router = useRouter()
@@ -160,18 +154,20 @@ export function NavbarSimple() {
   }
 
   return (
-    <Navbar width={{ sm: 250 }} p="md" className="pt-12 sticky top-0 z-auto">
-      <Navbar.Section grow>
-        <Group className="mb-6" position="apart">
-          <Link href="/">
-            <span>
-              <Logo className="w-auto h-[64px] cursor-pointer" />
-            </span>
-          </Link>
-        </Group>
-        <div className="mt-12">{links}</div>
-        <div className="mt-12">{preferences}</div>
-      </Navbar.Section>
-    </Navbar>
+    <MantineNavbar
+      classNames={{ root: 'w-[250px] z-[5]' }}
+      width={{ sm: 250 }}
+      withBorder={false}
+      hidden={hidden}
+      hiddenBreakpoint="sm"
+    >
+      <MantineNavbar.Section grow className="m-4">
+        {links}
+        <div className="mt-4">{preferences}</div>
+      </MantineNavbar.Section>
+      <MantineNavbar.Section>
+        <User />
+      </MantineNavbar.Section>
+    </MantineNavbar>
   )
 }
