@@ -1,8 +1,8 @@
 import { useSession } from 'next-auth/react'
 import * as React from 'react'
 
-import { BuyDialog } from '@/components/certificate/BuyDialog'
-import { EditDialog } from '@/components/certificate/EditDialog'
+import { BuyDialog } from '@/components/certificate/buyDialog'
+import { EditDialog } from '@/components/certificate/editDialog'
 import { classNames } from '@/lib/classnames'
 import { SHARE_COUNT } from '@/lib/constants'
 import { num } from '@/lib/text'
@@ -12,9 +12,9 @@ import { Prisma } from '@prisma/client'
 import { IconAlertCircle } from '@tabler/icons'
 
 import { Author } from '../author'
-import { ButtonLink } from '../button-link'
-import { HoldingsChart } from '../holdings-chart'
-import { Transactions } from './Transactions'
+import { ButtonLink } from '../buttonLink'
+import { HoldingsChart } from '../holdingsChart'
+import { Transactions } from './transactions'
 
 type LedgerProps = {
   isActive: boolean

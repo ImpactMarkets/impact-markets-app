@@ -62,6 +62,8 @@ test.describe('Create Certificate', () => {
     await expect(page.getByRole('heading', { level: 1 })).toContainText(
       titleText
     )
-    await page.locator('text=' + descriptionText).click() // Just clicking to verify it's there.
+    await expect(page.locator('text=' + descriptionText)).toBeVisible({
+      visible: true,
+    })
   })
 })

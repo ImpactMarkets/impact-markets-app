@@ -1,7 +1,7 @@
 import { Button } from '@/components/button'
 import { Container, Text, Title, createStyles } from '@mantine/core'
 
-import { ButtonLink } from './button-link'
+import { ButtonLink } from './buttonLink'
 
 const useStyles = createStyles((theme) => ({
   wrapper: {

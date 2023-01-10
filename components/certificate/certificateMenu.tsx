@@ -11,7 +11,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from '@/components/dialog'
-import { IconButton } from '@/components/icon-button'
+import { IconButton } from '@/components/iconButton'
 import { DotsIcon, EditIcon, EyeClosedIcon, EyeIcon } from '@/components/icons'
 import {
   Menu as BaseMenu,

@@ -4,9 +4,9 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
-import { CertificateFilters } from '@/components/certificate-filters'
-import type { CertificateSummaryProps } from '@/components/certificate-summary'
-import { CertificateSummarySkeleton } from '@/components/certificate-summary-skeleton'
+import { CertificateFilters } from '@/components/certificateFilters'
+import type { CertificateSummaryProps } from '@/components/certificateSummary'
+import { CertificateSummarySkeleton } from '@/components/certificateSummarySkeleton'
 import { Layout } from '@/components/layout'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import { CertSortKey } from '@/lib/constants'
@@ -15,7 +15,7 @@ import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
 const CertificateSummary = dynamic<CertificateSummaryProps>(
   () =>
-    import('@/components/certificate-summary').then(
+    import('@/components/certificateSummary').then(
       (mod) => mod.CertificateSummary
     ),
   { ssr: false }

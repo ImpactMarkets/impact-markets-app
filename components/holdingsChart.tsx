@@ -14,7 +14,7 @@ interface HoldingsChartProps {
 
 export function HoldingsChart({ holdings, issuers }: HoldingsChartProps) {
   const issuersIds = issuers.map((issuer) => issuer.user.id)
-  type Holding = typeof holdings[number]
+  type Holding = (typeof holdings)[number]
   const valueConsumed = fp
     .flow(
       fp.filter((holding: Holding) => holding.type === 'CONSUMPTION'),

@@ -3,15 +3,24 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
 import { Button } from '@/components/button'
-import { MarkdownEditor } from '@/components/markdown-editor'
-import { trpc } from '@/lib/trpc'
+import { MarkdownEditor } from '@/components/markdownEditor'
+import { InferQueryOutput, trpc } from '@/lib/trpc'
 
 import { CommentFormData, getCertificateQueryPathAndInput } from './utils'
 
-export function AddCommentForm({ certificateId }: { certificateId: string }) {
-  const [markdownEditorKey, setMarkdownEditorKey] = React.useState(0)
+export function EditCommentForm({
+  certificateId,
+  comment,
+  onDone,
+}: {
+  certificateId: string
+  comment:
+    | InferQueryOutput<'certificate.detail'>['comments'][number]
+    | InferQueryOutput<'certificate.detail'>['comments'][number]['children'][number]
+  onDone: () => void
+}) {
   const utils = trpc.useContext()
-  const addCommentMutation = trpc.useMutation('comment.add', {
+  const editCommentMutation = trpc.useMutation('comment.edit', {
     onSuccess: () => {
       return utils.invalidateQueries(
         getCertificateQueryPathAndInput(certificateId)
@@ -21,19 +30,22 @@ export function AddCommentForm({ certificateId }: { certificateId: string }) {
       toast.error(<pre>{error.message}</pre>)
     },
   })
-  const { control, handleSubmit, reset } = useForm<CommentFormData>()
+  const { control, handleSubmit } = useForm<CommentFormData>({
+    defaultValues: {
+      content: comment.content,
+    },
+  })
 
   const onSubmit: SubmitHandler<CommentFormData> = (data) => {
-    addCommentMutation.mutate(
+    editCommentMutation.mutate(
       {
-        certificateId,
-        content: data.content,
+        id: comment.id,
+        data: {
+          content: data.content,
+        },
       },
       {
-        onSuccess: () => {
-          reset({ content: '' })
-          setMarkdownEditorKey((markdownEditorKey) => markdownEditorKey + 1)
-        },
+        onSuccess: () => onDone(),
       }
     )
   }
@@ -46,23 +58,26 @@ export function AddCommentForm({ certificateId }: { certificateId: string }) {
         rules={{ required: true }}
         render={({ field }) => (
           <MarkdownEditor
-            key={markdownEditorKey}
             value={field.value}
             onChange={field.onChange}
             onTriggerSubmit={handleSubmit(onSubmit)}
             required
             placeholder="Comment"
             minRows={4}
+            autoFocus
           />
         )}
       />
-      <div className="mt-4">
+      <div className="flex gap-4 mt-4">
         <Button
           type="submit"
-          isLoading={addCommentMutation.isLoading}
-          loadingChildren="Adding comment"
+          isLoading={editCommentMutation.isLoading}
+          loadingChildren="Updating comment"
         >
-          Add comment
+          Update comment
+        </Button>
+        <Button variant="secondary" onClick={onDone}>
+          Cancel
         </Button>
       </div>
     </form>

@@ -7,7 +7,7 @@ import { postToSlackIfEnabled } from '@/lib/slack'
 import { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
-import { createProtectedRouter } from '../create-protected-router'
+import { createProtectedRouter } from '../createProtectedRouter'
 
 const getOrderBy = (
   orderByKey: CertSortKey | undefined
@@ -195,6 +195,9 @@ export const certificateRouter = createProtectedRouter()
             },
           },
           comments: {
+            where: {
+              parentId: null,
+            },
             orderBy: {
               createdAt: 'asc',
             },
@@ -208,6 +211,27 @@ export const certificateRouter = createProtectedRouter()
                   id: true,
                   name: true,
                   image: true,
+                },
+              },
+              parent: true,
+              children: {
+                orderBy: {
+                  createdAt: 'asc',
+                },
+                select: {
+                  id: true,
+                  certificateId: true,
+                  content: true,
+                  contentHtml: true,
+                  createdAt: true,
+                  author: {
+                    select: {
+                      id: true,
+                      name: true,
+                      image: true,
+                    },
+                  },
+                  parent: true,
                 },
               },
             },

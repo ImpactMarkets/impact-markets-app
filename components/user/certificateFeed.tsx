@@ -2,14 +2,14 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
-import type { CertificateSummaryProps } from '@/components/certificate-summary'
-import { CertificateSummarySkeleton } from '@/components/certificate-summary-skeleton'
+import type { CertificateSummaryProps } from '@/components/certificateSummary'
+import { CertificateSummarySkeleton } from '@/components/certificateSummarySkeleton'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc'
 
 const CertificateSummary = dynamic<CertificateSummaryProps>(
   () =>
-    import('@/components/certificate-summary').then(
+    import('@/components/certificateSummary').then(
       (mod) => mod.CertificateSummary
     ),
   { ssr: false }
@@ -17,7 +17,7 @@ const CertificateSummary = dynamic<CertificateSummaryProps>(
 
 const ITEMS_PER_PAGE = 20
 
-export default function CertificateFeed({
+export function CertificateFeed({
   user: _,
 }: {
   user: InferQueryOutput<'user.profile'>

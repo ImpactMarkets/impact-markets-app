@@ -3,16 +3,17 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import {
-  BoltIcon,
-  FileIcon,
-  HomeIcon,
-  LifebuoyIcon,
-  StoreIcon,
-} from '@/components/icons'
 import { browserEnv } from '@/env/browser'
 import { trpc } from '@/lib/trpc'
 import { Navbar as MantineNavbar, Switch, createStyles } from '@mantine/core'
+import {
+  IconBolt,
+  IconBuildingStore,
+  IconFile,
+  IconHome,
+  IconLifebuoy,
+  IconTrophy,
+} from '@tabler/icons'
 
 import { User } from './user'
 import refreshSession from './utils'
@@ -90,11 +91,12 @@ const useStyles = createStyles((theme, _params, getRef) => {
 })
 
 const data = [
-  { link: '/', label: 'Projects', icon: HomeIcon },
-  { link: '/funders', label: 'Funders & prizes', icon: StoreIcon },
-  { link: '/why', label: 'Why impact markets?', icon: BoltIcon },
-  { link: '/rules', label: 'Rules & terms', icon: FileIcon },
-  { link: '/support', label: 'Help & support', icon: LifebuoyIcon },
+  { link: '/', label: 'Projects', icon: IconHome },
+  { link: '/ranking', label: 'Top donors', icon: IconTrophy },
+  { link: '/funders', label: 'Funders & prizes', icon: IconBuildingStore },
+  { link: '/why', label: 'Why impact markets?', icon: IconBolt },
+  { link: '/rules', label: 'Rules & terms', icon: IconFile },
+  { link: '/support', label: 'Help & support', icon: IconLifebuoy },
 ]
 
 interface NavbarProps {

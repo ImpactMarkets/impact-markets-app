@@ -7,10 +7,10 @@ import { SHARE_COUNT } from '@/lib/constants'
 import { num } from '@/lib/text'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
 
-import { AuthorWithDate } from '../author-with-date'
-import { ButtonLink } from '../button-link'
-import { CancelDialog } from './CancelDialog'
-import { ConfirmDialog } from './ConfirmDialog'
+import { AuthorWithDate } from '../authorWithDate'
+import { ButtonLink } from '../buttonLink'
+import { CancelDialog } from './cancelDialog'
+import { ConfirmDialog } from './confirmDialog'
 
 const Transaction = ({
   transaction,

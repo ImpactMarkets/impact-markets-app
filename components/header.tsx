@@ -2,10 +2,10 @@ import { signIn, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import * as React from 'react'
 
-import { ButtonLink } from '@/components/button-link'
-import { IconButton } from '@/components/icon-button'
+import { ButtonLink } from '@/components/buttonLink'
+import { IconButton } from '@/components/iconButton'
 import { Logo, SearchIcon } from '@/components/icons'
-import { SearchDialog } from '@/components/search-dialog'
+import { SearchDialog } from '@/components/searchDialog'
 import { Burger, Header as MantineHeader, MediaQuery } from '@mantine/core'
 
 import { Button } from './button'

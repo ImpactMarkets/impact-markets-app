@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Url } from 'url'
 
-import { ButtonLink, ButtonLinkProps } from './button-link'
+import { ButtonLink, ButtonLinkProps } from './buttonLink'
 import { MessageIcon } from './icons'
 
 export const MAX_LIKED_BY_SHOWN = 50
