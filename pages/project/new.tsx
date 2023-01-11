@@ -33,6 +33,7 @@ const NewProjectPage: NextPageWithAuthAndLayout = () => {
             id: cuid(),
             title: '',
             content: '',
+            paymentUrl: '',
             tags: '',
           }}
           backTo="/"
@@ -46,6 +47,7 @@ const NewProjectPage: NextPageWithAuthAndLayout = () => {
                   ? new Date(values.actionStart)
                   : null,
                 actionEnd: values.actionEnd ? new Date(values.actionEnd) : null,
+                paymentUrl: values.paymentUrl,
                 tags: values.tags,
               },
               {

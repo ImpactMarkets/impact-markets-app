@@ -19,6 +19,7 @@ import { Tags } from '@/components/tags'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { LoadingOverlay } from '@mantine/core'
+import { IconCreditCard, IconCreditCardOff } from '@tabler/icons'
 
 // TODO: Maybe this could be made into a generic component ?
 const ProjectPageWrapper: NextPageWithAuthAndLayout = () => {
@@ -135,15 +136,31 @@ function ProjectPage({ projectId }: { projectId: string }) {
                 belongsToUser={projectBelongsToUser}
               />
             </div>
-            <div className="my-6">
+            <div className="flex justify-between my-6">
               <AuthorWithDate
                 author={project.author}
                 date={project.createdAt}
               />
+              {project.paymentUrl ? (
+                <a
+                  className="text-sm text-secondary inline-block max-w-60 whitespace-nowrap overflow-hidden overflow-ellipsis"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={project.paymentUrl}
+                >
+                  <IconCreditCard className="inline" /> Accepting donations
+                </a>
+              ) : (
+                <span>
+                  <IconCreditCardOff className="inline" /> Not accepting
+                  donations
+                </span>
+              )}
             </div>
             <div className="flex my-6">
+              <Tags queryData={project} />
               {!!(project.actionStart || project.actionEnd) && (
-                <span className="font-bold text-xs border text-primary border-secondary bg-primary px-1 mr-1 rounded">
+                <span className="font-bold text-xs border text-primary border-secondary bg-primary px-1 ml-1 rounded">
                   {project.actionStart && project.actionEnd ? (
                     <>
                       Work: {project.actionStart.toISOString().slice(0, 10)} to{' '}
@@ -161,7 +178,6 @@ function ProjectPage({ projectId }: { projectId: string }) {
                   )}
                 </span>
               )}
-              <Tags queryData={project} />
             </div>
             <div className="my-6"></div>
             <HtmlView html={project.contentHtml} className="mt-8" />

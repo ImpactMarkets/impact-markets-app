@@ -49,6 +49,7 @@ type FormData = {
   content: string
   actionStart?: string
   actionEnd?: string
+  paymentUrl: string
   tags: string
 }
 
@@ -154,6 +155,13 @@ export function ProjectForm({
           defaultValue={getValues().tags ? getValues().tags.split(',') : []}
         />
       </div>
+      <TextField
+        {...register('paymentUrl')}
+        label="Payment URL"
+        description="A link to a page where people can donate to the project."
+        placeholder="https://ko-fi.com/velvetillumnation"
+        className="my-6"
+      />
       <div className="mt-6">
         <Controller
           name="content"

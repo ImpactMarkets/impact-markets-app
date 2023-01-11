@@ -49,6 +49,7 @@ const EditProjectPage: NextPageWithAuthAndLayout = () => {
                   actionEnd: projectQuery.data.actionEnd
                     ? projectQuery.data.actionEnd.toISOString().slice(0, 10)
                     : undefined,
+                  paymentUrl: projectQuery.data.paymentUrl,
                   tags: projectQuery.data.tags || '',
                 }}
                 backTo={`/project/${projectQuery.data.id}`}
@@ -65,6 +66,7 @@ const EditProjectPage: NextPageWithAuthAndLayout = () => {
                         actionEnd: values.actionEnd
                           ? new Date(values.actionEnd)
                           : null,
+                        paymentUrl: values.paymentUrl,
                         tags: values.tags,
                       },
                     },

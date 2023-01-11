@@ -134,6 +134,7 @@ export const projectRouter = createProtectedRouter()
           hidden: true,
           actionStart: true,
           actionEnd: true,
+          paymentUrl: true,
           tags: true,
           author: {
             select: {
@@ -255,6 +256,7 @@ export const projectRouter = createProtectedRouter()
       content: z.string().min(1),
       actionStart: z.date().nullable(),
       actionEnd: z.date().nullable(),
+      paymentUrl: z.string(),
       tags: z.string(),
     }),
     async resolve({ ctx, input }) {
@@ -266,6 +268,7 @@ export const projectRouter = createProtectedRouter()
           contentHtml: markdownToHtml(input.content),
           actionStart: input.actionStart,
           actionEnd: input.actionEnd,
+          paymentUrl: input.paymentUrl,
           tags: input.tags,
           author: {
             connect: {
@@ -285,6 +288,7 @@ export const projectRouter = createProtectedRouter()
         content: z.string().min(1),
         actionStart: z.date().nullable(),
         actionEnd: z.date().nullable(),
+        paymentUrl: z.string(),
         tags: z.string(),
       }),
     }),
@@ -298,6 +302,7 @@ export const projectRouter = createProtectedRouter()
           contentHtml: markdownToHtml(data.content),
           actionStart: data.actionStart,
           actionEnd: data.actionEnd,
+          paymentUrl: data.paymentUrl,
           tags: data.tags,
         },
       })
