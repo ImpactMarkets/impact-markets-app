@@ -20,7 +20,7 @@ import {
 import { Accordion, SimpleGrid, Switch } from '@mantine/core'
 import { Prisma } from '@prisma/client'
 
-import { IMMultiSelect } from './multiSelect'
+import { IMMultiSelect } from '../multiSelect'
 
 const DESCRIPTION_PROMPTS = (
   <>
@@ -56,7 +56,6 @@ type FormData = {
   id: string
   title: string
   content: string
-  attributedImpactVersion: string
   counterfactual: string
   location: string
   rights: string
@@ -383,26 +382,6 @@ export function CertificateForm({
               </p>
             )}
 
-            <TextField
-              {...register('attributedImpactVersion', { required: true })}
-              label={
-                <span>
-                  Version of the{' '}
-                  <a
-                    href="https://impactmarkets.substack.com/i/64916368/impact-attribution-norm-formerly-attributed-impact"
-                    className="text-blue"
-                  >
-                    Attributed Impact Norm
-                  </a>
-                </span>
-              }
-              info="Your certificate description needs to justify the value of your impact based on a particular version of Attributed Impact."
-              placeholder="0.42"
-              autoFocus
-              required
-              disabled
-              className="text-lg disabled my-6"
-            />
             <ol className="list-decimal list-outside mx-5">
               <li className="mb-2">
                 This certificate defines a{' '}

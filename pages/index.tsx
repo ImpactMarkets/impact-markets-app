@@ -4,17 +4,18 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
+import { Filters } from '@/components/filters'
 import { Layout } from '@/components/layout'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
-import { ProjectFilters } from '@/components/projectFilters'
-import type { ProjectSummaryProps } from '@/components/projectSummary'
-import { ProjectSummarySkeleton } from '@/components/projectSummarySkeleton'
-import { CertSortKey } from '@/lib/constants'
+import type { ProjectSummaryProps } from '@/components/project/summary'
+import { SummarySkeleton } from '@/components/summarySkeleton'
+import { ProjectSortKey } from '@/lib/constants'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
 const ProjectSummary = dynamic<ProjectSummaryProps>(
-  () => import('@/components/projectSummary').then((mod) => mod.ProjectSummary),
+  () =>
+    import('@/components/project/summary').then((mod) => mod.ProjectSummary),
   { ssr: false }
 )
 
@@ -26,7 +27,7 @@ const Home: NextPageWithAuthAndLayout = () => {
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
   const utils = trpc.useContext()
   const [filterTags, setFilterTags] = React.useState('')
-  const [orderBy, setOrderBy] = React.useState('' as CertSortKey)
+  const [orderBy, setOrderBy] = React.useState('' as ProjectSortKey)
   const feedQueryPathAndInput: InferQueryPathAndInput<'project.feed'> = [
     'project.feed',
     {
@@ -108,9 +109,9 @@ const Home: NextPageWithAuthAndLayout = () => {
         </Head>
 
         <div className="mb-6">
-          <ProjectFilters
+          <Filters
             onFilterTagsUpdate={(tags) => setFilterTags(tags)}
-            onOrderByUpdate={(orderBy: CertSortKey) => setOrderBy(orderBy)}
+            onOrderByUpdate={(orderBy: ProjectSortKey) => setOrderBy(orderBy)}
             defaultFilterTagValue={filterTags}
             defaultOrderByValue={orderBy}
           />
@@ -160,7 +161,7 @@ const Home: NextPageWithAuthAndLayout = () => {
       <ul className="my-10 divide-y divide-transparent">
         {[...Array(3)].map((_, idx) => (
           <li key={idx} className="py-10">
-            <ProjectSummarySkeleton />
+            <SummarySkeleton />
           </li>
         ))}
       </ul>

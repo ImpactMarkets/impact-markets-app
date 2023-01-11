@@ -13,7 +13,7 @@ import { IconAlertCircle } from '@tabler/icons'
 
 import { Author } from '../author'
 import { ButtonLink } from '../buttonLink'
-import { HoldingsChart } from '../holdingsChart'
+import { HoldingsChart } from './holdingsChart'
 import { Transactions } from './transactions'
 
 type LedgerProps = {

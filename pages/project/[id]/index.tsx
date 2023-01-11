@@ -7,141 +7,120 @@ import * as React from 'react'
 import { AuthorWithDate } from '@/components/authorWithDate'
 import { Avatar } from '@/components/avatar'
 import { Banner } from '@/components/banner'
-import { AddCommentForm } from '@/components/certificate/addCommentForm'
-import { CertificateMenu } from '@/components/certificate/certificateMenu'
-import { Comment } from '@/components/certificate/comment'
-import { Labels } from '@/components/certificate/labels'
-import { Ledger } from '@/components/certificate/ledger'
-import { Tags } from '@/components/certificate/tags'
-import { getCertificateQueryPathAndInput } from '@/components/certificate/utils'
 import { CommentButton } from '@/components/commentButton'
 import { Heading1 } from '@/components/heading1'
 import { HtmlView } from '@/components/htmlView'
 import { Layout } from '@/components/layout'
 import { LikeButton } from '@/components/likeButton'
-import { trpc } from '@/lib/trpc'
+import { AddCommentForm } from '@/components/project/addCommentForm'
+import { Comment } from '@/components/project/comment'
+import { Menu } from '@/components/projectAndCertificate/menu'
+import { Tags } from '@/components/tags'
+import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { LoadingOverlay } from '@mantine/core'
 
 // TODO: Maybe this could be made into a generic component ?
-const CertificatePageWrapper: NextPageWithAuthAndLayout = () => {
+const ProjectPageWrapper: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
 
   if (!router.isReady) {
     return <LoadingOverlay visible />
   } else if (typeof router.query.id !== 'string') {
-    return <p>Invalid certificate id: {router.query.id}</p>
+    return <p>Invalid project id: {router.query.id}</p>
   } else {
-    return <CertificatePage certificateId={router.query.id} />
+    return <ProjectPage projectId={router.query.id} />
   }
 }
 
-function CertificatePage({ certificateId }: { certificateId: string }) {
+function ProjectPage({ projectId }: { projectId: string }) {
   const router = useRouter()
   const { data: session } = useSession()
   const utils = trpc.useContext()
-  const certificateQueryPathAndInput =
-    getCertificateQueryPathAndInput(certificateId)
-  const certificateQuery = trpc.useQuery(certificateQueryPathAndInput)
-  const certificate = certificateQuery.data
-  const likeMutation = trpc.useMutation(['certificate.like'], {
+  const projectQueryPathAndInput: InferQueryPathAndInput<'project.detail'> = [
+    'project.detail',
+    {
+      id: projectId,
+    },
+  ]
+  const projectQuery = trpc.useQuery(projectQueryPathAndInput)
+  const project = projectQuery.data
+  const likeMutation = trpc.useMutation(['project.like'], {
     onMutate: async () => {
-      await utils.cancelQuery(certificateQueryPathAndInput)
+      await utils.cancelQuery(projectQueryPathAndInput)
 
-      const previousCertificate = utils.getQueryData(
-        certificateQueryPathAndInput
-      )
+      const previousProject = utils.getQueryData(projectQueryPathAndInput)
 
-      if (previousCertificate) {
-        utils.setQueryData(certificateQueryPathAndInput, {
-          ...previousCertificate,
+      if (previousProject) {
+        utils.setQueryData(projectQueryPathAndInput, {
+          ...previousProject,
           likedBy: [
-            ...previousCertificate.likedBy,
+            ...previousProject.likedBy,
             { user: { id: session!.user.id, name: session!.user.name } },
           ],
         })
       }
 
-      return { previousCertificate }
+      return { previousProject }
     },
     onError: (err, id, context: any) => {
-      if (context?.previousCertificate) {
-        utils.setQueryData(
-          certificateQueryPathAndInput,
-          context.previousCertificate
-        )
+      if (context?.previousProject) {
+        utils.setQueryData(projectQueryPathAndInput, context.previousProject)
       }
     },
   })
-  const unlikeMutation = trpc.useMutation(['certificate.unlike'], {
+  const unlikeMutation = trpc.useMutation(['project.unlike'], {
     onMutate: async () => {
-      await utils.cancelQuery(certificateQueryPathAndInput)
+      await utils.cancelQuery(projectQueryPathAndInput)
 
-      const previousCertificate = utils.getQueryData(
-        certificateQueryPathAndInput
-      )
+      const previousProject = utils.getQueryData(projectQueryPathAndInput)
 
-      if (previousCertificate) {
-        utils.setQueryData(certificateQueryPathAndInput, {
-          ...previousCertificate,
-          likedBy: previousCertificate.likedBy.filter(
+      if (previousProject) {
+        utils.setQueryData(projectQueryPathAndInput, {
+          ...previousProject,
+          likedBy: previousProject.likedBy.filter(
             (item) => item.user.id !== session!.user.id
           ),
         })
       }
 
-      return { previousCertificate }
+      return { previousProject }
     },
     onError: (err, id, context: any) => {
-      if (context?.previousCertificate) {
-        utils.setQueryData(
-          certificateQueryPathAndInput,
-          context.previousCertificate
-        )
+      if (context?.previousProject) {
+        utils.setQueryData(projectQueryPathAndInput, context.previousProject)
       }
     },
   })
 
-  if (certificate) {
-    if (!isNaN(Number(certificateId))) {
-      // Redirect from old to new certificate URLs
-      router.push('/certificate/' + certificate.id)
+  if (project) {
+    if (!isNaN(Number(projectId))) {
+      // Redirect from old to new project URLs
+      router.push('/project/' + project.id)
     }
     const isUserAdmin = session?.user.role === 'ADMIN'
-    const certificateBelongsToUser = certificate.author.id === session?.user.id
-    const isActive = certificate.actionEnd > new Date()
+    const projectBelongsToUser = project.author.id === session?.user.id
 
     return (
       <>
         <Head>
-          <title>{certificate.title} – Impact Markets</title>
+          <title>{project.title} – Impact Markets</title>
         </Head>
 
         <div className="divide-y divide-primary">
           <div className="pb-12">
-            {certificate.hidden && (
+            {project.hidden && (
               <Banner className="mb-6">
                 This project will remain hidden until it’s published by the
                 curators.
               </Banner>
             )}
-            {!certificate.author.proofUrl && (
+            {!project.author.proofUrl && (
               <Banner className="mb-6">
-                {certificate.author.id === session?.user.id
+                {project.author.id === session?.user.id
                   ? 'Please enter proof of your identity on your'
                   : 'The author of this project has not yet entered proof of their'}{' '}
-                <Link href={`/profile/${certificate.author.id}`}>
-                  <span className="link">user profile</span>
-                </Link>
-                .
-              </Banner>
-            )}
-            {!certificate.author.paymentUrl && (
-              <Banner className="mb-6">
-                {certificate.author.id === session?.user.id
-                  ? 'Please enter a payment link on your'
-                  : 'The author of this project has not yet entered a payment link on their'}{' '}
-                <Link href={`/profile/${certificate.author.id}`}>
+                <Link href={`/profile/${project.author.id}`}>
                   <span className="link">user profile</span>
                 </Link>
                 .
@@ -149,43 +128,57 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
             )}
 
             <div className="flex items-center justify-between gap-4">
-              <Heading1>{certificate.title}</Heading1>
-              <CertificateMenu
-                queryData={certificate}
+              <Heading1>{project.title}</Heading1>
+              <Menu
+                queryData={project}
                 isUserAdmin={isUserAdmin}
-                certificateBelongsToUser={certificateBelongsToUser}
+                belongsToUser={projectBelongsToUser}
               />
             </div>
             <div className="my-6">
               <AuthorWithDate
-                author={certificate.author}
-                date={certificate.createdAt}
+                author={project.author}
+                date={project.createdAt}
               />
             </div>
-            <div className="my-6">
-              <Tags queryData={certificate} />
+            <div className="flex my-6">
+              {!!(project.actionStart || project.actionEnd) && (
+                <span className="font-bold text-xs border text-primary border-secondary bg-primary px-1 mr-1 rounded">
+                  {project.actionStart && project.actionEnd ? (
+                    <>
+                      Work: {project.actionStart.toISOString().slice(0, 10)} to{' '}
+                      {project.actionEnd.toISOString().slice(0, 10)}
+                    </>
+                  ) : project.actionEnd ? (
+                    <>
+                      Work: until {project.actionEnd.toISOString().slice(0, 10)}
+                    </>
+                  ) : (
+                    <>
+                      Work: since{' '}
+                      {project.actionStart!.toISOString().slice(0, 10)}
+                    </>
+                  )}
+                </span>
+              )}
+              <Tags queryData={project} />
             </div>
-            <div className="my-6">
-              <Ledger certificate={certificate} isActive={isActive} />
-            </div>
-            <HtmlView html={certificate.contentHtml} className="mt-8" />
-            <div className="my-6">
-              <Labels queryData={certificate} />
-            </div>
+            <div className="my-6"></div>
+            <HtmlView html={project.contentHtml} className="mt-8" />
             <div className="flex gap-4 mt-6">
               <LikeButton
                 disabled={!session}
-                likedBy={certificate.likedBy}
+                likedBy={project.likedBy}
                 onLike={() => {
-                  likeMutation.mutate(certificate.id)
+                  likeMutation.mutate(project.id)
                 }}
                 onUnlike={() => {
-                  unlikeMutation.mutate(certificate.id)
+                  unlikeMutation.mutate(project.id)
                 }}
               />
               <CommentButton
-                commentCount={certificate._count.comments}
-                href={`/certificate/${certificate.id}#comments`}
+                commentCount={project._count.comments}
+                href={`/project/${project.id}#comments`}
                 variant="secondary"
                 disabled={!session}
               />
@@ -193,21 +186,18 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
           </div>
 
           <div id="comments" className="pt-12 space-y-12">
-            {certificate.comments.length > 0 && (
+            {project.comments.length > 0 && (
               <ul className="space-y-12">
-                {certificate.comments.map((comment) => (
+                {project.comments.map((comment) => (
                   <li key={comment.id}>
-                    <Comment certificateId={certificate.id} comment={comment} />
+                    <Comment projectId={project.id} comment={comment} />
 
                     <div id="replies" className="pt-12 pl-14 space-y-12">
                       {comment.children.length > 0 && (
                         <ul className="space-y-12">
                           {comment.children.map((reply) => (
                             <li key={reply.id}>
-                              <Comment
-                                certificateId={certificate.id}
-                                comment={reply}
-                              />
+                              <Comment projectId={project.id} comment={reply} />
                             </li>
                           ))}
                         </ul>
@@ -229,7 +219,7 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
                     size="sm"
                   />
                 </span>
-                <AddCommentForm certificateId={certificate.id} />
+                <AddCommentForm projectId={project.id} />
               </div>
             )}
           </div>
@@ -238,8 +228,8 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
     )
   }
 
-  if (certificateQuery.isError) {
-    return <div>Error: {certificateQuery.error.message}</div>
+  if (projectQuery.isError) {
+    return <div>Error: {projectQuery.error.message}</div>
   }
 
   return (
@@ -276,10 +266,8 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
   )
 }
 
-CertificatePageWrapper.getLayout = function getLayout(
-  page: React.ReactElement
-) {
+ProjectPageWrapper.getLayout = function getLayout(page: React.ReactElement) {
   return <Layout>{page}</Layout>
 }
 
-export default CertificatePageWrapper
+export default ProjectPageWrapper

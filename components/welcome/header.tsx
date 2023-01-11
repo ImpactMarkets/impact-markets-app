@@ -99,7 +99,9 @@ export function Landing_Header() {
             size="sm"
           />
           <Link href="/">
-            <Logo className="w-auto h-[64px] cursor-pointer" />
+            <span>
+              <Logo className="w-auto h-[64px] cursor-pointer" />
+            </span>
           </Link>
         </Group>
         <Group spacing={5} className={classes.links}>

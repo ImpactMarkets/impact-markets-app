@@ -1,7 +1,7 @@
 import slugify from 'slugify'
 import { z } from 'zod'
 
-import { CERT_SORT_KEYS, CertSortKey } from '@/lib/constants'
+import { PROJECT_SORT_KEYS, ProjectSortKey } from '@/lib/constants'
 import { markdownToHtml } from '@/lib/editor'
 import { postToSlackIfEnabled } from '@/lib/slack'
 import { Prisma } from '@prisma/client'
@@ -10,7 +10,7 @@ import { TRPCError } from '@trpc/server'
 import { createProtectedRouter } from '../createProtectedRouter'
 
 const getOrderBy = (
-  orderByKey: CertSortKey | undefined
+  orderByKey: ProjectSortKey | undefined
 ):
   | Prisma.Enumerable<Prisma.CertificateOrderByWithRelationAndSearchRelevanceInput>
   | undefined => {
@@ -43,7 +43,7 @@ export const certificateRouter = createProtectedRouter()
         skip: z.number().min(1).optional(),
         authorId: z.string().optional(),
         filterTags: z.string().optional(),
-        orderBy: z.enum(CERT_SORT_KEYS).optional(),
+        orderBy: z.enum(PROJECT_SORT_KEYS).optional(),
       })
       .optional(),
     async resolve({ input, ctx }) {
@@ -118,11 +118,6 @@ export const certificateRouter = createProtectedRouter()
               },
             },
           },
-          _count: {
-            select: {
-              comments: true,
-            },
-          },
         },
       })
 
@@ -153,7 +148,6 @@ export const certificateRouter = createProtectedRouter()
           contentHtml: true,
           createdAt: true,
           hidden: true,
-          attributedImpactVersion: true,
           counterfactual: true,
           location: true,
           rights: true,
@@ -194,51 +188,8 @@ export const certificateRouter = createProtectedRouter()
               },
             },
           },
-          comments: {
-            where: {
-              parentId: null,
-            },
-            orderBy: {
-              createdAt: 'asc',
-            },
-            select: {
-              id: true,
-              content: true,
-              contentHtml: true,
-              createdAt: true,
-              author: {
-                select: {
-                  id: true,
-                  name: true,
-                  image: true,
-                },
-              },
-              parent: true,
-              children: {
-                orderBy: {
-                  createdAt: 'asc',
-                },
-                select: {
-                  id: true,
-                  certificateId: true,
-                  content: true,
-                  contentHtml: true,
-                  createdAt: true,
-                  author: {
-                    select: {
-                      id: true,
-                      name: true,
-                      image: true,
-                    },
-                  },
-                  parent: true,
-                },
-              },
-            },
-          },
           _count: {
             select: {
-              comments: true,
               likedBy: true,
             },
           },
@@ -290,7 +241,6 @@ export const certificateRouter = createProtectedRouter()
       id: z.string().min(1),
       title: z.string().min(1),
       content: z.string().min(1),
-      attributedImpactVersion: z.string().min(1),
       counterfactual: z.string(),
       location: z.string(),
       rights: z.string(),
@@ -308,7 +258,6 @@ export const certificateRouter = createProtectedRouter()
           title: input.title,
           content: input.content,
           contentHtml: markdownToHtml(input.content),
-          attributedImpactVersion: input.attributedImpactVersion,
           counterfactual: input.counterfactual,
           location: input.location,
           rights: 'RETROACTIVE_FUNDING',
@@ -360,7 +309,6 @@ export const certificateRouter = createProtectedRouter()
       data: z.object({
         title: z.string().min(1),
         content: z.string().min(1),
-        attributedImpactVersion: z.string().min(1),
         counterfactual: z.string(),
         location: z.string(),
         rights: z.string(),
@@ -378,7 +326,6 @@ export const certificateRouter = createProtectedRouter()
           title: data.title,
           content: data.content,
           contentHtml: markdownToHtml(data.content),
-          attributedImpactVersion: data.attributedImpactVersion,
           counterfactual: data.counterfactual,
           location: data.location,
           rights: 'RETROACTIVE_FUNDING',
@@ -386,11 +333,14 @@ export const certificateRouter = createProtectedRouter()
           actionEnd: data.actionEnd,
           tags: data.tags,
         },
+        include: {
+          author: true,
+        },
       })
 
       const issuerEmails = input.data.issuerEmails
         .split(',')
-        .concat([ctx.session!.user.email])
+        .concat([updatedCertificate.author.email || ''])
       // Delete all existing certificateIssuer associations for this certificate, and create
       // new ones based on the input
       const issuers = await ctx.prisma.user.findMany({

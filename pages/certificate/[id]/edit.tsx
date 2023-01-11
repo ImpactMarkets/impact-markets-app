@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 
-import { CertificateForm } from '@/components/certificateForm'
+import { CertificateForm } from '@/components/certificate/form'
 import { Heading1 } from '@/components/heading1'
 import { Layout } from '@/components/layout'
 import { trpc } from '@/lib/trpc'
@@ -44,8 +44,6 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
                   title: certificateQuery.data.title,
                   content: certificateQuery.data.content,
                   counterfactual: certificateQuery.data.counterfactual,
-                  attributedImpactVersion:
-                    certificateQuery.data.attributedImpactVersion,
                   location: certificateQuery.data.location || '',
                   rights: certificateQuery.data.rights,
                   actionStart: certificateQuery.data.actionStart
@@ -70,7 +68,6 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
                         title: values.title,
                         content: values.content,
                         counterfactual: values.counterfactual,
-                        attributedImpactVersion: values.attributedImpactVersion,
                         location: values.location || '',
                         rights: values.rights,
                         actionStart: new Date(values.actionStart),

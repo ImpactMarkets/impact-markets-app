@@ -22,19 +22,17 @@ import {
 } from '@/components/menu'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
 
-import { getCertificateQueryPathAndInput } from './utils'
+import { getCertificateQueryPathAndInput } from '../utils'
 
-type CertificateMenuProps = {
-  queryData: InferQueryOutput<'certificate.detail'>
+type MenuProps = {
+  queryData:
+    | InferQueryOutput<'certificate.detail'>
+    | InferQueryOutput<'project.detail'>
   isUserAdmin: boolean
-  certificateBelongsToUser: boolean
+  belongsToUser: boolean
 }
 
-export const CertificateMenu = ({
-  queryData,
-  isUserAdmin,
-  certificateBelongsToUser,
-}: CertificateMenuProps) => {
+export const Menu = ({ queryData, isUserAdmin, belongsToUser }: MenuProps) => {
   const router = useRouter()
 
   const [isConfirmHideDialogOpen, setIsConfirmHideDialogOpen] =
@@ -51,10 +49,10 @@ export const CertificateMenu = ({
   }
 
   function handleEdit() {
-    router.push(`/certificate/${queryData?.id}/edit`)
+    router.push(`${router.asPath}/edit`)
   }
 
-  if (!(certificateBelongsToUser || isUserAdmin)) {
+  if (!(belongsToUser || isUserAdmin)) {
     return null
   }
 
@@ -74,7 +72,7 @@ export const CertificateMenu = ({
                 ) : (
                   <MenuItemButton onClick={handleHide}>Hide</MenuItemButton>
                 ))}
-              {(isUserAdmin || certificateBelongsToUser) && (
+              {(isUserAdmin || belongsToUser) && (
                 <MenuItemButton onClick={handleEdit}>Edit</MenuItemButton>
               )}
             </MenuItemsContent>
@@ -96,7 +94,7 @@ export const CertificateMenu = ({
               <EyeClosedIcon className="w-4 h-4" />
             </IconButton>
           ))}
-        {(isUserAdmin || certificateBelongsToUser) && (
+        {(isUserAdmin || belongsToUser) && (
           <IconButton variant="secondary" title="Edit" onClick={handleEdit}>
             <EditIcon className="w-4 h-4" />
           </IconButton>

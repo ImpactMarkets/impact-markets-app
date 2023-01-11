@@ -20,9 +20,10 @@ CREATE TABLE "Project" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "authorId" TEXT NOT NULL,
-    "actionStart" TIMESTAMP(3) NOT NULL,
+    "actionStart" TIMESTAMP(3),
     "actionEnd" TIMESTAMP(3),
     "tags" TEXT,
+    "paymentUrl" TEXT NOT NULL DEFAULT '',
     CONSTRAINT "Project_pkey" PRIMARY KEY ("id")
 );
 

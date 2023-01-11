@@ -3,15 +3,13 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 
-import { CertificateForm } from '@/components/certificateForm'
+import { CertificateForm } from '@/components/certificate/form'
 import { Heading1 } from '@/components/heading1'
 import { Layout } from '@/components/layout'
 import { DEFAULT_TARGET, DEFAULT_VALUATION } from '@/lib/constants'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { Prisma } from '@prisma/client'
-
-const ATTRIBUTED_IMPACT_RECOMMENDED_VERSION = '0.3'
 
 const NewCertificatePage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
@@ -40,7 +38,6 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
             counterfactual: '',
             location: '',
             rights: '',
-            attributedImpactVersion: ATTRIBUTED_IMPACT_RECOMMENDED_VERSION,
             actionStart: new Date().toISOString().slice(0, 10),
             actionEnd: new Date(new Date().getTime() + 1000 * 60 * 60 * 24)
               .toISOString()
@@ -58,7 +55,6 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
                 title: values.title,
                 content: values.content,
                 counterfactual: values.counterfactual,
-                attributedImpactVersion: values.attributedImpactVersion,
                 location: values.location || '',
                 rights: 'RETROACTIVE_FUNDING',
                 actionStart: new Date(values.actionStart),

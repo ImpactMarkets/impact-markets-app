@@ -114,9 +114,10 @@ model Project {
   authorId    String
   likedBy     LikedProject[]
   comments    Comment[]
-  actionStart DateTime
+  actionStart DateTime?
   actionEnd   DateTime?
   tags        String?
+  paymentUrl  String         @default("")
 
   author       User          @relation(fields: [authorId], references: [id], onDelete: Restrict)
   donations    Donation[]

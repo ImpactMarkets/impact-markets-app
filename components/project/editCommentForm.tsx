@@ -6,25 +6,28 @@ import { Button } from '@/components/button'
 import { MarkdownEditor } from '@/components/markdownEditor'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
 
-import { CommentFormData, getCertificateQueryPathAndInput } from './utils'
+import { CommentFormData } from '../utils'
 
 export function EditCommentForm({
-  certificateId,
+  projectId,
   comment,
   onDone,
 }: {
-  certificateId: string
+  projectId: string
   comment:
-    | InferQueryOutput<'certificate.detail'>['comments'][number]
-    | InferQueryOutput<'certificate.detail'>['comments'][number]['children'][number]
+    | InferQueryOutput<'project.detail'>['comments'][number]
+    | InferQueryOutput<'project.detail'>['comments'][number]['children'][number]
   onDone: () => void
 }) {
   const utils = trpc.useContext()
   const editCommentMutation = trpc.useMutation('comment.edit', {
     onSuccess: () => {
-      return utils.invalidateQueries(
-        getCertificateQueryPathAndInput(certificateId)
-      )
+      return utils.invalidateQueries([
+        'project.detail',
+        {
+          id: projectId,
+        },
+      ])
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)

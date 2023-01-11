@@ -3,85 +3,74 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 
-import { CertificateForm } from '@/components/certificateForm'
 import { Heading1 } from '@/components/heading1'
 import { Layout } from '@/components/layout'
+import { ProjectForm } from '@/components/project/form'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
-const EditCertificatePage: NextPageWithAuthAndLayout = () => {
+const EditProjectPage: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()
   const router = useRouter()
-  const certificateQuery = trpc.useQuery([
-    'certificate.detail',
+  const projectQuery = trpc.useQuery([
+    'project.detail',
     { id: String(router.query.id) },
   ])
-  const editCertificateMutation = trpc.useMutation('certificate.edit', {
+  const editProjectMutation = trpc.useMutation('project.edit', {
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
     },
   })
 
-  if (certificateQuery.data) {
-    const certificateBelongsToUser =
-      certificateQuery.data.author.id === session!.user.id
+  if (projectQuery.data) {
+    const projectBelongsToUser =
+      projectQuery.data.author.id === session!.user.id
 
     return (
       <>
         <Head>
-          <title>Edit {certificateQuery.data.title} – Impact Markets</title>
+          <title>Edit {projectQuery.data.title} – Impact Markets</title>
         </Head>
 
-        {session!.user.role === 'ADMIN' || certificateBelongsToUser ? (
+        {session!.user.role === 'ADMIN' || projectBelongsToUser ? (
           <>
-            <Heading1>Edit “{certificateQuery.data.title}”</Heading1>
+            <Heading1>Edit “{projectQuery.data.title}”</Heading1>
 
             <div className="mt-6">
-              <CertificateForm
-                isSubmitting={editCertificateMutation.isLoading}
+              <ProjectForm
+                isSubmitting={editProjectMutation.isLoading}
                 defaultValues={{
-                  id: certificateQuery.data.id,
-                  title: certificateQuery.data.title,
-                  content: certificateQuery.data.content,
-                  counterfactual: certificateQuery.data.counterfactual,
-                  attributedImpactVersion:
-                    certificateQuery.data.attributedImpactVersion,
-                  location: certificateQuery.data.location || '',
-                  rights: certificateQuery.data.rights,
-                  actionStart: certificateQuery.data.actionStart
-                    .toISOString()
-                    .slice(0, 10),
-                  actionEnd: certificateQuery.data.actionEnd
-                    .toISOString()
-                    .slice(0, 10),
-                  issuerEmails:
-                    certificateQuery.data.issuers
-                      .map((certficateIssuer) => certficateIssuer.user.email)
-                      .filter((x) => x)
-                      .join(',') || '',
-                  tags: certificateQuery.data.tags || '',
+                  id: projectQuery.data.id,
+                  title: projectQuery.data.title,
+                  content: projectQuery.data.content,
+                  actionStart: projectQuery.data.actionStart
+                    ? projectQuery.data.actionStart.toISOString().slice(0, 10)
+                    : undefined,
+                  actionEnd: projectQuery.data.actionEnd
+                    ? projectQuery.data.actionEnd.toISOString().slice(0, 10)
+                    : undefined,
+                  tags: projectQuery.data.tags || '',
                 }}
-                backTo={`/certificate/${certificateQuery.data.id}`}
+                backTo={`/project/${projectQuery.data.id}`}
                 onSubmit={(values) => {
-                  editCertificateMutation.mutate(
+                  editProjectMutation.mutate(
                     {
-                      id: certificateQuery.data.id,
+                      id: projectQuery.data.id,
                       data: {
                         title: values.title,
                         content: values.content,
-                        counterfactual: values.counterfactual,
-                        attributedImpactVersion: values.attributedImpactVersion,
-                        location: values.location || '',
-                        rights: values.rights,
-                        actionStart: new Date(values.actionStart),
-                        actionEnd: new Date(values.actionEnd),
-                        issuerEmails: values.issuerEmails,
+                        actionStart: values.actionStart
+                          ? new Date(values.actionStart)
+                          : null,
+                        actionEnd: values.actionEnd
+                          ? new Date(values.actionEnd)
+                          : null,
                         tags: values.tags,
                       },
                     },
                     {
                       onSuccess: () =>
-                        router.push(`/certificate/${certificateQuery.data.id}`),
+                        router.push(`/project/${projectQuery.data.id}`),
                     }
                   )
                 }}
@@ -89,14 +78,14 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
             </div>
           </>
         ) : (
-          <div>You don&apos;t have permissions to edit this certificate.</div>
+          <div>You don&apos;t have permissions to edit this project.</div>
         )}
       </>
     )
   }
 
-  if (certificateQuery.isError) {
-    return <div>Error: {certificateQuery.error.message}</div>
+  if (projectQuery.isError) {
+    return <div>Error: {projectQuery.error.message}</div>
   }
 
   return (
@@ -121,10 +110,10 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
   )
 }
 
-EditCertificatePage.auth = true
+EditProjectPage.auth = true
 
-EditCertificatePage.getLayout = function getLayout(page: React.ReactElement) {
+EditProjectPage.getLayout = function getLayout(page: React.ReactElement) {
   return <Layout>{page}</Layout>
 }
 
-export default EditCertificatePage
+export default EditProjectPage

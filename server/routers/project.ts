@@ -1,29 +1,23 @@
 import slugify from 'slugify'
 import { z } from 'zod'
 
-import { CERT_SORT_KEYS, CertSortKey } from '@/lib/constants'
+import { PROJECT_SORT_KEYS, ProjectSortKey } from '@/lib/constants'
 import { markdownToHtml } from '@/lib/editor'
-import { postToSlackIfEnabled } from '@/lib/slack'
 import { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
 import { createProtectedRouter } from '../createProtectedRouter'
 
 const getOrderBy = (
-  orderByKey: CertSortKey | undefined
+  orderByKey: ProjectSortKey | undefined
 ):
-  | Prisma.Enumerable<Prisma.projectOrderByWithRelationAndSearchRelevanceInput>
+  | Prisma.Enumerable<Prisma.ProjectOrderByWithRelationAndSearchRelevanceInput>
   | undefined => {
   const orderOptions = {
     actionStart: { actionStart: Prisma.SortOrder.desc },
     actionEnd: { actionEnd: Prisma.SortOrder.desc },
     supporterCount: {
-      holdings: {
-        // Sadly not supported:
-        // where: {
-        //   size: { gt: 0 },
-        //   type: { in: ['OWNERSHIP', 'CONSUMPTION'] },
-        // },
+      donations: {
         _count: Prisma.SortOrder.desc,
       },
     },
@@ -43,13 +37,13 @@ export const projectRouter = createProtectedRouter()
         skip: z.number().min(1).optional(),
         authorId: z.string().optional(),
         filterTags: z.string().optional(),
-        orderBy: z.enum(CERT_SORT_KEYS).optional(),
+        orderBy: z.enum(PROJECT_SORT_KEYS).optional(),
       })
       .optional(),
     async resolve({ input, ctx }) {
       const take = input?.take ?? 50
       const skip = input?.skip
-      const baseQuery: Array<Prisma.projectWhereInput> | undefined =
+      const baseQuery: Array<Prisma.ProjectWhereInput> | undefined =
         ctx.session?.user.role === 'ADMIN'
           ? undefined
           : [{ hidden: false }, { authorId: ctx.session?.user.id }]
@@ -84,26 +78,13 @@ export const projectRouter = createProtectedRouter()
               image: true,
             },
           },
-          issuers: {
-            select: {
-              user: {
-                select: {
-                  id: true,
-                  name: true,
-                  image: true,
-                },
-              },
-            },
-          },
-          holdings: {
+          donations: {
             select: {
               id: true,
-              type: true,
-              size: true,
+              time: true,
+              amount: true,
               user: true,
-              sellTransactions: { where: { state: 'PENDING' } },
             },
-            where: { size: { gt: 0 } },
           },
           likedBy: {
             orderBy: {
@@ -143,20 +124,14 @@ export const projectRouter = createProtectedRouter()
     async resolve({ ctx, input }) {
       const { id } = input
       const project = await ctx.prisma.project.findUnique({
-        // For the redirect from old to new project URLs
-        where: isNaN(Number(id)) ? { id } : { oldId: Number(id) },
+        where: { id },
         select: {
           id: true,
-          oldId: true,
           title: true,
           content: true,
           contentHtml: true,
           createdAt: true,
           hidden: true,
-          attributedImpactVersion: true,
-          counterfactual: true,
-          location: true,
-          rights: true,
           actionStart: true,
           actionEnd: true,
           tags: true,
@@ -167,18 +142,6 @@ export const projectRouter = createProtectedRouter()
               image: true,
               paymentUrl: true,
               proofUrl: true,
-            },
-          },
-          issuers: {
-            select: {
-              user: {
-                select: {
-                  id: true,
-                  name: true,
-                  image: true,
-                  email: true,
-                },
-              },
             },
           },
           likedBy: {
@@ -245,6 +208,7 @@ export const projectRouter = createProtectedRouter()
         },
       })
 
+      // Move to permissions middleware
       const projectBelongsToUser = project?.author.id === ctx.session?.user.id
 
       if (
@@ -289,16 +253,9 @@ export const projectRouter = createProtectedRouter()
       id: z.string().min(1),
       title: z.string().min(1),
       content: z.string().min(1),
-      attributedImpactVersion: z.string().min(1),
-      counterfactual: z.string(),
-      location: z.string(),
-      rights: z.string(),
-      actionStart: z.date(),
-      actionEnd: z.date(),
+      actionStart: z.date().nullable(),
+      actionEnd: z.date().nullable(),
       tags: z.string(),
-      issuerEmails: z.string(),
-      valuation: z.instanceof(Prisma.Decimal),
-      target: z.instanceof(Prisma.Decimal),
     }),
     async resolve({ ctx, input }) {
       const project = await ctx.prisma.project.create({
@@ -307,10 +264,6 @@ export const projectRouter = createProtectedRouter()
           title: input.title,
           content: input.content,
           contentHtml: markdownToHtml(input.content),
-          attributedImpactVersion: input.attributedImpactVersion,
-          counterfactual: input.counterfactual,
-          location: input.location,
-          rights: 'RETROACTIVE_FUNDING',
           actionStart: input.actionStart,
           actionEnd: input.actionEnd,
           tags: input.tags,
@@ -321,35 +274,6 @@ export const projectRouter = createProtectedRouter()
           },
         },
       })
-      await ctx.prisma.holding.create({
-        data: {
-          projectId: project.id,
-          userId: ctx.session!.user.id,
-          type: 'OWNERSHIP',
-          size: 1,
-          cost: 0,
-          valuation: input.valuation,
-          target: input.target,
-        },
-      })
-      const issuerEmails = input.issuerEmails
-        .split(',')
-        .concat([ctx.session!.user.email])
-      const issuers = await ctx.prisma.user.findMany({
-        where: { email: { in: issuerEmails } },
-      })
-      await ctx.prisma.projectIssuer.createMany({
-        data: issuers.map((issuer) => {
-          return { projectId: project.id, userId: issuer.id }
-        }),
-        skipDuplicates: true,
-      })
-
-      await postToSlackIfEnabled({
-        project,
-        authorName: ctx.session!.user.name,
-      })
-
       return project
     },
   })
@@ -359,13 +283,8 @@ export const projectRouter = createProtectedRouter()
       data: z.object({
         title: z.string().min(1),
         content: z.string().min(1),
-        attributedImpactVersion: z.string().min(1),
-        counterfactual: z.string(),
-        location: z.string(),
-        rights: z.string(),
-        actionStart: z.date(),
-        actionEnd: z.date(),
-        issuerEmails: z.string(),
+        actionStart: z.date().nullable(),
+        actionEnd: z.date().nullable(),
         tags: z.string(),
       }),
     }),
@@ -377,35 +296,11 @@ export const projectRouter = createProtectedRouter()
           title: data.title,
           content: data.content,
           contentHtml: markdownToHtml(data.content),
-          attributedImpactVersion: data.attributedImpactVersion,
-          counterfactual: data.counterfactual,
-          location: data.location,
-          rights: 'RETROACTIVE_FUNDING',
           actionStart: data.actionStart,
           actionEnd: data.actionEnd,
           tags: data.tags,
         },
       })
-
-      const issuerEmails = input.data.issuerEmails
-        .split(',')
-        .concat([ctx.session!.user.email])
-      // Delete all existing projectIssuer associations for this project, and create
-      // new ones based on the input
-      const issuers = await ctx.prisma.user.findMany({
-        where: { email: { in: issuerEmails } },
-      })
-      ctx.prisma.$transaction([
-        ctx.prisma.projectIssuer.deleteMany({
-          where: { projectId: updatedproject.id },
-        }),
-        ctx.prisma.projectIssuer.createMany({
-          data: issuers.map((issuer) => {
-            return { projectId: updatedproject.id, userId: issuer.id }
-          }),
-          skipDuplicates: true,
-        }),
-      ])
 
       return updatedproject
     },
@@ -413,7 +308,7 @@ export const projectRouter = createProtectedRouter()
   .mutation('like', {
     input: z.string().min(1),
     async resolve({ input: id, ctx }) {
-      await ctx.prisma.likedproject.create({
+      await ctx.prisma.likedProject.create({
         data: {
           project: {
             connect: {
@@ -434,7 +329,7 @@ export const projectRouter = createProtectedRouter()
   .mutation('unlike', {
     input: z.string().min(1),
     async resolve({ input: id, ctx }) {
-      await ctx.prisma.likedproject.delete({
+      await ctx.prisma.likedProject.delete({
         where: {
           projectId_userId: {
             projectId: id,

@@ -6,28 +6,28 @@ import { Button } from '@/components/button'
 import { MarkdownEditor } from '@/components/markdownEditor'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
 
-import {
-  CommentFormData,
-  getCertificateQueryPathAndInput,
-} from '../certificate/utils'
+import { CommentFormData } from '../utils'
 
 export function AddReplyForm({
-  certificateId,
+  projectId,
   parent,
   onDone,
 }: {
-  certificateId: string
+  projectId: string
   parent:
-    | InferQueryOutput<'certificate.detail'>['comments'][number]
-    | InferQueryOutput<'certificate.detail'>['comments'][number]['children'][number]
+    | InferQueryOutput<'project.detail'>['comments'][number]
+    | InferQueryOutput<'project.detail'>['comments'][number]['children'][number]
   onDone: () => void
 }) {
   const utils = trpc.useContext()
   const addReplyMutation = trpc.useMutation('comment.add', {
     onSuccess: () => {
-      return utils.invalidateQueries(
-        getCertificateQueryPathAndInput(certificateId)
-      )
+      return utils.invalidateQueries([
+        'project.detail',
+        {
+          id: projectId,
+        },
+      ])
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
@@ -38,7 +38,7 @@ export function AddReplyForm({
   const onSubmit: SubmitHandler<CommentFormData> = (data) => {
     addReplyMutation.mutate(
       {
-        certificateId,
+        projectId,
         content: data.content,
         parentId: parent?.id,
       },

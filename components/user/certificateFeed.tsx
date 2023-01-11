@@ -2,14 +2,14 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
-import type { CertificateSummaryProps } from '@/components/certificateSummary'
+import type { CertificateSummaryProps } from '@/components/certificate/summary'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
-import { CertificateSummarySkeleton } from '@/components/summarySkeleton'
+import { SummarySkeleton } from '@/components/summarySkeleton'
 import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc'
 
 const CertificateSummary = dynamic<CertificateSummaryProps>(
   () =>
-    import('@/components/certificateSummary').then(
+    import('@/components/certificate/summary').then(
       (mod) => mod.CertificateSummary
     ),
   { ssr: false }
@@ -71,7 +71,7 @@ export function CertificateFeed({
       <ul className="-my-12 divide-y divide-primary">
         {[...Array(3)].map((_, idx) => (
           <li key={idx} className="py-10">
-            <CertificateSummarySkeleton />
+            <SummarySkeleton />
           </li>
         ))}
       </ul>
