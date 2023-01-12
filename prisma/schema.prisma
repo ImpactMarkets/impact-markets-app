@@ -86,6 +86,7 @@ model User {
   paymentUrl        String    @default("")
   // This should only change the interface but not anything functionally
   prefersDetailView Boolean   @default(false)
+  prefersAnonymity  Boolean   @default(false)
 
   accounts           Account[]
   certificates       Certificate[]
