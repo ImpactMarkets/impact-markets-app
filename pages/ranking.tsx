@@ -41,7 +41,9 @@ const Ranking: NextPageWithAuthAndLayout = () => {
                       <td className="w-64">
                         <Author author={user} />
                       </td>
-                      <td className="text-right">{num(user.credits, 0)}</td>
+                      <td className="text-right">
+                        {num(user.totalCredits, 0)}
+                      </td>
                       <td className="w-10 text-right">
                         {index < 3 && (
                           <IconTrophy
