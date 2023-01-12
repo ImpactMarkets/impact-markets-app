@@ -3,7 +3,7 @@ import { sortBy } from 'lodash/fp'
 import { InferQueryPathAndInput } from '@/lib/trpc'
 import { Author } from '@/lib/types'
 
-export default function refreshSession() {
+export function refreshSession() {
   const event = new Event('visibilitychange')
   document.dispatchEvent(event)
 }
