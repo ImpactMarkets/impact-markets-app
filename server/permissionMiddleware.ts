@@ -54,6 +54,32 @@ export const permissionMiddleware: MiddlewareFunction = async ({
     return project?.authorId === ctx.session!.user.id
   }
 
+  const donationBelongsToUser = async () => {
+    const id = <number>rawInput
+    const donation = await ctx.prisma.donation.findUnique({
+      where: { id },
+      select: {
+        userId: true,
+      },
+    })
+    return donation?.userId === ctx.session!.user.id
+  }
+
+  const donationProjectBelongsToUser = async () => {
+    const id = <number>rawInput
+    const donation = await ctx.prisma.donation.findUnique({
+      where: { id },
+      select: {
+        project: {
+          select: {
+            authorId: true,
+          },
+        },
+      },
+    })
+    return donation?.project.authorId === ctx.session!.user.id
+  }
+
   const commentBelongsToUser = async () => {
     interface commentInput {
       id: number
@@ -143,6 +169,13 @@ export const permissionMiddleware: MiddlewareFunction = async ({
     'holding.feed': () => true,
     'holding.edit': () =>
       isAuthenticated() && (isAdmin() || holdingBelongsToUser()),
+    'donation.feed': isAuthenticated,
+    'donation.add': isAuthenticated,
+    'donation.confirm': () =>
+      isAuthenticated() && (isAdmin() || donationProjectBelongsToUser()),
+    'donation.cancel': () =>
+      isAuthenticated() &&
+      (isAdmin() || donationProjectBelongsToUser() || donationBelongsToUser()),
     'transaction.feed': isAuthenticated,
     'transaction.add': isAuthenticated,
     'transaction.confirm': () =>
@@ -152,7 +185,7 @@ export const permissionMiddleware: MiddlewareFunction = async ({
       (isAdmin() ||
         buyingHoldingBelongsToUser() ||
         sellingHoldingBelongsToUser()),
-    'user.ranking': () => true,
+    'user.topDonors': () => true,
     'user.profile': () => true,
     'user.edit': isAuthenticated, // Always edits the same user
     'user.update-avatar': isAuthenticated, // Always edits the same user

@@ -14,11 +14,13 @@ import { Layout } from '@/components/layout'
 import { LikeButton } from '@/components/likeButton'
 import { AddCommentForm } from '@/components/project/addCommentForm'
 import { Comment } from '@/components/project/comment'
+import { IncomingDonations } from '@/components/project/incomingDonations'
+import { OutgoingDonations } from '@/components/project/outgoingDonations'
 import { Menu } from '@/components/projectAndCertificate/menu'
 import { Tags } from '@/components/tags'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
-import { LoadingOverlay } from '@mantine/core'
+import { LoadingOverlay, Tabs } from '@mantine/core'
 import { IconCreditCard, IconCreditCardOff } from '@tabler/icons'
 
 // TODO: Maybe this could be made into a generic component ?
@@ -46,6 +48,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
   ]
   const projectQuery = trpc.useQuery(projectQueryPathAndInput)
   const project = projectQuery.data
+
   const likeMutation = trpc.useMutation(['project.like'], {
     onMutate: async () => {
       await utils.cancelQuery(projectQueryPathAndInput)
@@ -139,7 +142,16 @@ function ProjectPage({ projectId }: { projectId: string }) {
             <div className="flex justify-between my-6">
               <AuthorWithDate
                 author={project.author}
-                date={project.createdAt}
+                date={
+                  project.actionEnd ?? project.actionStart ?? project.createdAt
+                }
+                dateLabel={
+                  project.actionEnd
+                    ? 'Completed'
+                    : project.actionStart
+                    ? 'Started'
+                    : 'Created'
+                }
               />
               {project.paymentUrl ? (
                 <a
@@ -151,7 +163,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
                   <IconCreditCard className="inline" /> Accepting donations
                 </a>
               ) : (
-                <span>
+                <span className="text-sm text-secondary whitespace-nowrap">
                   <IconCreditCardOff className="inline" /> Not accepting
                   donations
                 </span>
@@ -159,27 +171,40 @@ function ProjectPage({ projectId }: { projectId: string }) {
             </div>
             <div className="flex my-6">
               <Tags queryData={project} />
-              {!!(project.actionStart || project.actionEnd) && (
-                <span className="font-bold text-xs border text-primary border-secondary bg-primary px-1 ml-1 rounded">
-                  {project.actionStart && project.actionEnd ? (
-                    <>
-                      Work: {project.actionStart.toISOString().slice(0, 10)} to{' '}
-                      {project.actionEnd.toISOString().slice(0, 10)}
-                    </>
-                  ) : project.actionEnd ? (
-                    <>
-                      Work: until {project.actionEnd.toISOString().slice(0, 10)}
-                    </>
-                  ) : (
-                    <>
-                      Work: since{' '}
-                      {project.actionStart!.toISOString().slice(0, 10)}
-                    </>
-                  )}
-                </span>
-              )}
             </div>
-            <div className="my-6"></div>
+            <div className="my-6">
+              <Tabs
+                defaultValue={
+                  projectBelongsToUser
+                    ? 'incomingDonations'
+                    : 'outgoingDonations'
+                }
+              >
+                <Tabs.List>
+                  {session && (
+                    <Tabs.Tab value="outgoingDonations">
+                      Register a donation
+                    </Tabs.Tab>
+                  )}
+                  {projectBelongsToUser && (
+                    <Tabs.Tab value="incomingDonations">
+                      Incoming donations
+                    </Tabs.Tab>
+                  )}
+                </Tabs.List>
+
+                {session && (
+                  <Tabs.Panel value="outgoingDonations" pt="xs">
+                    <OutgoingDonations project={project} />
+                  </Tabs.Panel>
+                )}
+                {projectBelongsToUser && (
+                  <Tabs.Panel value="incomingDonations" pt="xs">
+                    <IncomingDonations project={project} />
+                  </Tabs.Panel>
+                )}
+              </Tabs>
+            </div>
             <HtmlView html={project.contentHtml} className="mt-8" />
             <div className="flex gap-4 mt-6">
               <LikeButton
