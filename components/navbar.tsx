@@ -4,8 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import { browserEnv } from '@/env/browser'
-import { trpc } from '@/lib/trpc'
-import { Navbar as MantineNavbar, Switch, createStyles } from '@mantine/core'
+import { Navbar as MantineNavbar, createStyles } from '@mantine/core'
 import {
   IconBolt,
   IconBuildingStore,
@@ -16,7 +15,6 @@ import {
 } from '@tabler/icons'
 
 import { User } from './user'
-import refreshSession from './utils'
 
 mixpanel.init(browserEnv.NEXT_PUBLIC_MIXPANEL_TOKEN, {
   debug: browserEnv.NEXT_PUBLIC_DEBUG,
@@ -108,10 +106,6 @@ export function Navbar({ hidden }: NavbarProps) {
   const { classes, cx } = useStyles()
   const router = useRouter()
 
-  const preferencesMutation = trpc.useMutation(['user.preferences'], {
-    onSuccess: refreshSession,
-  })
-
   const links = data.map((item) => (
     <Link href={item.link} key={item.label}>
       <div
@@ -137,22 +131,6 @@ export function Navbar({ hidden }: NavbarProps) {
     </Link>
   ))
 
-  let preferences = null
-  if (session) {
-    preferences = (
-      <Switch
-        label="Detail view"
-        classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
-        checked={session.user.prefersDetailView}
-        onChange={(event) => {
-          preferencesMutation.mutate({
-            prefersDetailView: event.target.checked,
-          })
-        }}
-      />
-    )
-  }
-
   return (
     <MantineNavbar
       classNames={{ root: 'w-[250px] z-[5]' }}
@@ -163,7 +141,6 @@ export function Navbar({ hidden }: NavbarProps) {
     >
       <MantineNavbar.Section grow className="m-4">
         {links}
-        <div className="mt-4">{preferences}</div>
       </MantineNavbar.Section>
       <MantineNavbar.Section>
         <User />
