@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
 import { num } from '@/lib/text'
-import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc'
+import { InferQueryOutput, trpc } from '@/lib/trpc'
 import { Prisma } from '@prisma/client'
 
 import { Button } from '../button'
