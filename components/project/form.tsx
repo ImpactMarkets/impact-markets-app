@@ -8,7 +8,7 @@ import { MarkdownIcon } from '@/components/icons'
 import { MarkdownEditor } from '@/components/markdownEditor'
 import { TextField } from '@/components/textField'
 import { TAGS } from '@/lib/tags'
-import { Accordion, SimpleGrid, Switch } from '@mantine/core'
+import { SimpleGrid } from '@mantine/core'
 
 import { IMMultiSelect } from '../multiSelect'
 
