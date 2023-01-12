@@ -9,7 +9,7 @@ import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { IconTrophy } from '@tabler/icons'
 
 const Ranking: NextPageWithAuthAndLayout = () => {
-  const rankingQuery = trpc.useQuery(['user.ranking'])
+  const rankingQuery = trpc.useQuery(['user.topDonors'])
 
   if (rankingQuery.data) {
     return (
