@@ -34,6 +34,12 @@ enum TransactionState {
   REJECTED
 }
 
+enum DonationState {
+  PENDING
+  CONFIRMED
+  REJECTED
+}
+
 model Account {
   id                       String  @id @default(cuid())
   userId                   String
@@ -218,11 +224,12 @@ model Holding {
 }
 
 model Donation {
-  id        Int      @id @default(autoincrement())
+  id        Int           @id @default(autoincrement())
   time      DateTime
   amount    Decimal
   projectId String
   userId    String
+  state     DonationState @default(PENDING)
 
   user    User    @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Cascade)
   project Project @relation(fields: [projectId], references: [id])
