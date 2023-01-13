@@ -7,8 +7,8 @@ import { createProtectedRouter } from '../createProtectedRouter'
 export const donationRouter = createProtectedRouter()
   .query('feed', {
     input: z.object({
-      userId: z.string(),
       projectId: z.string(),
+      userId: z.string().optional(),
       state: z.nativeEnum(DonationState).optional(),
     }),
     async resolve({ input, ctx }) {
@@ -18,6 +18,7 @@ export const donationRouter = createProtectedRouter()
         },
         where: {
           projectId: input.projectId,
+          userId: input.userId || undefined,
           state: input.state || undefined,
           OR: [
             { state: 'CONFIRMED' },

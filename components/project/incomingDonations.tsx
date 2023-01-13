@@ -21,7 +21,6 @@ export function IncomingDonations({
       'donation.feed',
       {
         projectId: project.id,
-        userId: session!.user.id,
         state: 'PENDING',
       },
     ])
