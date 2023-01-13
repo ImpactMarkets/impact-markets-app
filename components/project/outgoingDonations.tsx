@@ -25,6 +25,7 @@ export function OutgoingDonations({
   const { data: session } = useSession()
   const utils = trpc.useContext()
   const { register, handleSubmit } = useForm<AddDonationFormData>({
+    mode: 'onSubmit',
     defaultValues: {
       time: new Date().toISOString().slice(0, 10),
       projectId: project.id,
@@ -74,30 +75,22 @@ export function OutgoingDonations({
     })
   }
 
-  // Fresh keys to force re-mounting of the dialogs
-  // https://stackoverflow.com/a/66772917/678861
-  const [childKey, setChildKey] = React.useState(1)
-  React.useEffect(() => {
-    setChildKey((prev) => prev + 1)
-  }, [donations?.length])
-
   return (
     <div className="flex justify-center">
       <form onSubmit={handleSubmit(onSubmit)}>
         <table className="text-sm">
           <thead>
             <tr>
-              <th className="text-left w-32">Date</th>
+              <th className="text-right w-32">Date</th>
               <th className="text-right w-32">Amount</th>
-              <th className="text-left w-64"></th>
+              <th className="text-right w-64"></th>
             </tr>
           </thead>
           <tbody>
-            <tr key={childKey}>
+            <tr>
               <td className="py-4">
                 <TextField
                   {...register('time', { required: true, valueAsDate: true })}
-                  defaultValue={new Date().toISOString().slice(0, 10)}
                   type="date"
                   required
                 />
@@ -117,6 +110,7 @@ export function OutgoingDonations({
               <td className="py-4 pl-2">
                 <Button
                   type="submit"
+                  variant="highlight"
                   isLoading={addDonationMutation.isLoading}
                   loadingChildren="Saving"
                   data-testid="submit"
@@ -127,7 +121,7 @@ export function OutgoingDonations({
             </tr>
             {donations?.map((donation) => (
               <tr key={donation.id}>
-                <td className="text-left">
+                <td className="text-right">
                   {donation.time.toISOString().slice(0, 10)}
                 </td>
                 <td className="text-right">${num(donation.amount)}</td>
@@ -136,6 +130,7 @@ export function OutgoingDonations({
                     (donation.state === 'PENDING' ? (
                       <Button
                         type="button"
+                        variant="secondary"
                         onClick={() =>
                           cancelDonationMutation.mutate(donation.id)
                         }
