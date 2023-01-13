@@ -13,6 +13,7 @@ import { Switch, Tabs } from '@mantine/core'
 
 const ProfilePage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
+  const { data: session } = useSession()
   const profileQuery = trpc.useQuery([
     'user.profile',
     {
@@ -27,8 +28,6 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
   const preferencesMutation = trpc.useMutation(['user.preferences'], {
     onSuccess: refreshSession,
   })
-
-  const { data: session } = useSession()
 
   if (profileQuery.data) {
     return (
