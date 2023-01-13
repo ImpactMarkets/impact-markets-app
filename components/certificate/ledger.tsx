@@ -23,7 +23,7 @@ type LedgerProps = {
 
 const Holding = ({
   holding,
-  userId,
+  userId, // eslint-disable-line @typescript-eslint/no-unused-vars
   isActive,
   simplified = false,
 }: {
@@ -32,7 +32,6 @@ const Holding = ({
   isActive: boolean
   simplified: boolean
 }) => {
-  const { data: session } = useSession()
   const [isBuyDialogOpen, setIsBuyDialogOpen] = React.useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false)
 
@@ -50,11 +49,14 @@ const Holding = ({
   // Show the edit button only if (1) the viewer is logged in, (2) the viewer wants to see details,
   // and (3) the viewer is admin or the specified user is the owner of the holding. The specified
   // user might be different from the viewer on the profile pages.
-  const showEditButton =
-    session &&
-    !simplified &&
-    (session!.user.role === 'ADMIN' || holding.user.id === userId)
-  const showBuyButton = session && holding.user.id !== userId
+  // Reactivate this when ready:
+  // const showEditButton =
+  //   session &&
+  //   !simplified &&
+  //   (session!.user.role === 'ADMIN' || holding.user.id === userId)
+  // const showBuyButton = session && holding.user.id !== userId
+  const showEditButton = false
+  const showBuyButton = false
   return (
     <tr key={holding.user.id + holding.type + childKey}>
       <td className="text-sm text-left flex" key="owner">
@@ -144,8 +146,10 @@ export const Ledger = ({ certificate, isActive }: LedgerProps) => {
   const holdings = holdingsQuery.data || []
 
   const { data: session } = useSession()
-  const { prefersDetailView } = session?.user || {}
-  const simplified = !prefersDetailView
+  // Reactivate this when ready:
+  // const { prefersDetailView } = session?.user || {}
+  // const simplified = !prefersDetailView
+  const simplified = true
 
   const totalReservedSize = holdings
     .filter((holding) => holding.type === 'RESERVATION')
