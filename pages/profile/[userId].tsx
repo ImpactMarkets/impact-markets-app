@@ -49,14 +49,26 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
           </Tabs.Panel>
 
           {session && (
-            <Tabs.Panel value="preferences" pt="xs">
+            <Tabs.Panel value="preferences" pt="xs" className="p-6">
               <Switch
-                label="Detail view"
+                label="Show detailed certificate view"
                 classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
+                disabled={preferencesMutation.isLoading}
                 checked={session.user.prefersDetailView}
                 onChange={(event) => {
                   preferencesMutation.mutate({
                     prefersDetailView: event.target.checked,
+                  })
+                }}
+              />
+              <Switch
+                label="Hide name from rankings"
+                classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
+                disabled={preferencesMutation.isLoading}
+                checked={session.user.prefersAnonymity}
+                onChange={(event) => {
+                  preferencesMutation.mutate({
+                    prefersAnonymity: event.target.checked,
                   })
                 }}
               />

@@ -35,6 +35,7 @@ export const authOptions: NextAuthOptions = {
           image: (user || token).image,
           email: (user || token).email,
           prefersDetailView: (user || token).prefersDetailView,
+          prefersAnonymity: (user || token).prefersAnonymity,
         },
       } as Session
     },
@@ -64,6 +65,7 @@ if (serverEnv.MOCK_LOGIN) {
         image: true,
         email: true,
         prefersDetailView: true,
+        prefersAnonymity: true,
       },
       where: { email },
       create: { email, name, image, role },
@@ -82,6 +84,7 @@ declare module 'next-auth' {
       image?: string | null
       role: Role
       prefersDetailView: boolean
+      prefersAnonymity: boolean
     }
     expires: string
   }

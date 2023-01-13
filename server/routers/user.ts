@@ -73,13 +73,15 @@ export const userRouter = createProtectedRouter()
   })
   .mutation('preferences', {
     input: z.object({
-      prefersDetailView: z.boolean(),
+      prefersDetailView: z.boolean().optional(),
+      prefersAnonymity: z.boolean().optional(),
     }),
-    async resolve({ input: { prefersDetailView }, ctx }) {
+    async resolve({ input: { prefersDetailView, prefersAnonymity }, ctx }) {
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session!.user.id },
         data: {
           prefersDetailView: prefersDetailView,
+          prefersAnonymity: prefersAnonymity,
         },
       })
 
