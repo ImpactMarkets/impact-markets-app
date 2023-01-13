@@ -40,7 +40,7 @@ test.describe('Create Certificate', () => {
   test('should allow creating new certificate', async ({ page }) => {
     const titleText = 'My test project 0001'
 
-    await page.click('text=New project')
+    await page.goto('http://localhost:3001/certificate/new')
     await fillInDefaultValues(page, titleText)
     await page.locator('button[data-testid="submit"]').click()
 
@@ -51,7 +51,7 @@ test.describe('Create Certificate', () => {
   test('should fill in all certificate values', async ({ page }) => {
     const titleText = 'My test project 0002'
 
-    await page.click('text=New project')
+    await page.goto('http://localhost:3001/certificate/new')
     await fillInDefaultValues(page, titleText)
     await page.locator('button[data-testid="submit"]').click()
 
