@@ -78,11 +78,11 @@ export function OutgoingDonations({
   return (
     <div className="flex justify-center">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <table className="text-sm">
+        <table>
           <thead>
             <tr>
-              <th className="text-right w-32">Date</th>
-              <th className="text-right w-32">Amount</th>
+              <th className="text-right w-32 pr-3">Date</th>
+              <th className="text-right w-32 pr-3">Amount</th>
               <th className="text-right w-64"></th>
             </tr>
           </thead>
@@ -121,10 +121,10 @@ export function OutgoingDonations({
             </tr>
             {donations?.map((donation) => (
               <tr key={donation.id}>
-                <td className="text-right">
+                <td className="text-right pr-3">
                   {donation.time.toISOString().slice(0, 10)}
                 </td>
-                <td className="text-right">${num(donation.amount)}</td>
+                <td className="text-right pr-3">${num(donation.amount)}</td>
                 <td className="text-left pl-2">
                   {donation.userId === session!.user.id &&
                     (donation.state === 'PENDING' ? (
