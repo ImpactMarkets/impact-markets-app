@@ -8,12 +8,14 @@ import { Date } from './date'
 type AuthorWithDateProps = {
   author: Author
   date: Date
+  dateLabel?: string
   size?: 'sm' | 'md' | 'lg'
 }
 
 export function AuthorWithDate({
   author,
   date,
+  dateLabel = undefined,
   size = undefined,
 }: AuthorWithDateProps) {
   return (
@@ -36,8 +38,8 @@ export function AuthorWithDate({
             </a>
           </Link>
         </div>
-        <div className="text-secondary">
-          <Date date={date} />
+        <div className="text-gray-500 text-sm">
+          {dateLabel} <Date date={date} />
         </div>
       </div>
     </div>

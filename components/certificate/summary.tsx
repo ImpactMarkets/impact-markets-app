@@ -3,18 +3,17 @@ import Link from 'next/link'
 import * as React from 'react'
 
 import { Banner } from '@/components/banner'
-import { HoldingsChart } from '@/components/holdingsChart'
+import { HoldingsChart } from '@/components/certificate/holdingsChart'
 import { LikeButton } from '@/components/likeButton'
 import { classNames } from '@/lib/classnames'
 import { InferQueryOutput } from '@/lib/trpc'
 import { Card } from '@mantine/core'
 
-import { Author } from './author'
-import { Tags } from './certificate/tags'
-import { sortAuthorFirst } from './certificate/utils'
-import { CommentButton } from './commentButton'
-import { Date } from './date'
-import { Heading2 } from './heading2'
+import { Author } from '../author'
+import { Date } from '../date'
+import { Heading2 } from '../heading2'
+import { Tags } from '../tags'
+import { sortAuthorFirst } from '../utils'
 
 export type CertificateSummaryProps = {
   certificate: InferQueryOutput<'certificate.feed'>['certificates'][number]
@@ -90,7 +89,6 @@ function Right({ certificate }: CertificateSummaryProps) {
       </div>
       <div className="flex justify-around h-8">
         <LikeButton likedBy={certificate.likedBy} disabled />
-        <CommentButton commentCount={certificate._count.comments} disabled />
       </div>
     </div>
   )

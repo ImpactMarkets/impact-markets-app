@@ -1,20 +1,20 @@
 import React, { useState } from 'react'
 
-import { CERT_SORT_KEYS, CertSortKey } from '@/lib/constants'
+import { PROJECT_SORT_KEYS, ProjectSortKey } from '@/lib/constants'
 import { TAGS } from '@/lib/tags'
 import { Button, Flex } from '@mantine/core'
 
 import { IMMultiSelect } from './multiSelect'
 import { IMSelect } from './select'
 
-export type CertificateFiltersProps = {
+export type FiltersProps = {
   onFilterTagsUpdate: (tags: string) => void
-  onOrderByUpdate: (sort: CertSortKey) => void
+  onOrderByUpdate: (sort: ProjectSortKey) => void
   defaultFilterTagValue: string
   defaultOrderByValue: string
 }
 
-export function CertificateFilters(props: CertificateFiltersProps) {
+export function Filters(props: FiltersProps) {
   const tagsMultiSelect = React.useRef<HTMLInputElement>(null)
   const [filterTags, setFilterTags] = useState<string[] | undefined>(
     props.defaultFilterTagValue.split(',')
@@ -22,7 +22,7 @@ export function CertificateFilters(props: CertificateFiltersProps) {
   const [orderBy, setOrderBy] = useState<string | undefined>(
     props.defaultOrderByValue
   )
-  const sortOptions: Array<{ value: CertSortKey; label: string }> = [
+  const sortOptions: Array<{ value: ProjectSortKey; label: string }> = [
     { value: 'actionStart', label: 'Start of work' },
     { value: 'actionEnd', label: 'End of work' },
     { value: 'supporterCount', label: 'Supporters' },
@@ -57,9 +57,9 @@ export function CertificateFilters(props: CertificateFiltersProps) {
         placeholder="Sort by:"
         data={sortOptions}
         onChange={(value) => {
-          if (CERT_SORT_KEYS.includes(value as CertSortKey)) {
-            setOrderBy(value as CertSortKey)
-            props.onOrderByUpdate(value as CertSortKey)
+          if (PROJECT_SORT_KEYS.includes(value as ProjectSortKey)) {
+            setOrderBy(value as ProjectSortKey)
+            props.onOrderByUpdate(value as ProjectSortKey)
           }
         }}
         value={orderBy}

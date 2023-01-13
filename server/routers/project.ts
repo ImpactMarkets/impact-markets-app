@@ -3,7 +3,6 @@ import { z } from 'zod'
 
 import { PROJECT_SORT_KEYS, ProjectSortKey } from '@/lib/constants'
 import { markdownToHtml } from '@/lib/editor'
-import { postToSlackIfEnabled } from '@/lib/slack'
 import { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
@@ -12,18 +11,13 @@ import { createProtectedRouter } from '../createProtectedRouter'
 const getOrderBy = (
   orderByKey: ProjectSortKey | undefined
 ):
-  | Prisma.Enumerable<Prisma.CertificateOrderByWithRelationAndSearchRelevanceInput>
+  | Prisma.Enumerable<Prisma.ProjectOrderByWithRelationAndSearchRelevanceInput>
   | undefined => {
   const orderOptions = {
     actionStart: { actionStart: Prisma.SortOrder.desc },
     actionEnd: { actionEnd: Prisma.SortOrder.desc },
     supporterCount: {
-      holdings: {
-        // Sadly not supported:
-        // where: {
-        //   size: { gt: 0 },
-        //   type: { in: ['OWNERSHIP', 'CONSUMPTION'] },
-        // },
+      donations: {
         _count: Prisma.SortOrder.desc,
       },
     },
@@ -35,7 +29,7 @@ const getOrderBy = (
   return orderBy
 }
 
-export const certificateRouter = createProtectedRouter()
+export const projectRouter = createProtectedRouter()
   .query('feed', {
     input: z
       .object({
@@ -49,7 +43,7 @@ export const certificateRouter = createProtectedRouter()
     async resolve({ input, ctx }) {
       const take = input?.take ?? 50
       const skip = input?.skip
-      const baseQuery: Array<Prisma.CertificateWhereInput> | undefined =
+      const baseQuery: Array<Prisma.ProjectWhereInput> | undefined =
         ctx.session?.user.role === 'ADMIN'
           ? undefined
           : [{ hidden: false }, { authorId: ctx.session?.user.id }]
@@ -65,7 +59,7 @@ export const certificateRouter = createProtectedRouter()
         authorId: input?.authorId,
       }
 
-      const certificates = await ctx.prisma.certificate.findMany({
+      const projects = await ctx.prisma.project.findMany({
         take,
         skip,
         orderBy: getOrderBy(input?.orderBy),
@@ -84,95 +78,12 @@ export const certificateRouter = createProtectedRouter()
               image: true,
             },
           },
-          issuers: {
-            select: {
-              user: {
-                select: {
-                  id: true,
-                  name: true,
-                  image: true,
-                },
-              },
-            },
-          },
-          holdings: {
+          donations: {
             select: {
               id: true,
-              type: true,
-              size: true,
+              time: true,
+              amount: true,
               user: true,
-              sellTransactions: { where: { state: 'PENDING' } },
-            },
-            where: { size: { gt: 0 } },
-          },
-          likedBy: {
-            orderBy: {
-              createdAt: 'asc',
-            },
-            select: {
-              user: {
-                select: {
-                  id: true,
-                  name: true,
-                },
-              },
-            },
-          },
-        },
-      })
-
-      const certificateCount = await ctx.prisma.certificate.count({
-        where,
-      })
-
-      return {
-        certificates,
-        certificateCount,
-      }
-    },
-  })
-  .query('detail', {
-    input: z.object({
-      id: z.string().min(1),
-    }),
-    async resolve({ ctx, input }) {
-      const { id } = input
-      const certificate = await ctx.prisma.certificate.findUnique({
-        // For the redirect from old to new certificate URLs
-        where: isNaN(Number(id)) ? { id } : { oldId: Number(id) },
-        select: {
-          id: true,
-          oldId: true,
-          title: true,
-          content: true,
-          contentHtml: true,
-          createdAt: true,
-          hidden: true,
-          counterfactual: true,
-          location: true,
-          rights: true,
-          actionStart: true,
-          actionEnd: true,
-          tags: true,
-          author: {
-            select: {
-              id: true,
-              name: true,
-              image: true,
-              paymentUrl: true,
-              proofUrl: true,
-            },
-          },
-          issuers: {
-            select: {
-              user: {
-                select: {
-                  id: true,
-                  name: true,
-                  image: true,
-                  email: true,
-                },
-              },
             },
           },
           likedBy: {
@@ -190,28 +101,130 @@ export const certificateRouter = createProtectedRouter()
           },
           _count: {
             select: {
+              comments: true,
+            },
+          },
+        },
+      })
+
+      const projectCount = await ctx.prisma.project.count({
+        where,
+      })
+
+      return {
+        projects,
+        projectCount,
+      }
+    },
+  })
+  .query('detail', {
+    input: z.object({
+      id: z.string().min(1),
+    }),
+    async resolve({ ctx, input }) {
+      const { id } = input
+      const project = await ctx.prisma.project.findUnique({
+        where: { id },
+        select: {
+          id: true,
+          title: true,
+          content: true,
+          contentHtml: true,
+          createdAt: true,
+          hidden: true,
+          actionStart: true,
+          actionEnd: true,
+          paymentUrl: true,
+          tags: true,
+          author: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+              paymentUrl: true,
+              proofUrl: true,
+            },
+          },
+          likedBy: {
+            orderBy: {
+              createdAt: 'asc',
+            },
+            select: {
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
+          comments: {
+            where: {
+              parentId: null,
+            },
+            orderBy: {
+              createdAt: 'asc',
+            },
+            select: {
+              id: true,
+              content: true,
+              contentHtml: true,
+              createdAt: true,
+              author: {
+                select: {
+                  id: true,
+                  name: true,
+                  image: true,
+                },
+              },
+              parent: true,
+              children: {
+                orderBy: {
+                  createdAt: 'asc',
+                },
+                select: {
+                  id: true,
+                  projectId: true,
+                  content: true,
+                  contentHtml: true,
+                  createdAt: true,
+                  author: {
+                    select: {
+                      id: true,
+                      name: true,
+                      image: true,
+                    },
+                  },
+                  parent: true,
+                },
+              },
+            },
+          },
+          _count: {
+            select: {
+              comments: true,
               likedBy: true,
             },
           },
         },
       })
 
-      const certificateBelongsToUser =
-        certificate?.author.id === ctx.session?.user.id
+      // Move to permissions middleware
+      const projectBelongsToUser = project?.author.id === ctx.session?.user.id
 
       if (
-        !certificate ||
-        (certificate.hidden &&
-          !certificateBelongsToUser &&
+        !project ||
+        (project.hidden &&
+          !projectBelongsToUser &&
           ctx.session?.user.role !== 'ADMIN')
       ) {
         throw new TRPCError({
           code: 'NOT_FOUND',
-          message: `No certificate with id '${id}'`,
+          message: `No project with id '${id}'`,
         })
       }
 
-      return certificate
+      return project
     },
   })
   .query('search', {
@@ -220,7 +233,7 @@ export const certificateRouter = createProtectedRouter()
     }),
     async resolve({ input, ctx }) {
       const query = slugify(input.query, ' & ')
-      const certificates = await ctx.prisma.certificate.findMany({
+      const projects = await ctx.prisma.project.findMany({
         take: 10,
         where: {
           hidden: false,
@@ -233,7 +246,7 @@ export const certificateRouter = createProtectedRouter()
         },
       })
 
-      return certificates
+      return projects
     },
   })
   .mutation('add', {
@@ -241,28 +254,21 @@ export const certificateRouter = createProtectedRouter()
       id: z.string().min(1),
       title: z.string().min(1),
       content: z.string().min(1),
-      counterfactual: z.string(),
-      location: z.string(),
-      rights: z.string(),
-      actionStart: z.date(),
-      actionEnd: z.date(),
+      actionStart: z.date().nullable(),
+      actionEnd: z.date().nullable(),
+      paymentUrl: z.string(),
       tags: z.string(),
-      issuerEmails: z.string(),
-      valuation: z.instanceof(Prisma.Decimal),
-      target: z.instanceof(Prisma.Decimal),
     }),
     async resolve({ ctx, input }) {
-      const certificate = await ctx.prisma.certificate.create({
+      const project = await ctx.prisma.project.create({
         data: {
           id: input.id,
           title: input.title,
           content: input.content,
           contentHtml: markdownToHtml(input.content),
-          counterfactual: input.counterfactual,
-          location: input.location,
-          rights: 'RETROACTIVE_FUNDING',
           actionStart: input.actionStart,
           actionEnd: input.actionEnd,
+          paymentUrl: input.paymentUrl,
           tags: input.tags,
           author: {
             connect: {
@@ -271,36 +277,7 @@ export const certificateRouter = createProtectedRouter()
           },
         },
       })
-      await ctx.prisma.holding.create({
-        data: {
-          certificateId: certificate.id,
-          userId: ctx.session!.user.id,
-          type: 'OWNERSHIP',
-          size: 1,
-          cost: 0,
-          valuation: input.valuation,
-          target: input.target,
-        },
-      })
-      const issuerEmails = input.issuerEmails
-        .split(',')
-        .concat([ctx.session!.user.email])
-      const issuers = await ctx.prisma.user.findMany({
-        where: { email: { in: issuerEmails } },
-      })
-      await ctx.prisma.certificateIssuer.createMany({
-        data: issuers.map((issuer) => {
-          return { certificateId: certificate.id, userId: issuer.id }
-        }),
-        skipDuplicates: true,
-      })
-
-      await postToSlackIfEnabled({
-        certificate,
-        authorName: ctx.session!.user.name,
-      })
-
-      return certificate
+      return project
     },
   })
   .mutation('edit', {
@@ -309,64 +286,36 @@ export const certificateRouter = createProtectedRouter()
       data: z.object({
         title: z.string().min(1),
         content: z.string().min(1),
-        counterfactual: z.string(),
-        location: z.string(),
-        rights: z.string(),
-        actionStart: z.date(),
-        actionEnd: z.date(),
-        issuerEmails: z.string(),
+        actionStart: z.date().nullable(),
+        actionEnd: z.date().nullable(),
+        paymentUrl: z.string(),
         tags: z.string(),
       }),
     }),
     async resolve({ ctx, input }) {
       const { id, data } = input
-      const updatedCertificate = await ctx.prisma.certificate.update({
+      const updatedproject = await ctx.prisma.project.update({
         where: { id },
         data: {
           title: data.title,
           content: data.content,
           contentHtml: markdownToHtml(data.content),
-          counterfactual: data.counterfactual,
-          location: data.location,
-          rights: 'RETROACTIVE_FUNDING',
           actionStart: data.actionStart,
           actionEnd: data.actionEnd,
+          paymentUrl: data.paymentUrl,
           tags: data.tags,
         },
-        include: {
-          author: true,
-        },
       })
 
-      const issuerEmails = input.data.issuerEmails
-        .split(',')
-        .concat([updatedCertificate.author.email || ''])
-      // Delete all existing certificateIssuer associations for this certificate, and create
-      // new ones based on the input
-      const issuers = await ctx.prisma.user.findMany({
-        where: { email: { in: issuerEmails } },
-      })
-      ctx.prisma.$transaction([
-        ctx.prisma.certificateIssuer.deleteMany({
-          where: { certificateId: updatedCertificate.id },
-        }),
-        ctx.prisma.certificateIssuer.createMany({
-          data: issuers.map((issuer) => {
-            return { certificateId: updatedCertificate.id, userId: issuer.id }
-          }),
-          skipDuplicates: true,
-        }),
-      ])
-
-      return updatedCertificate
+      return updatedproject
     },
   })
   .mutation('like', {
     input: z.string().min(1),
     async resolve({ input: id, ctx }) {
-      await ctx.prisma.likedCertificate.create({
+      await ctx.prisma.likedProject.create({
         data: {
-          certificate: {
+          project: {
             connect: {
               id,
             },
@@ -385,10 +334,10 @@ export const certificateRouter = createProtectedRouter()
   .mutation('unlike', {
     input: z.string().min(1),
     async resolve({ input: id, ctx }) {
-      await ctx.prisma.likedCertificate.delete({
+      await ctx.prisma.likedProject.delete({
         where: {
-          certificateId_userId: {
-            certificateId: id,
+          projectId_userId: {
+            projectId: id,
             userId: ctx.session!.user.id,
           },
         },
@@ -400,7 +349,7 @@ export const certificateRouter = createProtectedRouter()
   .mutation('hide', {
     input: z.string().min(1),
     async resolve({ input: id, ctx }) {
-      const certificate = await ctx.prisma.certificate.update({
+      const project = await ctx.prisma.project.update({
         where: { id },
         data: {
           hidden: true,
@@ -409,13 +358,13 @@ export const certificateRouter = createProtectedRouter()
           id: true,
         },
       })
-      return certificate
+      return project
     },
   })
   .mutation('unhide', {
     input: z.string().min(1),
     async resolve({ input: id, ctx }) {
-      const certificate = await ctx.prisma.certificate.update({
+      const project = await ctx.prisma.project.update({
         where: { id },
         data: {
           hidden: false,
@@ -424,6 +373,6 @@ export const certificateRouter = createProtectedRouter()
           id: true,
         },
       })
-      return certificate
+      return project
     },
   })

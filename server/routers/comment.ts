@@ -7,7 +7,7 @@ import { createProtectedRouter } from '../createProtectedRouter'
 export const commentRouter = createProtectedRouter()
   .mutation('add', {
     input: z.object({
-      certificateId: z.string().min(1),
+      projectId: z.string().min(1),
       content: z.string().min(1),
       parentId: z.optional(z.number().int()),
     }),
@@ -21,9 +21,9 @@ export const commentRouter = createProtectedRouter()
               id: ctx.session!.user.id,
             },
           },
-          certificate: {
+          project: {
             connect: {
-              id: input.certificateId,
+              id: input.projectId,
             },
           },
           ...(input.parentId && {

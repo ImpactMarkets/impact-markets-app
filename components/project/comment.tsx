@@ -20,13 +20,13 @@ import { ConfirmDeleteCommentDialog } from './confirmDeleteCommentDialog'
 import { EditCommentForm } from './editCommentForm'
 
 export function Comment({
-  certificateId,
+  projectId,
   comment,
 }: {
-  certificateId: string
+  projectId: string
   comment:
-    | InferQueryOutput<'certificate.detail'>['comments'][number]
-    | InferQueryOutput<'certificate.detail'>['comments'][number]['children'][number]
+    | InferQueryOutput<'project.detail'>['comments'][number]
+    | InferQueryOutput<'project.detail'>['comments'][number]['children'][number]
 }) {
   const { data: session } = useSession()
   const [isEditing, setIsEditing] = React.useState(false)
@@ -41,7 +41,7 @@ export function Comment({
       <div className="flex items-start gap-4">
         <Avatar name={comment.author.name!} src={comment.author.image} />
         <EditCommentForm
-          certificateId={certificateId}
+          projectId={projectId}
           comment={comment}
           onDone={() => {
             setIsEditing(false)
@@ -88,7 +88,7 @@ export function Comment({
         <HtmlView html={comment.contentHtml} />
 
         {!comment.parent && !isReplying && (
-          <div className="text-secondary hover:text-blue text-gray-500 text-sm">
+          <div className="text-secondary hover:text-blue text-sm">
             <button
               type="submit"
               onClick={() => {
@@ -116,7 +116,7 @@ export function Comment({
                 />
               </span>
               <AddReplyForm
-                certificateId={certificateId}
+                projectId={projectId}
                 parent={comment}
                 onDone={() => {
                   setIsReplying(false)
@@ -128,7 +128,7 @@ export function Comment({
       )}
 
       <ConfirmDeleteCommentDialog
-        certificateId={certificateId}
+        projectId={projectId}
         commentId={comment.id}
         isOpen={isConfirmDeleteDialogOpen}
         onClose={() => {

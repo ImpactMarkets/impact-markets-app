@@ -40,6 +40,46 @@ export const permissionMiddleware: MiddlewareFunction = async ({
     return certificate?.authorId === ctx.session!.user.id
   }
 
+  const projectBelongsToUser = async () => {
+    interface projectInput {
+      id: string
+    }
+    const { id } = <projectInput>rawInput
+    const project = await ctx.prisma.project.findUnique({
+      where: { id },
+      select: {
+        authorId: true,
+      },
+    })
+    return project?.authorId === ctx.session!.user.id
+  }
+
+  const donationBelongsToUser = async () => {
+    const id = <number>rawInput
+    const donation = await ctx.prisma.donation.findUnique({
+      where: { id },
+      select: {
+        userId: true,
+      },
+    })
+    return donation?.userId === ctx.session!.user.id
+  }
+
+  const donationProjectBelongsToUser = async () => {
+    const id = <number>rawInput
+    const donation = await ctx.prisma.donation.findUnique({
+      where: { id },
+      select: {
+        project: {
+          select: {
+            authorId: true,
+          },
+        },
+      },
+    })
+    return donation?.project.authorId === ctx.session!.user.id
+  }
+
   const commentBelongsToUser = async () => {
     interface commentInput {
       id: number
@@ -111,6 +151,16 @@ export const permissionMiddleware: MiddlewareFunction = async ({
     'certificate.unlike': isAuthenticated,
     'certificate.hide': isAdmin,
     'certificate.unhide': isAdmin,
+    'project.feed': () => true,
+    'project.detail': () => true,
+    'project.search': () => true,
+    'project.add': isAuthenticated,
+    'project.edit': () =>
+      isAuthenticated() && (isAdmin() || projectBelongsToUser()),
+    'project.like': isAuthenticated,
+    'project.unlike': isAuthenticated,
+    'project.hide': isAdmin,
+    'project.unhide': isAdmin,
     'comment.add': isAuthenticated,
     'comment.edit': () =>
       isAuthenticated() && (isAdmin() || commentBelongsToUser()),
@@ -119,6 +169,13 @@ export const permissionMiddleware: MiddlewareFunction = async ({
     'holding.feed': () => true,
     'holding.edit': () =>
       isAuthenticated() && (isAdmin() || holdingBelongsToUser()),
+    'donation.feed': isAuthenticated,
+    'donation.add': isAuthenticated,
+    'donation.confirm': () =>
+      isAuthenticated() && (isAdmin() || donationProjectBelongsToUser()),
+    'donation.cancel': () =>
+      isAuthenticated() &&
+      (isAdmin() || donationProjectBelongsToUser() || donationBelongsToUser()),
     'transaction.feed': isAuthenticated,
     'transaction.add': isAuthenticated,
     'transaction.confirm': () =>
@@ -128,7 +185,7 @@ export const permissionMiddleware: MiddlewareFunction = async ({
       (isAdmin() ||
         buyingHoldingBelongsToUser() ||
         sellingHoldingBelongsToUser()),
-    'user.ranking': () => true,
+    'user.topDonors': () => true,
     'user.profile': () => true,
     'user.edit': isAuthenticated, // Always edits the same user
     'user.update-avatar': isAuthenticated, // Always edits the same user

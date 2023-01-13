@@ -40,7 +40,9 @@ export function Header({ opened, setOpened }: HeaderProps) {
         </MediaQuery>
         <div>
           <Link href="/">
-            <Logo className="w-auto h-[32px] md:h-[64px] cursor-pointer" />
+            <span>
+              <Logo className="w-auto h-[32px] md:h-[64px] cursor-pointer" />
+            </span>
           </Link>
         </div>
         <div className="flex items-center gap-x-3">
@@ -54,7 +56,7 @@ export function Header({ opened, setOpened }: HeaderProps) {
           </IconButton>
 
           {session ? (
-            <ButtonLink href="/new" variant="highlight">
+            <ButtonLink href="/project/new" variant="highlight">
               <span className="sm:hidden">New</span>
               <span className="hidden sm:block shrink-0">New project</span>
             </ButtonLink>
