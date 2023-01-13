@@ -131,7 +131,7 @@ export const userRouter = createProtectedRouter()
         name: string
         image: string
         prefersAnonymity: boolean
-        credits: Prisma.Decimal
+        totalCredits: Prisma.Decimal
       }[] = await ctx.prisma.$queryRaw`
         SELECT
           "id",
