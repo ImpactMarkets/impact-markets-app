@@ -4,18 +4,20 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
+import type { CertificateSummaryProps } from '@/components/certificate/summary'
 import { Filters } from '@/components/filters'
 import { Layout } from '@/components/layout'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
-import type { ProjectSummaryProps } from '@/components/project/summary'
 import { SummarySkeleton } from '@/components/summarySkeleton'
 import { ProjectSortKey } from '@/lib/constants'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
-const ProjectSummary = dynamic<ProjectSummaryProps>(
+const CertificateSummary = dynamic<CertificateSummaryProps>(
   () =>
-    import('@/components/project/summary').then((mod) => mod.ProjectSummary),
+    import('@/components/certificate/summary').then(
+      (mod) => mod.CertificateSummary
+    ),
   { ssr: false }
 )
 
@@ -28,8 +30,8 @@ const Home: NextPageWithAuthAndLayout = () => {
   const utils = trpc.useContext()
   const [filterTags, setFilterTags] = React.useState('')
   const [orderBy, setOrderBy] = React.useState('' as ProjectSortKey)
-  const feedQueryPathAndInput: InferQueryPathAndInput<'project.feed'> = [
-    'project.feed',
+  const feedQueryPathAndInput: InferQueryPathAndInput<'certificate.feed'> = [
+    'certificate.feed',
     {
       ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
       filterTags,
@@ -37,8 +39,8 @@ const Home: NextPageWithAuthAndLayout = () => {
     },
   ]
   const feedQuery = trpc.useQuery(feedQueryPathAndInput)
-  const likeMutation = trpc.useMutation(['project.like'], {
-    onMutate: async (likedProjectId) => {
+  const likeMutation = trpc.useMutation(['certificate.like'], {
+    onMutate: async (likedCertificateId) => {
       await utils.cancelQuery(feedQueryPathAndInput)
 
       const previousQuery = utils.getQueryData(feedQueryPathAndInput)
@@ -46,18 +48,18 @@ const Home: NextPageWithAuthAndLayout = () => {
       if (previousQuery) {
         utils.setQueryData(feedQueryPathAndInput, {
           ...previousQuery,
-          projects: previousQuery.projects.map((project) =>
-            project.id === likedProjectId
+          certificates: previousQuery.certificates.map((certificate) =>
+            certificate.id === likedCertificateId
               ? {
-                  ...project,
+                  ...certificate,
                   likedBy: [
-                    ...project.likedBy,
+                    ...certificate.likedBy,
                     {
                       user: { id: session!.user.id, name: session!.user.name },
                     },
                   ],
                 }
-              : project
+              : certificate
           ),
         })
       }
@@ -70,8 +72,8 @@ const Home: NextPageWithAuthAndLayout = () => {
       }
     },
   })
-  const unlikeMutation = trpc.useMutation(['project.unlike'], {
-    onMutate: async (unlikedProjectId) => {
+  const unlikeMutation = trpc.useMutation(['certificate.unlike'], {
+    onMutate: async (unlikedCertificateId) => {
       await utils.cancelQuery(feedQueryPathAndInput)
 
       const previousQuery = utils.getQueryData(feedQueryPathAndInput)
@@ -79,15 +81,15 @@ const Home: NextPageWithAuthAndLayout = () => {
       if (previousQuery) {
         utils.setQueryData(feedQueryPathAndInput, {
           ...previousQuery,
-          projects: previousQuery.projects.map((project) =>
-            project.id === unlikedProjectId
+          certificates: previousQuery.certificates.map((certificate) =>
+            certificate.id === unlikedCertificateId
               ? {
-                  ...project,
-                  likedBy: project.likedBy.filter(
+                  ...certificate,
+                  likedBy: certificate.likedBy.filter(
                     (item) => item.user.id !== session!.user.id
                   ),
                 }
-              : project
+              : certificate
           ),
         })
       }
@@ -108,7 +110,7 @@ const Home: NextPageWithAuthAndLayout = () => {
           <title>Impact Markets</title>
         </Head>
 
-        <div className="mb-6">
+        <div className="mt-12">
           <Filters
             onFilterTagsUpdate={(tags) => setFilterTags(tags)}
             onOrderByUpdate={(orderBy: ProjectSortKey) => setOrderBy(orderBy)}
@@ -116,25 +118,22 @@ const Home: NextPageWithAuthAndLayout = () => {
             defaultOrderByValue={orderBy}
           />
         </div>
-        {feedQuery.data.projectCount === 0 ? (
+        {feedQuery.data.certificateCount === 0 ? (
           <div className="text-center text-secondary border rounded my-10 py-20 px-10">
-            There are no published projects to show yet.
+            There are no published certificates to show yet.
           </div>
         ) : (
           <div className="flow-root">
-            <ul className="divide-y divide-transparent flex flex-wrap gap-2">
-              {feedQuery.data.projects.map((project) => (
-                <li
-                  key={project.id}
-                  className="w-full max-w-full xl:w-[49%] xl:max-w-[49%] 2xl:w-[32%] 2xl:max-w-[32%]"
-                >
-                  <ProjectSummary
-                    project={project}
+            <ul className="my-5 divide-y divide-transparent">
+              {feedQuery.data.certificates.map((certificate) => (
+                <li key={certificate.id} className="py-6">
+                  <CertificateSummary
+                    certificate={certificate}
                     onLike={() => {
-                      likeMutation.mutate(project.id)
+                      likeMutation.mutate(certificate.id)
                     }}
                     onUnlike={() => {
-                      unlikeMutation.mutate(project.id)
+                      unlikeMutation.mutate(certificate.id)
                     }}
                   />
                 </li>
@@ -144,7 +143,7 @@ const Home: NextPageWithAuthAndLayout = () => {
         )}
 
         <Pagination
-          itemCount={feedQuery.data.projectCount}
+          itemCount={feedQuery.data.certificateCount}
           itemsPerPage={ITEMS_PER_PAGE}
           currentPageNumber={currentPageNumber}
         />

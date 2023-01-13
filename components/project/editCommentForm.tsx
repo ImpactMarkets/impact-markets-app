@@ -6,38 +6,46 @@ import { Button } from '@/components/button'
 import { MarkdownEditor } from '@/components/markdownEditor'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
 
-import { CommentFormData, getCertificateQueryPathAndInput } from './utils'
+import { CommentFormData } from '../utils'
 
-export function AddReplyForm({
-  certificateId,
-  parent,
+export function EditCommentForm({
+  projectId,
+  comment,
   onDone,
 }: {
-  certificateId: string
-  parent:
-    | InferQueryOutput<'certificate.detail'>['comments'][number]
-    | InferQueryOutput<'certificate.detail'>['comments'][number]['children'][number]
+  projectId: string
+  comment:
+    | InferQueryOutput<'project.detail'>['comments'][number]
+    | InferQueryOutput<'project.detail'>['comments'][number]['children'][number]
   onDone: () => void
 }) {
   const utils = trpc.useContext()
-  const addReplyMutation = trpc.useMutation('comment.add', {
+  const editCommentMutation = trpc.useMutation('comment.edit', {
     onSuccess: () => {
-      return utils.invalidateQueries(
-        getCertificateQueryPathAndInput(certificateId)
-      )
+      return utils.invalidateQueries([
+        'project.detail',
+        {
+          id: projectId,
+        },
+      ])
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
     },
   })
-  const { control, handleSubmit, reset } = useForm<CommentFormData>()
+  const { control, handleSubmit } = useForm<CommentFormData>({
+    defaultValues: {
+      content: comment.content,
+    },
+  })
 
   const onSubmit: SubmitHandler<CommentFormData> = (data) => {
-    addReplyMutation.mutate(
+    editCommentMutation.mutate(
       {
-        certificateId,
-        content: data.content,
-        parentId: parent?.id,
+        id: comment.id,
+        data: {
+          content: data.content,
+        },
       },
       {
         onSuccess: () => onDone(),
@@ -57,7 +65,7 @@ export function AddReplyForm({
             onChange={field.onChange}
             onTriggerSubmit={handleSubmit(onSubmit)}
             required
-            placeholder="Reply"
+            placeholder="Comment"
             minRows={4}
             autoFocus
           />
@@ -66,10 +74,10 @@ export function AddReplyForm({
       <div className="flex gap-4 mt-4">
         <Button
           type="submit"
-          isLoading={addReplyMutation.isLoading}
-          loadingChildren="Adding reply"
+          isLoading={editCommentMutation.isLoading}
+          loadingChildren="Updating comment"
         >
-          Add reply
+          Update comment
         </Button>
         <Button variant="secondary" onClick={onDone}>
           Cancel

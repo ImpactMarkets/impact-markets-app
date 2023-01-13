@@ -92,6 +92,12 @@ export const TAGS: IMTag[] = [
     color: '#4fcdf7',
     group: 'Type of work',
   },
+  {
+    value: 'organization',
+    label: 'Organization',
+    color: '#4fcdf7',
+    group: 'Type of work',
+  },
   { value: 'other', label: 'Other', color: '#4fcdf7', group: 'Type of work' },
   {
     value: 'personal_communication',

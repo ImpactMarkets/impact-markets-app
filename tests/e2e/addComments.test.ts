@@ -3,12 +3,6 @@ import { type Page, expect, test } from '@playwright/test'
 async function fillInAndCreateCert(page: Page, titleText: string) {
   await page.getByRole('textbox', { name: 'title' }).fill(titleText)
   await page.locator(':nth-match(textarea, 1)').fill('description')
-  await page.click(
-    'text=I will never sell these rights (or parts thereof) more than once'
-  )
-  await page.click(
-    'text=I am happy for this record to be publicly accessible forever'
-  )
   await page.locator('button[data-testid="submit"]').click()
 }
 

@@ -6,25 +6,6 @@ import { TRPCError } from '@trpc/server'
 import { createProtectedRouter } from '../createProtectedRouter'
 
 export const userRouter = createProtectedRouter()
-  .query('ranking', {
-    async resolve({ ctx }) {
-      const users: {
-        id: string
-        name: string
-        image: string
-        credits: Prisma.Decimal
-      }[] = await ctx.prisma.$queryRaw`
-        SELECT "User"."id", "User"."name", "User"."image", SUM("Certificate"."credits" * "Holding"."size") as "credits"
-        FROM "User"
-        JOIN "Holding" ON "User"."id" = "Holding"."userId"
-        JOIN "Certificate" ON "Holding"."certificateId" = "Certificate"."id"
-        WHERE "Certificate"."credits" > 0
-        GROUP BY "User"."id", "User"."name", "User"."image"
-        ORDER BY "credits" DESC;
-      `
-      return users
-    },
-  })
   .query('profile', {
     input: z.object({
       id: z.string(),
@@ -92,13 +73,15 @@ export const userRouter = createProtectedRouter()
   })
   .mutation('preferences', {
     input: z.object({
-      prefersDetailView: z.boolean(),
+      prefersDetailView: z.boolean().optional(),
+      prefersAnonymity: z.boolean().optional(),
     }),
-    async resolve({ input: { prefersDetailView }, ctx }) {
+    async resolve({ input: { prefersDetailView, prefersAnonymity }, ctx }) {
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session!.user.id },
         data: {
           prefersDetailView: prefersDetailView,
+          prefersAnonymity: prefersAnonymity,
         },
       })
 
@@ -118,5 +101,86 @@ export const userRouter = createProtectedRouter()
       })
 
       return users
+    },
+  })
+  .query('topRetirers', {
+    async resolve({ ctx }) {
+      const users: {
+        id: string
+        name: string
+        image: string
+        credits: Prisma.Decimal
+      }[] = await ctx.prisma.$queryRaw`
+        SELECT
+          "User"."id",
+          "User"."name",
+          "User"."image",
+          SUM("Certificate"."credits" * "Holding"."size") as "credits"
+        FROM "User"
+        JOIN "Holding" ON "User"."id" = "Holding"."userId"
+        JOIN "Certificate" ON "Holding"."certificateId" = "Certificate"."id"
+        WHERE "Certificate"."credits" > 0 and "Holding"."type" = 'CONSUMPTION'
+        GROUP BY "User"."id", "User"."name", "User"."image"
+        ORDER BY "credits" DESC;
+      `
+      return users
+    },
+  })
+  .query('topDonors', {
+    async resolve({ ctx }) {
+      const users: {
+        id: string
+        name: string
+        image: string
+        prefersAnonymity: boolean
+        totalCredits: Prisma.Decimal
+      }[] = await ctx.prisma.$queryRaw`
+        SELECT
+          "id",
+          "name",
+          "image",
+          "prefersAnonymity",
+          SUM(("contribution" / "contributionTotal") * "credits") as "totalCredits"
+        FROM (
+          SELECT
+            "id",
+            "name",
+            "image",
+            "amount",
+            "projectId",
+            "credits",
+            "prefersAnonymity",
+            "runningTotal",
+            "projectTotal",
+            "amount" / "runningTotal" as "contribution",
+            SUM("amount" / "runningTotal")
+              OVER (PARTITION BY "projectId") as "contributionTotal"
+          FROM (
+            SELECT
+              "User"."id",
+              "User"."name",
+              "User"."image",
+              "User"."prefersAnonymity",
+              "Donation"."amount",
+              "Donation"."projectId",
+              "Project"."credits",
+              (100 + SUM("Donation"."amount")
+                OVER (ORDER BY time ASC)) as "runningTotal",
+              (100 + SUM("Donation"."amount")
+                OVER (PARTITION BY "Donation"."projectId")) as "projectTotal"
+            FROM "Donation"
+            JOIN "User" ON "User"."id" = "Donation"."userId"
+            JOIN "Project" ON "Donation"."projectId" = "Project"."id"
+            WHERE "Project"."credits" > 0 and "Donation"."state" = 'CONFIRMED'
+          ) subtotals
+        ) contributions
+        GROUP BY "id", "name", "image", "prefersAnonymity"
+        ORDER BY "totalCredits" DESC
+        LIMIT 100;
+      `
+      return users.map(({ name, prefersAnonymity, ...rest }) => ({
+        name: prefersAnonymity ? name[0] + '. Anonymous' : name,
+        ...rest,
+      }))
     },
   })

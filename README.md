@@ -61,3 +61,9 @@ npx prisma migrate deploy
 ```bash
 npm run dev
 ```
+
+### FAQ and Common Problems
+
+- I pulled main and now I'm getting a lot of type errors on files I didn't touch when I try to commit. How do I fix this?
+
+Try running `npx prisma generate`. These may be from schema changes someone else made that haven't propagated on your local instance yet. Sometimes you also need to restart the dev server after regenerating the client.

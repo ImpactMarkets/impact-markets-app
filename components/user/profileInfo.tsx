@@ -408,7 +408,10 @@ export function ProfileInfo({
               >
                 <EditIcon className="w-4 h-4" />
               </IconButton>
-              <MantineButton color="red" onClick={() => signOut()}>
+              <MantineButton
+                className="bg-red-600 hover:bg-red-400"
+                onClick={() => signOut()}
+              >
                 Sign out
               </MantineButton>
             </div>

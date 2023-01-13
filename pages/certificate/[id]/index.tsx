@@ -5,20 +5,16 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 
 import { AuthorWithDate } from '@/components/authorWithDate'
-import { Avatar } from '@/components/avatar'
 import { Banner } from '@/components/banner'
-import { AddCommentForm } from '@/components/certificate/addCommentForm'
-import { CertificateMenu } from '@/components/certificate/certificateMenu'
-import { Comment } from '@/components/certificate/comment'
 import { Labels } from '@/components/certificate/labels'
 import { Ledger } from '@/components/certificate/ledger'
-import { Tags } from '@/components/certificate/tags'
-import { getCertificateQueryPathAndInput } from '@/components/certificate/utils'
-import { CommentButton } from '@/components/commentButton'
 import { Heading1 } from '@/components/heading1'
 import { HtmlView } from '@/components/htmlView'
 import { Layout } from '@/components/layout'
 import { LikeButton } from '@/components/likeButton'
+import { Menu } from '@/components/projectAndCertificate/menu'
+import { Tags } from '@/components/tags'
+import { getCertificateQueryPathAndInput } from '@/components/utils'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { LoadingOverlay } from '@mantine/core'
@@ -150,10 +146,10 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
 
             <div className="flex items-center justify-between gap-4">
               <Heading1>{certificate.title}</Heading1>
-              <CertificateMenu
+              <Menu
                 queryData={certificate}
                 isUserAdmin={isUserAdmin}
-                certificateBelongsToUser={certificateBelongsToUser}
+                belongsToUser={certificateBelongsToUser}
               />
             </div>
             <div className="my-6">
@@ -183,55 +179,7 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
                   unlikeMutation.mutate(certificate.id)
                 }}
               />
-              <CommentButton
-                commentCount={certificate._count.comments}
-                href={`/certificate/${certificate.id}#comments`}
-                variant="secondary"
-                disabled={!session}
-              />
             </div>
-          </div>
-
-          <div id="comments" className="pt-12 space-y-12">
-            {certificate.comments.length > 0 && (
-              <ul className="space-y-12">
-                {certificate.comments.map((comment) => (
-                  <li key={comment.id}>
-                    <Comment certificateId={certificate.id} comment={comment} />
-
-                    <div id="replies" className="pt-12 pl-14 space-y-12">
-                      {comment.children.length > 0 && (
-                        <ul className="space-y-12">
-                          {comment.children.map((reply) => (
-                            <li key={reply.id}>
-                              <Comment
-                                certificateId={certificate.id}
-                                comment={reply}
-                              />
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-            {session && (
-              <div className="flex items-start gap-2 sm:gap-4">
-                <span className="hidden sm:inline-block">
-                  <Avatar name={session!.user.name} src={session!.user.image} />
-                </span>
-                <span className="inline-block sm:hidden">
-                  <Avatar
-                    name={session!.user.name}
-                    src={session!.user.image}
-                    size="sm"
-                  />
-                </span>
-                <AddCommentForm certificateId={certificate.id} />
-              </div>
-            )}
           </div>
         </div>
       </>
