@@ -33,7 +33,7 @@ export function AddReplyForm({
       toast.error(<pre>{error.message}</pre>)
     },
   })
-  const { control, handleSubmit, reset } = useForm<CommentFormData>()
+  const { control, handleSubmit } = useForm<CommentFormData>()
 
   const onSubmit: SubmitHandler<CommentFormData> = (data) => {
     addReplyMutation.mutate(
