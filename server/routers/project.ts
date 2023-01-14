@@ -10,9 +10,7 @@ import { createProtectedRouter } from '../createProtectedRouter'
 
 const getOrderBy = (
   orderByKey: ProjectSortKey | undefined
-):
-  | Prisma.Enumerable<Prisma.ProjectOrderByWithRelationAndSearchRelevanceInput>
-  | undefined => {
+): Prisma.ProjectOrderByWithRelationAndSearchRelevanceInput => {
   const orderOptions = {
     actionStart: { actionStart: Prisma.SortOrder.desc },
     actionEnd: { actionEnd: Prisma.SortOrder.desc },
@@ -62,7 +60,7 @@ export const projectRouter = createProtectedRouter()
       const projects = await ctx.prisma.project.findMany({
         take,
         skip,
-        orderBy: getOrderBy(input?.orderBy),
+        orderBy: [getOrderBy(input?.orderBy), { id: Prisma.SortOrder.asc }],
         where,
         select: {
           id: true,
