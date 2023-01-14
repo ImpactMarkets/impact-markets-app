@@ -224,7 +224,7 @@ function UpdateAvatarDialog({
         <DialogCloseButton onClick={handleClose} />
         <div className="flex justify-center mt-8">
           <Avatar
-            name={user.name || 'Anonymous  Aardvark'}
+            name={user.name || 'Anonymous'}
             src={uploadedImage}
             size="lg"
           />
@@ -270,7 +270,7 @@ function UpdateAvatarDialog({
                 onClick={() => {
                   fileInputRef.current!.value = ''
                   URL.revokeObjectURL(uploadedImage)
-                  setUploadedImage(null)
+                  setUploadedImage('')
                 }}
               >
                 Remove photo
@@ -304,7 +304,7 @@ function UpdateAvatarDialog({
                 })
               } else {
                 updateUserAvatarMutation.mutate({
-                  image: null,
+                  image: '',
                 })
               }
             }
