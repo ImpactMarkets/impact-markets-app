@@ -234,7 +234,10 @@ export const projectRouter = createProtectedRouter()
       const projects = await ctx.prisma.project.findMany({
         take: 10,
         where: {
-          hidden: false,
+          OR:
+            ctx.session?.user.role === 'ADMIN'
+              ? undefined
+              : [{ hidden: false }, { authorId: ctx.session?.user.id }],
           title: { search: query },
           content: { search: query },
         },
