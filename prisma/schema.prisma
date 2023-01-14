@@ -76,11 +76,11 @@ model Session {
 
 model User {
   id                String    @id @default(cuid())
-  name              String?
+  name              String    @default("Anonymous")
   email             String?   @unique
   emailVerified     DateTime?
-  image             String?
-  title             String?
+  image             String    @default("")
+  title             String    @default("")
   role              Role      @default(USER)
   proofUrl          String    @default("")
   paymentUrl        String    @default("")
@@ -123,7 +123,7 @@ model Project {
   comments    Comment[]
   actionStart DateTime?
   actionEnd   DateTime?
-  tags        String?
+  tags        String         @default("")
   paymentUrl  String         @default("")
 
   author       User          @relation(fields: [authorId], references: [id], onDelete: Restrict)
@@ -153,7 +153,7 @@ model Certificate {
   rights      Right    @default(RETROACTIVE_FUNDING)
   actionStart DateTime
   actionEnd   DateTime
-  tags        String?
+  tags        String   @default("")
 
   author   User                @relation(fields: [authorId], references: [id], onDelete: Restrict)
   holdings Holding[]
