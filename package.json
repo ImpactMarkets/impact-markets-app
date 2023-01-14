@@ -16,7 +16,7 @@
     "pretty": "prettier --write '**/*.{ts,tsx,json,html,css}'",
     "prepare": "husky install",
     "postinstall": "patch-package",
-    "deploy:staging": "ssh im-app 'cd /opt/im-app-beta && git pull && ./utils.sh deploy-beta'",
+    "deploy:staging": "ssh im-app 'cd /opt/im-app-staging && git pull && ./utils.sh deploy-staging'",
     "deploy:prod": "ssh im-app 'cd /opt/im-app-prod && git pull && ./utils.sh deploy-prod'"
   },
   "dependencies": {

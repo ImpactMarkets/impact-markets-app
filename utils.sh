@@ -40,8 +40,8 @@ case "$1" in
     deploy-prod)
         deploy prod
         ;;
-    deploy-beta)
-        deploy beta
+    deploy-staging)
+        deploy staging
         ;;
     import)
         import $2
