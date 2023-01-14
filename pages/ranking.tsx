@@ -2,6 +2,7 @@ import Head from 'next/head'
 import * as React from 'react'
 
 import { Author } from '@/components/author'
+import { Heading1 } from '@/components/heading1'
 import { Layout } from '@/components/layout'
 import { num } from '@/lib/text'
 import { trpc } from '@/lib/trpc'
@@ -17,6 +18,13 @@ const Ranking: NextPageWithAuthAndLayout = () => {
         <Head>
           <title>Impact Markets – Ranking</title>
         </Head>
+
+        <Heading1>Top Donor Ranking</Heading1>
+
+        <p className="py-6">
+          The algorithm behind this ranking is still under active development
+          and subject to change.
+        </p>
 
         {rankingQuery.data.length === 0 ? (
           <div className="text-center text-secondary border rounded my-10 py-20 px-10">
