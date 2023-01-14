@@ -33,7 +33,7 @@ export const projectRouter = createProtectedRouter()
   .query('feed', {
     input: z
       .object({
-        take: z.number().min(1).max(50).optional(),
+        take: z.number().min(1).max(60).optional(),
         skip: z.number().min(1).optional(),
         authorId: z.string().optional(),
         filterTags: z.string().optional(),
@@ -41,7 +41,7 @@ export const projectRouter = createProtectedRouter()
       })
       .optional(),
     async resolve({ input, ctx }) {
-      const take = input?.take ?? 50
+      const take = input?.take ?? 60
       const skip = input?.skip
       const baseQuery: Array<Prisma.ProjectWhereInput> | undefined =
         ctx.session?.user.role === 'ADMIN'
