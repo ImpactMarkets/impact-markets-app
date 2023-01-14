@@ -50,7 +50,7 @@ export function Pagination({
         <span className="mr-1">
           <ChevronLeftIcon />
         </span>
-        Newer certificates
+        Newer
       </ButtonLink>
       <ButtonLink
         href={{
@@ -64,7 +64,7 @@ export function Pagination({
             : ''
         }
       >
-        Older certificates{' '}
+        Older{' '}
         <span className="ml-1">
           <ChevronRightIcon />
         </span>

@@ -39,7 +39,7 @@ export const certificateRouter = createProtectedRouter()
   .query('feed', {
     input: z
       .object({
-        take: z.number().min(1).max(50).optional(),
+        take: z.number().min(1).max(60).optional(),
         skip: z.number().min(1).optional(),
         authorId: z.string().optional(),
         filterTags: z.string().optional(),
@@ -47,7 +47,7 @@ export const certificateRouter = createProtectedRouter()
       })
       .optional(),
     async resolve({ input, ctx }) {
-      const take = input?.take ?? 50
+      const take = input?.take ?? 60
       const skip = input?.skip
       const baseQuery: Array<Prisma.CertificateWhereInput> | undefined =
         ctx.session?.user.role === 'ADMIN'

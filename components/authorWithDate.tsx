@@ -21,21 +21,21 @@ export function AuthorWithDate({
   return (
     <div className="flex items-center gap-2 sm:gap-4">
       <Link href={`/profile/${author.id}`}>
-        <a className="relative inline-flex">
+        <span className="relative inline-flex">
           <span className="hidden sm:flex">
             <Avatar name={author.name!} src={author.image} size={size} />
           </span>
           <span className="flex sm:hidden">
             <Avatar name={author.name!} src={author.image} size="sm" />
           </span>
-        </a>
+        </span>
       </Link>
       <div className="flex-1">
         <div>
           <Link href={`/profile/${author.id}`}>
-            <a className="font-medium transition-colors hover:text-blue">
+            <span className="font-medium transition-colors hover:text-blue">
               {author.name}
-            </a>
+            </span>
           </Link>
         </div>
         <div className="text-gray-500 text-sm">

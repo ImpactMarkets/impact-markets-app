@@ -9,7 +9,7 @@ import { Layout } from '@/components/layout'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import type { ProjectSummaryProps } from '@/components/project/summary'
 import { SummarySkeleton } from '@/components/summarySkeleton'
-import { ProjectSortKey } from '@/lib/constants'
+import { ITEMS_PER_PAGE, ProjectSortKey } from '@/lib/constants'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
@@ -18,8 +18,6 @@ const ProjectSummary = dynamic<ProjectSummaryProps>(
     import('@/components/project/summary').then((mod) => mod.ProjectSummary),
   { ssr: false }
 )
-
-const ITEMS_PER_PAGE = 20
 
 const Home: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()

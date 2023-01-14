@@ -10,9 +10,7 @@ import { createProtectedRouter } from '../createProtectedRouter'
 
 const getOrderBy = (
   orderByKey: ProjectSortKey | undefined
-):
-  | Prisma.Enumerable<Prisma.ProjectOrderByWithRelationAndSearchRelevanceInput>
-  | undefined => {
+): Prisma.ProjectOrderByWithRelationAndSearchRelevanceInput => {
   const orderOptions = {
     actionStart: { actionStart: Prisma.SortOrder.desc },
     actionEnd: { actionEnd: Prisma.SortOrder.desc },
@@ -33,7 +31,7 @@ export const projectRouter = createProtectedRouter()
   .query('feed', {
     input: z
       .object({
-        take: z.number().min(1).max(50).optional(),
+        take: z.number().min(1).max(60).optional(),
         skip: z.number().min(1).optional(),
         authorId: z.string().optional(),
         filterTags: z.string().optional(),
@@ -41,7 +39,7 @@ export const projectRouter = createProtectedRouter()
       })
       .optional(),
     async resolve({ input, ctx }) {
-      const take = input?.take ?? 50
+      const take = input?.take ?? 60
       const skip = input?.skip
       const baseQuery: Array<Prisma.ProjectWhereInput> | undefined =
         ctx.session?.user.role === 'ADMIN'
@@ -62,7 +60,7 @@ export const projectRouter = createProtectedRouter()
       const projects = await ctx.prisma.project.findMany({
         take,
         skip,
-        orderBy: getOrderBy(input?.orderBy),
+        orderBy: [getOrderBy(input?.orderBy), { id: Prisma.SortOrder.asc }],
         where,
         select: {
           id: true,
@@ -236,7 +234,10 @@ export const projectRouter = createProtectedRouter()
       const projects = await ctx.prisma.project.findMany({
         take: 10,
         where: {
-          hidden: false,
+          OR:
+            ctx.session?.user.role === 'ADMIN'
+              ? undefined
+              : [{ hidden: false }, { authorId: ctx.session?.user.id }],
           title: { search: query },
           content: { search: query },
         },

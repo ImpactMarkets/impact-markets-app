@@ -27,7 +27,7 @@ function SearchResult({
     // eslint-disable-next-line @typescript-eslint/ban-types
     useHighlighted: () => boolean | Boolean // Boolean due to dependency on use-item-list
   }
-  result: InferQueryOutput<'certificate.search'>[number]
+  result: InferQueryOutput<'project.search'>[number]
 }) {
   const ref = React.useRef<HTMLLIElement>(null)
   const { id, highlight, select, useHighlighted } = useItem({
@@ -38,7 +38,7 @@ function SearchResult({
 
   return (
     <li ref={ref} id={id} onMouseEnter={highlight} onClick={select}>
-      <Link href={`/certificate/${result.id}`}>
+      <Link href={`/project/${result.id}`}>
         <a
           className={classNames(
             'block py-3.5 pl-10 pr-3 transition-colors leading-tight',
@@ -59,7 +59,7 @@ function SearchField({ onSelect }: { onSelect: () => void }) {
 
   const feedQuery = trpc.useQuery(
     [
-      'certificate.search',
+      'project.search',
       {
         query: debouncedValue,
       },
@@ -71,7 +71,7 @@ function SearchField({ onSelect }: { onSelect: () => void }) {
 
   const { moveHighlightedItem, selectHighlightedItem, useItem } = useItemList({
     onSelect: (item) => {
-      router.push(`/certificate/${item.value.id}`)
+      router.push(`/project/${item.value.id}`)
       onSelect()
     },
   })

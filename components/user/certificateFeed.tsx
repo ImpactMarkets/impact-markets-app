@@ -5,6 +5,7 @@ import * as React from 'react'
 import type { CertificateSummaryProps } from '@/components/certificate/summary'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import { SummarySkeleton } from '@/components/summarySkeleton'
+import { ITEMS_PER_PAGE } from '@/lib/constants'
 import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc'
 
 const CertificateSummary = dynamic<CertificateSummaryProps>(
@@ -14,8 +15,6 @@ const CertificateSummary = dynamic<CertificateSummaryProps>(
     ),
   { ssr: false }
 )
-
-const ITEMS_PER_PAGE = 20
 
 export function CertificateFeed({
   user: _,
