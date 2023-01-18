@@ -87,7 +87,7 @@ export function Comment({
       <div className="mt-4 pl-11 sm:pl-16">
         <HtmlView html={comment.contentHtml} />
 
-        {!comment.parent && !isReplying && (
+        {session && !comment.parent && !isReplying && (
           <div className="text-secondary hover:text-blue text-sm">
             <button
               type="submit"
