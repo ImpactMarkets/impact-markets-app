@@ -6,6 +6,7 @@ export type IMTag = {
 }
 
 export const TAGS: IMTag[] = [
+  // Types of work
   {
     value: 'article',
     label: 'Article',
@@ -98,7 +99,6 @@ export const TAGS: IMTag[] = [
     color: '#4fcdf7',
     group: 'Type of work',
   },
-  { value: 'other', label: 'Other', color: '#4fcdf7', group: 'Type of work' },
   {
     value: 'personal_communication',
     label: 'Personal communication',
@@ -148,6 +148,49 @@ export const TAGS: IMTag[] = [
     color: '#4fcdf7',
     group: 'Type of work',
   },
+  {
+    value: 'public_goods_infrastructure',
+    label: 'Public goods infrastructure',
+    color: '#4fcdf7',
+    group: 'Type of work',
+  },
+  {
+    value: 'service',
+    label: 'Service',
+    color: '#4fcdf7',
+    group: 'Type of work',
+  },
+  {
+    value: 'campaign',
+    label: 'Campaign',
+    color: '#4fcdf7',
+    group: 'Type of work',
+  },
+  {
+    value: 'study',
+    label: 'Study',
+    color: '#4fcdf7',
+    group: 'Type of work',
+  },
+  {
+    value: 'workshop',
+    label: 'Workshop',
+    color: '#4fcdf7',
+    group: 'Type of work',
+  },
+  {
+    value: 'course',
+    label: 'Course',
+    color: '#4fcdf7',
+    group: 'Type of work',
+  },
+  {
+    value: 'training',
+    label: 'Training',
+    color: '#4fcdf7',
+    group: 'Type of work',
+  },
+  // Fields of work
   {
     value: 'ai_governance',
     label: 'AI governance',
@@ -263,8 +306,8 @@ export const TAGS: IMTag[] = [
     group: 'Field of work',
   },
   {
-    value: 'progress',
-    label: 'Progress',
+    value: 'progress_studies',
+    label: 'Progress studies',
     color: '#47d6ab',
     group: 'Field of work',
   },
@@ -285,5 +328,17 @@ export const TAGS: IMTag[] = [
     label: 'Wild animal welfare',
     color: '#47d6ab',
     group: 'Field of work',
+  },
+  {
+    value: 'other_type_of_work',
+    label: 'Other type of work',
+    color: '#4fcdf7',
+    group: 'Other',
+  },
+  {
+    value: 'other_field_of_work',
+    label: 'Other field of work',
+    color: '#47d6ab',
+    group: 'Other',
   },
 ]
