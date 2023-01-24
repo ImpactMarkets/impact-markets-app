@@ -76,14 +76,18 @@ export function OutgoingDonations({
   }
 
   return (
-    <div className="flex justify-center">
+    <div className="flex flex-col items-center">
+      <div className="w-full max-w-2xl pb-6 text-sm">
+        You can register all your donations here, regardless how long ago you
+        made them and whether the project still accepts donations.
+      </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <table>
           <thead>
             <tr>
               <th className="text-right w-32 pr-3">Date</th>
               <th className="text-right w-32 pr-3">Amount</th>
-              <th className="text-right w-64"></th>
+              <th className="text-right"></th>
             </tr>
           </thead>
           <tbody>
