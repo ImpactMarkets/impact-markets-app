@@ -33,7 +33,6 @@ export function Avatar({ size = 'md', name, src }: AvatarProps) {
           <Image
             src={src}
             alt={name}
-            layout="fixed"
             width={dimension[size]}
             height={dimension[size]}
             className="object-cover rounded-full"

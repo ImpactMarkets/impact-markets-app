@@ -10,7 +10,7 @@ type AuthorProps = {
 export function Author({ author }: AuthorProps) {
   return (
     <div className="relative inline-flex items-center gap-2 w-full">
-      <Link href={`/profile/${author.id}`}>
+      <Link href={`/profile/${author.id}`} className="h-[34px]">
         <span className="relative inline-flex">
           <span className="flex">
             <Avatar name={author.name!} src={author.image} size="sm" />
