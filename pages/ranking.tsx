@@ -21,9 +21,11 @@ const Ranking: NextPageWithAuthAndLayout = () => {
 
         <Heading1>Top Donor Ranking</Heading1>
 
-        <p className="py-6">
+        <p className="py-6 text-sm">
           The algorithm behind this ranking is still under active development
-          and subject to change.
+          and subject to change. It takes into account the size of the donation,
+          how early it was made, and how well the project panned out. It
+          highlights donors with great foresight even if they are not rich.
         </p>
 
         {rankingQuery.data.length === 0 ? (
