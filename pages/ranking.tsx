@@ -30,7 +30,7 @@ const Ranking: NextPageWithAuthAndLayout = () => {
 
         {rankingQuery.data.length === 0 ? (
           <div className="text-center text-secondary border rounded my-10 py-20 px-10">
-            There have been no evaluations yet.
+            There have been either no donations or no evaluations yet.
           </div>
         ) : (
           <div className="flow-root">
