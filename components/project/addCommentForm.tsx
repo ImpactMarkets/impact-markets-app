@@ -53,9 +53,10 @@ export function AddCommentForm({ projectId }: { projectId: string }) {
             value={field.value}
             onChange={field.onChange}
             onTriggerSubmit={handleSubmit(onSubmit)}
-            required
             placeholder="Questions, comments, or feedback?"
             minRows={4}
+            data-testid="comment-form"
+            required
           />
         )}
       />
