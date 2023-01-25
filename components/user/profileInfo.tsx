@@ -130,8 +130,8 @@ function EditProfileDialog({
             />
             <TextField
               {...register('title')}
-              label="Title"
-              placeholder="Lictor of Thrax"
+              label="Title or role"
+              placeholder="Lictor of Thrax, CEO of Gem Inc., etc."
             />
             <TextField
               {...register('proofUrl', {})}
@@ -148,10 +148,11 @@ function EditProfileDialog({
                     My impactmarkets.io profile
                   </a>
                   . Please put it on a personal page that is clearly yours and
-                  paste a link to that page below.
+                  paste a link to that page below. Putting a link to your
+                  certificate on a website that only you can edit proves to your
+                  supporters that you are really who you claim to be.
                 </span>
               }
-              info="Putting a link to your certificate on a website that only you can edit proves to readers on this page that you are really who you claim to be."
               placeholder="https://forum.effectivealtruism.org/users/inga"
               type="url"
               className="my-6"
@@ -160,7 +161,7 @@ function EditProfileDialog({
               {...register('paymentUrl')}
               label="Payment link"
               placeholder="https://ko-fi.com/velvetillumnation"
-              description="Please enter a link to a page where people can pay you (e.g., PayPal, Stripe, Ko-Fi, etc.)"
+              description="A page for people can pay you (Stripe, PayPal, Ko-Fi, etc.). Only needed for certificates."
             />
           </div>
           <DialogCloseButton onClick={handleClose} />
