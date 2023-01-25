@@ -17,14 +17,14 @@ test.beforeEach(async ({ page }) => {
   await page.click('text=New project')
 })
 
-test.describe('Add Comments and Replies', () => {
+test.describe('Submits and Replies', () => {
   test('should allow creating a comment', async ({ page }) => {
     const titleText = '0'
     await fillInAndCreateCert(page, titleText)
 
     const commentText0 = 'toplevel comment 0'
-    await page.locator('[placeholder="Comment"]').fill(commentText0)
-    await page.click('text=Add comment')
+    await page.locator('[data-testid="comment-form"]').fill(commentText0)
+    await page.click('text=Submit')
 
     await expect(page.locator('text=' + commentText0)).toBeVisible({
       visible: true,
@@ -41,13 +41,13 @@ test.describe('Add Comments and Replies', () => {
       'toplevel comment 2',
     ]
     for (const commentText of commentTexts) {
-      await page.locator('[placeholder="Comment"]').fill(commentText)
-      await page.click('text=Add comment')
+      await page.locator('[data-testid="comment-form"]').fill(commentText)
+      await page.click('text=Submit')
 
       // TODO: Replace these delays with an await for some less brittle confirmation of submission.
       // For some reason there's a weird race condition where we try to fill in the next comment
       // before the Comment box is actually visible on the page. I've tried waiting for various
-      // elements to become visible (the post itself, the "Add comment" button, etc), but no
+      // elements to become visible (the post itself, the "Submit" button, etc), but no
       // luck yet.
       await delay(200)
     }
@@ -63,8 +63,10 @@ test.describe('Add Comments and Replies', () => {
     const titleText = '2'
     await fillInAndCreateCert(page, titleText)
 
-    await page.locator('[placeholder="Comment"]').fill('toplevel comment 0')
-    await page.click('text=Add comment')
+    await page
+      .locator('[data-testid="comment-form"]')
+      .fill('toplevel comment 0')
+    await page.click('text=Submit')
     await delay(200)
 
     page.locator(':nth-match(button:is(:text("reply")), 1)').click()
@@ -90,8 +92,8 @@ test.describe('Add Comments and Replies', () => {
       'toplevel comment 2',
     ]
     for (const commentText of commentTexts) {
-      await page.locator('[placeholder="Comment"]').fill(commentText)
-      await page.click('text=Add comment')
+      await page.locator('[data-testid="comment-form"]').fill(commentText)
+      await page.click('text=Submit')
       await delay(200)
     }
 

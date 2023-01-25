@@ -25,9 +25,7 @@ import { InferQueryOutput, trpc } from '@/lib/trpc'
 import { getCertificateQueryPathAndInput } from '../utils'
 
 type MenuProps = {
-  queryData:
-    | InferQueryOutput<'certificate.detail'>
-    | InferQueryOutput<'project.detail'>
+  queryData: InferQueryOutput<'certificate.detail'>
   isUserAdmin: boolean
   belongsToUser: boolean
 }
@@ -147,13 +145,13 @@ function ConfirmHideDialog({
       <DialogContent>
         <DialogTitle>Hide certificate</DialogTitle>
         <DialogDescription className="mt-6">
-          Are you sure you want to publish this certificate?
+          Are you sure you want to unpublish this certificate?
         </DialogDescription>
         <DialogCloseButton onClick={onClose} />
       </DialogContent>
       <DialogActions>
         <Button
-          variant="secondary"
+          variant="primary"
           isLoading={hideCertificateMutation.isLoading}
           loadingChildren="Hiding certificate"
           onClick={() => {
@@ -202,13 +200,13 @@ function ConfirmUnhideDialog({
       <DialogContent>
         <DialogTitle>Unhide certificate</DialogTitle>
         <DialogDescription className="mt-6">
-          Are you sure you want to unpublish this certificate?
+          Are you sure you want to publish this certificate?
         </DialogDescription>
         <DialogCloseButton onClick={onClose} />
       </DialogContent>
       <DialogActions>
         <Button
-          variant="secondary"
+          variant="primary"
           isLoading={unhideCertificateMutation.isLoading}
           loadingChildren="Unhiding certificate"
           onClick={() => {

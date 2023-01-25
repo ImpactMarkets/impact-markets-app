@@ -15,8 +15,8 @@ import { LikeButton } from '@/components/likeButton'
 import { AddCommentForm } from '@/components/project/addCommentForm'
 import { Comment } from '@/components/project/comment'
 import { IncomingDonations } from '@/components/project/incomingDonations'
+import { Menu } from '@/components/project/menu'
 import { OutgoingDonations } from '@/components/project/outgoingDonations'
-import { Menu } from '@/components/projectAndCertificate/menu'
 import { Tags } from '@/components/tags'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
@@ -111,7 +111,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
           <title>{project.title} – Impact Markets</title>
         </Head>
 
-        <div className="divide-y divide-primary">
+        <div>
           <div className="pb-12">
             {project.hidden && (
               <Banner className="mb-6">
@@ -122,8 +122,8 @@ function ProjectPage({ projectId }: { projectId: string }) {
             {!project.author.proofUrl && (
               <Banner className="mb-6">
                 {project.author.id === session?.user.id
-                  ? 'Please enter proof of your identity on your'
-                  : 'The author of this project has not yet entered proof of their'}{' '}
+                  ? 'Please click the pen icon to enter proof of your identity on your'
+                  : 'The author of this project has not yet entered proof of their identity on their'}{' '}
                 <Link href={`/profile/${project.author.id}`}>
                   <span className="link">user profile</span>
                 </Link>
@@ -226,44 +226,60 @@ function ProjectPage({ projectId }: { projectId: string }) {
             </div>
           </div>
 
-          <div id="comments" className="pt-12 space-y-12">
-            {project.comments.length > 0 && (
-              <ul className="space-y-12">
-                {project.comments.map((comment) => (
-                  <li key={comment.id}>
-                    <Comment projectId={project.id} comment={comment} />
+          <Tabs defaultValue="questions-and-answers">
+            <Tabs.List>
+              <Tabs.Tab value="questions-and-answers">
+                Questions and answers
+              </Tabs.Tab>
+            </Tabs.List>
 
-                    <div id="replies" className="pt-12 pl-14 space-y-12">
-                      {comment.children.length > 0 && (
-                        <ul className="space-y-12">
-                          {comment.children.map((reply) => (
-                            <li key={reply.id}>
-                              <Comment projectId={project.id} comment={reply} />
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-            {session && (
-              <div className="flex items-start gap-2 sm:gap-4">
-                <span className="hidden sm:inline-block">
-                  <Avatar name={session!.user.name} src={session!.user.image} />
-                </span>
-                <span className="inline-block sm:hidden">
-                  <Avatar
-                    name={session!.user.name}
-                    src={session!.user.image}
-                    size="sm"
-                  />
-                </span>
-                <AddCommentForm projectId={project.id} />
+            <Tabs.Panel value="questions-and-answers" pt="xs">
+              <div id="comments" className="pt-12 space-y-12">
+                {project.comments.length > 0 && (
+                  <ul className="space-y-12">
+                    {project.comments.map((comment) => (
+                      <li key={comment.id}>
+                        <Comment projectId={project.id} comment={comment} />
+
+                        <div id="replies" className="pt-12 pl-14 space-y-12">
+                          {comment.children.length > 0 && (
+                            <ul className="space-y-12">
+                              {comment.children.map((reply) => (
+                                <li key={reply.id}>
+                                  <Comment
+                                    projectId={project.id}
+                                    comment={reply}
+                                  />
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {session && (
+                  <div className="flex items-start gap-2 sm:gap-4">
+                    <span className="hidden sm:inline-block">
+                      <Avatar
+                        name={session!.user.name}
+                        src={session!.user.image}
+                      />
+                    </span>
+                    <span className="inline-block sm:hidden">
+                      <Avatar
+                        name={session!.user.name}
+                        src={session!.user.image}
+                        size="sm"
+                      />
+                    </span>
+                    <AddCommentForm projectId={project.id} />
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </Tabs.Panel>
+          </Tabs>
         </div>
       </>
     )

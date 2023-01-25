@@ -38,15 +38,14 @@ function SearchResult({
 
   return (
     <li ref={ref} id={id} onMouseEnter={highlight} onClick={select}>
-      <Link href={`/project/${result.id}`}>
-        <a
-          className={classNames(
-            'block py-3.5 pl-10 pr-3 transition-colors leading-tight',
-            highlighted && 'bg-blue-600 text-white'
-          )}
-        >
-          {result.title}
-        </a>
+      <Link
+        href={`/project/${result.id}`}
+        className={classNames(
+          'block py-3.5 pl-10 pr-3 transition-colors leading-tight',
+          highlighted && 'bg-blue-600 text-white'
+        )}
+      >
+        {result.title}
       </Link>
     </li>
   )

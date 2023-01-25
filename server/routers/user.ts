@@ -12,6 +12,7 @@ export const userRouter = createProtectedRouter()
     }),
     async resolve({ ctx, input }) {
       const { id } = input
+      const isOwnProfile = ctx.session?.userId === id
       const user = await ctx.prisma.user.findUnique({
         where: { id },
         select: {
@@ -21,6 +22,7 @@ export const userRouter = createProtectedRouter()
           title: true,
           proofUrl: true,
           paymentUrl: true,
+          prefersAnonymity: true,
           email: ctx.session?.user.role === 'ADMIN',
         },
       })
@@ -32,7 +34,13 @@ export const userRouter = createProtectedRouter()
         })
       }
 
-      return user
+      return {
+        ...user,
+        name:
+          user.prefersAnonymity && !isOwnProfile
+            ? user.name[0] + '. Anonymous'
+            : user.name,
+      }
     },
   })
   .mutation('edit', {

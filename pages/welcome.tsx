@@ -27,7 +27,6 @@ const LandingPage: NextPageWithAuthAndLayout = () => {
             alt="Trophy"
             width={626}
             height={378}
-            layout="fixed"
             object-fit="contain"
             unoptimized
           />
@@ -71,7 +70,6 @@ const LandingPage: NextPageWithAuthAndLayout = () => {
             alt="Trophy"
             width={626}
             height={378}
-            layout="fixed"
             object-fit="contain"
             unoptimized
           />
