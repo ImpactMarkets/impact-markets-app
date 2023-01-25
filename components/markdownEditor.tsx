@@ -20,12 +20,14 @@ import {
 } from '@/lib/editor'
 import { trpc } from '@/lib/trpc'
 import { Switch } from '@headlessui/react'
+import { Input } from '@mantine/core'
 
 import { InfoTooltip } from './infoTooltip'
 import { Label } from './label'
 
 type MarkdownEditorProps = {
   label?: string | React.ReactElement
+  description?: string | React.ReactElement
   info?: string | React.ReactElement
   value: string
   onChange: (value: string) => void
@@ -133,6 +135,7 @@ function MarkdownPreview({ markdown }: { markdown: string }) {
 
 export function MarkdownEditor({
   label,
+  description,
   info,
   value,
   minRows = 15,
@@ -161,8 +164,14 @@ export function MarkdownEditor({
     <div>
       {label && (
         <Label className="block mb-2">
-          {label} {info && <InfoTooltip text={info} />}
+          {label}
+          {info && <InfoTooltip text={info} />}
         </Label>
+      )}
+      {description && (
+        <Input.Description className="block mb-2">
+          {description}
+        </Input.Description>
       )}
       <div>
         <div className="flex items-center justify-between gap-4 px-4 py-px border rounded bg-primary">

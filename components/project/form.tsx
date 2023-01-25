@@ -14,11 +14,13 @@ import { IMMultiSelect } from '../multiSelect'
 
 const DESCRIPTION_PROMPTS = (
   <>
-    <p className="mt-2 ml-1">Please touch on the following points:</p>
+    <p className="mt-2 ml-1">Ideally please touch on the following points:</p>
     <ol className="list-decimal list-outside m-6">
       <li className="mb-2">
         What is the action that this project is about? What is the goal?
       </li>
+
+      <li className="mb-2">What are your funding targets and stretch goals?</li>
 
       <li className="mb-2">
         Once you have already completed it, where can supporters see proof of
@@ -125,13 +127,13 @@ export function ProjectForm({
         <TextField
           {...register('actionStart', { valueAsDate: true })}
           label="Start of the work period"
-          description="When did you (or will you) start working on this?"
+          description="When did you (or will you) start working on this? (Optional)"
           type="date"
         />
         <TextField
           {...register('actionEnd', { valueAsDate: true })}
           label="End of the work period"
-          description="… finish working on this? You can add or edit these later."
+          description="… finish working on this? You can add or edit these later. (Optional)"
           type="date"
         />
       </SimpleGrid>
@@ -140,7 +142,7 @@ export function ProjectForm({
           {...register('tags')}
           label="Tags"
           description={TagDescription(
-            'Please select all that apply or <a>leave us feedback</a> if you can’t find suitable tags for your field and type of work so we can add them.'
+            'Please select all that apply or <a>leave us feedback</a> if you can’t find suitable tags for your field and type of work so we can add them. (Optional)'
           )}
           placeholder="Pick all that apply"
           data={TAGS.map((tag) => ({
@@ -158,7 +160,7 @@ export function ProjectForm({
       <TextField
         {...register('paymentUrl')}
         label="Payment URL"
-        description="A link to a page where people can donate to the project."
+        description="A link to a page where people can donate to the project. (Optional)"
         placeholder="https://ko-fi.com/velvetillumnation"
         className="my-6"
       />
@@ -170,6 +172,7 @@ export function ProjectForm({
           render={({ field }) => (
             <MarkdownEditor
               label="Description"
+              description="Please hover over the question mark icon for some guidance. But don’t worry, supporters can ask questions too."
               info={DESCRIPTION_PROMPTS}
               value={field.value}
               onChange={field.onChange}
