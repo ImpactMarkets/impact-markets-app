@@ -234,8 +234,8 @@ function ProjectPage({ projectId }: { projectId: string }) {
             </Tabs.List>
 
             <Tabs.Panel value="questions-and-answers" pt="xs">
-              <div id="comments" className="pt-12 space-y-12">
-                {project.comments.length > 0 && (
+              <div id="comments" className="pt-6 space-y-12">
+                {project.comments.length > 0 ? (
                   <ul className="space-y-12">
                     {project.comments.map((comment) => (
                       <li key={comment.id}>
@@ -258,6 +258,8 @@ function ProjectPage({ projectId }: { projectId: string }) {
                       </li>
                     ))}
                   </ul>
+                ) : (
+                  <p className="pb-6">No comments yet</p>
                 )}
                 {session && (
                   <div className="flex items-start gap-2 sm:gap-4">
