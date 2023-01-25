@@ -122,8 +122,8 @@ function ProjectPage({ projectId }: { projectId: string }) {
             {!project.author.proofUrl && (
               <Banner className="mb-6">
                 {project.author.id === session?.user.id
-                  ? 'Please enter proof of your identity on your'
-                  : 'The author of this project has not yet entered proof of their'}{' '}
+                  ? 'Please click the pen icon to enter proof of your identity on your'
+                  : 'The author of this project has not yet entered proof of their identity on their'}{' '}
                 <Link href={`/profile/${project.author.id}`}>
                   <span className="link">user profile</span>
                 </Link>
