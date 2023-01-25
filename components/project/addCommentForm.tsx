@@ -54,7 +54,7 @@ export function AddCommentForm({ projectId }: { projectId: string }) {
             onChange={field.onChange}
             onTriggerSubmit={handleSubmit(onSubmit)}
             required
-            placeholder="Comment"
+            placeholder="Questions, comments, or feedback?"
             minRows={4}
           />
         )}
@@ -63,9 +63,9 @@ export function AddCommentForm({ projectId }: { projectId: string }) {
         <Button
           type="submit"
           isLoading={addCommentMutation.isLoading}
-          loadingChildren="Adding comment"
+          loadingChildren="Submitting"
         >
-          Add comment
+          Submit
         </Button>
       </div>
     </form>
