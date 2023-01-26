@@ -130,7 +130,7 @@ export function OutgoingDonations({
                 </td>
                 <td className="text-right pr-3">${num(donation.amount)}</td>
                 <td className="text-left pl-2">
-                  {donation.userId === session!.user.id &&
+                  {donation.user.id === session!.user.id &&
                     (donation.state === 'PENDING' ? (
                       <Button
                         type="button"
