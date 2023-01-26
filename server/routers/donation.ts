@@ -31,7 +31,7 @@ export const donationRouter = createProtectedRouter()
           time: true,
           state: true,
           amount: true,
-          userId: true,
+          user: true,
           projectId: true,
         },
       })

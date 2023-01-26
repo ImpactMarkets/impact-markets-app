@@ -5,6 +5,7 @@ import toast from 'react-hot-toast'
 import { num } from '@/lib/text'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
 
+import { Author } from '../author'
 import { Button } from '../button'
 
 export function IncomingDonations({
@@ -46,11 +47,20 @@ export function IncomingDonations({
     },
   })
 
+  if (donations.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center w-full h-full">
+        <div className="text-gray-500">No incoming donations</div>
+      </div>
+    )
+  }
+
   return (
     <div className="flex justify-center">
       <table className="text-sm">
         <thead>
           <tr>
+            <th className="text-left w-64">Donor</th>
             <th className="text-left w-32">Date</th>
             <th className="text-right w-32">Amount</th>
             <th className="text-left w-64"></th>
@@ -59,6 +69,10 @@ export function IncomingDonations({
         <tbody>
           {donations?.map((donation) => (
             <tr key={donation.id}>
+              {/* FIXME: The row should be 34 px high but it’s ~ 42 px */}
+              <td className="text-left">
+                <Author author={donation.user} />
+              </td>
               <td className="text-left">
                 {donation.time.toISOString().slice(0, 10)}
               </td>
