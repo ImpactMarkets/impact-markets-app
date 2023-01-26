@@ -411,7 +411,7 @@ export function ProfileInfo({
               </IconButton>
               <MantineButton
                 className="bg-red-600 hover:bg-red-400"
-                onClick={() => signOut()}
+                onClick={async () => signOut({ redirect: false })}
               >
                 Sign out
               </MantineButton>
