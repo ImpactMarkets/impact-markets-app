@@ -18,11 +18,18 @@ export const permissionMiddleware: MiddlewareFunction = async ({
   // This is needed for Prettier to process this file:
   // https://github.com/trivago/prettier-plugin-sort-imports/issues/113#issuecomment-1226730519
 
-  const isAuthenticated = () => {
+  // Alternatives to && and || that first assert that the parameters are all already booleans.
+  // This prevents (the truthy) Promise<boolean> from slipping through, which may evaluate to false.
+  const or = (...args: boolean[]) => args.some((x) => x)
+  const and = (...args: boolean[]) => args.every((x) => x)
+
+  const allow = async () => true
+
+  const isAuthenticated = async () => {
     return !!ctx.session
   }
 
-  const isAdmin = () => {
+  const isAdmin = async () => {
     return ctx.session?.user.role === 'ADMIN'
   }
 
@@ -141,52 +148,83 @@ export const permissionMiddleware: MiddlewareFunction = async ({
   // Permissions
 
   const permissions = {
-    'certificate.feed': () => true,
-    'certificate.detail': () => true,
-    'certificate.search': () => true,
+    'certificate.feed': allow,
+    'certificate.detail': allow,
+    'certificate.search': allow,
     'certificate.add': isAuthenticated,
-    'certificate.edit': () =>
-      isAuthenticated() && (isAdmin() || certificateBelongsToUser()),
+    'certificate.edit': async () =>
+      and(
+        await isAuthenticated(),
+        or(await isAdmin(), await certificateBelongsToUser())
+      ),
     'certificate.like': isAuthenticated,
     'certificate.unlike': isAuthenticated,
     'certificate.hide': isAdmin,
     'certificate.unhide': isAdmin,
-    'project.feed': () => true,
-    'project.detail': () => true,
-    'project.search': () => true,
+    'project.feed': allow,
+    'project.detail': allow,
+    'project.search': allow,
     'project.add': isAuthenticated,
-    'project.edit': () =>
-      isAuthenticated() && (isAdmin() || projectBelongsToUser()),
+    'project.edit': async () =>
+      and(
+        await isAuthenticated(),
+        or(await isAdmin(), await projectBelongsToUser())
+      ),
     'project.like': isAuthenticated,
     'project.unlike': isAuthenticated,
     'project.hide': isAdmin,
     'project.unhide': isAdmin,
     'comment.add': isAuthenticated,
-    'comment.edit': () =>
-      isAuthenticated() && (isAdmin() || commentBelongsToUser()),
-    'comment.delete': () =>
-      isAuthenticated() && (isAdmin() || commentBelongsToUser()),
-    'holding.feed': () => true,
-    'holding.edit': () =>
-      isAuthenticated() && (isAdmin() || holdingBelongsToUser()),
+    'comment.edit': async () =>
+      and(
+        await isAuthenticated(),
+        or(await isAdmin(), await commentBelongsToUser())
+      ),
+    'comment.delete': async () =>
+      and(
+        await isAuthenticated(),
+        or(await isAdmin(), await commentBelongsToUser())
+      ),
+    'holding.feed': allow,
+    'holding.edit': async () =>
+      and(
+        await isAuthenticated(),
+        or(await isAdmin(), await holdingBelongsToUser())
+      ),
     'donation.feed': isAuthenticated,
     'donation.add': isAuthenticated,
-    'donation.confirm': () =>
-      isAuthenticated() && (isAdmin() || donationProjectBelongsToUser()),
-    'donation.cancel': () =>
-      isAuthenticated() &&
-      (isAdmin() || donationProjectBelongsToUser() || donationBelongsToUser()),
+    'donation.confirm': async () =>
+      and(
+        await isAuthenticated(),
+        or(await isAdmin(), await donationProjectBelongsToUser())
+      ),
+    'donation.cancel': async () =>
+      and(
+        await isAuthenticated(),
+        or(
+          await isAdmin(),
+          await donationProjectBelongsToUser(),
+          await donationBelongsToUser()
+        )
+      ),
     'transaction.feed': isAuthenticated,
     'transaction.add': isAuthenticated,
-    'transaction.confirm': () =>
-      isAuthenticated() && (isAdmin() || sellingHoldingBelongsToUser()),
-    'transaction.cancel': () =>
-      isAuthenticated() &&
-      (isAdmin() ||
-        buyingHoldingBelongsToUser() ||
-        sellingHoldingBelongsToUser()),
-    'user.topDonors': () => true,
-    'user.profile': () => true,
+    'transaction.confirm': async () =>
+      and(
+        await isAuthenticated(),
+        or(await isAdmin(), await sellingHoldingBelongsToUser())
+      ),
+    'transaction.cancel': async () =>
+      and(
+        await isAuthenticated(),
+        or(
+          await isAdmin(),
+          await buyingHoldingBelongsToUser(),
+          await sellingHoldingBelongsToUser()
+        )
+      ),
+    'user.topDonors': allow,
+    'user.profile': allow,
     'user.edit': isAuthenticated, // Always edits the same user
     'user.update-avatar': isAuthenticated, // Always edits the same user
     'user.preferences': isAuthenticated, // Always edits the same user
