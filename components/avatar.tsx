@@ -27,7 +27,7 @@ export function Avatar({ size = 'md', name, src }: AvatarProps) {
   const initial = name.charAt(0).toLocaleLowerCase()
 
   return (
-    <div className="relative inline-flex flex-shrink-0 rounded-full">
+    <div className="relative self-center flex-shrink-0 rounded-full aspect-square">
       {src ? (
         <>
           <Image
