@@ -1,9 +1,11 @@
 import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
+import { Banner } from '@/components/banner'
 import type { CertificateSummaryProps } from '@/components/certificate/summary'
 import { Filters } from '@/components/filters'
 import { Layout } from '@/components/layout'
@@ -116,15 +118,25 @@ const Home: NextPageWithAuthAndLayout = () => {
             defaultOrderByValue={orderBy}
           />
         </div>
+        <Banner className="my-6">
+          This is an archive. Please see the{' '}
+          <Link href="/" className="link">
+            projects
+          </Link>{' '}
+          page for the current projects.
+        </Banner>
         {feedQuery.data.certificateCount === 0 ? (
           <div className="text-center text-secondary border rounded my-10 py-20 px-10">
             There are no published certificates to show yet.
           </div>
         ) : (
           <div className="flow-root">
-            <ul className="my-5 divide-y divide-transparent">
+            <ul className="divide-y divide-transparent flex flex-wrap gap-2">
               {feedQuery.data.certificates.map((certificate) => (
-                <li key={certificate.id} className="py-6">
+                <li
+                  key={certificate.id}
+                  className="w-full max-w-full xl:w-[49%] xl:max-w-[49%] 2xl:w-[32%] 2xl:max-w-[32%]"
+                >
                   <CertificateSummary
                     certificate={certificate}
                     onLike={() => {

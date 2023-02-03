@@ -7,8 +7,8 @@ import { browserEnv } from '@/env/browser'
 import { Navbar as MantineNavbar, createStyles } from '@mantine/core'
 import {
   IconBolt,
-  IconBuildingStore,
   IconFile,
+  IconFileCertificate,
   IconHome,
   IconLifebuoy,
   IconTrophy,
@@ -90,8 +90,9 @@ const useStyles = createStyles((theme, _params, getRef) => {
 
 const data = [
   { link: '/', label: 'Projects', icon: IconHome },
+  { link: '/certificates', label: 'Certificates', icon: IconFileCertificate },
   { link: '/ranking', label: 'Top donors', icon: IconTrophy },
-  { link: '/funders', label: 'Funders & prizes', icon: IconBuildingStore },
+  //  { link: '/funders', label: 'Funders & prizes', icon: IconBuildingStore },
   { link: '/why', label: 'Why impact markets?', icon: IconBolt },
   { link: '/rules', label: 'Rules & terms', icon: IconFile },
   { link: '/support', label: 'Help & support', icon: IconLifebuoy },
