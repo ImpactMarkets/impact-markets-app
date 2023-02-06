@@ -148,7 +148,7 @@ export const userRouter = createProtectedRouter()
           "name",
           "image",
           "prefersAnonymity",
-          SUM(("contribution" / "contributionTotal") * "credits") as "totalCredits"
+          SUM(("contribution" / "contributionTotal") * "credits")::numeric as "totalCredits"
         FROM (
           SELECT
             "id",
@@ -160,8 +160,8 @@ export const userRouter = createProtectedRouter()
             "prefersAnonymity",
             "runningTotal",
             "projectTotal",
-            "amount" / "runningTotal" as "contribution",
-            SUM("amount" / "runningTotal")
+            "amount" / "runningTotal"::float as "contribution",
+            SUM("amount" / "runningTotal"::float)
               OVER (PARTITION BY "projectId") as "contributionTotal"
           FROM (
             SELECT
@@ -173,13 +173,21 @@ export const userRouter = createProtectedRouter()
               "Donation"."projectId",
               "Project"."credits",
               (100 + SUM("Donation"."amount")
-                OVER (ORDER BY time ASC)) as "runningTotal",
+                OVER (
+                  PARTITION BY "Donation"."projectId"
+                  ORDER BY "Donation"."time" ASC, "Donation"."id" ASC
+                )
+              ) as "runningTotal",
               (100 + SUM("Donation"."amount")
-                OVER (PARTITION BY "Donation"."projectId")) as "projectTotal"
+                OVER (
+                  PARTITION BY "Donation"."projectId"
+                )
+              ) as "projectTotal"
             FROM "Donation"
             JOIN "User" ON "User"."id" = "Donation"."userId"
             JOIN "Project" ON "Donation"."projectId" = "Project"."id"
             WHERE "Project"."credits" > 0 and "Donation"."state" = 'CONFIRMED'
+            ORDER BY "Donation"."projectId" ASC, "Donation"."time" ASC
           ) subtotals
         ) contributions
         GROUP BY "id", "name", "image", "prefersAnonymity"
