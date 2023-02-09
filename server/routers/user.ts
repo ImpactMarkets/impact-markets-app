@@ -135,7 +135,11 @@ export const userRouter = createProtectedRouter()
     },
   })
   .query('topDonors', {
-    async resolve({ ctx }) {
+    input: z.object({
+      ignoreSize: z.boolean().optional(),
+      pastDays: z.number().optional(),
+    }),
+    async resolve({ ctx, input: { ignoreSize = false, pastDays = 1e6 } }) {
       const users: {
         id: string
         name: string
@@ -143,13 +147,52 @@ export const userRouter = createProtectedRouter()
         prefersAnonymity: boolean
         totalCredits: Prisma.Decimal
       }[] = await ctx.prisma.$queryRaw`
-        SELECT
-          "id",
-          "name",
-          "image",
-          "prefersAnonymity",
-          SUM(("contribution" / "contributionTotal") * "credits")::numeric as "totalCredits"
-        FROM (
+        WITH
+          raw_donations AS (
+            SELECT
+              "User"."id",
+              "User"."name",
+              "User"."image",
+              "User"."prefersAnonymity",
+              CASE
+                WHEN ${ignoreSize} THEN 1
+                ELSE "Donation"."amount"
+              END as "amount",
+              "Donation"."projectId",
+              "Donation"."time",
+              "Project"."credits"
+            FROM "Donation"
+            JOIN "User" ON "User"."id" = "Donation"."userId"
+            JOIN "Project" ON "Donation"."projectId" = "Project"."id"
+            WHERE 
+              "Project"."credits" > 0 AND
+              "Donation"."state" = 'CONFIRMED' AND
+              "Donation"."time" > now() - make_interval(days => ${pastDays}::int)
+            ORDER BY "Donation"."projectId" ASC, "Donation"."time" ASC
+          ),
+          donations AS (
+            SELECT
+              "id",
+              "name",
+              "image",
+              "prefersAnonymity",
+              "projectId",
+              "credits",
+              "amount",
+              (100 + SUM("amount")
+                OVER (
+                  PARTITION BY "projectId"
+                  ORDER BY "time" ASC, "id" ASC
+                )
+              ) as "runningTotal",
+              (100 + SUM(raw_donations."amount")
+                OVER (
+                  PARTITION BY "projectId"
+                )
+              ) as "projectTotal"
+            FROM raw_donations
+        ),
+        contributions AS (
           SELECT
             "id",
             "name",
@@ -163,39 +206,22 @@ export const userRouter = createProtectedRouter()
             "amount" / "runningTotal"::float as "contribution",
             SUM("amount" / "runningTotal"::float)
               OVER (PARTITION BY "projectId") as "contributionTotal"
-          FROM (
-            SELECT
-              "User"."id",
-              "User"."name",
-              "User"."image",
-              "User"."prefersAnonymity",
-              "Donation"."amount",
-              "Donation"."projectId",
-              "Project"."credits",
-              (100 + SUM("Donation"."amount")
-                OVER (
-                  PARTITION BY "Donation"."projectId"
-                  ORDER BY "Donation"."time" ASC, "Donation"."id" ASC
-                )
-              ) as "runningTotal",
-              (100 + SUM("Donation"."amount")
-                OVER (
-                  PARTITION BY "Donation"."projectId"
-                )
-              ) as "projectTotal"
-            FROM "Donation"
-            JOIN "User" ON "User"."id" = "Donation"."userId"
-            JOIN "Project" ON "Donation"."projectId" = "Project"."id"
-            WHERE "Project"."credits" > 0 and "Donation"."state" = 'CONFIRMED'
-            ORDER BY "Donation"."projectId" ASC, "Donation"."time" ASC
-          ) subtotals
-        ) contributions
+          FROM donations
+        )
+        SELECT
+          "id",
+          "name",
+          "image",
+          "prefersAnonymity",
+          SUM(("contribution" / "contributionTotal") * "credits")::numeric as "totalCredits"
+        FROM contributions
         GROUP BY "id", "name", "image", "prefersAnonymity"
         ORDER BY "totalCredits" DESC
         LIMIT 100;
       `
-      return users.map(({ name, prefersAnonymity, ...rest }) => ({
+      return users.map(({ name, image, prefersAnonymity, ...rest }) => ({
         name: prefersAnonymity ? name[0] + '. Anonymous' : name,
+        image: prefersAnonymity ? '' : image,
         ...rest,
       }))
     },
