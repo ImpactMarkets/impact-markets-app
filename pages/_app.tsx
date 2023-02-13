@@ -10,6 +10,7 @@ import { transformer } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { AppRouter } from '@/server/routers/_app'
 import { MantineProvider } from '@mantine/core'
+import { Barlow_Condensed, Open_Sans } from '@next/font/google'
 import { Provider as RollbarProvider } from '@rollbar/react'
 import { httpBatchLink } from '@trpc/client/links/httpBatchLink'
 import { loggerLink } from '@trpc/client/links/loggerLink'
@@ -17,6 +18,14 @@ import { withTRPC } from '@trpc/next'
 import { TRPCError } from '@trpc/server'
 
 import '../styles/globals.css'
+
+const barlowCondensed = Barlow_Condensed({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+})
+const openSans = Open_Sans({
+  subsets: ['latin'],
+})
 
 type AppPropsWithAuthAndLayout = AppProps & {
   Component: NextPageWithAuthAndLayout
@@ -52,6 +61,14 @@ function MyApp({
               attribute="class"
               disableTransitionOnChange
             >
+              {/* Hack because the default variable definitions don’t seem to work because they
+              are namespaced within the class openSans.variable */}
+              <style jsx global>{`
+                body {
+                  --font-barlow-condensed: ${barlowCondensed.style.fontFamily};
+                  --font-open-sans: ${openSans.style.fontFamily};
+                }
+              `}</style>
               {Component.auth ? (
                 <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
               ) : (

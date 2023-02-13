@@ -101,8 +101,11 @@ module.exports = {
         'theme-blue': '#228be6',
       },
       fontFamily: {
-        sans: ['"Open Sans"', ...defaultTheme.fontFamily.sans],
-        display: ['"Barlow Condensed"', ...defaultTheme.fontFamily.sans],
+        sans: ['var(--font-open-sans)', ...defaultTheme.fontFamily.sans],
+        display: [
+          'var(--font-barlow-condensed)',
+          ...defaultTheme.fontFamily.sans,
+        ],
       },
       fontSize: {
         base: ['16px', '24px'],
