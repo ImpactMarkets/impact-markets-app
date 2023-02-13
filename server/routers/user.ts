@@ -155,7 +155,7 @@ export const userRouter = createProtectedRouter()
               "User"."image",
               "User"."prefersAnonymity",
               CASE
-                WHEN ${ignoreSize} THEN 1
+                WHEN ${ignoreSize} THEN 100
                 ELSE "Donation"."amount"
               END as "amount",
               "Donation"."projectId",
@@ -185,7 +185,7 @@ export const userRouter = createProtectedRouter()
                   ORDER BY "time" ASC, "id" ASC
                 )
               ) as "runningTotal",
-              (100 + SUM(raw_donations."amount")
+              (100 + SUM("amount")
                 OVER (
                   PARTITION BY "projectId"
                 )
