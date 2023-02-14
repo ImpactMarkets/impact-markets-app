@@ -20,7 +20,7 @@ export function Layout({ children }: LayoutProps) {
     }
   }, [opened, setOpened])
 
-  // Hook to close the menu when a link is cliked
+  // Hook to close the menu when a link is clicked
   useEffect(() => {
     router.events.on('routeChangeStart', closeMenu)
 

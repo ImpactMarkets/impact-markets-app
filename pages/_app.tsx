@@ -6,6 +6,7 @@ import { Toaster } from 'react-hot-toast'
 import { IntercomProvider } from 'react-use-intercom'
 
 import { browserEnv } from '@/env/browser'
+import { emotionCache } from '@/lib/emotionCache'
 import { transformer } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { AppRouter } from '@/server/routers/_app'
@@ -54,7 +55,12 @@ function MyApp({
   return (
     <RollbarProvider config={rollbarConfig}>
       <IntercomProvider appId={browserEnv.NEXT_PUBLIC_INTERCOM_APP_ID} autoBoot>
-        <MantineProvider withCSSVariables withGlobalStyles withNormalizeCSS>
+        <MantineProvider
+          emotionCache={emotionCache}
+          withCSSVariables
+          withGlobalStyles
+          withNormalizeCSS
+        >
           <SessionProvider session={session} refetchOnWindowFocus>
             <ThemeProvider
               forcedTheme="light"
