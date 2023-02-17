@@ -87,18 +87,19 @@ model Session {
 }
 
 model User {
-  id                String    @id @default(cuid())
-  name              String    @default("Anonymous")
-  email             String?   @unique
-  emailVerified     DateTime?
-  image             String    @default("")
-  title             String    @default("")
-  role              Role      @default(USER)
-  proofUrl          String    @default("")
-  paymentUrl        String    @default("")
+  id                        String    @id @default(cuid())
+  name                      String    @default("Anonymous")
+  email                     String?   @unique
+  emailVerified             DateTime?
+  image                     String    @default("")
+  title                     String    @default("")
+  role                      Role      @default(USER)
+  proofUrl                  String    @default("")
+  paymentUrl                String    @default("")
   // This should only change the interface but not anything functionally
-  prefersDetailView Boolean   @default(false)
-  prefersAnonymity  Boolean   @default(false)
+  prefersDetailView         Boolean   @default(false)
+  prefersAnonymity          Boolean   @default(false)
+  prefersEventNotifications Boolean   @default(true)
 
   accounts           Account[]
   certificates       Certificate[]
