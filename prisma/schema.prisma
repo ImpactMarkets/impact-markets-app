@@ -40,6 +40,18 @@ enum DonationState {
   REJECTED
 }
 
+enum EventType {
+  COMMENT
+  DONATION
+  CREATED
+}
+
+enum EventStatus {
+  PENDING
+  COMPLETED
+  DROPPED
+}
+
 model Account {
   id                       String  @id @default(cuid())
   userId                   String
@@ -272,4 +284,13 @@ model Transaction {
 
   @@index([sellingHoldingId])
   @@index([buyingHoldingId])
+}
+
+model Event {
+  id         Int         @id @default(autoincrement())
+  time       DateTime    @default(now())
+  type       EventType
+  parameters String
+  recipient  String
+  status     EventStatus @default(PENDING)
 }
