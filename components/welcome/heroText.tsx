@@ -1,4 +1,3 @@
-import { Button } from '@/components/button'
 import { Container, Text, Title, createStyles } from '@mantine/core'
 
 import { ButtonLink } from '../buttonLink'

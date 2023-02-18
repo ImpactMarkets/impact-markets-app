@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { Container, SimpleGrid, Text, createStyles } from '@mantine/core'
+import { Container, SimpleGrid, Text } from '@mantine/core'
 import {
   IconHeart,
   IconSearch,
