@@ -104,8 +104,8 @@ const RulesAndTerms: NextPageWithAuthAndLayout = () => {
       <p className="py-3">
         These Terms of Use constitute a legally binding agreement made between
         you, whether personally or on behalf of an entity (“you”) and Good
-        Exchange, PBC, doing business as GoodX ("<strong>GoodX</strong>," “
-        <strong>we</strong>," “<strong>us</strong>," or “<strong>our</strong>”),
+        Exchange, PBC, doing business as GoodX (“<strong>GoodX</strong>,” “
+        <strong>we</strong>,” “<strong>us</strong>,” or “<strong>our</strong>”),
         concerning your access to and use of the{' '}
         <a href="https://impactmarkets.io/">https://impactmarkets.io</a> website
         as well as any other media form, media channel, mobile website or mobile
@@ -379,7 +379,7 @@ const RulesAndTerms: NextPageWithAuthAndLayout = () => {
         perform, publish, distribute, or broadcast content and materials to us
         or on the Site, including but not limited to text, writings, video,
         audio, photographs, graphics, comments, suggestions, or personal
-        information or other material (collectively, "Contributions").
+        information or other material (collectively, “Contributions”).
         Contributions may be viewable by other users of the Site and through
         third-party websites. As such, any Contributions you transmit may be
         treated as non-confidential and non-proprietary. When you create or make
@@ -608,7 +608,7 @@ const RulesAndTerms: NextPageWithAuthAndLayout = () => {
       <p className="py-3">10. SUBMISSIONS</p>
       <p className="py-3">
         You acknowledge and agree that any questions, comments, suggestions,
-        ideas, feedback, or other information regarding the Site ("Submissions")
+        ideas, feedback, or other information regarding the Site (“Submissions”)
         provided by you to us are non-confidential and shall become our sole
         property. We shall own exclusive rights, including all intellectual
         property rights, and shall be entitled to the unrestricted use and
@@ -623,10 +623,10 @@ const RulesAndTerms: NextPageWithAuthAndLayout = () => {
       <p className="py-3">11. THIRD-PARTY WEBSITE AND CONTENT</p>
       <p className="py-3">
         The Site may contain (or you may be sent via the Site) links to other
-        websites ("Third-Party Websites") as well as articles, photographs,
+        websites (“Third-Party Websites”) as well as articles, photographs,
         text, graphics, pictures, designs, music, sound, video, information,
         applications, software, and other content or items belonging to or
-        originating from third parties ("Third-Party Content"). Such Third-Party
+        originating from third parties (“Third-Party Content”). Such Third-Party
         Websites and Third-Party Content are not investigated, monitored, or
         checked for accuracy, appropriateness, or completeness by us, and we are
         not responsible for any Third-Party Websites accessed through the Site
@@ -752,7 +752,7 @@ const RulesAndTerms: NextPageWithAuthAndLayout = () => {
       </p>
       <p className="py-3">
         To expedite resolution and control the cost of any dispute, controversy,
-        or claim related to these Terms of Use (each "Dispute" and collectively,
+        or claim related to these Terms of Use (each “Dispute” and collectively,
         the “Disputes”) brought by either you or us (individually, a “Party” and
         collectively, the “Parties”), the Parties agree to first attempt to
         negotiate any Dispute (except those Disputes expressly provided below)
@@ -770,9 +770,9 @@ const RulesAndTerms: NextPageWithAuthAndLayout = () => {
         arbitration. YOU UNDERSTAND THAT WITHOUT THIS PROVISION, YOU WOULD HAVE
         THE RIGHT TO SUE IN COURT AND HAVE A JURY TRIAL. The arbitration shall
         be commenced and conducted under the Commercial Arbitration Rules of the
-        American Arbitration Association ("AAA") and, where appropriate, the
-        AAA’s Supplementary Procedures for Consumer Related Disputes ("AAA
-        Consumer Rules"), both of which are available at the AAA website:
+        American Arbitration Association (“AAA”) and, where appropriate, the
+        AAA’s Supplementary Procedures for Consumer Related Disputes (“AAA
+        Consumer Rules”), both of which are available at the AAA website:
         <a
           target="_blank"
           rel="noopener noreferrer nofollow"
@@ -1000,7 +1000,7 @@ const RulesAndTerms: NextPageWithAuthAndLayout = () => {
         <strong>hi@impactmarkets.io</strong>
       </p>
       <p className="py-3">
-        These terms of use were created using Termly's{' '}
+        These terms of use were created using Termly’s{' '}
         <a
           target="_blank"
           rel="noopener noreferrer"
