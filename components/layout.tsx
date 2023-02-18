@@ -30,7 +30,7 @@ export function Layout({ children }: LayoutProps) {
   return (
     <AppShell
       navbar={<Navbar hidden={!opened} />}
-      header={<Header opened={opened} setOpened={setOpened} />}
+      header={<Header opened={opened} setOpened={setOpened} showMenu />}
     >
       {children}
     </AppShell>

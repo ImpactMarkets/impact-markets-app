@@ -11,11 +11,16 @@ import { Burger, Header as MantineHeader, MediaQuery } from '@mantine/core'
 import { Button } from './button'
 
 interface HeaderProps {
-  opened: boolean
+  opened?: boolean
+  showMenu?: boolean
   setOpened?: (f: (opened: boolean) => boolean) => void
 }
 
-export function Header({ opened, setOpened }: HeaderProps) {
+export function Header({
+  opened = false,
+  showMenu = false,
+  setOpened,
+}: HeaderProps) {
   const { data: session } = useSession()
   const [isSearchDialogOpen, setIsSearchDialogOpen] = React.useState(false)
 
@@ -30,11 +35,11 @@ export function Header({ opened, setOpened }: HeaderProps) {
       height={80}
     >
       <div className="flex justify-between items-center h-full px-5">
-        {setOpened && (
+        {showMenu && (
           <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
             <Burger
               opened={opened}
-              onClick={() => setOpened((o) => !o)}
+              onClick={() => setOpened!((o) => !o)}
               size="sm"
               mr="xl"
             />

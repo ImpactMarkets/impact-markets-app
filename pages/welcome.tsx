@@ -60,11 +60,7 @@ const LandingPage: NextPageWithAuthAndLayout = () => {
       <CenteredFooter></CenteredFooter>
     </div>
   )
-  return (
-    <AppShell header={<Header opened={false} setOpened={undefined} />}>
-      {page}
-    </AppShell>
-  )
+  return <AppShell header={<Header />}>{page}</AppShell>
 }
 
 export default LandingPage
