@@ -12,7 +12,7 @@ import { Button } from './button'
 
 interface HeaderProps {
   opened: boolean
-  setOpened: (f: (opened: boolean) => boolean) => void
+  setOpened?: (f: (opened: boolean) => boolean) => void
 }
 
 export function Header({ opened, setOpened }: HeaderProps) {
@@ -30,14 +30,16 @@ export function Header({ opened, setOpened }: HeaderProps) {
       height={80}
     >
       <div className="flex justify-between items-center h-full px-5">
-        <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
-          <Burger
-            opened={opened}
-            onClick={() => setOpened((o) => !o)}
-            size="sm"
-            mr="xl"
-          />
-        </MediaQuery>
+        {setOpened && (
+          <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
+            <Burger
+              opened={opened}
+              onClick={() => setOpened((o) => !o)}
+              size="sm"
+              mr="xl"
+            />
+          </MediaQuery>
+        )}
         <div>
           <Link href="/">
             <span>
