@@ -56,37 +56,11 @@ const useStyles = createStyles((theme) => ({
           : theme.colors.gray[0],
     },
   },
-
-  linkLabel: {
-    marginRight: 5,
-  },
 }))
 
-export function Landing_Header() {
+export function LandingHeader() {
   const { classes } = useStyles()
   const [opened, { toggle }] = useDisclosure(false)
-
-  const links = [
-    {
-      link: '/why',
-      label: 'Why impact markets?',
-      links: null,
-    },
-    {
-      link: 'https://impactmarkets.substack.com/',
-      label: 'Our Blog',
-      links: null,
-    },
-  ]
-  const items = links.map((link) => {
-    return (
-      <div key={link.label} className={classes.link}>
-        <Link href={link.link} onClick={(event) => event.preventDefault()}>
-          {link.label}
-        </Link>
-      </div>
-    )
-  })
 
   return (
     <Header height={HEADER_HEIGHT} sx={{ borderBottom: 0 }} mb={90}>
@@ -103,9 +77,56 @@ export function Landing_Header() {
               <Logo className="w-auto h-[64px] cursor-pointer" />
             </span>
           </Link>
+          <div
+            key="Why impact markets?"
+            className="px-3 py-3 text-gray-700 text-sm"
+          >
+            <Link href="/why" onClick={(event) => event.preventDefault()}>
+              Why impact markets?
+            </Link>
+          </div>
+          <div key="Our blog" className="px-3 py-3 text-gray-700 text-sm">
+            <Link
+              href="https://impactmarkets.substack.com/"
+              onClick={(event) => event.preventDefault()}
+            >
+              Our blog
+            </Link>
+          </div>
+          <div
+            key="Why impact markets?"
+            className="px-3 py-3 text-gray-700 text-sm"
+          >
+            <Link href="/why" onClick={(event) => event.preventDefault()}>
+              Why impact markets?
+            </Link>
+          </div>
+          <div key="Our blog" className="px-3 py-3 text-gray-700 text-sm">
+            <Link
+              href="https://impactmarkets.substack.com/"
+              onClick={(event) => event.preventDefault()}
+            >
+              Our blog
+            </Link>
+          </div>
         </Group>
-        <Group spacing={5} className={classes.links}>
-          {items}
+        <Group spacing={5} className="hidden sm:flex">
+          <div
+            key="Why impact markets?"
+            className="px-3 py-3 text-gray-700 text-sm"
+          >
+            <Link href="/why" onClick={(event) => event.preventDefault()}>
+              Why impact markets?
+            </Link>
+          </div>
+          <div key="Our blog" className="px-3 py-3 text-gray-700 text-sm">
+            <Link
+              href="https://impactmarkets.substack.com/"
+              onClick={(event) => event.preventDefault()}
+            >
+              Our blog
+            </Link>
+          </div>
           <Menu>
             <div className="inline-flex gap-1 ml-4">
               <Button onClick={() => signIn()} variant="secondary">
