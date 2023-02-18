@@ -12,10 +12,10 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
   return (
     <div className="max-w-[720px] mx-auto my-5 py-6">
       <Head>
-        <title>Why impact markets?</title>
+        <title>Frequently asked questions</title>
       </Head>
 
-      <Heading1 className="mb-6">Why impact markets?</Heading1>
+      <Heading1 className="mb-6">Frequently asked questions</Heading1>
 
       <Accordion
         chevronPosition="right"
