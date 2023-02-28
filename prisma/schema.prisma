@@ -294,7 +294,7 @@ model Event {
   type        EventType
   parameters  Json
   status      EventStatus @default(PENDING)
-	recipientId String
+  recipientId String
 
   recipient   User        @relation(fields: [recipientId], references: [id], onDelete: Cascade)
 }
