@@ -43,7 +43,7 @@ enum DonationState {
 enum EventType {
   COMMENT
   DONATION
-  CREATED
+  PROJECT
 }
 
 enum EventStatus {
@@ -105,6 +105,7 @@ model User {
   certificates       Certificate[]
   comments           Comment[]
   donations          Donation[]
+  notificationEvents Event[]
   holdings           Holding[]
   issuedCertificates CertificateIssuer[]
   likedCertificate   LikedCertificate[]
@@ -288,10 +289,12 @@ model Transaction {
 }
 
 model Event {
-  id         Int         @id @default(autoincrement())
-  time       DateTime    @default(now())
-  type       EventType
-  parameters String
-  recipient  String
-  status     EventStatus @default(PENDING)
+  id          Int         @id @default(autoincrement())
+  time        DateTime    @default(now())
+  type        EventType
+  parameters  Json
+  status      EventStatus @default(PENDING)
+	recipientId String
+
+  recipient   User        @relation(fields: [recipientId], references: [id], onDelete: Cascade)
 }
