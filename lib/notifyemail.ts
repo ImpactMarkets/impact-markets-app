@@ -1,5 +1,7 @@
+import * as htmlToText from 'html-to-text'
 import DOMPurify from 'isomorphic-dompurify'
 import mjml2html from 'mjml'
+import { createTransport } from 'nodemailer'
 
 import { Prisma } from '@prisma/client'
 import { Event, EventType } from '@prisma/client'
@@ -174,4 +176,24 @@ function showComment(resources: EmailResources) {
 
     return `<strong>${comment?.author.name}</strong> added a comment`
   }
+}
+
+export async function sendEmail(recipientAddress: string, emailHtml: string) {
+  const transporter = createTransport({
+    host: process.env.EMAIL_SERVER_HOST,
+    port: Number(process.env.EMAIL_SERVER_PORT),
+    secure: true, // true for 465, false for other ports
+    auth: {
+      user: process.env.EMAIL_SERVER_USER,
+      pass: process.env.EMAIL_SERVER_PASSWORD,
+    },
+  })
+
+  await transporter.sendMail({
+    from: process.env.EMAIL_FROM,
+    to: recipientAddress,
+    subject: 'Recent Activity on Your Project(s)',
+    text: htmlToText.convert(emailHtml, { wordwrap: 130 }),
+    html: emailHtml,
+  })
 }
