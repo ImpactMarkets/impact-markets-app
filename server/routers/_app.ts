@@ -4,6 +4,7 @@ import { createRouter } from '../createRouter'
 import { certificateRouter } from './certificate'
 import { commentRouter } from './comment'
 import { donationRouter } from './donation'
+import { eventRouter } from './event'
 import { holdingRouter } from './holding'
 import { projectRouter } from './project'
 import { transactionRouter } from './transaction'
@@ -15,6 +16,7 @@ export const appRouter = createRouter()
   .merge('donation.', donationRouter)
   .merge('certificate.', certificateRouter)
   .merge('comment.', commentRouter)
+  .merge('event.', eventRouter)
   .merge('holding.', holdingRouter)
   .merge('transaction.', transactionRouter)
   .merge('user.', userRouter)
