@@ -145,6 +145,13 @@ export const permissionMiddleware: MiddlewareFunction = async ({
     return transaction?.buyingHolding.userId === ctx.session!.user.id
   }
 
+  const requestComesFromLocalhost = async () => {
+    // In my testing, the IP address from a local request is "::ffff:127.0.0.1".
+    // I'm not sure what the "::ffff:" prefix is about, but regardless it seems we can just check
+    // the suffix to make sure the request is coming from localhost.
+    return ctx.req.socket.remoteAddress?.endsWith('127.0.0.1')
+  }
+
   // Permissions
 
   const permissions = {
@@ -229,6 +236,7 @@ export const permissionMiddleware: MiddlewareFunction = async ({
     'user.update-avatar': isAuthenticated, // Always edits the same user
     'user.preferences': isAuthenticated, // Always edits the same user
     'user.mentionList': isAuthenticated,
+    'job.sendEmails': requestComesFromLocalhost,
   }
 
   // https://bobbyhadz.com/blog/typescript-no-index-signature-with-parameter-of-type-string
