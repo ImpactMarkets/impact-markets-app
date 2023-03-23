@@ -1,10 +1,41 @@
 import { z } from 'zod'
 
+import { EventStatus, EventType } from '@prisma/client'
+
 import { createProtectedRouter } from '../createProtectedRouter'
 
-import { EventType, EventStatus } from '@prisma/client'
-
 export const eventRouter = createProtectedRouter()
+  .query('feed', {
+    input: z.object({
+      status: z.nativeEnum(EventStatus).optional(),
+    }),
+    async resolve({ input, ctx }) {
+      return await ctx.prisma.event.findMany({
+        orderBy: [
+          {
+            recipientId: 'desc',
+          },
+          {
+            type: 'desc',
+          },
+          {
+            time: 'asc',
+          },
+        ],
+        where: {
+          status: input.status || undefined,
+        },
+        select: {
+          id: true,
+          time: true,
+          type: true,
+          parameters: true,
+          status: true,
+          recipient: true,
+        },
+      })
+    },
+  })
   .mutation('add', {
     input: z.object({
       type: z.nativeEnum(EventType),
