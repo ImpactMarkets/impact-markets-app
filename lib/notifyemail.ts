@@ -1,7 +1,7 @@
 import DOMPurify from 'isomorphic-dompurify'
-import { Prisma } from '@prisma/client'
 import mjml2html from 'mjml'
 
+import { Prisma } from '@prisma/client'
 import { Event, EventType } from '@prisma/client'
 
 type ProjectId = string
@@ -39,14 +39,14 @@ export const commentSelect = Prisma.validator<Prisma.CommentSelect>()({
 })
 
 export type ProjectWithRelations = Prisma.ProjectGetPayload<{
-  select: typeof projectSelect;
-}>;
+  select: typeof projectSelect
+}>
 export type DonationWithRelations = Prisma.DonationGetPayload<{
-  select: typeof donationSelect;
-}>;
+  select: typeof donationSelect
+}>
 export type CommentWithRelations = Prisma.CommentGetPayload<{
-  select: typeof commentSelect;
-}>;
+  select: typeof commentSelect
+}>
 
 // Utility class for storing all the resources that will be needed in the emails.
 //
@@ -70,7 +70,7 @@ export function createEmail(
   eventHierarchy: Map<ProjectId, Map<EventType, Event[]>>,
   resources: EmailResources
 ) {
-  var emailContents = `
+  const emailContents = `
     <mjml>
       <mj-body>
         <mj-section>
@@ -102,7 +102,9 @@ function projectsSection(
 
       return `
 		  <mj-text>
-        <h1><a href="https://app.impactmarkets.io/project/${projectId}">${project?.title}</a></h1>
+        <h1><a href="https://app.impactmarkets.io/project/${projectId}">${
+        project?.title
+      }</a></h1>
 		  </mj-text>
       ${eventsSubsection(
         '', // "New project created" section; No header needed.
@@ -146,7 +148,7 @@ function eventsSubsection(
 function showProjectCreation(resources: EmailResources) {
   return (event: Event) => {
     const paramsObject = event.parameters as Prisma.JsonObject
-    const projectId = paramsObject["projectId"] as ProjectId
+    const projectId = paramsObject['projectId'] as ProjectId
     const project = resources.projects.get(projectId)
 
     return `Project was created by <strong>${project?.author.name}</strong>`
@@ -156,7 +158,7 @@ function showProjectCreation(resources: EmailResources) {
 function showDonation(resources: EmailResources) {
   return (event: Event) => {
     const paramsObject = event.parameters as Prisma.JsonObject
-    const donationId = paramsObject["donationId"] as DonationId
+    const donationId = paramsObject['donationId'] as DonationId
     const donation = resources.donations.get(donationId)
 
     return `<strong>${donation?.user.name}</strong> donated <strong>${donation?.amount}</strong>`
@@ -166,7 +168,7 @@ function showDonation(resources: EmailResources) {
 function showComment(resources: EmailResources) {
   return (event: Event) => {
     const paramsObject = event.parameters as Prisma.JsonObject
-    const commentId = paramsObject["commentId"] as CommentId
+    const commentId = paramsObject['commentId'] as CommentId
     const comment = resources.comments.get(commentId)
 
     return `<strong>${comment?.author.name}</strong> added a comment`
