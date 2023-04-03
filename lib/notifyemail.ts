@@ -75,7 +75,7 @@ export function createEmail(
       <mj-body>
         <mj-section>
           <mj-column>
-            <mj-image width="100px" src="https://substackcdn.com/image/fetch/w_264,c_limit,f_webp,q_auto:best,fl_progressive:steep/https%3A%2F%2Fbucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com%2Fpublic%2Fimages%2Fe7ba5746-d417-4f8d-b679-33b845e5299e_1077x1077.png"></mj-image>
+            <mj-image width="200px" src="https://app.impactmarkets.io/static/images/logo-light.png"></mj-image>
             <mj-divider border-color="#EE0000"></mj-divider>
             <mj-text>
               Hello ${userName},</br>
