@@ -1,9 +1,11 @@
+import { Context } from 'server/context'
 import slugify from 'slugify'
 import { z } from 'zod'
 
 import { PROJECT_SORT_KEYS, ProjectSortKey } from '@/lib/constants'
 import { markdownToHtml } from '@/lib/editor'
 import { Prisma } from '@prisma/client'
+import { EventStatus, EventType } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
 import { createProtectedRouter } from '../createProtectedRouter'
@@ -278,6 +280,12 @@ export const projectRouter = createProtectedRouter()
           },
         },
       })
+
+      // We don't wait for the event to emit before continuing.
+      //
+      // TODO: Send this to an administrative user, separated by environment (dev vs prod, etc).
+      //emitNewProjectEvent(ctx, project.id, '')
+
       return project
     },
   })
@@ -377,3 +385,24 @@ export const projectRouter = createProtectedRouter()
       return project
     },
   })
+
+async function emitNewProjectEvent(
+  ctx: Context,
+  projectId: string,
+  recipientId: string
+) {
+  await ctx.prisma.event.create({
+    data: {
+      type: EventType.PROJECT,
+      parameters: {
+        projectId: projectId,
+      } as Prisma.JsonObject,
+      status: EventStatus.PENDING || undefined,
+      recipient: {
+        connect: {
+          id: recipientId,
+        },
+      },
+    },
+  })
+}

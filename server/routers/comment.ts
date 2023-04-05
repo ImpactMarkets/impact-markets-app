@@ -1,6 +1,10 @@
+import { Context } from 'server/context'
 import { z } from 'zod'
 
 import { markdownToHtml } from '@/lib/editor'
+import { projectSelect } from '@/lib/notifyemail'
+import { EventStatus, EventType } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 
 import { createProtectedRouter } from '../createProtectedRouter'
 
@@ -36,6 +40,9 @@ export const commentRouter = createProtectedRouter()
         },
       })
 
+      // We don't wait for the event to emit before continuing.
+      emitNewCommentEvent(ctx, input.projectId, comment.id)
+
       return comment
     },
   })
@@ -65,3 +72,32 @@ export const commentRouter = createProtectedRouter()
       return id
     },
   })
+
+async function emitNewCommentEvent(
+  ctx: Context,
+  projectId: string,
+  commentId: number
+) {
+  const project = await ctx.prisma.project.findUnique({
+    where: {
+      id: projectId,
+    },
+    select: projectSelect,
+  })
+
+  await ctx.prisma.event.create({
+    data: {
+      type: EventType.COMMENT,
+      parameters: {
+        projectId: projectId,
+        commentId: commentId,
+      } as Prisma.JsonObject,
+      status: EventStatus.PENDING || undefined,
+      recipient: {
+        connect: {
+          id: project?.author.id,
+        },
+      },
+    },
+  })
+}

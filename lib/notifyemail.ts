@@ -14,6 +14,7 @@ export const projectSelect = Prisma.validator<Prisma.ProjectSelect>()({
   paymentUrl: true,
   author: {
     select: {
+      id: true,
       name: true,
       image: true,
     },
