@@ -64,7 +64,9 @@ export const jobRouter = createProtectedRouter()
             eventHierarchy,
             emailResources
           )
-          await sendEmail(events[i].recipient.email || '', emailHtml)
+          if (events[i].recipient.prefersEventNotifications) {
+            await sendEmail(events[i].recipient.email || '', emailHtml)
+          }
           await markEventsCompleted(ctx, eventHierarchy)
 
           eventHierarchy = new Map<ProjectId, Map<EventType, Event[]>>()

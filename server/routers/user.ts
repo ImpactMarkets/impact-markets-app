@@ -23,6 +23,7 @@ export const userRouter = createProtectedRouter()
           proofUrl: true,
           paymentUrl: true,
           prefersAnonymity: true,
+          prefersEventNotifications: true,
           email: ctx.session?.user.role === 'ADMIN',
         },
       })
@@ -83,13 +84,18 @@ export const userRouter = createProtectedRouter()
     input: z.object({
       prefersDetailView: z.boolean().optional(),
       prefersAnonymity: z.boolean().optional(),
+      prefersEventNotifications: z.boolean().optional(),
     }),
-    async resolve({ input: { prefersDetailView, prefersAnonymity }, ctx }) {
+    async resolve({
+      input: { prefersDetailView, prefersAnonymity, prefersEventNotifications },
+      ctx,
+    }) {
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session!.user.id },
         data: {
           prefersDetailView: prefersDetailView,
           prefersAnonymity: prefersAnonymity,
+          prefersEventNotifications: prefersEventNotifications,
         },
       })
 
@@ -164,7 +170,7 @@ export const userRouter = createProtectedRouter()
             FROM "Donation"
             JOIN "User" ON "User"."id" = "Donation"."userId"
             JOIN "Project" ON "Donation"."projectId" = "Project"."id"
-            WHERE 
+            WHERE
               "Project"."credits" > 0 AND
               "Donation"."state" = 'CONFIRMED' AND
               "Donation"."time" > now() - make_interval(days => ${pastDays}::int)
