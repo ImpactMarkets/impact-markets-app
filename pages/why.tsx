@@ -949,13 +949,23 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
           <Accordion.Control>Can it go bad?</Accordion.Control>
           <Accordion.Panel>
             <p className="my-3">
-              The biggest concern that we’ve had from the beginning is that
-              prize contests (such as impact markets) are general purpose:
+              The biggest concern that we’ve had from the beginning in 2021 is
+              that prize contests (such as impact markets) are general purpose:
               Anyone can use them – to incentivize awesome papers on AI safety
               or to incentivize terrorist attacks. In fact, promises of rewards
               in heaven could count as prizes. If we create tooling to make
               prize contests easier, there is the risk that said tooling will be
-              used by unscrupulous actors too.
+              used by unscrupulous actors too. The very concept of the prize
+              contest could also count as attention hazard.
+            </p>
+            <p className="my-3">
+              <a
+                href="https://docs.google.com/document/d/1fQIbl6vi8rs68uj96Zg0zdcwMmx4IdPdrA_ClfmxydI/edit"
+                rel="nofollow ugc noopener"
+              >
+                Here is a summary of all of the risks that we’ve identified and
+                our mitigation strategies.
+              </a>
             </p>
             <p className="my-3">
               A rich terrorism funder could, for example, copy our approach and
@@ -1034,11 +1044,16 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
               unscrupulous actors to achieve their ends and why they are not
               doing it already. It is quite easy for an unscrupulous millionaire
               to promise a big reward for something like nuclear fusion simply
-              by tweeting it. Being so unscrupulous, they will probably not care
-              whether their followers stumble into trouble with securities law.
-              But this is not currently a major problem. So the legal safeguards
-              (or some other mechanisms) that also apply to our solution must be
-              working.
+              by tweeting it. But this is not currently a major problem. So the
+              legal safeguards (or some other mechanisms) that also apply to our
+              solution must be working fairly well. That said,{' '}
+              <a
+                href="https://docs.google.com/document/d/1fQIbl6vi8rs68uj96Zg0zdcwMmx4IdPdrA_ClfmxydI/edit"
+                rel="nofollow noopener"
+              >
+                we’re not solely relying on them
+              </a>
+              .
             </p>
           </Accordion.Panel>
         </Accordion.Item>
@@ -1115,7 +1130,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
         </Accordion.Item>
         <Accordion.Item value="h.rt1a9x5wy2y4">
           <Accordion.Control>
-            Do impact markets instead risk centralizing funding?
+            Do impact markets risk centralizing funding?
           </Accordion.Control>
           <Accordion.Panel>
             <p className="my-3">
@@ -1149,6 +1164,48 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
             <p className="my-3">
               We’ll keep monitoring this potential issue and react in case it
               does manifest.
+            </p>
+          </Accordion.Panel>
+        </Accordion.Item>
+        <Accordion.Item value="top-charities">
+          <Accordion.Control>
+            Do impact markets detract from top charities?
+          </Accordion.Control>
+          <Accordion.Panel>
+            <p className="my-3">
+              In contrast to the previous question: If impact markets succeed in
+              their mission to decentralize funding, might they thereby detract
+              from the top charities of GiveWell or Animal Charity Evaluators?
+            </p>
+            <p className="my-3">
+              That’s not automatically a bad thing, but (1) if there is no
+              funding overhang, and (2) if our top donors are not sufficiently
+              astute, the average project on impact markets might be worse than
+              the average top charity. If donors still switch to impact markets,
+              then impact markets might do harm.
+            </p>
+            <p className="my-3">
+              I’ve talked to Animal Charity Evaluators about this, and they
+              don’t seem particularly concerned about it. They welcome the
+              diversity of opinions and even run their own “movement grants”
+              program to support smaller charities that don’t yet have the scale
+              and track record to become top or standout charities. GiveWell,
+              too, has made grants of this sort, and its staff is also open
+              about their private donations, which sometimes capitalize on
+              smaller, less legible funding gaps that they’re aware of.
+            </p>
+            <p className="my-3">
+              Nonetheless this is something that we want to monitor closely. We
+              can ask donors and compare their impact market donations to
+              donations they’ve made in the past. But more importantly, we can
+              compare how our impact market projects compare against top
+              charities.
+            </p>
+            <p className="my-3">
+              Ídeally of course the impact market becomes a place where you can
+              find and donate to all the future top charities. We’re planning to
+              incentivze that by boosting the scores of projects that were
+              instrumental in the genesis of new top and standout charities.
             </p>
           </Accordion.Panel>
         </Accordion.Item>
