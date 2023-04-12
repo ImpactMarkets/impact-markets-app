@@ -1,7 +1,6 @@
-import { Button } from '@/components/button'
 import { Container, Text, Title, createStyles } from '@mantine/core'
 
-import { ButtonLink } from './buttonLink'
+import { ButtonLink } from '../buttonLink'
 
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -48,7 +47,6 @@ const useStyles = createStyles((theme) => ({
 
     '@media (max-width: 520px)': {
       fontSize: 28,
-      textAlign: 'left',
     },
   },
 
@@ -61,34 +59,7 @@ const useStyles = createStyles((theme) => ({
     textAlign: 'center',
 
     '@media (max-width: 520px)': {
-      textAlign: 'left',
       fontSize: theme.fontSizes.md,
-    },
-  },
-
-  controls: {
-    marginTop: theme.spacing.lg,
-    display: 'flex',
-    justifyContent: 'center',
-
-    '@media (max-width: 520px)': {
-      flexDirection: 'column',
-    },
-  },
-
-  control: {
-    '&:not(:first-of-type)': {
-      marginLeft: theme.spacing.md,
-    },
-
-    '@media (max-width: 520px)': {
-      height: 42,
-      fontSize: theme.fontSizes.md,
-
-      '&:not(:first-of-type)': {
-        marginTop: theme.spacing.md,
-        marginLeft: 0,
-      },
     },
   },
 }))
@@ -97,28 +68,30 @@ export function HeroText() {
   const { classes } = useStyles()
 
   return (
-    <Container className={classes.wrapper} size={1400}>
+    <Container className="max-w-[1400px] pb-24 text-center">
       <div className={classes.inner}>
         <Title className={classes.title}>
-          Fund, trade, and accelerate
+          Your crowdsourced, meritocratic
           <div>
             <Text component="span" className={classes.highlight} inherit>
-              public goods
+              charity evaluator
             </Text>
           </div>
         </Title>
 
-        <Container p={0} size={600}>
-          <Text size="lg" color="dimmed" className={classes.description}>
-            Speculate and invest on the impact of altruistic projects. Align
-            incentives using profit to build a better future.
+        <Container className="max-w-[600px]">
+          <Text size="lg" color="dimmed">
+            Signal-boost the best projects or follow the signal to find the best
+            projects
           </Text>
         </Container>
 
-        <div className={classes.controls}>
-          <Button className="mr-2">What?</Button>
-          <ButtonLink className={classes.control} variant="highlight" href="/">
-            Explore Markets
+        <div className="mt-6">
+          <ButtonLink href="/why" variant="primary" className="mr-2">
+            What?
+          </ButtonLink>
+          <ButtonLink href="/" variant="highlight" className="">
+            Explore projects
           </ButtonLink>
         </div>
       </div>
