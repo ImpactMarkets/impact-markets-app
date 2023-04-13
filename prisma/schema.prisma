@@ -52,6 +52,12 @@ enum EventStatus {
   DROPPED
 }
 
+enum BountyStatus {
+  ACTIVE
+  CLAIMED
+  CLOSED
+}
+
 model Account {
   id                       String  @id @default(cuid())
   userId                   String
@@ -87,31 +93,34 @@ model Session {
 }
 
 model User {
-  id                        String    @id @default(cuid())
-  name                      String    @default("Anonymous")
-  email                     String?   @unique
-  emailVerified             DateTime?
-  image                     String    @default("")
-  title                     String    @default("")
-  role                      Role      @default(USER)
-  proofUrl                  String    @default("")
-  paymentUrl                String    @default("")
+  id            String    @id @default(cuid())
+  name          String    @default("Anonymous")
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String    @default("")
+  title         String    @default("")
+  role          Role      @default(USER)
+  proofUrl      String    @default("")
+  paymentUrl    String    @default("")
+
   // This should only change the interface but not anything functionally
-  prefersDetailView         Boolean   @default(false)
-  prefersAnonymity          Boolean   @default(false)
-  prefersEventNotifications Boolean   @default(true)
+  prefersDetailView         Boolean @default(false)
+  prefersAnonymity          Boolean @default(false)
+  prefersEventNotifications Boolean @default(true)
 
   accounts           Account[]
-  certificates       Certificate[]
+  sessions           Session[]
+  notificationEvents Event[]
   comments           Comment[]
   donations          Donation[]
-  notificationEvents Event[]
   holdings           Holding[]
+  certificates       Certificate[]
+  likedCertificates  LikedCertificate[]
   issuedCertificates CertificateIssuer[]
-  likedCertificate   LikedCertificate[]
-  likedProjects      LikedProject[]
   projects           Project[]
-  sessions           Session[]
+  likedProjects      LikedProject[]
+  bounties           Bounty[]
+  likedBounties      LikedBounty[]
 }
 
 model VerificationToken {
@@ -123,26 +132,26 @@ model VerificationToken {
 }
 
 model Project {
-  id          String         @id @default(cuid())
-  title       String         @db.VarChar(255)
-  content     String
-  // Is it optimal to prerender the MD to HTML?
-  contentHtml String
-  hidden      Boolean        @default(true)
-  credits     Decimal        @default(0)
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-  authorId    String
-  likedBy     LikedProject[]
-  comments    Comment[]
-  actionStart DateTime?
-  actionEnd   DateTime?
-  tags        String         @default("")
-  paymentUrl  String         @default("")
+  id             String    @id @default(cuid())
+  title          String    @db.VarChar(255)
+  content        String
+  contentHtml    String
+  hidden         Boolean   @default(false)
+  credits        Decimal   @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  authorId       String
+  actionStart    DateTime?
+  actionEnd      DateTime?
+  tags           String    @default("")
+  paymentUrl     String    @default("")
+  solvesBountyId String?
 
-  author       User          @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  author       User           @relation(fields: [authorId], references: [id], onDelete: Restrict)
   donations    Donation[]
   certificates Certificate[]
+  likedBy      LikedProject[]
+  comments     Comment[]
 
   @@index([authorId])
 }
@@ -178,6 +187,28 @@ model Certificate {
   @@index([authorId])
 }
 
+model Bounty {
+  id          String       @id @default(cuid())
+  title       String       @db.VarChar(255)
+  content     String
+  contentHtml String
+  size        Decimal
+  deadline    DateTime?
+  tags        String       @default("")
+  status      BountyStatus @default(ACTIVE)
+  hidden      Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  authorId    String
+  sourceUrl   String       @default("")
+
+  likedBy  LikedBounty[]
+  comments Comment[]
+  author   User          @relation(fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([authorId])
+}
+
 model LikedProject {
   projectId String
   userId    String
@@ -201,6 +232,19 @@ model LikedCertificate {
 
   @@id([certificateId, userId])
   @@index([certificateId])
+  @@index([userId])
+}
+
+model LikedBounty {
+  bountyId  String
+  userId    String
+  createdAt DateTime @default(now())
+
+  bounty Bounty @relation(fields: [bountyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([bountyId, userId])
+  @@index([bountyId])
   @@index([userId])
 }
 
@@ -259,16 +303,19 @@ model Comment {
   contentHtml String
   createdAt   DateTime @default(now())
   authorId    String
-  projectId   String
+  projectId   String?
   parentId    Int?
+  bountyId    String?
 
   author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  project  Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project  Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  Bounty   Bounty?   @relation(fields: [bountyId], references: [id])
   parent   Comment?  @relation("parentChildren", fields: [parentId], references: [id], onDelete: Cascade)
   children Comment[] @relation("parentChildren")
 
   @@index([authorId])
   @@index([projectId])
+  @@index([bountyId])
 }
 
 model Transaction {
@@ -296,5 +343,5 @@ model Event {
   status      EventStatus @default(PENDING)
   recipientId String
 
-  recipient   User        @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  recipient User @relation(fields: [recipientId], references: [id], onDelete: Cascade)
 }
