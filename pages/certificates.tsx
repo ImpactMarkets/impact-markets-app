@@ -110,7 +110,7 @@ const Home: NextPageWithAuthAndLayout = () => {
           <title>Impact Markets</title>
         </Head>
 
-        <div className="mt-12">
+        <div>
           <Filters
             onFilterTagsUpdate={(tags) => setFilterTags(tags)}
             onOrderByUpdate={(orderBy: ProjectSortKey) => setOrderBy(orderBy)}

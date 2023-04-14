@@ -4,7 +4,10 @@ import { PROJECT_SORT_KEYS, ProjectSortKey } from '@/lib/constants'
 import { TAGS } from '@/lib/tags'
 import { Button, Flex } from '@mantine/core'
 
+import { IconButton } from './iconButton'
+import { SearchIcon } from './icons'
 import { IMMultiSelect } from './multiSelect'
+import { SearchDialog } from './searchDialog'
 import { IMSelect } from './select'
 
 export type FiltersProps = {
@@ -16,6 +19,7 @@ export type FiltersProps = {
 
 export function Filters(props: FiltersProps) {
   const tagsMultiSelect = React.useRef<HTMLInputElement>(null)
+  const [isSearchDialogOpen, setIsSearchDialogOpen] = React.useState(false)
   const [filterTags, setFilterTags] = useState<string[] | undefined>(
     props.defaultFilterTagValue.split(',')
   )
@@ -50,7 +54,7 @@ export function Filters(props: FiltersProps) {
         value={filterTags}
         classNames={{
           input: 'bg-none border-none',
-          searchInput: 'border-none',
+          searchInput: 'border-none placeholder:text-primary',
         }}
       />
       <IMSelect
@@ -64,9 +68,17 @@ export function Filters(props: FiltersProps) {
         }}
         value={orderBy}
         classNames={{
-          input: 'bg-none border-none',
+          input: 'bg-none border-none placeholder:text-primary',
         }}
       />
+      <IconButton
+        variant="secondary"
+        onClick={() => {
+          setIsSearchDialogOpen(true)
+        }}
+      >
+        <SearchIcon className="w-4 h-4" />
+      </IconButton>
       <Button
         variant="subtle"
         radius="xs"
@@ -80,6 +92,12 @@ export function Filters(props: FiltersProps) {
       >
         Clear all
       </Button>
+      <SearchDialog
+        isOpen={isSearchDialogOpen}
+        onClose={() => {
+          setIsSearchDialogOpen(false)
+        }}
+      />
     </Flex>
   )
 }
