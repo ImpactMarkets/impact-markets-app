@@ -118,17 +118,6 @@ function ProjectPage({ projectId }: { projectId: string }) {
                 curators.
               </Banner>
             )}
-            {!project.author.proofUrl && (
-              <Banner className="mb-6">
-                {project.author.id === session?.user.id
-                  ? 'Please click the pen icon to enter proof of your identity on your'
-                  : 'The author of this project has not yet entered proof of their identity on their'}{' '}
-                <Link href={`/profile/${project.author.id}`}>
-                  <span className="link">user profile</span>
-                </Link>
-                .
-              </Banner>
-            )}
 
             <div className="flex items-center justify-between gap-4">
               <Heading1>{project.title}</Heading1>
