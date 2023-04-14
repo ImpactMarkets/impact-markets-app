@@ -88,36 +88,30 @@ const useStyles = createStyles((theme, _params, getRef) => {
   }
 })
 
-const data = [
-  { link: '/', label: 'Projects', icon: IconHome },
-  { link: '/certificates', label: 'Certificates', icon: IconFileCertificate },
-  { link: '/ranking', label: 'Top donors', icon: IconTrophy },
-  //  { link: '/funders', label: 'Funders & prizes', icon: IconBuildingStore },
-  { link: '/why', label: 'Questions & answers', icon: IconBolt },
-  { link: '/rules', label: 'Rules & terms', icon: IconFile },
-  { link: '/support', label: 'Help & support', icon: IconLifebuoy },
-]
-
-interface NavbarProps {
-  hidden: boolean
-}
-
-export function Navbar({ hidden }: NavbarProps) {
+const NavbarLink = ({
+  link,
+  label,
+  icon: Icon,
+}: {
+  link: string
+  label: string
+  icon: TablerIcon
+}) => {
   const { data: session } = useSession()
   const { classes, cx } = useStyles()
   const router = useRouter()
 
-  const links = data.map((item) => (
-    <Link href={item.link} key={item.label}>
+  return (
+    <Link href={link} key={label}>
       <div
         className={
           cx(classes.link, {
-            [classes.linkActive]: item.link === router.pathname,
+            [classes.linkActive]: link === router.pathname,
           }) + ' flex text-sm items-center cursor-pointer'
         }
         onClick={() => {
           try {
-            mixpanel.track('Click - ' + item.label, {
+            mixpanel.track('Click - ' + label, {
               user: session?.user.id,
               datetime: Date(),
             })
@@ -126,26 +120,33 @@ export function Navbar({ hidden }: NavbarProps) {
           }
         }}
       >
-        <item.icon className={classes.linkIcon} />
-        <span>{item.label}</span>
+        <Icon className={classes.linkIcon} />
+        <span>{label}</span>
       </div>
     </Link>
-  ))
-
-  return (
-    <MantineNavbar
-      classNames={{ root: 'w-[250px] z-[5]' }}
-      width={{ sm: 250 }}
-      withBorder={false}
-      hidden={hidden}
-      hiddenBreakpoint="sm"
-    >
-      <MantineNavbar.Section grow className="m-4">
-        {links}
-      </MantineNavbar.Section>
-      <MantineNavbar.Section>
-        <User />
-      </MantineNavbar.Section>
-    </MantineNavbar>
   )
 }
+
+export const Navbar = ({ hidden }: { hidden: boolean }) => (
+  <MantineNavbar
+    classNames={{ root: 'w-[250px] z-[5]' }}
+    width={{ sm: 250 }}
+    withBorder={false}
+    hidden={hidden}
+    hiddenBreakpoint="sm"
+  >
+    <MantineNavbar.Section grow className="mx-4 my-3">
+      <NavbarLink link="/" label="Projects" icon={IconHome} />
+      <NavbarLink link="/bounties" label="Bounties" icon={IconPigMoney} />
+      <NavbarLink link="/ranking" label="Top donors" icon={IconTrophy} />
+    </MantineNavbar.Section>
+    <MantineNavbar.Section className="m-4">
+      <NavbarLink link="/why" label="Questions & answers" icon={IconBolt} />
+      <NavbarLink link="/rules" label="Rules & terms" icon={IconFile} />
+      <NavbarLink link="/support" label="Help & support" icon={IconLifebuoy} />
+    </MantineNavbar.Section>
+    <MantineNavbar.Section>
+      <User />
+    </MantineNavbar.Section>
+  </MantineNavbar>
+)
