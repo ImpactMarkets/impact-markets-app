@@ -330,11 +330,14 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
           <Accordion.Panel>
             <p className="my-3">
               What we’ve been calling a “project” is something that can issue
-              one or more impact certificates. Our platform still lists the
-              existing certificates, but that’s merely an archive at this point.
-              There is a chance we might return to this format, especially if we
-              choose to found a nonprofit branch of our organization, but for
-              the moment we have no such plans.
+              one or more impact certificates.{' '}
+              <Link href="/certificates" className="link">
+                Our platform still lists the existing certificates
+              </Link>
+              , but that’s merely an archive at this point. There is a chance we
+              might return to this format, especially if we choose to found a
+              nonprofit branch of our organization, but for the moment we have
+              no such plans.
             </p>
             <p className="my-3">
               We’ve encountered three problems with impact certificates:
