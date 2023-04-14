@@ -108,6 +108,11 @@ export const Navbar = ({ hidden }: { hidden: boolean }) => (
     hidden={hidden}
     hiddenBreakpoint="sm"
   >
+    <MantineNavbar.Section className="hidden md:block m-4">
+      <Link href="/">
+        <Logo className="w-auto md:h-[64px] cursor-pointer" />
+      </Link>
+    </MantineNavbar.Section>
     <MantineNavbar.Section grow className="mx-4 my-3">
       <NavbarLink link="/" label="Projects" icon={IconHome} />
       <NavbarLink link="/bounties" label="Bounties" icon={IconPigMoney} />
