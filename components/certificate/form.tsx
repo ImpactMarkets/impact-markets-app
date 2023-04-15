@@ -8,10 +8,10 @@ import { Button } from '@/components/button'
 import { ButtonLink } from '@/components/buttonLink'
 import { MarkdownIcon } from '@/components/icons'
 import { MarkdownEditor } from '@/components/markdownEditor'
+import { TAGS } from '@/components/project/tags'
 import { TextField } from '@/components/textField'
 import { BondingCurve } from '@/lib/auction'
 import { DEFAULT_TARGET, DEFAULT_VALUATION, SHARE_COUNT } from '@/lib/constants'
-import { TAGS } from '@/lib/tags'
 import { num } from '@/lib/text'
 import {
   isListOfEmails,
