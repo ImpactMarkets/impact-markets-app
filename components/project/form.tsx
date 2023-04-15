@@ -90,22 +90,6 @@ export function ProjectForm({
 
   const { show } = useIntercom()
 
-  const TagDescription = (text: string) => {
-    const [messageText, linkText, endText] = text.split(
-      /<[a][^>]*>(.+?)<\/[a]>/
-    )
-
-    return (
-      <p>
-        {messageText}
-        <a className="font-bold" href="#/" onClick={() => show()}>
-          {linkText}
-        </a>
-        {endText}
-      </p>
-    )
-  }
-
   React.useEffect(() => {
     if (isSubmitSuccessful) {
       reset(getValues())
@@ -141,9 +125,16 @@ export function ProjectForm({
         <IMMultiSelect
           {...register('tags')}
           label="Tags"
-          description={TagDescription(
-            'Please select all that apply or <a>leave us feedback</a> if you can’t find suitable tags for your field and type of work so we can add them. (Optional)'
-          )}
+          description={
+            <>
+              Please select all that apply or{' '}
+              <span className="link" onClick={() => show()}>
+                leave us feedback
+              </span>{' '}
+              if you can’t find suitable tags for your field and type of work so
+              we can add them. (Optional)
+            </>
+          }
           placeholder="Pick all that apply"
           data={TAGS.map((tag) => ({
             value: tag.value,
