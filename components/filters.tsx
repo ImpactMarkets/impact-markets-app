@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
+import { TAGS } from '@/components/project/tags'
 import { PROJECT_SORT_KEYS, ProjectSortKey } from '@/lib/constants'
-import { TAGS } from '@/lib/tags'
 import { Button, Flex } from '@mantine/core'
 
 import { IconButton } from './iconButton'

@@ -158,7 +158,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
               )}
             </div>
             <div className="flex my-6">
-              <Tags queryData={project} />
+              <Tags queryData={project} tags={TAGS} />
             </div>
             <div className="my-6">
               <Tabs
