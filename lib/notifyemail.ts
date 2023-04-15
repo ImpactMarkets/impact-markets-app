@@ -7,48 +7,63 @@ import { Prisma } from '@prisma/client'
 import { Event, EventType } from '@prisma/client'
 
 type ProjectId = string
+type BountyId = string
 type DonationId = number
 type CommentId = number
 
 // Prisma query types for displaying information in the emails.
-export const projectSelect = Prisma.validator<Prisma.ProjectSelect>()({
-  title: true,
-  paymentUrl: true,
-  author: {
-    select: {
-      id: true,
-      name: true,
-      image: true,
+export const selects = {
+  project: Prisma.validator<Prisma.ProjectSelect>()({
+    title: true,
+    author: {
+      select: {
+        id: true,
+        name: true,
+        image: true,
+      },
     },
-  },
-})
-export const donationSelect = Prisma.validator<Prisma.DonationSelect>()({
-  amount: true,
-  user: {
-    select: {
-      name: true,
-      image: true,
+  }),
+  bounty: Prisma.validator<Prisma.BountySelect>()({
+    title: true,
+    author: {
+      select: {
+        id: true,
+        name: true,
+        image: true,
+      },
     },
-  },
-})
-export const commentSelect = Prisma.validator<Prisma.CommentSelect>()({
-  content: true,
-  author: {
-    select: {
-      name: true,
-      image: true,
+  }),
+  donation: Prisma.validator<Prisma.DonationSelect>()({
+    amount: true,
+    user: {
+      select: {
+        name: true,
+        image: true,
+      },
     },
-  },
-})
+  }),
+  comment: Prisma.validator<Prisma.CommentSelect>()({
+    content: true,
+    author: {
+      select: {
+        name: true,
+        image: true,
+      },
+    },
+  }),
+}
 
 export type ProjectWithRelations = Prisma.ProjectGetPayload<{
-  select: typeof projectSelect
+  select: typeof selects.project
+}>
+export type BountyWithRelations = Prisma.BountyGetPayload<{
+  select: typeof selects.bounty
 }>
 export type DonationWithRelations = Prisma.DonationGetPayload<{
-  select: typeof donationSelect
+  select: typeof selects.donation
 }>
 export type CommentWithRelations = Prisma.CommentGetPayload<{
-  select: typeof commentSelect
+  select: typeof selects.comment
 }>
 
 // Utility class for storing all the resources that will be needed in the emails.
@@ -57,11 +72,13 @@ export type CommentWithRelations = Prisma.CommentGetPayload<{
 // hold these data as relations; just their ids in the `parameters` Json field.
 export class EmailResources {
   projects: Map<ProjectId, ProjectWithRelations>
+  bounties: Map<BountyId, BountyWithRelations>
   donations: Map<DonationId, DonationWithRelations>
   comments: Map<CommentId, CommentWithRelations>
 
   constructor() {
     this.projects = new Map<ProjectId, ProjectWithRelations>()
+    this.bounties = new Map<BountyId, BountyWithRelations>()
     this.donations = new Map<DonationId, DonationWithRelations>()
     this.comments = new Map<CommentId, CommentWithRelations>()
   }
