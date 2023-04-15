@@ -274,6 +274,7 @@ export const permissionMiddleware: MiddlewareFunction = async ({
     'user.preferences': isAuthenticated, // Always edits the same user
     'user.mentionList': isAuthenticated,
     'job.sendEmails': requestComesFromLocalhost,
+    'job.deleteCompletedNotifications': requestComesFromLocalhost,
   }
 
   // https://bobbyhadz.com/blog/typescript-no-index-signature-with-parameter-of-type-string

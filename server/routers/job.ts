@@ -16,62 +16,73 @@ import { createProtectedRouter } from '../createProtectedRouter'
 
 type ProjectId = string
 
-export const jobRouter = createProtectedRouter().mutation('sendEmails', {
-  input: z.void(),
-  async resolve({ ctx }) {
-    const events = await ctx.prisma.event.findMany({
-      orderBy: [
-        {
-          recipientId: 'desc',
+export const jobRouter = createProtectedRouter()
+  .mutation('sendEmails', {
+    input: z.void(),
+    async resolve({ ctx }) {
+      const events = await ctx.prisma.event.findMany({
+        orderBy: [
+          {
+            recipientId: 'desc',
+          },
+          {
+            type: 'desc',
+          },
+          {
+            time: 'asc',
+          },
+        ],
+        where: {
+          status: EventStatus.PENDING,
         },
-        {
-          type: 'desc',
+        select: {
+          id: true,
+          time: true,
+          type: true,
+          parameters: true,
+          status: true,
+          recipient: true,
+          recipientId: true,
         },
-        {
-          time: 'asc',
-        },
-      ],
-      where: {
-        status: EventStatus.PENDING,
-      },
-      select: {
-        id: true,
-        time: true,
-        type: true,
-        parameters: true,
-        status: true,
-        recipient: true,
-        recipientId: true,
-      },
-    })
+      })
 
-    let eventHierarchy = new Map<ProjectId, Map<EventType, Event[]>>()
-    let emailResources = new EmailResources()
+      let eventHierarchy = new Map<ProjectId, Map<EventType, Event[]>>()
+      let emailResources = new EmailResources()
 
-    for (let i = 0; i < events.length; i++) {
-      addToEventHierarchy(eventHierarchy, events[i])
-      await addToEmailResources(ctx, emailResources, events[i])
+      for (let i = 0; i < events.length; i++) {
+        addToEventHierarchy(eventHierarchy, events[i])
+        await addToEmailResources(ctx, emailResources, events[i])
 
-      // Since we've ordered the events by recipient, we know we're done with the current recipient
-      // when the next event has a different one.
-      if (
-        i + 1 == events.length ||
-        events[i].recipientId != events[i + 1].recipientId
-      ) {
-        const emailHtml = createEmail(
-          events[i].recipient.name,
-          eventHierarchy,
-          emailResources
-        )
-        await sendEmail(events[i].recipient.email || '', emailHtml)
-        await markEventsCompleted(ctx, eventHierarchy)
+        // Since we've ordered the events by recipient, we know we're done with the current recipient
+        // when the next event has a different one.
+        if (
+          i + 1 == events.length ||
+          events[i].recipientId != events[i + 1].recipientId
+        ) {
+          if (events[i].recipient.prefersEventNotifications) {
+            const emailHtml = createEmail(
+              events[i].recipient.name,
+              eventHierarchy,
+              emailResources
+            )
+            await sendEmail(events[i].recipient.email || '', emailHtml)
+          }
+          await markEventsCompleted(ctx, eventHierarchy)
 
-        eventHierarchy = new Map<ProjectId, Map<EventType, Event[]>>()
-        emailResources = new EmailResources()
+          eventHierarchy = new Map<ProjectId, Map<EventType, Event[]>>()
+          emailResources = new EmailResources()
+        }
       }
-    }
-  },
-})
+    },
+  })
+  .mutation('deleteCompletedNotifications', {
+    input: z.void(),
+    async resolve({ ctx }) {
+      return await ctx.prisma.event.deleteMany({
+        where: { status: EventStatus.COMPLETED },
+      })
+    },
+  })
 
 function addToEventHierarchy(
   eventHierarchy: Map<ProjectId, Map<EventType, Event[]>>,

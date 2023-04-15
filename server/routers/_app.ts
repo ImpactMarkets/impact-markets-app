@@ -5,7 +5,6 @@ import { bountyRouter } from './bounty'
 import { certificateRouter } from './certificate'
 import { commentRouter } from './comment'
 import { donationRouter } from './donation'
-import { eventRouter } from './event'
 import { holdingRouter } from './holding'
 import { jobRouter } from './job'
 import { projectRouter } from './project'
@@ -19,7 +18,6 @@ export const appRouter = createRouter()
   .merge('bounty.', bountyRouter)
   .merge('certificate.', certificateRouter)
   .merge('comment.', commentRouter)
-  .merge('event.', eventRouter)
   .merge('holding.', holdingRouter)
   .merge('transaction.', transactionRouter)
   .merge('user.', userRouter)
