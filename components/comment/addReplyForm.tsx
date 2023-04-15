@@ -9,23 +9,27 @@ import { InferQueryOutput, trpc } from '@/lib/trpc'
 import { CommentFormData } from '../utils'
 
 export function AddReplyForm({
-  projectId,
+  objectId,
+  objectType,
   parent,
   onDone,
 }: {
-  projectId: string
+  objectId: string
+  objectType: 'project' | 'bounty'
   parent:
     | InferQueryOutput<'project.detail'>['comments'][number]
     | InferQueryOutput<'project.detail'>['comments'][number]['children'][number]
+    | InferQueryOutput<'bounty.detail'>['comments'][number]
+    | InferQueryOutput<'bounty.detail'>['comments'][number]['children'][number]
   onDone: () => void
 }) {
   const utils = trpc.useContext()
   const addReplyMutation = trpc.useMutation('comment.add', {
     onSuccess: () => {
       return utils.invalidateQueries([
-        'project.detail',
+        (objectType + '.detail') as 'project.detail' | 'bounty.detail',
         {
-          id: projectId,
+          id: objectId,
         },
       ])
     },
@@ -38,7 +42,8 @@ export function AddReplyForm({
   const onSubmit: SubmitHandler<CommentFormData> = (data) => {
     addReplyMutation.mutate(
       {
-        projectId,
+        objectId,
+        objectType,
         content: data.content,
         parentId: parent?.id,
       },

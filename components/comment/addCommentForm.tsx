@@ -8,15 +8,21 @@ import { trpc } from '@/lib/trpc'
 
 import { CommentFormData } from '../utils'
 
-export function AddCommentForm({ projectId }: { projectId: string }) {
+export function AddCommentForm({
+  objectId,
+  objectType,
+}: {
+  objectId: string
+  objectType: 'project' | 'bounty'
+}) {
   const [markdownEditorKey, setMarkdownEditorKey] = React.useState(0)
   const utils = trpc.useContext()
   const addCommentMutation = trpc.useMutation('comment.add', {
     onSuccess: () => {
       return utils.invalidateQueries([
-        'project.detail',
+        (objectType + '.detail') as 'project.detail' | 'bounty.detail',
         {
-          id: projectId,
+          id: objectId,
         },
       ])
     },
@@ -29,7 +35,8 @@ export function AddCommentForm({ projectId }: { projectId: string }) {
   const onSubmit: SubmitHandler<CommentFormData> = (data) => {
     addCommentMutation.mutate(
       {
-        projectId,
+        objectId,
+        objectType,
         content: data.content,
       },
       {
