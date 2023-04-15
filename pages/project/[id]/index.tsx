@@ -130,16 +130,8 @@ function ProjectPage({ projectId }: { projectId: string }) {
             <div className="flex justify-between my-6">
               <AuthorWithDate
                 author={project.author}
-                date={
-                  project.actionEnd ?? project.actionStart ?? project.createdAt
-                }
-                dateLabel={
-                  project.actionEnd
-                    ? 'Completed'
-                    : project.actionStart
-                    ? 'Started'
-                    : 'Created'
-                }
+                date={project.createdAt}
+                dateLabel="Created"
               />
               {project.paymentUrl ? (
                 <a
