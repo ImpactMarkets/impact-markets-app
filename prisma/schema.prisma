@@ -188,19 +188,20 @@ model Certificate {
 }
 
 model Bounty {
-  id          String       @id @default(cuid())
-  title       String       @db.VarChar(255)
+  id          String    @id @default(cuid())
+  title       String    @db.VarChar(255)
   content     String
   contentHtml String
   size        Decimal
   deadline    DateTime?
-  tags        String       @default("")
-  status      BountyStatus @default(ACTIVE)
-  hidden      Boolean      @default(false)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  authorId    String
-  sourceUrl   String       @default("")
+  sourceUrl   String    @default("")
+  tags        String    @default("")
+
+  status    BountyStatus @default(ACTIVE)
+  hidden    Boolean      @default(false)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  authorId  String
 
   likedBy  LikedBounty[]
   comments Comment[]
@@ -309,7 +310,7 @@ model Comment {
 
   author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   project  Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  Bounty   Bounty?   @relation(fields: [bountyId], references: [id])
+  bounty   Bounty?   @relation(fields: [bountyId], references: [id])
   parent   Comment?  @relation("parentChildren", fields: [parentId], references: [id], onDelete: Cascade)
   children Comment[] @relation("parentChildren")
 

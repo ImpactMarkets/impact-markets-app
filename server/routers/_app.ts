@@ -1,6 +1,7 @@
 import { superjson } from '@/lib/transformer'
 
 import { createRouter } from '../createRouter'
+import { bountyRouter } from './bounty'
 import { certificateRouter } from './certificate'
 import { commentRouter } from './comment'
 import { donationRouter } from './donation'
@@ -15,6 +16,7 @@ export const appRouter = createRouter()
   .transformer(superjson)
   .merge('project.', projectRouter)
   .merge('donation.', donationRouter)
+  .merge('bounty.', bountyRouter)
   .merge('certificate.', certificateRouter)
   .merge('comment.', commentRouter)
   .merge('event.', eventRouter)
