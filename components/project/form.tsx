@@ -163,7 +163,7 @@ export function ProjectForm({
           render={({ field }) => (
             <MarkdownEditor
               label="Description"
-              description="Please hover over the question mark icon for some guidance. But don’t worry, supporters can ask questions too."
+              description="Please hover over the question mark icon for some guidance. But don’t worry; supporters can ask questions too."
               info={DESCRIPTION_PROMPTS}
               value={field.value}
               onChange={field.onChange}
