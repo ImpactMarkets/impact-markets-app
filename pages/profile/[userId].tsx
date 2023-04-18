@@ -72,6 +72,17 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
                   })
                 }}
               />
+              <Switch
+                label="Send me daily email notifications for activity on my projects"
+                classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
+                disabled={preferencesMutation.isLoading}
+                checked={session.user.prefersEventNotifications}
+                onChange={(event) => {
+                  preferencesMutation.mutate({
+                    prefersEventNotifications: event.target.checked,
+                  })
+                }}
+              />
             </Tabs.Panel>
           )}
         </Tabs>

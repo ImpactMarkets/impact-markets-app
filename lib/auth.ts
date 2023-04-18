@@ -27,7 +27,7 @@ export const authOptions: NextAuthOptions = {
     EmailProvider({
       server: {
         host: process.env.EMAIL_SERVER_HOST,
-        port: process.env.EMAIL_SERVER_PORT,
+        port: Number(process.env.EMAIL_SERVER_PORT),
         auth: {
           user: process.env.EMAIL_SERVER_USER,
           pass: process.env.EMAIL_SERVER_PASSWORD,
@@ -50,6 +50,7 @@ export const authOptions: NextAuthOptions = {
           email: (user || token).email,
           prefersDetailView: (user || token).prefersDetailView,
           prefersAnonymity: (user || token).prefersAnonymity,
+          prefersEventNotifications: (user || token).prefersEventNotifications,
         },
       } as Session
     },
@@ -80,6 +81,7 @@ if (serverEnv.MOCK_LOGIN) {
         email: true,
         prefersDetailView: true,
         prefersAnonymity: true,
+        prefersEventNotifications: true,
       },
       where: { email },
       create: { email, name, image, role },
@@ -99,6 +101,7 @@ declare module 'next-auth' {
       role: Role
       prefersDetailView: boolean
       prefersAnonymity: boolean
+      prefersEventNotifications: boolean
     }
     expires: string
   }

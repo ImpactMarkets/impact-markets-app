@@ -1,6 +1,9 @@
+import { Context } from 'server/context'
 import { z } from 'zod'
 
+import { projectSelect } from '@/lib/notifyemail'
 import { DonationState, Prisma } from '@prisma/client'
+import { EventStatus, EventType } from '@prisma/client'
 
 import { createProtectedRouter } from '../createProtectedRouter'
 
@@ -45,7 +48,7 @@ export const donationRouter = createProtectedRouter()
       time: z.instanceof(Date),
     }),
     async resolve({ ctx, input: { projectId, userId, amount, time } }) {
-      return await ctx.prisma.donation.create({
+      const donation = await ctx.prisma.donation.create({
         data: {
           projectId,
           userId,
@@ -53,6 +56,11 @@ export const donationRouter = createProtectedRouter()
           time,
         },
       })
+
+      // We don't wait for the event to emit before continuing.
+      emitNewDonationEvent(ctx, projectId, donation.id)
+
+      return donation
     },
   })
   .mutation('confirm', {
@@ -77,3 +85,32 @@ export const donationRouter = createProtectedRouter()
       })
     },
   })
+
+async function emitNewDonationEvent(
+  ctx: Context,
+  projectId: string,
+  donationId: number
+) {
+  const project = await ctx.prisma.project.findUnique({
+    where: {
+      id: projectId,
+    },
+    select: projectSelect,
+  })
+
+  await ctx.prisma.event.create({
+    data: {
+      type: EventType.DONATION,
+      parameters: {
+        projectId: projectId,
+        donationId: donationId,
+      } as Prisma.JsonObject,
+      status: EventStatus.PENDING || undefined,
+      recipient: {
+        connect: {
+          id: project?.author.id,
+        },
+      },
+    },
+  })
+}
