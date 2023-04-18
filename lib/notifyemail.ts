@@ -189,11 +189,16 @@ export async function sendEmail(recipientAddress: string, emailHtml: string) {
     },
   })
 
-  await transporter.sendMail({
-    from: process.env.EMAIL_FROM,
-    to: recipientAddress,
-    subject: 'Recent Activity on Your Project(s)',
-    text: htmlToText.convert(emailHtml, { wordwrap: 130 }),
-    html: emailHtml,
-  })
+  if (
+    process.env.NODE_ENV === 'production' ||
+    recipientAddress.endsWith('@impactmarkets.io')
+  ) {
+    await transporter.sendMail({
+      from: process.env.EMAIL_FROM,
+      to: recipientAddress,
+      subject: 'Recent Activity on Your Projects',
+      text: htmlToText.convert(emailHtml, { wordwrap: 130 }),
+      html: emailHtml,
+    })
+  }
 }
