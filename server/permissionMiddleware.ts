@@ -1,3 +1,5 @@
+import { sha512 } from 'crypto-hash'
+
 import { TRPCError } from '@trpc/server'
 
 import { MiddlewareFunction } from './router'
@@ -170,10 +172,12 @@ export const permissionMiddleware: MiddlewareFunction = async ({
   }
 
   const requestComesFromLocalhost = async () => {
-    // In my testing, the IP address from a local request is "::ffff:127.0.0.1".
-    // I'm not sure what the "::ffff:" prefix is about, but regardless it seems we can just check
-    // the suffix to make sure the request is coming from localhost.
-    return ctx.req.socket.remoteAddress?.endsWith('127.0.0.1')
+    const expectedHash =
+      '9a71f29fc25843711e279ec1da9ef43eb455ea13592d2b1888449f52b6c19ef995e7ec591a8868544e4b650f83946da39f3f7607ee0fa655abe521eecd36753f'
+    if (typeof ctx.req.headers.authentication === 'string') {
+      const hash = await sha512(ctx.req.headers.authentication)
+      return hash === expectedHash
+    }
   }
 
   // Permissions
