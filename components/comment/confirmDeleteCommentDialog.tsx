@@ -25,7 +25,6 @@ export function ConfirmDeleteCommentDialog({
   isOpen: boolean
   onClose: () => void
 }) {
-  console.log('commentId', commentId)
   const cancelRef = React.useRef<HTMLButtonElement>(null)
   const utils = trpc.useContext()
   const deleteCommentMutation = trpc.useMutation('comment.delete', {

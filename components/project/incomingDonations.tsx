@@ -25,7 +25,6 @@ export function IncomingDonations({
         state: 'PENDING',
       },
     ])
-    console.log(donationsQuery, typeof donationsQuery)
     donations = donationsQuery.data ?? []
   }
 
