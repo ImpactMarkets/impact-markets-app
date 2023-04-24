@@ -44,6 +44,7 @@ enum EventType {
   COMMENT
   DONATION
   PROJECT
+  BOUNTY
 }
 
 enum EventStatus {
