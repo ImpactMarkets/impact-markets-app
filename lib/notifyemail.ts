@@ -247,7 +247,8 @@ export async function sendEmail(recipientAddress: string, emailHtml: string) {
 
   if (
     process.env.NODE_ENV === 'production' ||
-    recipientAddress.endsWith('@impactmarkets.io')
+    recipientAddress.endsWith('@impactmarkets.io') ||
+    recipientAddress === 'telofy@gmail.com'
   ) {
     await transporter.sendMail({
       from: process.env.EMAIL_FROM,
