@@ -56,6 +56,7 @@ export const selects = {
   }),
   donation: Prisma.validator<Prisma.DonationSelect>()({
     amount: true,
+    state: true,
     user: {
       select: {
         name: true,
@@ -107,8 +108,11 @@ export class EmailResources {
 
 // Construct the email body and return the html.
 export function createEmail(
-  userName: string,
-  eventHierarchy: Map<ProjectId, Map<EventType, Event[]>>,
+  recipient: {
+    id: string
+    name: string
+  },
+  eventHierarchy: Map<string, Map<EventType, Event[]>>,
   resources: EmailResources
 ) {
   const emailContents = `
@@ -119,12 +123,20 @@ export function createEmail(
             <mj-image width="200px" src="https://app.impactmarkets.io/static/images/logo-light.png"></mj-image>
             <mj-divider border-color="#EE0000"></mj-divider>
             <mj-text>
-              Hello ${userName},</br>
-              Here is your recent activity summary:
+              <p>Hello ${recipient.name},</p>
+              <p>Here is your summary of the recent activity on your projects and bounties.</p>
             </mj-text>
             <mj-divider border-color="#EE0000"></mj-divider>
             ${projectsSection(eventHierarchy, resources)}
             <mj-divider border-color="#EE0000"></mj-divider>
+            <mj-text>
+              <p>
+                You can change your notification preferences on your 
+                <a href="https://app.impactmarkets.io/profile/${recipient.id}">
+                  Impact Markets profile
+                </a>.
+              </p>
+            </mj-text>
           </mj-column>
         </mj-section>
       </mj-body>
@@ -134,7 +146,7 @@ export function createEmail(
 }
 
 function projectsSection(
-  eventHierarchy: Map<ProjectId, Map<EventType, Event[]>>,
+  eventHierarchy: Map<string, Map<EventType, Event[]>>,
   resources: EmailResources
 ) {
   const emailContentsArr = Array.from(eventHierarchy).map(
@@ -142,27 +154,27 @@ function projectsSection(
       const project = resources.projects.get(projectId)
 
       return `
-		  <mj-text>
-        <h1><a href="https://app.impactmarkets.io/project/${projectId}">${
+        <mj-text>
+          <h1><a href="https://app.impactmarkets.io/project/${projectId}">${
         project?.title
       }</a></h1>
-		  </mj-text>
-      ${eventsSubsection(
-        '', // "New project created" section; No header needed.
-        eventTypeToEvents.get(EventType.PROJECT),
-        showProjectCreation(resources)
-      )}
-      ${eventsSubsection(
-        '<h2>Donations</h2>',
-        eventTypeToEvents.get(EventType.DONATION),
-        showDonation(resources)
-      )}
-      ${eventsSubsection(
-        '<h2>Comments</h2>',
-        eventTypeToEvents.get(EventType.COMMENT),
-        showComment(resources)
-      )}
-    `
+        </mj-text>
+        ${eventsSubsection(
+          '', // "New project/bounty created" section; No header needed.
+          eventTypeToEvents.get(EventType.PROJECT),
+          showProjectOrBountyCreation(resources)
+        )}
+        ${eventsSubsection(
+          '<h2>Donations</h2>',
+          eventTypeToEvents.get(EventType.DONATION),
+          showDonation(resources)
+        )}
+        ${eventsSubsection(
+          '<h2>Comments</h2>',
+          eventTypeToEvents.get(EventType.COMMENT),
+          showComment(resources)
+        )}
+      `
     }
   )
   return emailContentsArr.join(
@@ -253,7 +265,7 @@ export async function sendEmail(recipientAddress: string, emailHtml: string) {
     await transporter.sendMail({
       from: process.env.EMAIL_FROM,
       to: recipientAddress,
-      subject: 'Recent Activity on Your Projects',
+      subject: 'Recent activity on your projects and bounties',
       text: htmlToText.convert(emailHtml, { wordwrap: 130 }),
       html: emailHtml,
     })
