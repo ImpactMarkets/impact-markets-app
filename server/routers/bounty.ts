@@ -388,8 +388,7 @@ async function emitNewBountyEvents(ctx: Context, bountyId: string) {
       data: {
         type: EventType.BOUNTY,
         parameters: {
-          bountyId: bountyId,
-        } as Prisma.JsonObject,
+        },
         status: EventStatus.PENDING || undefined,
         recipient: {
           connect: {

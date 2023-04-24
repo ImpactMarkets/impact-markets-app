@@ -167,9 +167,12 @@ function eventsSubsection(
 
 function showProjectCreation(resources: EmailResources) {
   return (event: Event) => {
-    const paramsObject = event.parameters as Prisma.JsonObject
-    const projectId = paramsObject['projectId'] as ProjectId
-    const project = resources.projects.get(projectId)
+    const objectId = String(event.parameters.objectId)
+    const objectType = String(event.parameters.objectType)
+    const projectOrBounty =
+      objectType === 'project'
+        ? resources.projects.get(objectId)
+        : resources.bounties.get(objectId)
 
     return `Project was created by <strong>${project?.author.name}</strong>`
   }
@@ -177,9 +180,9 @@ function showProjectCreation(resources: EmailResources) {
 
 function showDonation(resources: EmailResources) {
   return (event: Event) => {
-    const paramsObject = event.parameters as Prisma.JsonObject
-    const donationId = paramsObject['donationId'] as DonationId
-    const donation = resources.donations.get(donationId)
+    const { donationId } = event.parameters
+    const donation = donationId ? resources.donations.get(donationId) : null
+
 
     return `<strong>${donation?.user.name}</strong> donated <strong>${donation?.amount}</strong>`
   }
@@ -187,9 +190,9 @@ function showDonation(resources: EmailResources) {
 
 function showComment(resources: EmailResources) {
   return (event: Event) => {
-    const paramsObject = event.parameters as Prisma.JsonObject
-    const commentId = paramsObject['commentId'] as CommentId
-    const comment = resources.comments.get(commentId)
+    const { commentId } = event.parameters
+    const comment = commentId ? resources.comments.get(commentId) : null
+
 
     return `<strong>${comment?.author.name}</strong> added a comment`
   }
