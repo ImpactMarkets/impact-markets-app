@@ -4,7 +4,6 @@ import { z } from 'zod'
 import { markdownToHtml } from '@/lib/editor'
 import { selects } from '@/lib/notifyemail'
 import { EventStatus, EventType } from '@prisma/client'
-import { Prisma } from '@prisma/client'
 
 import { createProtectedRouter } from '../createProtectedRouter'
 
@@ -99,7 +98,7 @@ async function emitNewCommentEvent(
         objectId: objectId,
         objectType: objectType,
         commentId: commentId,
-      } as Prisma.JsonObject,
+      },
       status: EventStatus.PENDING || undefined,
       recipient: {
         connect: {

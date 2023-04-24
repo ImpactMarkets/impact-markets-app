@@ -1,7 +1,7 @@
 import { Context } from 'server/context'
 import { z } from 'zod'
 
-import { projectSelect } from '@/lib/notifyemail'
+import { selects } from '@/lib/notifyemail'
 import { DonationState, Prisma } from '@prisma/client'
 import { EventStatus, EventType } from '@prisma/client'
 
@@ -95,7 +95,7 @@ async function emitNewDonationEvent(
     where: {
       id: projectId,
     },
-    select: projectSelect,
+    select: selects.project,
   })
 
   await ctx.prisma.event.create({
@@ -105,7 +105,7 @@ async function emitNewDonationEvent(
         objectId: projectId,
         objectType: 'project',
         donationId: donationId,
-      } as Prisma.JsonObject,
+      },
       status: EventStatus.PENDING || undefined,
       recipient: {
         connect: {

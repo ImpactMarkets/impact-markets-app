@@ -3,24 +3,20 @@ import { z } from 'zod'
 
 import {
   EmailResources,
-  commentSelect,
+  Event,
   createEmail,
-  donationSelect,
-  projectSelect,
+  selects,
   sendEmail,
 } from '@/lib/notifyemail'
-import { Prisma } from '@prisma/client'
-import { Event, EventStatus, EventType } from '@prisma/client'
+import { EventStatus, EventType } from '@prisma/client'
 
 import { createProtectedRouter } from '../createProtectedRouter'
-
-type ProjectId = string
 
 export const jobRouter = createProtectedRouter()
   .mutation('sendEmails', {
     input: z.void(),
     async resolve({ ctx }) {
-      const events = await ctx.prisma.event.findMany({
+      const events_ = await ctx.prisma.event.findMany({
         orderBy: [
           {
             recipientId: 'desc',
@@ -45,8 +41,9 @@ export const jobRouter = createProtectedRouter()
           recipientId: true,
         },
       })
+      const events = events_.map((event) => Event.strip().parse(event))
 
-      let eventHierarchy = new Map<ProjectId, Map<EventType, Event[]>>()
+      let eventHierarchy = new Map<string, Map<EventType, Event[]>>()
       let emailResources = new EmailResources()
 
       for (let i = 0; i < events.length; i++) {
@@ -61,7 +58,7 @@ export const jobRouter = createProtectedRouter()
         ) {
           if (events[i].recipient.prefersEventNotifications) {
             const emailHtml = createEmail(
-              events[i].recipient.name,
+              events[i].recipient,
               eventHierarchy,
               emailResources
             )
@@ -69,7 +66,7 @@ export const jobRouter = createProtectedRouter()
           }
           await markEventsCompleted(ctx, eventHierarchy)
 
-          eventHierarchy = new Map<ProjectId, Map<EventType, Event[]>>()
+          eventHierarchy = new Map<string, Map<EventType, Event[]>>()
           emailResources = new EmailResources()
         }
       }
@@ -85,19 +82,18 @@ export const jobRouter = createProtectedRouter()
   })
 
 function addToEventHierarchy(
-  eventHierarchy: Map<ProjectId, Map<EventType, Event[]>>,
+  eventHierarchy: Map<string, Map<EventType, Event[]>>,
   event: Event
 ) {
-  const paramsObject = event.parameters as Prisma.JsonObject
-  const projectId = paramsObject['projectId'] as string
+  const { objectId } = event.parameters
 
-  if (!eventHierarchy.has(projectId)) {
-    eventHierarchy.set(projectId, new Map<EventType, Event[]>())
+  if (!eventHierarchy.has(objectId)) {
+    eventHierarchy.set(objectId, new Map<EventType, Event[]>())
   }
-  if (!eventHierarchy.get(projectId)?.has(event.type)) {
-    eventHierarchy.get(projectId)?.set(event.type, [])
+  if (!eventHierarchy.get(objectId)?.has(event.type)) {
+    eventHierarchy.get(objectId)?.set(event.type, [])
   }
-  eventHierarchy.get(projectId)?.get(event.type)?.push(event)
+  eventHierarchy.get(objectId)?.get(event.type)?.push(event)
 }
 
 async function addToEmailResources(
@@ -105,39 +101,41 @@ async function addToEmailResources(
   emailResources: EmailResources,
   event: Event
 ) {
-  const paramsObject = event.parameters as Prisma.JsonObject
-  const projectId = paramsObject['projectId'] as string
+  const { objectId, objectType, donationId, commentId } = event.parameters
 
-  if (!emailResources.projects.has(projectId)) {
-    const project = await ctx.prisma.project.findUnique({
+  if (objectId != null && !emailResources.projects.has(objectId)) {
+    // The straightforward ctx.prisma[objectType].findUnique(query) caused opaque type errors
+    const query = {
       where: {
-        id: projectId,
+        id: objectId,
       },
-      select: projectSelect,
-    })
-    if (project) {
-      emailResources.projects.set(projectId, project)
+      select: selects.project,
+    }
+    const commentee =
+      objectType === 'project'
+        ? await ctx.prisma.project.findUnique(query)
+        : await ctx.prisma.bounty.findUnique(query)
+    if (commentee) {
+      emailResources.projects.set(objectId, commentee)
     }
   }
 
-  if (event.type == EventType.DONATION) {
-    const donationId = paramsObject['donationId'] as number
+  if (event.type == EventType.DONATION && donationId != null) {
     const donation = await ctx.prisma.donation.findUnique({
       where: {
         id: donationId,
       },
-      select: donationSelect,
+      select: selects.donation,
     })
     if (donation) {
       emailResources.donations.set(donationId, donation)
     }
-  } else if (event.type == EventType.COMMENT) {
-    const commentId = paramsObject['commentId'] as number
+  } else if (event.type == EventType.COMMENT && commentId != null) {
     const comment = await ctx.prisma.comment.findUnique({
       where: {
         id: commentId,
       },
-      select: commentSelect,
+      select: selects.comment,
     })
     if (comment) {
       emailResources.comments.set(commentId, comment)
@@ -147,7 +145,7 @@ async function addToEmailResources(
 
 async function markEventsCompleted(
   ctx: Context,
-  eventHierarchy: Map<ProjectId, Map<EventType, Event[]>>
+  eventHierarchy: Map<string, Map<EventType, Event[]>>
 ) {
   const allEventIds = Array.from(eventHierarchy.values()).flatMap(
     (eventTypeToEvents) =>
