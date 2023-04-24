@@ -13,19 +13,21 @@ import { createProtectedRouter } from '../createProtectedRouter'
 const getOrderBy = (
   orderByKey: ProjectSortKey | undefined
 ): Prisma.ProjectOrderByWithRelationAndSearchRelevanceInput => {
+  const { desc } = Prisma.SortOrder
+  const { last } = Prisma.NullsOrder
   const orderOptions = {
-    createdAt: { createdAt: Prisma.SortOrder.desc },
-    actionStart: { actionStart: Prisma.SortOrder.desc },
-    actionEnd: { actionEnd: Prisma.SortOrder.desc },
+    createdAt: { createdAt: desc },
+    actionStart: { actionStart: { sort: desc, nulls: last } },
+    actionEnd: { actionEnd: { sort: desc, nulls: last } },
     supporterCount: {
       donations: {
-        _count: Prisma.SortOrder.desc,
+        _count: desc,
       },
     },
   }
   const orderBy = orderByKey && orderOptions[orderByKey]
   if (!orderBy) {
-    return { createdAt: Prisma.SortOrder.desc }
+    return { createdAt: desc }
   }
   return orderBy
 }
