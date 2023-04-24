@@ -220,7 +220,11 @@ function ProjectPage({ projectId }: { projectId: string }) {
                   <ul className="space-y-12">
                     {project.comments.map((comment) => (
                       <li key={comment.id}>
-                        <Comment projectId={project.id} comment={comment} />
+                        <Comment
+                          objectId={project.id}
+                          objectType="project"
+                          comment={comment}
+                        />
 
                         <div id="replies" className="pt-12 pl-14 space-y-12">
                           {comment.children.length > 0 && (
@@ -228,7 +232,8 @@ function ProjectPage({ projectId }: { projectId: string }) {
                               {comment.children.map((reply) => (
                                 <li key={reply.id}>
                                   <Comment
-                                    projectId={project.id}
+                                    objectId={project.id}
+                                    objectType="project"
                                     comment={reply}
                                   />
                                 </li>
@@ -257,7 +262,10 @@ function ProjectPage({ projectId }: { projectId: string }) {
                         size="sm"
                       />
                     </span>
-                    <AddCommentForm projectId={project.id} />
+                    <AddCommentForm
+                      objectId={project.id}
+                      objectType="project"
+                    />
                   </div>
                 )}
               </div>
