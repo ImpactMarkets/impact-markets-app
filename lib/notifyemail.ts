@@ -2,14 +2,35 @@ import * as htmlToText from 'html-to-text'
 import DOMPurify from 'isomorphic-dompurify'
 import mjml2html from 'mjml'
 import { createTransport } from 'nodemailer'
+import { z } from 'zod'
 
 import { Prisma } from '@prisma/client'
-import { Event, EventType } from '@prisma/client'
+import { EventStatus, EventType } from '@prisma/client'
 
-type ProjectId = string
-type BountyId = string
-type DonationId = number
-type CommentId = number
+import { capitalize } from './text'
+
+export const Event = z.object({
+  id: z.number(),
+  time: z.date(),
+  // z.enum needs at least one value, but our enums have > 1 value
+  type: z.enum(Object.keys(EventType) as [EventType, ...EventType[]]),
+  status: z.enum(Object.keys(EventStatus) as [EventStatus, ...EventStatus[]]),
+  recipientId: z.string(),
+  recipient: z.object({
+    id: z.string(),
+    name: z.string(),
+    email: z.string(),
+    prefersEventNotifications: z.boolean(),
+  }),
+  parameters: z.object({
+    objectId: z.string(),
+    objectType: z.enum(['project', 'bounty']),
+    commentId: z.number().nullable().optional(),
+    donationId: z.number().nullable().optional(),
+  }),
+})
+
+export type Event = z.infer<typeof Event>
 
 // Prisma query types for displaying information in the emails.
 export const selects = {
@@ -71,16 +92,16 @@ export type CommentWithRelations = Prisma.CommentGetPayload<{
 // We need a separate structure for holding these, because the Event model itself doesn't actually
 // hold these data as relations; just their ids in the `parameters` Json field.
 export class EmailResources {
-  projects: Map<ProjectId, ProjectWithRelations>
-  bounties: Map<BountyId, BountyWithRelations>
-  donations: Map<DonationId, DonationWithRelations>
-  comments: Map<CommentId, CommentWithRelations>
+  projects: Map<string, ProjectWithRelations>
+  bounties: Map<string, BountyWithRelations>
+  donations: Map<number, DonationWithRelations>
+  comments: Map<number, CommentWithRelations>
 
   constructor() {
-    this.projects = new Map<ProjectId, ProjectWithRelations>()
-    this.bounties = new Map<BountyId, BountyWithRelations>()
-    this.donations = new Map<DonationId, DonationWithRelations>()
-    this.comments = new Map<CommentId, CommentWithRelations>()
+    this.projects = new Map<string, ProjectWithRelations>()
+    this.bounties = new Map<string, BountyWithRelations>()
+    this.donations = new Map<number, DonationWithRelations>()
+    this.comments = new Map<number, CommentWithRelations>()
   }
 }
 
