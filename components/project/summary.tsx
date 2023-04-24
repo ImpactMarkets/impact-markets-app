@@ -12,6 +12,7 @@ import { CommentButton } from '../commentButton'
 import { Date } from '../date'
 import { Heading2 } from '../heading2'
 import { Tags } from '../tags'
+import { TAGS } from './tags'
 
 export type ProjectSummaryProps = {
   project: InferQueryOutput<'project.feed'>['projects'][number]
@@ -49,7 +50,7 @@ function Left({ project }: ProjectSummaryProps) {
     <div className="grow relative flex flex-col justify-between max-w-[calc(100%-140px-1rem)]">
       {project.tags && (
         <div className="mb-6 max-h-10 overflow-hidden">
-          <Tags queryData={project} />
+          <Tags queryData={project} tags={TAGS} />
         </div>
       )}
       <div className={classNames(project.hidden ? 'opacity-50' : '')}>
