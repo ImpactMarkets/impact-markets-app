@@ -388,6 +388,8 @@ async function emitNewBountyEvents(ctx: Context, bountyId: string) {
       data: {
         type: EventType.BOUNTY,
         parameters: {
+          objectId: bountyId,
+          objectType: 'bounty',
         },
         status: EventStatus.PENDING || undefined,
         recipient: {

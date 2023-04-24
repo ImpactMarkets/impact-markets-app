@@ -102,7 +102,8 @@ async function emitNewDonationEvent(
     data: {
       type: EventType.DONATION,
       parameters: {
-        projectId: projectId,
+        objectId: projectId,
+        objectType: 'project',
         donationId: donationId,
       } as Prisma.JsonObject,
       status: EventStatus.PENDING || undefined,

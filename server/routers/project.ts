@@ -399,8 +399,9 @@ async function emitNewProjectEvents(ctx: Context, projectId: string) {
       data: {
         type: EventType.PROJECT,
         parameters: {
-          projectId: projectId,
-        } as Prisma.JsonObject,
+          objectId: projectId,
+          objectType: 'project',
+        },
         status: EventStatus.PENDING || undefined,
         recipient: {
           connect: {
