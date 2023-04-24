@@ -20,6 +20,13 @@ const ProjectSummary = dynamic<ProjectSummaryProps>(
   { ssr: false }
 )
 
+const orderByValues: Array<{ value: ProjectSortKey; label: string }> = [
+  { value: 'createdAt', label: 'Creation date' },
+  { value: 'actionStart', label: 'Start of work' },
+  { value: 'actionEnd', label: 'End of work' },
+  { value: 'supporterCount', label: 'Supporters' },
+]
+
 const Home: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()
   const router = useRouter()
@@ -116,7 +123,13 @@ const Home: NextPageWithAuthAndLayout = () => {
           <div>
             <Filters
               onFilterTagsUpdate={(tags) => setFilterTags(tags)}
-              onOrderByUpdate={(orderBy: ProjectSortKey) => setOrderBy(orderBy)}
+              onOrderByUpdate={(orderBy: string) =>
+                // A bit unhappy with this – https://stackoverflow.com/a/69007934/678861
+                (orderByValues.map((item) => item.value) as string[]).includes(
+                  orderBy
+                ) && setOrderBy(orderBy as ProjectSortKey)
+              }
+              orderByValues={orderByValues}
               defaultFilterTagValue={filterTags}
               defaultOrderByValue={orderBy}
             />

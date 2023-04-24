@@ -14,6 +14,7 @@ const getOrderBy = (
   orderByKey: ProjectSortKey | undefined
 ): Prisma.ProjectOrderByWithRelationAndSearchRelevanceInput => {
   const orderOptions = {
+    createdAt: { createdAt: Prisma.SortOrder.desc },
     actionStart: { actionStart: Prisma.SortOrder.desc },
     actionEnd: { actionEnd: Prisma.SortOrder.desc },
     supporterCount: {

@@ -15,6 +15,7 @@ const getOrderBy = (
   | Prisma.Enumerable<Prisma.CertificateOrderByWithRelationAndSearchRelevanceInput>
   | undefined => {
   const orderOptions = {
+    createdAt: { createdAt: Prisma.SortOrder.desc },
     actionStart: { actionStart: Prisma.SortOrder.desc },
     actionEnd: { actionEnd: Prisma.SortOrder.desc },
     supporterCount: {

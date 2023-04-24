@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import { TAGS } from '@/components/project/tags'
-import { PROJECT_SORT_KEYS, ProjectSortKey } from '@/lib/constants'
+import { BountySortKey, ProjectSortKey } from '@/lib/constants'
 import { Button, Flex } from '@mantine/core'
 
 import { IconButton } from './iconButton'
@@ -12,7 +12,8 @@ import { IMSelect } from './select'
 
 export type FiltersProps = {
   onFilterTagsUpdate: (tags: string) => void
-  onOrderByUpdate: (sort: ProjectSortKey) => void
+  onOrderByUpdate: (orderBy: string) => void
+  orderByValues: Array<{ value: ProjectSortKey | BountySortKey; label: string }>
   defaultFilterTagValue: string
   defaultOrderByValue: string
 }
@@ -26,14 +27,6 @@ export function Filters(props: FiltersProps) {
   const [orderBy, setOrderBy] = useState<string | undefined>(
     props.defaultOrderByValue
   )
-  const sortOptions: Array<{ value: ProjectSortKey; label: string }> = [
-    { value: 'actionStart', label: 'Start of work' },
-    { value: 'actionEnd', label: 'End of work' },
-    { value: 'supporterCount', label: 'Supporters' },
-    // Not currently supported:
-    // { value: 'holdings', label: 'Shares Bought' },
-    // { value: 'investment', label: 'Total Investment' },
-  ]
 
   return (
     <Flex gap={{ base: 'sm' }} align="center">
@@ -59,11 +52,16 @@ export function Filters(props: FiltersProps) {
       />
       <IMSelect
         placeholder="Sort by:"
-        data={sortOptions}
+        data={props.orderByValues}
         onChange={(value) => {
-          if (PROJECT_SORT_KEYS.includes(value as ProjectSortKey)) {
-            setOrderBy(value as ProjectSortKey)
-            props.onOrderByUpdate(value as ProjectSortKey)
+          const sortKeys = props.orderByValues.map((item) => item.value)
+          if (
+            value &&
+            typeof value === 'string' &&
+            (sortKeys as string[]).includes(value)
+          ) {
+            setOrderBy(value)
+            props.onOrderByUpdate(value)
           }
         }}
         value={orderBy}

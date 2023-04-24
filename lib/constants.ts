@@ -8,6 +8,7 @@ export const SHARE_COUNT = 1e5
 export const ITEMS_PER_PAGE = 30
 
 export const PROJECT_SORT_KEYS = [
+  'createdAt',
   'actionStart',
   'actionEnd',
   'supporterCount',

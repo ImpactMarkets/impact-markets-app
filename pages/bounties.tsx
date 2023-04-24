@@ -4,20 +4,26 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
-import type { BountySummaryProps } from '@/components/bounty/summary'
+import type { SummaryProps } from '@/components/bounty/summary'
 import { ButtonLink } from '@/components/buttonLink'
 import { Filters } from '@/components/filters'
 import { Layout } from '@/components/layout'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import { SummarySkeleton } from '@/components/summarySkeleton'
-import { ITEMS_PER_PAGE, ProjectSortKey } from '@/lib/constants'
+import { BountySortKey, ITEMS_PER_PAGE } from '@/lib/constants'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
-const BountySummary = dynamic<BountySummaryProps>(
-  () => import('@/components/bounty/summary').then((mod) => mod.BountySummary),
+const Summary = dynamic<SummaryProps>(
+  () => import('@/components/bounty/summary').then((mod) => mod.Summary),
   { ssr: false }
 )
+
+const orderByValues: Array<{ value: BountySortKey; label: string }> = [
+  { value: 'createdAt', label: 'Creation date' },
+  { value: 'deadline', label: 'Deadline' },
+  { value: 'size', label: 'Bounty amount' },
+]
 
 const Home: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()
@@ -25,7 +31,7 @@ const Home: NextPageWithAuthAndLayout = () => {
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
   const utils = trpc.useContext()
   const [filterTags, setFilterTags] = React.useState('')
-  const [orderBy, setOrderBy] = React.useState('' as ProjectSortKey)
+  const [orderBy, setOrderBy] = React.useState('' as BountySortKey)
   const feedQueryPathAndInput: InferQueryPathAndInput<'bounty.feed'> = [
     'bounty.feed',
     {
@@ -115,7 +121,13 @@ const Home: NextPageWithAuthAndLayout = () => {
           <div>
             <Filters
               onFilterTagsUpdate={(tags) => setFilterTags(tags)}
-              onOrderByUpdate={(orderBy: ProjectSortKey) => setOrderBy(orderBy)}
+              onOrderByUpdate={(orderBy: string) =>
+                // A bit unhappy with this – https://stackoverflow.com/a/69007934/678861
+                (orderByValues.map((item) => item.value) as string[]).includes(
+                  orderBy
+                ) && setOrderBy(orderBy as BountySortKey)
+              }
+              orderByValues={orderByValues}
               defaultFilterTagValue={filterTags}
               defaultOrderByValue={orderBy}
             />
@@ -123,18 +135,18 @@ const Home: NextPageWithAuthAndLayout = () => {
         </div>
 
         {feedQuery.data.bountyCount === 0 ? (
-          <div className="text-center text-secondary border rounded my-10 py-20 px-10">
+          <div className="text-center text-secondary border rounded my-12 py-20 px-10">
             There are no published bounties to show yet.
           </div>
         ) : (
-          <div className="flow-root">
+          <div className="flow-root my-12">
             <ul className="divide-y divide-transparent flex flex-wrap gap-2">
               {feedQuery.data.bounties.map((bounty) => (
                 <li
                   key={bounty.id}
                   className="w-full max-w-full xl:w-[49.5%] xl:max-w-[49.5%] 2xl:w-[32.6%] 2xl:max-w-[32.6%]"
                 >
-                  <BountySummary
+                  <Summary
                     bounty={bounty}
                     onLike={() => {
                       likeMutation.mutate(bounty.id)
