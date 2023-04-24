@@ -13,6 +13,7 @@ import { Heading1 } from '@/components/heading1'
 import { HtmlView } from '@/components/htmlView'
 import { Layout } from '@/components/layout'
 import { LikeButton } from '@/components/likeButton'
+import { TAGS } from '@/components/project/tags'
 import { Tags } from '@/components/tags'
 import { getCertificateQueryPathAndInput } from '@/components/utils'
 import { trpc } from '@/lib/trpc'
@@ -159,7 +160,7 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
               />
             </div>
             <div className="my-6">
-              <Tags queryData={certificate} />
+              <Tags queryData={certificate} tags={TAGS} />
             </div>
             <div className="my-6">
               <Ledger certificate={certificate} isActive={isActive} />

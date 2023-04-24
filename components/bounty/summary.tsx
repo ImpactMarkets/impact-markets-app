@@ -12,6 +12,7 @@ import { CommentButton } from '../commentButton'
 import { Date } from '../date'
 import { Heading2 } from '../heading2'
 import { Tags } from '../tags'
+import { TAGS } from './tags'
 
 export type SummaryProps = {
   bounty: InferQueryOutput<'bounty.feed'>['bounties'][number]
@@ -49,7 +50,7 @@ function Left({ bounty }: SummaryProps) {
     <div className="grow relative flex flex-col justify-between max-w-[calc(100%-140px-1rem)]">
       {bounty.tags && (
         <div className="mb-6 max-h-10 overflow-hidden">
-          <Tags queryData={bounty} />
+          <Tags queryData={bounty} tags={TAGS} />
         </div>
       )}
       <div className={classNames(bounty.hidden ? 'opacity-50' : '')}>
