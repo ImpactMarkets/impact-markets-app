@@ -181,12 +181,15 @@ function eventsSubsection(
   return `
 		<mj-text>
 			${header}
-      ${events.map(displayer).join(`</br>`)}
+      ${events
+        .map(displayer)
+        .filter((text) => text.length)
+        .join(`<br />`)}
 		</mj-text>
 	`
 }
 
-function showProjectCreation(resources: EmailResources) {
+function showProjectOrBountyCreation(resources: EmailResources) {
   return (event: Event) => {
     const objectId = String(event.parameters.objectId)
     const objectType = String(event.parameters.objectType)
@@ -195,7 +198,13 @@ function showProjectCreation(resources: EmailResources) {
         ? resources.projects.get(objectId)
         : resources.bounties.get(objectId)
 
-    return `Project was created by <strong>${project?.author.name}</strong>`
+    if (projectOrBounty == null) {
+      return ''
+    }
+
+    return `${capitalize(objectType.toLowerCase())} was created by <strong>${
+      projectOrBounty?.author.name
+    }</strong>`
   }
 }
 
@@ -204,8 +213,11 @@ function showDonation(resources: EmailResources) {
     const { donationId } = event.parameters
     const donation = donationId ? resources.donations.get(donationId) : null
 
+    if (donation?.state !== 'PENDING') {
+      return ''
+    }
 
-    return `<strong>${donation?.user.name}</strong> donated <strong>${donation?.amount}</strong>`
+    return `<strong>${donation?.user.name}</strong>’s <strong>$${donation?.amount}</strong> donation is waiting for your confirmation`
   }
 }
 
@@ -214,6 +226,9 @@ function showComment(resources: EmailResources) {
     const { commentId } = event.parameters
     const comment = commentId ? resources.comments.get(commentId) : null
 
+    if (comment == null) {
+      return ''
+    }
 
     return `<strong>${comment?.author.name}</strong> added a comment`
   }
