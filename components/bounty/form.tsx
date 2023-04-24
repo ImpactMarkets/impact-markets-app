@@ -85,8 +85,13 @@ export const Form = ({
       <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
         <TextField
           {...register('size', {})}
-          label="Bounty amount in USD"
+          label="Bounty amount"
           description="What is your maximum bounty payment? (Optional)"
+          rightSection="USD"
+          classNames={{ rightSection: 'w-14' }}
+          type="number"
+          step="0.01"
+          max={1e30}
         />
         <TextField
           {...register('deadline', { valueAsDate: true })}

@@ -8,6 +8,7 @@ import { Heading1 } from '@/components/heading1'
 import { Layout } from '@/components/layout'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
+import { Prisma } from '@prisma/client'
 
 const NewBountyPage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
@@ -33,7 +34,7 @@ const NewBountyPage: NextPageWithAuthAndLayout = () => {
             id: cuid(),
             title: '',
             content: '',
-            size: '0',
+            size: new Prisma.Decimal('0'),
             deadline: '',
             sourceUrl: '',
             tags: '',
@@ -45,7 +46,7 @@ const NewBountyPage: NextPageWithAuthAndLayout = () => {
                 id: values.id,
                 title: values.title,
                 content: values.content,
-                size: values.size || '0',
+                size: new Prisma.Decimal(values.size || '0'),
                 deadline: values.deadline ? new Date(values.deadline) : null,
                 sourceUrl: values.sourceUrl,
                 tags: values.tags,
