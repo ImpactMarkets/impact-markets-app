@@ -80,7 +80,7 @@ function Right({ bounty }: SummaryProps) {
   )
 }
 
-export const BountySummary = ({ bounty }: SummaryProps) => (
+export const Summary = ({ bounty }: SummaryProps) => (
   <Card shadow="sm" p="lg" radius="md" withBorder>
     {bounty.hidden && (
       <Banner className="mb-6">
