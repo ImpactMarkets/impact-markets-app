@@ -16,7 +16,7 @@ export type FiltersProps = {
   orderByValues: Array<{ value: ProjectSortKey | BountySortKey; label: string }>
   defaultFilterTagValue: string
   defaultOrderByValue: string
-  searchEndpoint: 'project.search' | 'bounty.search'
+  searchEndpoint?: 'project.search' | 'bounty.search'
 }
 
 export function Filters(props: FiltersProps) {
@@ -70,14 +70,16 @@ export function Filters(props: FiltersProps) {
           input: 'bg-none border-none placeholder:text-primary',
         }}
       />
-      <IconButton
-        variant="secondary"
-        onClick={() => {
-          setIsSearchDialogOpen(true)
-        }}
-      >
-        <SearchIcon className="w-4 h-4" />
-      </IconButton>
+      {props.searchEndpoint && (
+        <IconButton
+          variant="secondary"
+          onClick={() => {
+            setIsSearchDialogOpen(true)
+          }}
+        >
+          <SearchIcon className="w-4 h-4" />
+        </IconButton>
+      )}
       <Button
         variant="subtle"
         radius="xs"
@@ -91,13 +93,15 @@ export function Filters(props: FiltersProps) {
       >
         Clear all
       </Button>
-      <SearchDialog
-        searchEndpoint={props.searchEndpoint}
-        isOpen={isSearchDialogOpen}
-        onClose={() => {
-          setIsSearchDialogOpen(false)
-        }}
-      />
+      {props.searchEndpoint && (
+        <SearchDialog
+          searchEndpoint={props.searchEndpoint}
+          isOpen={isSearchDialogOpen}
+          onClose={() => {
+            setIsSearchDialogOpen(false)
+          }}
+        />
+      )}
     </Flex>
   )
 }
