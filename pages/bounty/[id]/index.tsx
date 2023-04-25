@@ -1,6 +1,5 @@
 import { useSession } from 'next-auth/react'
 import Head from 'next/head'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
@@ -21,12 +20,7 @@ import { num } from '@/lib/text'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { LoadingOverlay, Tabs } from '@mantine/core'
-import {
-  IconCreditCard,
-  IconExternalLink,
-  IconHomeLink,
-  IconLink,
-} from '@tabler/icons'
+import { IconExternalLink } from '@tabler/icons'
 
 // TODO: Maybe this could be made into a generic component ?
 const BountyPageWrapper: NextPageWithAuthAndLayout = () => {

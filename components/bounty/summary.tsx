@@ -4,6 +4,7 @@ import * as React from 'react'
 import { Banner } from '@/components/banner'
 import { LikeButton } from '@/components/likeButton'
 import { classNames } from '@/lib/classnames'
+import { num } from '@/lib/text'
 import { InferQueryOutput } from '@/lib/trpc'
 import { Card } from '@mantine/core'
 
@@ -62,7 +63,10 @@ function Left({ bounty }: SummaryProps) {
             {bounty.title}
           </Heading2>
         </Link>
-        <Date date={bounty.createdAt} />
+        <Date
+          date={bounty.deadline || bounty.createdAt}
+          dateLabel={bounty.deadline ? 'Deadline' : 'Created'}
+        />
       </div>
       <div className="flex items-center gap-12 mt-6">{/* Donor chart */}</div>
     </div>

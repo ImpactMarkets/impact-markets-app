@@ -39,7 +39,7 @@ export function AuthorWithDate({
           </Link>
         </div>
         <div className="text-gray-500 text-sm">
-          {dateLabel} <Date date={date} />
+          <Date date={date} dateLabel={dateLabel} />
         </div>
       </div>
     </div>
