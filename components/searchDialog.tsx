@@ -12,6 +12,7 @@ import { Dialog, Transition } from '@headlessui/react'
 type SearchDialogProps = {
   isOpen: boolean
   onClose: () => void
+  searchEndpoint: 'project.search' | 'bounty.search'
 }
 
 function SearchResult({
@@ -27,7 +28,7 @@ function SearchResult({
     // eslint-disable-next-line @typescript-eslint/ban-types
     useHighlighted: () => boolean | Boolean // Boolean due to dependency on use-item-list
   }
-  result: InferQueryOutput<'project.search'>[number]
+  result: InferQueryOutput<'project.search' | 'bounty.search'>[number]
 }) {
   const ref = React.useRef<HTMLLIElement>(null)
   const { id, highlight, select, useHighlighted } = useItem({
@@ -39,7 +40,7 @@ function SearchResult({
   return (
     <li ref={ref} id={id} onMouseEnter={highlight} onClick={select}>
       <Link
-        href={`/project/${result.id}`}
+        href={result.link}
         className={classNames(
           'block py-3.5 pl-10 pr-3 transition-colors leading-tight',
           highlighted && 'bg-blue-600 text-white'
@@ -51,14 +52,20 @@ function SearchResult({
   )
 }
 
-function SearchField({ onSelect }: { onSelect: () => void }) {
+function SearchField({
+  onSelect,
+  searchEndpoint,
+}: {
+  onSelect: () => void
+  searchEndpoint: 'project.search' | 'bounty.search'
+}) {
   const [value, setValue] = React.useState('')
   const [debouncedValue] = useDebounce(value, 1000)
   const router = useRouter()
 
   const feedQuery = trpc.useQuery(
     [
-      'project.search',
+      searchEndpoint,
       {
         query: debouncedValue,
       },
@@ -163,7 +170,11 @@ function SearchField({ onSelect }: { onSelect: () => void }) {
   )
 }
 
-export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
+export function SearchDialog({
+  isOpen,
+  onClose,
+  searchEndpoint,
+}: SearchDialogProps) {
   return (
     <Transition.Root show={isOpen} as={React.Fragment}>
       <Dialog
@@ -196,7 +207,10 @@ export function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
           >
             <div className="inline-block w-full max-w-md mt-[10vh] mb-8 overflow-hidden text-left align-middle transition-all transform bg-primary rounded-lg shadow-xl dark:border">
               {isOpen ? (
-                <SearchField onSelect={onClose} />
+                <SearchField
+                  onSelect={onClose}
+                  searchEndpoint={searchEndpoint}
+                />
               ) : (
                 <div className="h-12" />
               )}

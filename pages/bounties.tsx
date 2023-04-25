@@ -130,6 +130,7 @@ const Home: NextPageWithAuthAndLayout = () => {
               orderByValues={orderByValues}
               defaultFilterTagValue={filterTags}
               defaultOrderByValue={orderBy}
+              searchEndpoint="bounty.search"
             />
           </div>
         </div>

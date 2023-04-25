@@ -16,6 +16,7 @@ export type FiltersProps = {
   orderByValues: Array<{ value: ProjectSortKey | BountySortKey; label: string }>
   defaultFilterTagValue: string
   defaultOrderByValue: string
+  searchEndpoint: 'project.search' | 'bounty.search'
 }
 
 export function Filters(props: FiltersProps) {
@@ -91,6 +92,7 @@ export function Filters(props: FiltersProps) {
         Clear all
       </Button>
       <SearchDialog
+        searchEndpoint={props.searchEndpoint}
         isOpen={isSearchDialogOpen}
         onClose={() => {
           setIsSearchDialogOpen(false)

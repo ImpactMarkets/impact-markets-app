@@ -65,6 +65,10 @@ export const bountyRouter = createProtectedRouter()
           title: true,
           contentHtml: true,
           createdAt: true,
+          size: true,
+          deadline: true,
+          sourceUrl: true,
+          status: true,
           hidden: true,
           tags: true,
           author: {
@@ -238,7 +242,11 @@ export const bountyRouter = createProtectedRouter()
         },
       })
 
-      return bounties
+      return bounties.map(({ id, ...rest }) => ({
+        id,
+        link: '/bounty/' + id,
+        ...rest,
+      }))
     },
   })
   .mutation('add', {

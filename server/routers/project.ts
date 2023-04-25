@@ -252,7 +252,11 @@ export const projectRouter = createProtectedRouter()
         },
       })
 
-      return projects
+      return projects.map(({ id, ...rest }) => ({
+        id,
+        link: '/project/' + id,
+        ...rest,
+      }))
     },
   })
   .mutation('add', {
