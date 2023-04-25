@@ -56,6 +56,9 @@ function Left({ bounty }: SummaryProps) {
       <div className={classNames(bounty.hidden ? 'opacity-50' : '')}>
         <Link href={`/bounty/${bounty.id}`}>
           <Heading2 className="cursor-pointer w-[95%] whitespace-nowrap text-ellipsis overflow-hidden">
+            <span className="text-gray-500">
+              {bounty.size ? `$${num(bounty.size)}: ` : ''}
+            </span>
             {bounty.title}
           </Heading2>
         </Link>
