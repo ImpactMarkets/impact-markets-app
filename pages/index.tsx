@@ -132,6 +132,7 @@ const Home: NextPageWithAuthAndLayout = () => {
               orderByValues={orderByValues}
               defaultFilterTagValue={filterTags}
               defaultOrderByValue={orderBy}
+              searchEndpoint="project.search"
             />
           </div>
         </div>
