@@ -37,7 +37,7 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
           <Tabs.List>
             <Tabs.Tab value="certificates">Projects</Tabs.Tab>
             <Tabs.Tab value="transactions">Transactions</Tabs.Tab>
-            {router?.query?.userId !== session?.user.id &&
+            {router.query.userId !== session?.user.id &&
             session?.user.role !== 'ADMIN' ? null : (
               <Tabs.Tab value="preferences">Preferences</Tabs.Tab>
             )}
@@ -51,13 +51,14 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
             <TransactionFeed user={profileQuery.data} />
           </Tabs.Panel>
 
-          {session && (
+          {router.query.userId !== session?.user.id &&
+          session?.user.role !== 'ADMIN' ? null : (
             <Tabs.Panel value="preferences" pt="xs" className="p-6">
               <Switch
                 label="Show detailed certificate view"
                 classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
                 disabled={preferencesMutation.isLoading}
-                checked={session.user.prefersDetailView}
+                checked={session?.user.prefersDetailView}
                 onChange={(event) => {
                   preferencesMutation.mutate({
                     prefersDetailView: event.target.checked,
@@ -68,7 +69,7 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
                 label="Hide name from rankings"
                 classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
                 disabled={preferencesMutation.isLoading}
-                checked={session.user.prefersAnonymity}
+                checked={session?.user.prefersAnonymity}
                 onChange={(event) => {
                   preferencesMutation.mutate({
                     prefersAnonymity: event.target.checked,
@@ -79,7 +80,7 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
                 label="Send me daily email notifications for activity on my projects"
                 classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
                 disabled={preferencesMutation.isLoading}
-                checked={session.user.prefersEventNotifications}
+                checked={session?.user.prefersEventNotifications}
                 onChange={(event) => {
                   preferencesMutation.mutate({
                     prefersEventNotifications: event.target.checked,
