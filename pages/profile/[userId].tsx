@@ -37,7 +37,10 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
           <Tabs.List>
             <Tabs.Tab value="certificates">Projects</Tabs.Tab>
             <Tabs.Tab value="transactions">Transactions</Tabs.Tab>
-            {session && <Tabs.Tab value="preferences">Preferences</Tabs.Tab>}
+            {router?.query?.userId !== session?.user.id &&
+            session?.user.role !== 'ADMIN' ? null : (
+              <Tabs.Tab value="preferences">Preferences</Tabs.Tab>
+            )}
           </Tabs.List>
 
           <Tabs.Panel value="certificates" pt="xs">
