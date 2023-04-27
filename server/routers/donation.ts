@@ -16,9 +16,7 @@ export const donationRouter = createProtectedRouter()
     }),
     async resolve({ input, ctx }) {
       return await ctx.prisma.donation.findMany({
-        orderBy: {
-          time: 'desc',
-        },
+        orderBy: [{ time: 'desc' }, { createdAt: 'desc' }],
         where: {
           projectId: input.projectId,
           userId: input.userId || undefined,
