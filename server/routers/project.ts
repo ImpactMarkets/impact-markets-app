@@ -4,7 +4,7 @@ import { z } from 'zod'
 
 import { PROJECT_SORT_KEYS, ProjectSortKey } from '@/lib/constants'
 import { markdownToHtml } from '@/lib/editor'
-import { Prisma } from '@prisma/client'
+import { Prisma, User } from '@prisma/client'
 import { EventStatus, EventType, Role } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
@@ -286,10 +286,15 @@ export const projectRouter = createProtectedRouter()
             },
           },
         },
+        select: {
+          id: true,
+          title: true,
+          author: true,
+        },
       })
 
       // We don't wait for the events to emit before continuing.
-      emitNewProjectEvents(ctx, project.id)
+      emitNewProjectEvents(ctx, project)
 
       return project
     },
@@ -391,7 +396,18 @@ export const projectRouter = createProtectedRouter()
     },
   })
 
-async function emitNewProjectEvents(ctx: Context, projectId: string) {
+async function emitNewProjectEvents(
+  ctx: Context,
+  {
+    id,
+    title,
+    author,
+  }: {
+    id: string
+    title: string
+    author: User
+  }
+) {
   const adminUsers = await ctx.prisma.user.findMany({
     where: {
       role: Role.ADMIN,
@@ -406,10 +422,12 @@ async function emitNewProjectEvents(ctx: Context, projectId: string) {
       data: {
         type: EventType.PROJECT,
         parameters: {
-          objectId: projectId,
+          objectId: id,
           objectType: 'project',
+          objectTitle: title,
+          text: `Project created by **${author.name}**`,
         },
-        status: EventStatus.PENDING || undefined,
+        status: EventStatus.PENDING,
         recipient: {
           connect: {
             id: adminUser.id,

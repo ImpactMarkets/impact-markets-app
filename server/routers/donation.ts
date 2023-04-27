@@ -1,8 +1,8 @@
 import { Context } from 'server/context'
 import { z } from 'zod'
 
-import { selects } from '@/lib/notifyemail'
-import { DonationState, Prisma } from '@prisma/client'
+import { num } from '@/lib/text'
+import { DonationState, Prisma, Project, User } from '@prisma/client'
 import { EventStatus, EventType } from '@prisma/client'
 
 import { createProtectedRouter } from '../createProtectedRouter'
@@ -53,10 +53,16 @@ export const donationRouter = createProtectedRouter()
           amount,
           time,
         },
+        select: {
+          id: true,
+          project: true,
+          amount: true,
+          user: true,
+        },
       })
 
       // We don't wait for the event to emit before continuing.
-      emitNewDonationEvent(ctx, projectId, donation.id)
+      emitNewDonationEvent(ctx, donation)
 
       return donation
     },
@@ -86,28 +92,32 @@ export const donationRouter = createProtectedRouter()
 
 async function emitNewDonationEvent(
   ctx: Context,
-  projectId: string,
-  donationId: number
+  {
+    user,
+    project,
+    amount,
+  }: {
+    user: User
+    project: Project
+    id: number
+    amount: Prisma.Decimal
+  }
 ) {
-  const project = await ctx.prisma.project.findUnique({
-    where: {
-      id: projectId,
-    },
-    select: selects.project,
-  })
-
   await ctx.prisma.event.create({
     data: {
       type: EventType.DONATION,
       parameters: {
-        objectId: projectId,
+        objectId: project.id,
         objectType: 'project',
-        donationId: donationId,
+        objectTitle: project.title,
+        text: `**${user.name}**’s **$${num(
+          amount
+        )}** donation is waiting for your confirmation`,
       },
-      status: EventStatus.PENDING || undefined,
+      status: EventStatus.PENDING,
       recipient: {
         connect: {
-          id: project?.author.id,
+          id: project.authorId,
         },
       },
     },

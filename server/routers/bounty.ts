@@ -4,7 +4,7 @@ import { z } from 'zod'
 
 import { BOUNTY_SORT_KEYS, BountySortKey } from '@/lib/constants'
 import { markdownToHtml } from '@/lib/editor'
-import { Prisma } from '@prisma/client'
+import { Prisma, User } from '@prisma/client'
 import { EventStatus, EventType, Role } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
@@ -276,10 +276,15 @@ export const bountyRouter = createProtectedRouter()
             },
           },
         },
+        select: {
+          id: true,
+          title: true,
+          author: true,
+        },
       })
 
       // We don't wait for the events to emit before continuing.
-      emitNewBountyEvents(ctx, bounty.id)
+      emitNewBountyEvents(ctx, bounty)
 
       return bounty
     },
@@ -381,7 +386,18 @@ export const bountyRouter = createProtectedRouter()
     },
   })
 
-async function emitNewBountyEvents(ctx: Context, bountyId: string) {
+async function emitNewBountyEvents(
+  ctx: Context,
+  {
+    id,
+    title,
+    author,
+  }: {
+    id: string
+    title: string
+    author: User
+  }
+) {
   const adminUsers = await ctx.prisma.user.findMany({
     where: {
       role: Role.ADMIN,
@@ -396,10 +412,12 @@ async function emitNewBountyEvents(ctx: Context, bountyId: string) {
       data: {
         type: EventType.BOUNTY,
         parameters: {
-          objectId: bountyId,
+          objectId: id,
           objectType: 'bounty',
+          objectTitle: title,
+          text: `Bounty created by **${author.name}**`,
         },
-        status: EventStatus.PENDING || undefined,
+        status: EventStatus.PENDING,
         recipient: {
           connect: {
             id: adminUser.id,

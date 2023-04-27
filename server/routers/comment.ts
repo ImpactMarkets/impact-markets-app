@@ -2,7 +2,6 @@ import { Context } from 'server/context'
 import { z } from 'zod'
 
 import { markdownToHtml } from '@/lib/editor'
-import { selects } from '@/lib/notifyemail'
 import { EventStatus, EventType } from '@prisma/client'
 
 import { createProtectedRouter } from '../createProtectedRouter'
@@ -38,10 +37,29 @@ export const commentRouter = createProtectedRouter()
             },
           }),
         },
+        select: {
+          id: true,
+          project: {
+            select: {
+              id: true,
+              title: true,
+              author: {
+                select: { id: true, name: true },
+              },
+            },
+          },
+          bounty: {
+            select: {
+              id: true,
+              title: true,
+              author: { select: { id: true, name: true } },
+            },
+          },
+        },
       })
 
       // We don't wait for the event to emit before continuing.
-      emitNewCommentEvent(ctx, input.objectId, input.objectType, comment.id)
+      emitNewCommentEvent(ctx, input.objectType, comment)
 
       return comment
     },
@@ -75,34 +93,44 @@ export const commentRouter = createProtectedRouter()
 
 async function emitNewCommentEvent(
   ctx: Context,
-  objectId: string,
   objectType: 'project' | 'bounty',
-  commentId: number
-) {
-  const query = {
-    where: {
-      id: objectId,
-    },
-    select: selects[objectType],
+  {
+    project,
+    bounty,
+  }: {
+    project: {
+      id: string
+      title: string
+      author: {
+        id: string
+        name: string
+      }
+    } | null
+    bounty: {
+      id: string
+      title: string
+      author: {
+        id: string
+        name: string
+      }
+    } | null
+    id: number
   }
-  // The straightforward ctx.prisma[objectType].findUnique(query) caused opaque type errors
-  const commentee =
-    objectType === 'project'
-      ? await ctx.prisma.project.findUnique(query)
-      : await ctx.prisma.bounty.findUnique(query)
-
+) {
+  const commentee = objectType === 'project' ? project : bounty
   await ctx.prisma.event.create({
     data: {
       type: EventType.COMMENT,
       parameters: {
-        objectId: objectId,
+        objectId: commentee!.id,
         objectType: objectType,
-        commentId: commentId,
+        objectTitle: commentee!.title,
+        text: `**${commentee!.author.name}** added a comment`,
       },
-      status: EventStatus.PENDING || undefined,
+      status: EventStatus.PENDING,
       recipient: {
         connect: {
-          id: commentee?.author.id,
+          id: commentee!.author.id,
         },
       },
     },
