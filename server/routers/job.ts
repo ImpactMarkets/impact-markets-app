@@ -2,7 +2,7 @@ import { groupBy } from 'lodash'
 import { Context } from 'server/context'
 import { z } from 'zod'
 
-import { Event, createEmail, sendEmail } from '@/lib/notifyemail'
+import { Event, createEmail, sendEmail } from '@/lib/emailEvents'
 import { EventStatus } from '@prisma/client'
 
 import { createProtectedRouter } from '../createProtectedRouter'
