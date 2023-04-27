@@ -123,7 +123,7 @@ export async function sendEmail(recipientAddress: string, emailHtml: string) {
   })
 
   if (
-    process.env.NODE_ENV === 'production' ||
+    (process.env.NODE_ENV === 'production' && process.env.EMAIL_ANYONE) ||
     recipientAddress.endsWith('@impactmarkets.io') ||
     recipientAddress === 'telofy@gmail.com'
   ) {
