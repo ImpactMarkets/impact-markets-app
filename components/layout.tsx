@@ -31,6 +31,7 @@ export function Layout({ children }: LayoutProps) {
     <AppShell
       navbar={<Navbar hidden={!opened} />}
       header={<Header opened={opened} setOpened={setOpened} showMenu />}
+      classNames={{ body: 'overflow-x-auto' }}
     >
       {children}
     </AppShell>

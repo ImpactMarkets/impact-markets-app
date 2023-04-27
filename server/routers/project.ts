@@ -4,7 +4,7 @@ import { z } from 'zod'
 
 import { PROJECT_SORT_KEYS, ProjectSortKey } from '@/lib/constants'
 import { markdownToHtml } from '@/lib/editor'
-import { Prisma } from '@prisma/client'
+import { Prisma, User } from '@prisma/client'
 import { EventStatus, EventType, Role } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
@@ -13,18 +13,21 @@ import { createProtectedRouter } from '../createProtectedRouter'
 const getOrderBy = (
   orderByKey: ProjectSortKey | undefined
 ): Prisma.ProjectOrderByWithRelationAndSearchRelevanceInput => {
+  const { desc } = Prisma.SortOrder
+  const { last } = Prisma.NullsOrder
   const orderOptions = {
-    actionStart: { actionStart: Prisma.SortOrder.desc },
-    actionEnd: { actionEnd: Prisma.SortOrder.desc },
+    createdAt: { createdAt: desc },
+    actionStart: { actionStart: { sort: desc, nulls: last } },
+    actionEnd: { actionEnd: { sort: desc, nulls: last } },
     supporterCount: {
       donations: {
-        _count: Prisma.SortOrder.desc,
+        _count: desc,
       },
     },
   }
   const orderBy = orderByKey && orderOptions[orderByKey]
   if (!orderBy) {
-    return { createdAt: Prisma.SortOrder.desc }
+    return { createdAt: desc }
   }
   return orderBy
 }
@@ -249,7 +252,11 @@ export const projectRouter = createProtectedRouter()
         },
       })
 
-      return projects
+      return projects.map(({ id, ...rest }) => ({
+        id,
+        link: '/project/' + id,
+        ...rest,
+      }))
     },
   })
   .mutation('add', {
@@ -279,10 +286,15 @@ export const projectRouter = createProtectedRouter()
             },
           },
         },
+        select: {
+          id: true,
+          title: true,
+          author: true,
+        },
       })
 
       // We don't wait for the events to emit before continuing.
-      emitNewProjectEvents(ctx, project.id)
+      emitNewProjectEvents(ctx, project)
 
       return project
     },
@@ -384,7 +396,18 @@ export const projectRouter = createProtectedRouter()
     },
   })
 
-async function emitNewProjectEvents(ctx: Context, projectId: string) {
+async function emitNewProjectEvents(
+  ctx: Context,
+  {
+    id,
+    title,
+    author,
+  }: {
+    id: string
+    title: string
+    author: User
+  }
+) {
   const adminUsers = await ctx.prisma.user.findMany({
     where: {
       role: Role.ADMIN,
@@ -399,9 +422,12 @@ async function emitNewProjectEvents(ctx: Context, projectId: string) {
       data: {
         type: EventType.PROJECT,
         parameters: {
-          projectId: projectId,
-        } as Prisma.JsonObject,
-        status: EventStatus.PENDING || undefined,
+          objectId: id,
+          objectType: 'project',
+          objectTitle: title,
+          text: `Project created by **${author.name}**`,
+        },
+        status: EventStatus.PENDING,
         recipient: {
           connect: {
             id: adminUser.id,

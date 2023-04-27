@@ -8,10 +8,10 @@ import { Button } from '@/components/button'
 import { ButtonLink } from '@/components/buttonLink'
 import { MarkdownIcon } from '@/components/icons'
 import { MarkdownEditor } from '@/components/markdownEditor'
+import { TAGS } from '@/components/project/tags'
 import { TextField } from '@/components/textField'
 import { BondingCurve } from '@/lib/auction'
 import { DEFAULT_TARGET, DEFAULT_VALUATION, SHARE_COUNT } from '@/lib/constants'
-import { TAGS } from '@/lib/tags'
 import { num } from '@/lib/text'
 import {
   isListOfEmails,
@@ -105,22 +105,6 @@ export function CertificateForm({
   const { show } = useIntercom()
 
   const { data: session } = useSession()
-
-  const TagDescription = (text: string) => {
-    const [messageText, linkText, endText] = text.split(
-      /<[a][^>]*>(.+?)<\/[a]>/
-    )
-
-    return (
-      <p>
-        {messageText}
-        <a className="font-bold" href="#/" onClick={() => show()}>
-          {linkText}
-        </a>
-        {endText}
-      </p>
-    )
-  }
 
   React.useEffect(() => {
     if (isSubmitSuccessful) {
@@ -225,9 +209,16 @@ export function CertificateForm({
             <IMMultiSelect
               {...register('tags')}
               label="Tags"
-              description={TagDescription(
-                'Please select all that apply or <a>leave us feedback</a> if you can’t find suitable tags for your field and type of work so we can add them.'
-              )}
+              description={
+                <>
+                  Please select all that apply or{' '}
+                  <span className="link" onClick={() => show()}>
+                    leave us feedback
+                  </span>{' '}
+                  if you can’t find suitable tags for your field and type of
+                  work so we can add them.
+                </>
+              }
               placeholder="Pick all that apply"
               data={TAGS.map((tag) => ({
                 value: tag.value,

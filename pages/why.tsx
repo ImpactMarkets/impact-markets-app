@@ -67,7 +67,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
             </p>
             <p className="my-3">
               <strong>If you are a philanthropic funder</strong>, we want to
-              make all the local informa tion accessible to you that is
+              make all the local information accessible to you that is
               distributed across thousands of sophisticated donors and helps
               them find exceptional funding gaps. We signal-boost that knowledge
               and make it accessible to you. You can use cash or regranting
@@ -106,7 +106,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
                 identical in content.
               </li>
               <li>
-                Donors , especially if they are “earning to give,” often don’t
+                Donors, especially if they are “earning to give,” often don’t
                 have the time to do a lot of vetting. Funds and donor lotteries
                 address this, but a team of fund managers needs to win their
                 trust first, which is not a given, and maybe they don’t want to
@@ -330,11 +330,14 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
           <Accordion.Panel>
             <p className="my-3">
               What we’ve been calling a “project” is something that can issue
-              one or more impact certificates. Our platform still lists the
-              existing certificates, but that’s merely an archive at this point.
-              There is a chance we might return to this format, especially if we
-              choose to found a nonprofit branch of our organization, but for
-              the moment we have no such plans.
+              one or more impact certificates.{' '}
+              <Link href="/certificates" className="link">
+                Our platform still lists the existing certificates
+              </Link>
+              , but that’s merely an archive at this point. There is a chance we
+              might return to this format, especially if we choose to found a
+              nonprofit branch of our organization, but for the moment we have
+              no such plans.
             </p>
             <p className="my-3">
               We’ve encountered three problems with impact certificates:
@@ -439,7 +442,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
                 scoring.
               </li>
               <li>
-                Do you know any of the top donors? If the #1 donors is an AI
+                Do you know any of the top donors? If the #1 donor is an AI
                 specialist but your project is in animal rights, getting in
                 touch with a top donor who is a specialist in your field may pay
                 off even if they’re only donor #8 because animal rights donors
@@ -653,7 +656,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
               Our plan is to hand off power to top donors gradually. First all
               their forecasting will bottom out at the judgments of impact
               evaluators that we will hire. That’ll ensure that they’ll be
-              sophisticated altruistic, but it will not immediately steel us
+              sophisticated altruists, but it will not immediately steel us
               against our own biases. Later we want to recruit impact evaluators
               from our top donors, increasing the organic, bottom-up meritocracy
               of the platform.
@@ -767,9 +770,9 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
               Not really, sort of in the way that airplanes didn’t replace
               bikes. We think that impact markets will be best suited for
               funding the long-tail of small, young speculative startup charity
-              projects . But they will be rather uninteresting for projects with
+              projects. But they will be rather uninteresting for projects with
               strong track records or otherwise safe, reliable success. They
-              will also be uninteresting for project s that require a lot of
+              will also be uninteresting for projects that require a lot of
               funding from the get-go.
             </p>
             <p className="my-3">
@@ -838,7 +841,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
             </p>
             <p className="my-3">
               We therefore consider it infeasible to try to replace the existing
-              financial systems. Rather our goal is to create s ystems that
+              financial systems. Rather our goal is to create systems that
               reward the creation and maintenance of public, common, and network
               goods while interfacing with the existing financial systems in
               standard, regulated ways. (The closest parallel is the voluntary
@@ -949,13 +952,23 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
           <Accordion.Control>Can it go bad?</Accordion.Control>
           <Accordion.Panel>
             <p className="my-3">
-              The biggest concern that we’ve had from the beginning is that
-              prize contests (such as impact markets) are general purpose:
+              The biggest concern that we’ve had from the beginning in 2021 is
+              that prize contests (such as impact markets) are general purpose:
               Anyone can use them – to incentivize awesome papers on AI safety
               or to incentivize terrorist attacks. In fact, promises of rewards
               in heaven could count as prizes. If we create tooling to make
               prize contests easier, there is the risk that said tooling will be
-              used by unscrupulous actors too.
+              used by unscrupulous actors too. The very concept of the prize
+              contest could also count as attention hazard.
+            </p>
+            <p className="my-3">
+              <a
+                href="https://docs.google.com/document/d/1fQIbl6vi8rs68uj96Zg0zdcwMmx4IdPdrA_ClfmxydI/edit"
+                rel="nofollow ugc noopener"
+              >
+                Here is a summary of all of the risks that we’ve identified and
+                our mitigation strategies.
+              </a>
             </p>
             <p className="my-3">
               A rich terrorism funder could, for example, copy our approach and
@@ -980,7 +993,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
                 href="https://forum.effectivealtruism.org/posts/7kqL4G5badqjskYQs/toward-impact-markets-1%23Definition"
               >
                 The Impact Attribution Norm
-              </Link>
+              </Link>{' '}
               alleviates this problem to (roughly) the extent to which it is
               adopted (see the question about measurement above). Yet it is not
               obvious that it will reliably be applied the way we would like to
@@ -991,7 +1004,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
               >
                 This article is a good summary of its limits
               </Link>
-              .
+              .{' '}
               <Link
                 className="link"
                 href="https://forum.effectivealtruism.org/posts/74rz7b8fztCsKotL6/impact-markets-may-incentivize-predictably-net-negative?commentId%3D7t7hRntZTMqiaMKBA%23comments"
@@ -1018,7 +1031,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
                 only) to actions that can turn out very well or very badly –
                 might save lives or destroy civilization – but so happen to turn
                 out well. The longer the duration betwee n the launch of the
-                project and the evaluation , the greater the risk that the prize
+                project and the evaluation, the greater the risk that the prize
                 committee will see only how well it turned out and ignore the
                 other possible world where it did not.
               </li>
@@ -1034,11 +1047,16 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
               unscrupulous actors to achieve their ends and why they are not
               doing it already. It is quite easy for an unscrupulous millionaire
               to promise a big reward for something like nuclear fusion simply
-              by tweeting it. Being so unscrupulous, they will probably not care
-              whether their followers stumble into trouble with securities law.
-              But this is not currently a major problem. So the legal safeguards
-              (or some other mechanisms) that also apply to our solution must be
-              working.
+              by tweeting it. But this is not currently a major problem. So the
+              legal safeguards (or some other mechanisms) that also apply to our
+              solution must be working fairly well. That said,{' '}
+              <a
+                href="https://docs.google.com/document/d/1fQIbl6vi8rs68uj96Zg0zdcwMmx4IdPdrA_ClfmxydI/edit"
+                rel="nofollow noopener"
+              >
+                we’re not solely relying on them
+              </a>
+              .
             </p>
           </Accordion.Panel>
         </Accordion.Item>
@@ -1064,7 +1082,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
               Another option is escrow.
             </p>
             <p className="my-3">
-              Eventually we hope to have tra dable impact credits so that donors
+              Eventually we hope to have tradable impact credits so that donors
               can assume that any funder who suddenly vanishes will thus leave
               the price at an unexpectedly low level which other funders will
               immediately use to “buy the dip.”
@@ -1082,7 +1100,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
                 href="https://impactmarkets.substack.com/p/chaining-retroactive-funders"
               >
                 This article touches on this question.
-              </Link>
+              </Link>{' '}
               I don’t think it’s important whether there is always more evidence
               of impact at a later point. Impact markets will just be most
               interesting for projects for which that is true.
@@ -1115,7 +1133,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
         </Accordion.Item>
         <Accordion.Item value="h.rt1a9x5wy2y4">
           <Accordion.Control>
-            Do impact markets instead risk centralizing funding?
+            Do impact markets risk centralizing funding?
           </Accordion.Control>
           <Accordion.Panel>
             <p className="my-3">
@@ -1123,7 +1141,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
               might they perversely increase it? The argument goes that the
               current scoring rule allows for truly exceptionally good donations
               – the first donation to a project as amazing as{' '}
-              <Link className="link" href="https://longtermrisk.org/msr&amp;">
+              <Link className="link" href="https://longtermrisk.org/msr">
                 Evidential Cooperation in Large Worlds
               </Link>{' '}
               might’ve been a substantial donation. Whoever the donor might be,
@@ -1149,6 +1167,48 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
             <p className="my-3">
               We’ll keep monitoring this potential issue and react in case it
               does manifest.
+            </p>
+          </Accordion.Panel>
+        </Accordion.Item>
+        <Accordion.Item value="top-charities">
+          <Accordion.Control>
+            Do impact markets detract from top charities?
+          </Accordion.Control>
+          <Accordion.Panel>
+            <p className="my-3">
+              In contrast to the previous question: If impact markets succeed in
+              their mission to decentralize funding, might they thereby detract
+              from the top charities of GiveWell or Animal Charity Evaluators?
+            </p>
+            <p className="my-3">
+              That’s not automatically a bad thing, but (1) if there is no
+              funding overhang, and (2) if our top donors are not sufficiently
+              astute, the average project on impact markets might be worse than
+              the average top charity. If donors still switch to impact markets,
+              then impact markets might do harm.
+            </p>
+            <p className="my-3">
+              I’ve talked to Animal Charity Evaluators about this, and they
+              don’t seem particularly concerned about it. They welcome the
+              diversity of opinions and even run their own “movement grants”
+              program to support smaller charities that don’t yet have the scale
+              and track record to become top or standout charities. GiveWell,
+              too, has made grants of this sort, and its staff is also open
+              about their private donations, which sometimes capitalize on
+              smaller, less legible funding gaps that they’re aware of.
+            </p>
+            <p className="my-3">
+              Nonetheless this is something that we want to monitor closely. We
+              can ask donors and compare their impact market donations to
+              donations they’ve made in the past. But more importantly, we can
+              compare how our impact market projects compare against top
+              charities.
+            </p>
+            <p className="my-3">
+              Ídeally of course the impact market becomes a place where you can
+              find and donate to all the future top charities. We’re planning to
+              incentivze that by boosting the scores of projects that were
+              instrumental in the genesis of new top and standout charities.
             </p>
           </Accordion.Panel>
         </Accordion.Item>

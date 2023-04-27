@@ -4,6 +4,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
+import { ButtonLink } from '@/components/buttonLink'
 import { Filters } from '@/components/filters'
 import { Layout } from '@/components/layout'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
@@ -18,6 +19,13 @@ const ProjectSummary = dynamic<ProjectSummaryProps>(
     import('@/components/project/summary').then((mod) => mod.ProjectSummary),
   { ssr: false }
 )
+
+const orderByValues: Array<{ value: ProjectSortKey; label: string }> = [
+  { value: 'createdAt', label: 'Creation date' },
+  { value: 'actionStart', label: 'Start of work' },
+  { value: 'actionEnd', label: 'End of work' },
+  { value: 'supporterCount', label: 'Supporters' },
+]
 
 const Home: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()
@@ -106,25 +114,40 @@ const Home: NextPageWithAuthAndLayout = () => {
           <title>Impact Markets</title>
         </Head>
 
-        <div className="mb-6">
-          <Filters
-            onFilterTagsUpdate={(tags) => setFilterTags(tags)}
-            onOrderByUpdate={(orderBy: ProjectSortKey) => setOrderBy(orderBy)}
-            defaultFilterTagValue={filterTags}
-            defaultOrderByValue={orderBy}
-          />
+        <div className="flex justify-between flex-row-reverse flex-wrap gap-2">
+          <div>
+            <ButtonLink href="/project/new" variant="highlight">
+              <span className="block shrink-0">New project</span>
+            </ButtonLink>
+          </div>
+          <div>
+            <Filters
+              onFilterTagsUpdate={(tags) => setFilterTags(tags)}
+              onOrderByUpdate={(orderBy: string) =>
+                // A bit unhappy with this – https://stackoverflow.com/a/69007934/678861
+                (orderByValues.map((item) => item.value) as string[]).includes(
+                  orderBy
+                ) && setOrderBy(orderBy as ProjectSortKey)
+              }
+              orderByValues={orderByValues}
+              defaultFilterTagValue={filterTags}
+              defaultOrderByValue={orderBy}
+              searchEndpoint="project.search"
+            />
+          </div>
         </div>
+
         {feedQuery.data.projectCount === 0 ? (
-          <div className="text-center text-secondary border rounded my-10 py-20 px-10">
+          <div className="text-center text-secondary border rounded my-12 py-20 px-10">
             There are no published projects to show yet.
           </div>
         ) : (
-          <div className="flow-root">
-            <ul className="divide-y divide-transparent flex flex-wrap gap-2">
+          <div className="flow-root my-12">
+            <ul className="divide-y divide-transparent flex flex-wrap gap-x-[1%] gap-y-2">
               {feedQuery.data.projects.map((project) => (
                 <li
                   key={project.id}
-                  className="w-full max-w-full xl:w-[49%] xl:max-w-[49%] 2xl:w-[32%] 2xl:max-w-[32%]"
+                  className="w-full max-w-full xl:w-[49.5%] xl:max-w-[49.5%] 2xl:w-[32.6%] 2xl:max-w-[32.6%]"
                 >
                   <ProjectSummary
                     project={project}

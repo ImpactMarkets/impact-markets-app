@@ -2,16 +2,15 @@ import { Context } from 'server/context'
 import { z } from 'zod'
 
 import { markdownToHtml } from '@/lib/editor'
-import { projectSelect } from '@/lib/notifyemail'
 import { EventStatus, EventType } from '@prisma/client'
-import { Prisma } from '@prisma/client'
 
 import { createProtectedRouter } from '../createProtectedRouter'
 
 export const commentRouter = createProtectedRouter()
   .mutation('add', {
     input: z.object({
-      projectId: z.string().min(1),
+      objectId: z.string().min(1),
+      objectType: z.enum(['project', 'bounty']),
       content: z.string().min(1),
       parentId: z.optional(z.number().int()),
     }),
@@ -25,9 +24,9 @@ export const commentRouter = createProtectedRouter()
               id: ctx.session!.user.id,
             },
           },
-          project: {
+          [input.objectType]: {
             connect: {
-              id: input.projectId,
+              id: input.objectId,
             },
           },
           ...(input.parentId && {
@@ -38,10 +37,29 @@ export const commentRouter = createProtectedRouter()
             },
           }),
         },
+        select: {
+          id: true,
+          project: {
+            select: {
+              id: true,
+              title: true,
+              author: {
+                select: { id: true, name: true },
+              },
+            },
+          },
+          bounty: {
+            select: {
+              id: true,
+              title: true,
+              author: { select: { id: true, name: true } },
+            },
+          },
+        },
       })
 
       // We don't wait for the event to emit before continuing.
-      emitNewCommentEvent(ctx, input.projectId, comment.id)
+      emitNewCommentEvent(ctx, input.objectType, comment)
 
       return comment
     },
@@ -75,27 +93,44 @@ export const commentRouter = createProtectedRouter()
 
 async function emitNewCommentEvent(
   ctx: Context,
-  projectId: string,
-  commentId: number
+  objectType: 'project' | 'bounty',
+  {
+    project,
+    bounty,
+  }: {
+    project: {
+      id: string
+      title: string
+      author: {
+        id: string
+        name: string
+      }
+    } | null
+    bounty: {
+      id: string
+      title: string
+      author: {
+        id: string
+        name: string
+      }
+    } | null
+    id: number
+  }
 ) {
-  const project = await ctx.prisma.project.findUnique({
-    where: {
-      id: projectId,
-    },
-    select: projectSelect,
-  })
-
+  const commentee = objectType === 'project' ? project : bounty
   await ctx.prisma.event.create({
     data: {
       type: EventType.COMMENT,
       parameters: {
-        projectId: projectId,
-        commentId: commentId,
-      } as Prisma.JsonObject,
-      status: EventStatus.PENDING || undefined,
+        objectId: commentee!.id,
+        objectType: objectType,
+        objectTitle: commentee!.title,
+        text: `**${commentee!.author.name}** added a comment`,
+      },
+      status: EventStatus.PENDING,
       recipient: {
         connect: {
-          id: project?.author.id,
+          id: commentee!.author.id,
         },
       },
     },

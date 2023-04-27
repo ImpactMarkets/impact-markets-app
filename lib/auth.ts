@@ -1,4 +1,5 @@
 import type { DefaultSession, NextAuthOptions, Session } from 'next-auth'
+import { User } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import EmailProvider from 'next-auth/providers/email'
 import GoogleProvider from 'next-auth/providers/google'
@@ -64,7 +65,7 @@ if (serverEnv.MOCK_LOGIN) {
     CredentialsProvider({
       name: 'Mock Login',
       credentials: {},
-      authorize: async () => ({}),
+      authorize: async () => ({} as User),
     })
   )
   authOptions.callbacks!.jwt = async ({ token }) => {
@@ -108,5 +109,8 @@ declare module 'next-auth' {
 
   interface User {
     role: Role
+    prefersDetailView: boolean
+    prefersAnonymity: boolean
+    prefersEventNotifications: boolean
   }
 }
