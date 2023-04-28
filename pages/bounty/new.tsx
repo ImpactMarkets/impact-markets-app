@@ -19,7 +19,7 @@ const NewBountyPage: NextPageWithAuthAndLayout = () => {
   })
 
   return (
-    <>
+    <div className="max-w-screen-lg mx-auto">
       <Head>
         <title>New Bounty</title>
       </Head>
@@ -58,7 +58,7 @@ const NewBountyPage: NextPageWithAuthAndLayout = () => {
           }}
         />
       </div>
-    </>
+    </div>
   )
 }
 

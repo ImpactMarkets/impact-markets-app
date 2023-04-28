@@ -18,14 +18,14 @@ const NewProjectPage: NextPageWithAuthAndLayout = () => {
   })
 
   return (
-    <>
+    <div className="max-w-screen-lg mx-auto">
       <Head>
         <title>New Project</title>
       </Head>
 
       <Heading1>New project</Heading1>
 
-      <div className="mt-6 max-w-screen-lg">
+      <div className="mt-6">
         <ProjectForm
           isNew
           isSubmitting={addProjectMutation.isLoading}
@@ -57,7 +57,7 @@ const NewProjectPage: NextPageWithAuthAndLayout = () => {
           }}
         />
       </div>
-    </>
+    </div>
   )
 }
 
