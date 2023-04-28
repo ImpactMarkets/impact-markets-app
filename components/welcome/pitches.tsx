@@ -65,8 +65,8 @@ export const Pitches = () => (
           Specialist donors research their donations in-depth, and they can
           access local information to find exceptional funding gaps. We
           signal-boost that knowledge and make it accessible to you. You can use
-          cash or regranting prizes to incentivize these donors, or you can mine
-          their findings for any funding gaps that you want to fill!
+          cash or regranting bounties to incentivize these donors, or you can
+          mine their findings for any funding gaps that you want to fill!
         </Feature>
       </SimpleGrid>
     </Container>
