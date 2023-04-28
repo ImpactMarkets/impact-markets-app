@@ -14,7 +14,7 @@ function delay(ms: number) {
 test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:3001/api/auth/signin')
   await page.click('text=Sign in with Mock Login')
-  await page.click('text=New project')
+  await page.goto('http://localhost:3001/project/new')
 })
 
 test.describe('Submits and Replies', () => {
