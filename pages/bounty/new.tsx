@@ -26,7 +26,7 @@ const NewBountyPage: NextPageWithAuthAndLayout = () => {
 
       <Heading1>New bounty</Heading1>
 
-      <div className="mt-6">
+      <div className="mt-6 max-w-screen-lg">
         <Form
           isNew
           isSubmitting={addBountyMutation.isLoading}

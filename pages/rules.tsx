@@ -6,7 +6,7 @@ import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
 const RulesAndTerms: NextPageWithAuthAndLayout = () => {
   return (
-    <div className="max-w-[720px] mx-auto my-5 py-6">
+    <div className="max-w-screen-lg mx-auto my-5 py-6">
       <Head>
         <title>Terms & conditions</title>
       </Head>

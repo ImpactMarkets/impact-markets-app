@@ -90,7 +90,7 @@ export function HeroText() {
           <ButtonLink href="/why" variant="primary" className="mr-2">
             What?
           </ButtonLink>
-          <ButtonLink href="/" variant="highlight" className="">
+          <ButtonLink href="/projects" variant="highlight" className="">
             Explore projects
           </ButtonLink>
         </div>

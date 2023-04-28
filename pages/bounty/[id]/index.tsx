@@ -113,7 +113,7 @@ function BountyPage({ bountyId }: { bountyId: string }) {
           </title>
         </Head>
 
-        <div>
+        <div className="max-w-screen-lg mx-auto">
           <div className="pb-12">
             {bounty.hidden && (
               <Banner className="mb-6">
