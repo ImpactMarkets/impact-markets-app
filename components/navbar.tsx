@@ -11,6 +11,7 @@ import {
   IconHome,
   IconLifebuoy,
   IconPigMoney,
+  IconRocket,
   IconTrophy,
   TablerIcon,
 } from '@tabler/icons'
@@ -114,7 +115,8 @@ export const Navbar = ({ hidden }: { hidden: boolean }) => (
       </Link>
     </MantineNavbar.Section>
     <MantineNavbar.Section grow className="mx-4 my-3">
-      <NavbarLink link="/" label="Projects" icon={IconHome} />
+      <NavbarLink link="/" label="Home" icon={IconHome} />
+      <NavbarLink link="/projects" label="Projects" icon={IconRocket} />
       <NavbarLink link="/bounties" label="Bounties" icon={IconPigMoney} />
       <NavbarLink link="/ranking" label="Top donors" icon={IconTrophy} />
     </MantineNavbar.Section>
