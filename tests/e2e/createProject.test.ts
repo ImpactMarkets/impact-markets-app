@@ -26,7 +26,7 @@ test.describe('Create Project', () => {
   test('should allow creating new project', async ({ page }) => {
     const titleText = 'My test project 0001'
 
-    await page.goto('http://localhost:3001/certificate/new')
+    await page.goto('http://localhost:3001/project/new')
     await fillInDefaultValues(page, titleText)
     await page.locator('button[data-testid="submit"]').click()
 
@@ -37,11 +37,11 @@ test.describe('Create Project', () => {
   test('should fill in all project values', async ({ page }) => {
     const titleText = 'My test project 0002'
 
-    await page.click('text=New project')
+    await page.goto('http://localhost:3001/project/new')
     await fillInDefaultValues(page, titleText)
     await page.locator('button[data-testid="submit"]').click()
 
-    // Check we've landed on the cert page.
+    // Check we've landed on the project page.
     await expect(page).toHaveTitle(new RegExp('.*' + titleText + '.*'))
 
     // Verify project values.
