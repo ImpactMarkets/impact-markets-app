@@ -111,7 +111,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
           <title>{project.title} – Impact Markets</title>
         </Head>
 
-        <div>
+        <div className="max-w-screen-lg mx-auto">
           <div className="pb-12">
             {project.hidden && (
               <Banner className="mb-6">

@@ -114,7 +114,7 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
           <title>{certificate.title} – Impact Markets</title>
         </Head>
 
-        <div className="divide-y divide-primary">
+        <div className="divide-y divide-primary max-w-screen-lg mx-auto">
           <div className="pb-12">
             {certificate.hidden && (
               <Banner className="mb-6">

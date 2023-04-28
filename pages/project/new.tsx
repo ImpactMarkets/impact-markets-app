@@ -25,7 +25,7 @@ const NewProjectPage: NextPageWithAuthAndLayout = () => {
 
       <Heading1>New project</Heading1>
 
-      <div className="mt-6">
+      <div className="mt-6 max-w-screen-lg">
         <ProjectForm
           isNew
           isSubmitting={addProjectMutation.isLoading}

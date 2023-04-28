@@ -27,7 +27,7 @@ const NewCertificatePage: NextPageWithAuthAndLayout = () => {
 
       <Heading1>New project</Heading1>
 
-      <div className="mt-6">
+      <div className="mt-6 max-w-screen-lg">
         <CertificateForm
           isNew
           isSubmitting={addCertificateMutation.isLoading}
