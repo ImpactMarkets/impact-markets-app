@@ -10,7 +10,7 @@ import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { Card } from '@mantine/core'
 
 const LandingPage: NextPageWithAuthAndLayout = () => (
-  <div className="mx-auto my-5 pt-6">
+  <div className="mx-auto max-w-screen-lg my-5 pt-6">
     <Head>
       <title>Impact Markets</title>
     </Head>
@@ -24,7 +24,7 @@ const LandingPage: NextPageWithAuthAndLayout = () => (
       p="lg"
       radius="md"
       withBorder
-      className="max-w-screen-lg border-theme-blue m-auto border-2 rounded-2xl text-center p-16 mt-32 mb-12"
+      className="border-theme-blue m-auto border-2 rounded-2xl text-center p-16 mt-32 mb-12"
     >
       <div>
         <div className="text-4xl font-extrabold mb-4">Check it out!</div>
