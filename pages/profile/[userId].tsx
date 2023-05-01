@@ -37,10 +37,9 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
           <Tabs.List>
             <Tabs.Tab value="certificates">Projects</Tabs.Tab>
             <Tabs.Tab value="transactions">Transactions</Tabs.Tab>
-            {router.query.userId !== session?.user.id &&
-            session?.user.role !== 'ADMIN' ? null : (
+            {router.query.userId === session?.user.id ? (
               <Tabs.Tab value="preferences">Preferences</Tabs.Tab>
-            )}
+            ) : null}
           </Tabs.List>
 
           <Tabs.Panel value="certificates" pt="xs">
@@ -50,9 +49,7 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
           <Tabs.Panel value="transactions" pt="xs">
             <TransactionFeed user={profileQuery.data} />
           </Tabs.Panel>
-
-          {router.query.userId !== session?.user.id &&
-          session?.user.role !== 'ADMIN' ? null : (
+          {router.query.userId === session?.user.id ? (
             <Tabs.Panel value="preferences" pt="xs" className="p-6">
               <Switch
                 label="Show detailed certificate view"
@@ -88,7 +85,7 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
                 }}
               />
             </Tabs.Panel>
-          )}
+          ) : null}
         </Tabs>
       </>
     )
