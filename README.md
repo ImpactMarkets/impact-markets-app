@@ -70,6 +70,6 @@ Try running `npx prisma generate`. These may be from schema changes someone else
 
 ### Styles
 
-This project uses [Tailwind CSS](https://tailwindcss.com/) to handle styles. Documentation: [Tailwind CSS documentation](https://tailwindcss.com/docs).
+This project uses [Tailwind CSS](https://tailwindcss.com/docs) and [Mantine] (https://mantine.dev/) to handle styles.
 
 To make changes to default Tailwind CSS values, modify the `tailwind.config.js` file located at the root of the project.
