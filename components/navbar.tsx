@@ -8,12 +8,15 @@ import { Navbar as MantineNavbar, createStyles } from '@mantine/core'
 import {
   IconBolt,
   IconFile,
-  IconFileCertificate,
   IconHome,
   IconLifebuoy,
+  IconPigMoney,
+  IconRocket,
   IconTrophy,
+  TablerIcon,
 } from '@tabler/icons'
 
+import { Logo } from './icons'
 import { User } from './user'
 
 mixpanel.init(browserEnv.NEXT_PUBLIC_MIXPANEL_TOKEN, {
@@ -23,49 +26,26 @@ mixpanel.init(browserEnv.NEXT_PUBLIC_MIXPANEL_TOKEN, {
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
   return {
-    header: {
-      paddingBottom: theme.spacing.md,
-      marginBottom: theme.spacing.md * 1.5,
-      borderBottom: `1px solid ${
-        theme.colorScheme === 'dark'
-          ? theme.colors.dark[4]
-          : theme.colors.gray[2]
-      }`,
-    },
-
     link: {
       ...theme.fn.focusStyles(),
       display: 'flex',
       alignItems: 'center',
       textDecoration: 'none',
       fontSize: theme.fontSizes.sm,
-      color:
-        theme.colorScheme === 'dark'
-          ? theme.colors.dark[1]
-          : theme.colors.gray[7],
+      color: theme.colors.gray[7],
       padding: `${theme.spacing.xs}px ${theme.spacing.sm}px`,
       borderRadius: theme.radius.sm,
       fontWeight: 500,
 
       '&:hover': {
-        backgroundColor:
-          theme.colorScheme === 'dark'
-            ? theme.colors.dark[6]
-            : theme.colors.gray[0],
-        color: theme.colorScheme === 'dark' ? theme.white : theme.black,
-
-        [`& .${icon}`]: {
-          color: theme.colorScheme === 'dark' ? theme.white : theme.black,
-        },
+        backgroundColor: theme.colors.gray[0],
+        color: theme.black,
       },
     },
 
     linkIcon: {
       ref: icon,
-      color:
-        theme.colorScheme === 'dark'
-          ? theme.colors.dark[2]
-          : theme.colors.gray[6],
+      color: theme.colors.gray[6],
       marginRight: theme.spacing.sm,
     },
 
@@ -77,47 +57,35 @@ const useStyles = createStyles((theme, _params, getRef) => {
         }).background,
         color: theme.fn.variant({ variant: 'light', color: theme.primaryColor })
           .color,
-        [`& .${icon}`]: {
-          color: theme.fn.variant({
-            variant: 'light',
-            color: theme.primaryColor,
-          }).color,
-        },
       },
     },
   }
 })
 
-const data = [
-  { link: '/', label: 'Projects', icon: IconHome },
-  { link: '/certificates', label: 'Certificates', icon: IconFileCertificate },
-  { link: '/ranking', label: 'Top donors', icon: IconTrophy },
-  //  { link: '/funders', label: 'Funders & prizes', icon: IconBuildingStore },
-  { link: '/why', label: 'Questions & answers', icon: IconBolt },
-  { link: '/rules', label: 'Rules & terms', icon: IconFile },
-  { link: '/support', label: 'Help & support', icon: IconLifebuoy },
-]
-
-interface NavbarProps {
-  hidden: boolean
-}
-
-export function Navbar({ hidden }: NavbarProps) {
+const NavbarLink = ({
+  link,
+  label,
+  icon: Icon,
+}: {
+  link: string
+  label: string
+  icon: TablerIcon
+}) => {
   const { data: session } = useSession()
   const { classes, cx } = useStyles()
   const router = useRouter()
 
-  const links = data.map((item) => (
-    <Link href={item.link} key={item.label}>
+  return (
+    <Link href={link} key={label}>
       <div
         className={
           cx(classes.link, {
-            [classes.linkActive]: item.link === router.pathname,
+            [classes.linkActive]: link === router.pathname,
           }) + ' flex text-sm items-center cursor-pointer'
         }
         onClick={() => {
           try {
-            mixpanel.track('Click - ' + item.label, {
+            mixpanel.track('Click - ' + label, {
               user: session?.user.id,
               datetime: Date(),
             })
@@ -126,26 +94,39 @@ export function Navbar({ hidden }: NavbarProps) {
           }
         }}
       >
-        <item.icon className={classes.linkIcon} />
-        <span>{item.label}</span>
+        <Icon className={classes.linkIcon} />
+        <span>{label}</span>
       </div>
     </Link>
-  ))
-
-  return (
-    <MantineNavbar
-      classNames={{ root: 'w-[250px] z-[5]' }}
-      width={{ sm: 250 }}
-      withBorder={false}
-      hidden={hidden}
-      hiddenBreakpoint="sm"
-    >
-      <MantineNavbar.Section grow className="m-4">
-        {links}
-      </MantineNavbar.Section>
-      <MantineNavbar.Section>
-        <User />
-      </MantineNavbar.Section>
-    </MantineNavbar>
   )
 }
+
+export const Navbar = ({ hidden }: { hidden: boolean }) => (
+  <MantineNavbar
+    classNames={{ root: 'w-[250px] z-[5]' }}
+    width={{ sm: 250 }}
+    withBorder={false}
+    hidden={hidden}
+    hiddenBreakpoint="sm"
+  >
+    <MantineNavbar.Section className="hidden md:block m-4">
+      <Link href="/">
+        <Logo className="w-auto md:h-[64px] cursor-pointer" />
+      </Link>
+    </MantineNavbar.Section>
+    <MantineNavbar.Section grow className="mx-4 my-3">
+      <NavbarLink link="/" label="Home" icon={IconHome} />
+      <NavbarLink link="/projects" label="Projects" icon={IconRocket} />
+      <NavbarLink link="/bounties" label="Bounties" icon={IconPigMoney} />
+      <NavbarLink link="/ranking" label="Top donors" icon={IconTrophy} />
+    </MantineNavbar.Section>
+    <MantineNavbar.Section className="m-4">
+      <NavbarLink link="/why" label="Questions & answers" icon={IconBolt} />
+      <NavbarLink link="/rules" label="Rules & terms" icon={IconFile} />
+      <NavbarLink link="/support" label="Help & support" icon={IconLifebuoy} />
+    </MantineNavbar.Section>
+    <MantineNavbar.Section>
+      <User />
+    </MantineNavbar.Section>
+  </MantineNavbar>
+)

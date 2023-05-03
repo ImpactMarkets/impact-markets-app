@@ -12,7 +12,7 @@ import { IconTrophy } from '@tabler/icons'
 
 const RankingPage: NextPageWithAuthAndLayout = () => {
   return (
-    <>
+    <div className="max-w-screen-lg mx-auto">
       <Head>
         <title>Impact Markets – Ranking</title>
       </Head>
@@ -44,7 +44,7 @@ const RankingPage: NextPageWithAuthAndLayout = () => {
           <Ranking pastDays={365} />
         </Tabs.Panel>
       </Tabs>
-    </>
+    </div>
   )
 }
 

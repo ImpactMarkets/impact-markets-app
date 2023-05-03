@@ -4,28 +4,25 @@ import toast from 'react-hot-toast'
 
 import { Button } from '@/components/button'
 import { MarkdownEditor } from '@/components/markdownEditor'
-import { InferQueryOutput, trpc } from '@/lib/trpc'
+import { trpc } from '@/lib/trpc'
 
 import { CommentFormData } from '../utils'
 
-export function AddReplyForm({
-  projectId,
-  parent,
-  onDone,
+export function AddCommentForm({
+  objectId,
+  objectType,
 }: {
-  projectId: string
-  parent:
-    | InferQueryOutput<'project.detail'>['comments'][number]
-    | InferQueryOutput<'project.detail'>['comments'][number]['children'][number]
-  onDone: () => void
+  objectId: string
+  objectType: 'project' | 'bounty'
 }) {
+  const [markdownEditorKey, setMarkdownEditorKey] = React.useState(0)
   const utils = trpc.useContext()
-  const addReplyMutation = trpc.useMutation('comment.add', {
+  const addCommentMutation = trpc.useMutation('comment.add', {
     onSuccess: () => {
       return utils.invalidateQueries([
-        'project.detail',
+        (objectType + '.detail') as 'project.detail' | 'bounty.detail',
         {
-          id: projectId,
+          id: objectId,
         },
       ])
     },
@@ -33,17 +30,20 @@ export function AddReplyForm({
       toast.error(<pre>{error.message}</pre>)
     },
   })
-  const { control, handleSubmit } = useForm<CommentFormData>()
+  const { control, handleSubmit, reset } = useForm<CommentFormData>()
 
   const onSubmit: SubmitHandler<CommentFormData> = (data) => {
-    addReplyMutation.mutate(
+    addCommentMutation.mutate(
       {
-        projectId,
+        objectId,
+        objectType,
         content: data.content,
-        parentId: parent?.id,
       },
       {
-        onSuccess: () => onDone(),
+        onSuccess: () => {
+          reset({ content: '' })
+          setMarkdownEditorKey((markdownEditorKey) => markdownEditorKey + 1)
+        },
       }
     )
   }
@@ -56,26 +56,24 @@ export function AddReplyForm({
         rules={{ required: true }}
         render={({ field }) => (
           <MarkdownEditor
+            key={markdownEditorKey}
             value={field.value}
             onChange={field.onChange}
             onTriggerSubmit={handleSubmit(onSubmit)}
-            required
-            placeholder="Reply"
+            placeholder="Questions, comments, or feedback?"
             minRows={4}
-            autoFocus
+            data-testid="comment-form"
+            required
           />
         )}
       />
-      <div className="flex gap-4 mt-4">
+      <div className="mt-4">
         <Button
           type="submit"
-          isLoading={addReplyMutation.isLoading}
-          loadingChildren="Adding reply"
+          isLoading={addCommentMutation.isLoading}
+          loadingChildren="Submitting"
         >
-          Add reply
-        </Button>
-        <Button variant="secondary" onClick={onDone}>
-          Cancel
+          Submit
         </Button>
       </div>
     </form>

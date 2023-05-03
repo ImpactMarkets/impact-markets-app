@@ -6,6 +6,8 @@ import * as React from 'react'
 import { AuthorWithDate } from '@/components/authorWithDate'
 import { Avatar } from '@/components/avatar'
 import { Banner } from '@/components/banner'
+import { Menu } from '@/components/bounty/menu'
+import { TAGS } from '@/components/bounty/tags'
 import { AddCommentForm } from '@/components/comment/addCommentForm'
 import { Comment } from '@/components/comment/comment'
 import { CommentButton } from '@/components/commentButton'
@@ -13,194 +15,162 @@ import { Heading1 } from '@/components/heading1'
 import { HtmlView } from '@/components/htmlView'
 import { Layout } from '@/components/layout'
 import { LikeButton } from '@/components/likeButton'
-import { IncomingDonations } from '@/components/project/incomingDonations'
-import { Menu } from '@/components/project/menu'
-import { OutgoingDonations } from '@/components/project/outgoingDonations'
-import { TAGS } from '@/components/project/tags'
 import { Tags } from '@/components/tags'
+import { num } from '@/lib/text'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { LoadingOverlay, Tabs } from '@mantine/core'
-import { IconCreditCard, IconCreditCardOff } from '@tabler/icons'
+import { IconExternalLink } from '@tabler/icons'
 
 // TODO: Maybe this could be made into a generic component ?
-const ProjectPageWrapper: NextPageWithAuthAndLayout = () => {
+const BountyPageWrapper: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
 
   if (!router.isReady) {
     return <LoadingOverlay visible />
   } else if (typeof router.query.id !== 'string') {
-    return <p>Invalid project id: {router.query.id}</p>
+    return <p>Invalid bounty id: {router.query.id}</p>
   } else {
-    return <ProjectPage projectId={router.query.id} />
+    return <BountyPage bountyId={router.query.id} />
   }
 }
 
-function ProjectPage({ projectId }: { projectId: string }) {
+function BountyPage({ bountyId }: { bountyId: string }) {
   const router = useRouter()
   const { data: session } = useSession()
   const utils = trpc.useContext()
-  const projectQueryPathAndInput: InferQueryPathAndInput<'project.detail'> = [
-    'project.detail',
+  const bountyQueryPathAndInput: InferQueryPathAndInput<'bounty.detail'> = [
+    'bounty.detail',
     {
-      id: projectId,
+      id: bountyId,
     },
   ]
-  const projectQuery = trpc.useQuery(projectQueryPathAndInput)
-  const project = projectQuery.data
+  const bountyQuery = trpc.useQuery(bountyQueryPathAndInput)
+  const bounty = bountyQuery.data
 
-  const likeMutation = trpc.useMutation(['project.like'], {
+  const likeMutation = trpc.useMutation(['bounty.like'], {
     onMutate: async () => {
-      await utils.cancelQuery(projectQueryPathAndInput)
+      await utils.cancelQuery(bountyQueryPathAndInput)
 
-      const previousProject = utils.getQueryData(projectQueryPathAndInput)
+      const previousBounty = utils.getQueryData(bountyQueryPathAndInput)
 
-      if (previousProject) {
-        utils.setQueryData(projectQueryPathAndInput, {
-          ...previousProject,
+      if (previousBounty) {
+        utils.setQueryData(bountyQueryPathAndInput, {
+          ...previousBounty,
           likedBy: [
-            ...previousProject.likedBy,
+            ...previousBounty.likedBy,
             { user: { id: session!.user.id, name: session!.user.name } },
           ],
         })
       }
 
-      return { previousProject }
+      return { previousBounty }
     },
     onError: (err, id, context: any) => {
-      if (context?.previousProject) {
-        utils.setQueryData(projectQueryPathAndInput, context.previousProject)
+      if (context?.previousBounty) {
+        utils.setQueryData(bountyQueryPathAndInput, context.previousBounty)
       }
     },
   })
-  const unlikeMutation = trpc.useMutation(['project.unlike'], {
+  const unlikeMutation = trpc.useMutation(['bounty.unlike'], {
     onMutate: async () => {
-      await utils.cancelQuery(projectQueryPathAndInput)
+      await utils.cancelQuery(bountyQueryPathAndInput)
 
-      const previousProject = utils.getQueryData(projectQueryPathAndInput)
+      const previousBounty = utils.getQueryData(bountyQueryPathAndInput)
 
-      if (previousProject) {
-        utils.setQueryData(projectQueryPathAndInput, {
-          ...previousProject,
-          likedBy: previousProject.likedBy.filter(
+      if (previousBounty) {
+        utils.setQueryData(bountyQueryPathAndInput, {
+          ...previousBounty,
+          likedBy: previousBounty.likedBy.filter(
             (item) => item.user.id !== session!.user.id
           ),
         })
       }
 
-      return { previousProject }
+      return { previousBounty }
     },
     onError: (err, id, context: any) => {
-      if (context?.previousProject) {
-        utils.setQueryData(projectQueryPathAndInput, context.previousProject)
+      if (context?.previousBounty) {
+        utils.setQueryData(bountyQueryPathAndInput, context.previousBounty)
       }
     },
   })
 
-  if (project) {
-    if (!isNaN(Number(projectId))) {
-      // Redirect from old to new project URLs
-      router.push('/project/' + project.id)
+  if (bounty) {
+    if (!isNaN(Number(bountyId))) {
+      // Redirect from old to new bounty URLs
+      router.push('/bounty/' + bounty.id)
     }
     const isUserAdmin = session?.user.role === 'ADMIN'
-    const projectBelongsToUser = project.author.id === session?.user.id
+    const bountyBelongsToUser = bounty.author.id === session?.user.id
 
     return (
       <>
         <Head>
-          <title>{project.title} – Impact Markets</title>
+          <title>
+            {bounty.size ? num(bounty.size) + ': ' : ''}
+            {bounty.title} – Impact Markets
+          </title>
         </Head>
 
         <div className="max-w-screen-lg mx-auto">
           <div className="pb-12">
-            {project.hidden && (
+            {bounty.hidden && (
               <Banner className="mb-6">
-                This project will remain hidden until it’s published by the
+                This bounty will remain hidden until it’s published by the
                 curators.
               </Banner>
             )}
 
             <div className="flex items-center justify-between gap-4">
-              <Heading1>{project.title}</Heading1>
+              <Heading1>
+                <span className="text-gray-500">
+                  {bounty.size ? `$${num(bounty.size)}: ` : ''}
+                </span>
+                {bounty.title}
+              </Heading1>
               <Menu
-                queryData={project}
+                queryData={bounty}
                 isUserAdmin={isUserAdmin}
-                belongsToUser={projectBelongsToUser}
+                belongsToUser={bountyBelongsToUser}
               />
             </div>
             <div className="flex justify-between my-6">
               <AuthorWithDate
-                author={project.author}
-                date={project.createdAt}
-                dateLabel="Created"
+                author={bounty.author}
+                date={bounty.deadline || bounty.createdAt}
+                dateLabel={bounty.deadline ? 'Deadline' : 'Created'}
               />
-              {project.paymentUrl ? (
+              {bounty.sourceUrl && (
                 <a
                   className="text-sm text-secondary inline-block max-w-60 whitespace-nowrap overflow-hidden overflow-ellipsis"
                   target="_blank"
                   rel="noopener noreferrer"
-                  href={project.paymentUrl}
+                  href={bounty.sourceUrl}
                 >
-                  <IconCreditCard className="inline" /> Accepting donations
+                  <IconExternalLink className="inline h-5 align-text-bottom" />{' '}
+                  More information
                 </a>
-              ) : (
-                <span className="text-sm text-secondary whitespace-nowrap">
-                  <IconCreditCardOff className="inline" /> Not accepting
-                  donations
-                </span>
               )}
             </div>
             <div className="flex my-6">
-              <Tags queryData={project} tags={TAGS} />
+              <Tags queryData={bounty} tags={TAGS} />
             </div>
-            <div className="my-6">
-              <Tabs
-                defaultValue={
-                  projectBelongsToUser
-                    ? 'incomingDonations'
-                    : 'outgoingDonations'
-                }
-              >
-                <Tabs.List>
-                  {session && (
-                    <Tabs.Tab value="outgoingDonations">
-                      Register a donation
-                    </Tabs.Tab>
-                  )}
-                  {projectBelongsToUser && (
-                    <Tabs.Tab value="incomingDonations">
-                      Incoming donations
-                    </Tabs.Tab>
-                  )}
-                </Tabs.List>
-
-                {session && (
-                  <Tabs.Panel value="outgoingDonations" pt="xs">
-                    <OutgoingDonations project={project} />
-                  </Tabs.Panel>
-                )}
-                {projectBelongsToUser && (
-                  <Tabs.Panel value="incomingDonations" pt="xs">
-                    <IncomingDonations project={project} />
-                  </Tabs.Panel>
-                )}
-              </Tabs>
-            </div>
-            <HtmlView html={project.contentHtml} className="mt-8" />
+            <HtmlView html={bounty.contentHtml} className="mt-8" />
             <div className="flex gap-4 mt-6">
               <LikeButton
                 disabled={!session}
-                likedBy={project.likedBy}
+                likedBy={bounty.likedBy}
                 onLike={() => {
-                  likeMutation.mutate(project.id)
+                  likeMutation.mutate(bounty.id)
                 }}
                 onUnlike={() => {
-                  unlikeMutation.mutate(project.id)
+                  unlikeMutation.mutate(bounty.id)
                 }}
               />
               <CommentButton
-                commentCount={project._count.comments}
-                href={`/project/${project.id}#comments`}
+                commentCount={bounty._count.comments}
+                href={`/bounty/${bounty.id}#comments`}
                 variant="secondary"
                 disabled={!session}
               />
@@ -216,13 +186,13 @@ function ProjectPage({ projectId }: { projectId: string }) {
 
             <Tabs.Panel value="questions-and-answers" pt="xs">
               <div id="comments" className="pt-6 space-y-12">
-                {project.comments.length > 0 ? (
+                {bounty.comments.length > 0 ? (
                   <ul className="space-y-12">
-                    {project.comments.map((comment) => (
+                    {bounty.comments.map((comment) => (
                       <li key={comment.id}>
                         <Comment
-                          objectId={project.id}
-                          objectType="project"
+                          objectId={bounty.id}
+                          objectType="bounty"
                           comment={comment}
                         />
 
@@ -232,8 +202,8 @@ function ProjectPage({ projectId }: { projectId: string }) {
                               {comment.children.map((reply) => (
                                 <li key={reply.id}>
                                   <Comment
-                                    objectId={project.id}
-                                    objectType="project"
+                                    objectId={bounty.id}
+                                    objectType="bounty"
                                     comment={reply}
                                   />
                                 </li>
@@ -262,10 +232,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
                         size="sm"
                       />
                     </span>
-                    <AddCommentForm
-                      objectId={project.id}
-                      objectType="project"
-                    />
+                    <AddCommentForm objectId={bounty.id} objectType="bounty" />
                   </div>
                 )}
               </div>
@@ -276,8 +243,8 @@ function ProjectPage({ projectId }: { projectId: string }) {
     )
   }
 
-  if (projectQuery.isError) {
-    return <div>Error: {projectQuery.error.message}</div>
+  if (bountyQuery.isError) {
+    return <div>Error: {bountyQuery.error.message}</div>
   }
 
   return (
@@ -314,8 +281,8 @@ function ProjectPage({ projectId }: { projectId: string }) {
   )
 }
 
-ProjectPageWrapper.getLayout = function getLayout(page: React.ReactElement) {
+BountyPageWrapper.getLayout = function getLayout(page: React.ReactElement) {
   return <Layout>{page}</Layout>
 }
 
-export default ProjectPageWrapper
+export default BountyPageWrapper

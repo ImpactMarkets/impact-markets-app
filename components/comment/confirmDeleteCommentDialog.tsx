@@ -13,12 +13,14 @@ import {
 import { trpc } from '@/lib/trpc'
 
 export function ConfirmDeleteCommentDialog({
-  projectId,
+  objectId,
+  objectType,
   commentId,
   isOpen,
   onClose,
 }: {
-  projectId: string
+  objectId: string
+  objectType: 'project' | 'bounty'
   commentId: number
   isOpen: boolean
   onClose: () => void
@@ -28,9 +30,9 @@ export function ConfirmDeleteCommentDialog({
   const deleteCommentMutation = trpc.useMutation('comment.delete', {
     onSuccess: () => {
       return utils.invalidateQueries([
-        'project.detail',
+        (objectType + '.detail') as 'project.detail' | 'bounty.detail',
         {
-          id: projectId,
+          id: objectId,
         },
       ])
     },

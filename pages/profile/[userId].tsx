@@ -31,7 +31,7 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
 
   if (profileQuery.data) {
     return (
-      <>
+      <div className="max-w-screen-lg mx-auto">
         <ProfileInfo user={profileQuery.data} />
         <Tabs defaultValue="certificates">
           <Tabs.List>
@@ -87,7 +87,7 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
             </Tabs.Panel>
           ) : null}
         </Tabs>
-      </>
+      </div>
     )
   }
 

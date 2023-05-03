@@ -20,13 +20,17 @@ import { ConfirmDeleteCommentDialog } from './confirmDeleteCommentDialog'
 import { EditCommentForm } from './editCommentForm'
 
 export function Comment({
-  projectId,
+  objectId,
+  objectType,
   comment,
 }: {
-  projectId: string
+  objectId: string
+  objectType: 'project' | 'bounty'
   comment:
     | InferQueryOutput<'project.detail'>['comments'][number]
     | InferQueryOutput<'project.detail'>['comments'][number]['children'][number]
+    | InferQueryOutput<'bounty.detail'>['comments'][number]
+    | InferQueryOutput<'bounty.detail'>['comments'][number]['children'][number]
 }) {
   const { data: session } = useSession()
   const [isEditing, setIsEditing] = React.useState(false)
@@ -41,7 +45,8 @@ export function Comment({
       <div className="flex items-start gap-4">
         <Avatar name={comment.author.name!} src={comment.author.image} />
         <EditCommentForm
-          projectId={projectId}
+          objectId={objectId}
+          objectType={objectType}
           comment={comment}
           onDone={() => {
             setIsEditing(false)
@@ -116,7 +121,8 @@ export function Comment({
                 />
               </span>
               <AddReplyForm
-                projectId={projectId}
+                objectId={objectId}
+                objectType={objectType}
                 parent={comment}
                 onDone={() => {
                   setIsReplying(false)
@@ -128,7 +134,8 @@ export function Comment({
       )}
 
       <ConfirmDeleteCommentDialog
-        projectId={projectId}
+        objectId={objectId}
+        objectType={objectType}
         commentId={comment.id}
         isOpen={isConfirmDeleteDialogOpen}
         onClose={() => {

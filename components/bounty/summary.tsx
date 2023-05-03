@@ -4,6 +4,7 @@ import * as React from 'react'
 import { Banner } from '@/components/banner'
 import { LikeButton } from '@/components/likeButton'
 import { classNames } from '@/lib/classnames'
+import { num } from '@/lib/text'
 import { InferQueryOutput } from '@/lib/trpc'
 import { Card } from '@mantine/core'
 
@@ -14,16 +15,16 @@ import { Heading2 } from '../heading2'
 import { Tags } from '../tags'
 import { TAGS } from './tags'
 
-export type ProjectSummaryProps = {
-  project: InferQueryOutput<'project.feed'>['projects'][number]
+export type SummaryProps = {
+  bounty: InferQueryOutput<'bounty.feed'>['bounties'][number]
   onLike?: () => void
   onUnlike?: () => void
 }
 
-function Left({ project }: ProjectSummaryProps) {
+function Left({ bounty }: SummaryProps) {
   const contentDocument = React.useMemo(
-    () => new DOMParser().parseFromString(project.contentHtml, 'text/html'),
-    [project.contentHtml]
+    () => new DOMParser().parseFromString(bounty.contentHtml, 'text/html'),
+    [bounty.contentHtml]
   )
   //   TODO: decide on the order of the allowed tags
   //   and research on how to truncate html to a max amount of characters
@@ -48,53 +49,59 @@ function Left({ project }: ProjectSummaryProps) {
 
   return (
     <div className="grow relative flex flex-col justify-between max-w-[calc(100%-140px-1rem)]">
-      {project.tags && (
+      {bounty.tags && (
         <div className="mb-6 max-h-10 overflow-hidden">
-          <Tags queryData={project} tags={TAGS} />
+          <Tags queryData={bounty} tags={TAGS} />
         </div>
       )}
-      <div className={classNames(project.hidden ? 'opacity-50' : '')}>
-        <Link href={`/project/${project.id}`}>
+      <div className={classNames(bounty.hidden ? 'opacity-50' : '')}>
+        <Link href={`/bounty/${bounty.id}`}>
           <Heading2 className="cursor-pointer w-[95%] whitespace-nowrap text-ellipsis overflow-hidden">
-            {project.title}
+            <span className="text-gray-500">
+              {bounty.size ? `$${num(bounty.size)}: ` : ''}
+            </span>
+            {bounty.title}
           </Heading2>
         </Link>
-        <Date date={project.createdAt} />
+        <Date
+          date={bounty.deadline || bounty.createdAt}
+          dateLabel={bounty.deadline ? 'Deadline' : 'Created'}
+        />
       </div>
       <div className="flex items-center gap-12 mt-6">{/* Donor chart */}</div>
     </div>
   )
 }
 
-function Right({ project }: ProjectSummaryProps) {
+function Right({ bounty }: SummaryProps) {
   return (
     <div className="flex flex-col justify-between ml-4 max-w-[140px] min-w-[140px] w-[140px]">
       <div>
-        <Author author={project.author} />
+        <Author author={bounty.author} />
       </div>
       <div className="flex justify-around h-8">
-        <LikeButton likedBy={project.likedBy} disabled />
-        <CommentButton commentCount={project._count.comments} disabled />
+        <LikeButton likedBy={bounty.likedBy} disabled />
+        <CommentButton commentCount={bounty._count.comments} disabled />
       </div>
     </div>
   )
 }
 
-export const ProjectSummary = ({ project }: ProjectSummaryProps) => (
+export const Summary = ({ bounty }: SummaryProps) => (
   <Card shadow="sm" p="lg" radius="md" withBorder>
-    {project.hidden && (
+    {bounty.hidden && (
       <Banner className="mb-6">
-        This project will remain hidden until it’s published by the curators.
+        This bounty will remain hidden until it’s published by the curators.
       </Banner>
     )}
     <div
       className={classNames(
         'flex items-stretch',
-        project.hidden ? 'opacity-50' : ''
+        bounty.hidden ? 'opacity-50' : ''
       )}
     >
-      <Left project={project} />
-      <Right project={project} />
+      <Left bounty={bounty} />
+      <Right bounty={bounty} />
     </div>
   </Card>
 )

@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
+  // https://stackoverflow.com/questions/72399203/google-fonts-not-loading
+  optimizeFonts: false,
   reactStrictMode: true,
   images: {
     domains: [

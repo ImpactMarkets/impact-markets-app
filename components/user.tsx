@@ -13,12 +13,9 @@ export function User() {
 
   if (!session) {
     return (
-      <Box className="md:hidden flex justify-center gap-5 p-5">
-        <Button onClick={() => signIn()} variant="secondary" className="w-full">
-          Log in
-        </Button>
+      <Box className="flex justify-center gap-1 p-5">
         <Button onClick={() => signIn()} variant="highlight" className="w-full">
-          Sign up
+          Sign in/up
         </Button>
       </Box>
     )

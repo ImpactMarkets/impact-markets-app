@@ -12,6 +12,7 @@ import { Card } from '@mantine/core'
 import { Author } from '../author'
 import { Date } from '../date'
 import { Heading2 } from '../heading2'
+import { TAGS } from '../project/tags'
 import { Tags } from '../tags'
 import { sortAuthorFirst } from '../utils'
 
@@ -52,7 +53,7 @@ function Left({ certificate }: CertificateSummaryProps) {
     <div className="grow relative flex flex-col justify-between max-w-[calc(100%-140px-1rem)]">
       {certificate.tags && (
         <div className="mb-6 max-h-10 overflow-hidden">
-          <Tags queryData={certificate} />
+          <Tags queryData={certificate} tags={TAGS} />
         </div>
       )}
       <div className={classNames(certificate.hidden ? 'opacity-50' : '')}>

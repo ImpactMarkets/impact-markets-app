@@ -3,15 +3,16 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 
+import { Form } from '@/components/bounty/form'
 import { Heading1 } from '@/components/heading1'
 import { Layout } from '@/components/layout'
-import { ProjectForm } from '@/components/project/form'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
+import { Prisma } from '@prisma/client'
 
-const NewProjectPage: NextPageWithAuthAndLayout = () => {
+const NewBountyPage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
-  const addProjectMutation = trpc.useMutation('project.add', {
+  const addBountyMutation = trpc.useMutation('bounty.add', {
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
     },
@@ -20,38 +21,38 @@ const NewProjectPage: NextPageWithAuthAndLayout = () => {
   return (
     <div className="max-w-screen-lg mx-auto">
       <Head>
-        <title>New Project</title>
+        <title>New Bounty</title>
       </Head>
 
-      <Heading1>New project</Heading1>
+      <Heading1>New bounty</Heading1>
 
-      <div className="mt-6">
-        <ProjectForm
+      <div className="mt-6 max-w-screen-lg">
+        <Form
           isNew
-          isSubmitting={addProjectMutation.isLoading}
+          isSubmitting={addBountyMutation.isLoading}
           defaultValues={{
             id: cuid(),
             title: '',
             content: '',
-            paymentUrl: '',
+            size: new Prisma.Decimal('0'),
+            deadline: '',
+            sourceUrl: '',
             tags: '',
           }}
           backTo="/"
           onSubmit={(values) => {
-            addProjectMutation.mutate(
+            addBountyMutation.mutate(
               {
                 id: values.id,
                 title: values.title,
                 content: values.content,
-                actionStart: values.actionStart
-                  ? new Date(values.actionStart)
-                  : null,
-                actionEnd: values.actionEnd ? new Date(values.actionEnd) : null,
-                paymentUrl: values.paymentUrl,
+                size: new Prisma.Decimal(values.size || '0'),
+                deadline: values.deadline ? new Date(values.deadline) : null,
+                sourceUrl: values.sourceUrl,
                 tags: values.tags,
               },
               {
-                onSuccess: (data) => router.push(`/project/${data.id}`),
+                onSuccess: (data) => router.push(`/bounty/${data.id}`),
               }
             )
           }}
@@ -61,10 +62,10 @@ const NewProjectPage: NextPageWithAuthAndLayout = () => {
   )
 }
 
-NewProjectPage.auth = true
+NewBountyPage.auth = true
 
-NewProjectPage.getLayout = function getLayout(page: React.ReactElement) {
+NewBountyPage.getLayout = function getLayout(page: React.ReactElement) {
   return <Layout>{page}</Layout>
 }
 
-export default NewProjectPage
+export default NewBountyPage

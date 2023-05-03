@@ -63,6 +63,7 @@ export const serverEnv = {
     }),
     DEBUG: bool({ default: false }),
     MOCK_LOGIN: bool({ default: false }),
+    EMAIL_ANYONE: bool({ default: false }),
     GOOGLE_CLIENT_ID: googleParser({ allowEmpty: true, default: '' }),
     GOOGLE_CLIENT_SECRET: googleParser({ allowEmpty: true, default: '' }),
     GITHUB_ID: githubParser({ allowEmpty: true, default: '' }),

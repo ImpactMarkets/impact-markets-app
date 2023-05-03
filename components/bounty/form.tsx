@@ -2,60 +2,28 @@ import * as React from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useIntercom } from 'react-use-intercom'
 
+import { TAGS } from '@/components/bounty/tags'
 import { Button } from '@/components/button'
 import { ButtonLink } from '@/components/buttonLink'
 import { MarkdownIcon } from '@/components/icons'
 import { MarkdownEditor } from '@/components/markdownEditor'
-import { TAGS } from '@/components/project/tags'
 import { TextField } from '@/components/textField'
 import { SimpleGrid } from '@mantine/core'
+import { Prisma } from '@prisma/client'
 
 import { IMMultiSelect } from '../multiSelect'
-
-const DESCRIPTION_PROMPTS = (
-  <>
-    <p className="mt-2 ml-1">Ideally please touch on the following points:</p>
-    <ol className="list-decimal list-outside m-6">
-      <li className="mb-2">
-        What is the action that this project is about? What is the goal?
-      </li>
-
-      <li className="mb-2">What are your funding targets and stretch goals?</li>
-
-      <li className="mb-2">
-        Once you have already completed it, where can supporters see proof of
-        it?
-      </li>
-
-      <li className="mb-2">
-        Might someone feel that the action is morally bad according to their
-        values?
-      </li>
-
-      <li className="mb-2">
-        Was there ever a risk that the action might be harmful?
-      </li>
-
-      <li className="mb-2">
-        Who are all collaborators and how much have they each contributed?
-      </li>
-
-      <li>Is this a submission to any particular contests?</li>
-    </ol>
-  </>
-)
 
 type FormData = {
   id: string
   title: string
   content: string
-  actionStart?: string
-  actionEnd?: string
-  paymentUrl: string
+  size: Prisma.Decimal
+  deadline?: string
+  sourceUrl: string
   tags: string
 }
 
-type ProjectFormProps = {
+type FormProps = {
   defaultValues: FormData
   isSubmitting?: boolean
   isNew?: boolean
@@ -63,13 +31,13 @@ type ProjectFormProps = {
   onSubmit: SubmitHandler<FormData>
 }
 
-export function ProjectForm({
+export const Form = ({
   defaultValues,
   isSubmitting,
   isNew,
   backTo,
   onSubmit,
-}: ProjectFormProps) {
+}: FormProps) => {
   const {
     control,
     register,
@@ -101,23 +69,34 @@ export function ProjectForm({
       <TextField
         {...register('title', { required: true })}
         label="Title"
-        description="What’s the plan, in a few words?"
-        placeholder="An article on implications of Evidential Cooperation in Large Worlds for population ethics"
+        description="What are you looking for?"
+        placeholder="Rescue my capybara from the clutches of the evil wizard"
+        className="my-6"
         autoFocus
         required
+      />
+      <TextField
+        {...register('sourceUrl')}
+        label="Source URL"
+        description="Where can your clients find more information on your bounty? (Optional)"
+        placeholder="https://bit.ly/my-dating-doc"
         className="my-6"
       />
       <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
         <TextField
-          {...register('actionStart', { valueAsDate: true })}
-          label="Start of the work period"
-          description="When did you (or will you) start working on this? (Optional)"
-          type="date"
+          {...register('size', {})}
+          label="Bounty amount"
+          description="What is your maximum bounty payment? (Optional)"
+          rightSection="USD"
+          classNames={{ rightSection: 'w-14' }}
+          type="number"
+          step="0.01"
+          max={1e30}
         />
         <TextField
-          {...register('actionEnd', { valueAsDate: true })}
-          label="End of the work period"
-          description="… finish working on this? You can add or edit these later. (Optional)"
+          {...register('deadline', { valueAsDate: true })}
+          label="Deadline"
+          description="Will your bounty expire? (Optional)"
           type="date"
         />
       </SimpleGrid>
@@ -131,8 +110,7 @@ export function ProjectForm({
               <span className="link" onClick={() => show()}>
                 leave us feedback
               </span>{' '}
-              if you can’t find suitable tags for your field and type of work so
-              we can add them. (Optional)
+              if you can’t find suitable tags so we can add them. (Optional)
             </>
           }
           placeholder="Pick all that apply"
@@ -148,13 +126,6 @@ export function ProjectForm({
           defaultValue={getValues().tags ? getValues().tags.split(',') : []}
         />
       </div>
-      <TextField
-        {...register('paymentUrl')}
-        label="Payment URL"
-        description="A link to a page where people can donate to the project. (Optional)"
-        placeholder="https://ko-fi.com/velvetillumnation"
-        className="my-6"
-      />
       <div className="mt-6">
         <Controller
           name="content"
@@ -163,8 +134,7 @@ export function ProjectForm({
           render={({ field }) => (
             <MarkdownEditor
               label="Description"
-              description="Please hover over the question mark icon for some guidance. But don’t worry; supporters can ask questions too."
-              info={DESCRIPTION_PROMPTS}
+              description="What is your bounty about? Don’t worry; supporters can ask questions too."
               value={field.value}
               onChange={field.onChange}
               onTriggerSubmit={handleSubmit(onSubmit)}
@@ -186,8 +156,7 @@ export function ProjectForm({
       </div>
 
       <p className="my-6 text-sm">
-        When you submit your project, you can still edit it, and it will remain
-        hidden until a curator publishes it.
+        When you submit your project, you can still edit it.
       </p>
 
       <div className="flex items-center justify-between gap-4 mt-8">

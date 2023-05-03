@@ -36,10 +36,11 @@ export const permissionMiddleware: MiddlewareFunction = async ({
   }
 
   const certificateBelongsToUser = async () => {
-    interface certificateInput {
-      id: string
-    }
-    const { id } = <certificateInput>rawInput
+    const { id } = <
+      {
+        id: string
+      }
+    >rawInput
     const certificate = await ctx.prisma.certificate.findUnique({
       where: { id },
       select: {
@@ -50,10 +51,11 @@ export const permissionMiddleware: MiddlewareFunction = async ({
   }
 
   const projectBelongsToUser = async () => {
-    interface projectInput {
-      id: string
-    }
-    const { id } = <projectInput>rawInput
+    const { id } = <
+      {
+        id: string
+      }
+    >rawInput
     const project = await ctx.prisma.project.findUnique({
       where: { id },
       select: {
@@ -61,6 +63,21 @@ export const permissionMiddleware: MiddlewareFunction = async ({
       },
     })
     return project?.authorId === ctx.session!.user.id
+  }
+
+  const bountyBelongsToUser = async () => {
+    const { id } = <
+      {
+        id: string
+      }
+    >rawInput
+    const bounty = await ctx.prisma.bounty.findUnique({
+      where: { id },
+      select: {
+        authorId: true,
+      },
+    })
+    return bounty?.authorId === ctx.session!.user.id
   }
 
   const donationBelongsToUser = async () => {
@@ -90,10 +107,16 @@ export const permissionMiddleware: MiddlewareFunction = async ({
   }
 
   const commentBelongsToUser = async () => {
-    interface commentInput {
-      id: number
+    const { id } = <
+      {
+        id: number
+      }
+    >rawInput
+    if (id == null) {
+      // Prevents weird error even when id is a number: Argument where of type
+      // CommentWhereUniqueInput needs at least one argument.
+      return false
     }
-    const { id } = <commentInput>rawInput
     const comment = await ctx.prisma.comment.findUnique({
       where: { id },
       select: {
@@ -104,10 +127,11 @@ export const permissionMiddleware: MiddlewareFunction = async ({
   }
 
   const holdingBelongsToUser = async () => {
-    interface holdingInput {
-      id: number
-    }
-    const { id } = <holdingInput>rawInput
+    const { id } = <
+      {
+        id: number
+      }
+    >rawInput
     const holding = await ctx.prisma.holding.findUnique({
       where: { id },
       select: {
@@ -185,6 +209,19 @@ export const permissionMiddleware: MiddlewareFunction = async ({
     'project.unlike': isAuthenticated,
     'project.hide': isAdmin,
     'project.unhide': isAdmin,
+    'bounty.feed': allow,
+    'bounty.detail': allow,
+    'bounty.search': allow,
+    'bounty.add': isAuthenticated,
+    'bounty.edit': async () =>
+      and(
+        await isAuthenticated(),
+        or(await isAdmin(), await bountyBelongsToUser())
+      ),
+    'bounty.like': isAuthenticated,
+    'bounty.unlike': isAuthenticated,
+    'bounty.hide': isAdmin,
+    'bounty.unhide': isAdmin,
     'comment.add': isAuthenticated,
     'comment.edit': async () =>
       and(

@@ -12,7 +12,7 @@ export const userRouter = createProtectedRouter()
     }),
     async resolve({ ctx, input }) {
       const { id } = input
-      const isOwnProfile = ctx.session?.userId === id
+      const isOwnProfile = ctx.session?.user.id === id
       const user = await ctx.prisma.user.findUnique({
         where: { id },
         select: {

@@ -1,25 +1,22 @@
 import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
-import { Banner } from '@/components/banner'
-import type { CertificateSummaryProps } from '@/components/certificate/summary'
+import { ButtonLink } from '@/components/buttonLink'
 import { Filters } from '@/components/filters'
 import { Layout } from '@/components/layout'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
+import type { ProjectSummaryProps } from '@/components/project/summary'
 import { SummarySkeleton } from '@/components/summarySkeleton'
 import { ITEMS_PER_PAGE, ProjectSortKey } from '@/lib/constants'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
-const CertificateSummary = dynamic<CertificateSummaryProps>(
+const ProjectSummary = dynamic<ProjectSummaryProps>(
   () =>
-    import('@/components/certificate/summary').then(
-      (mod) => mod.CertificateSummary
-    ),
+    import('@/components/project/summary').then((mod) => mod.ProjectSummary),
   { ssr: false }
 )
 
@@ -30,15 +27,15 @@ const orderByValues: Array<{ value: ProjectSortKey; label: string }> = [
   { value: 'supporterCount', label: 'Supporters' },
 ]
 
-const Home: NextPageWithAuthAndLayout = () => {
+const Projects: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()
   const router = useRouter()
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
   const utils = trpc.useContext()
   const [filterTags, setFilterTags] = React.useState('')
   const [orderBy, setOrderBy] = React.useState('' as ProjectSortKey)
-  const feedQueryPathAndInput: InferQueryPathAndInput<'certificate.feed'> = [
-    'certificate.feed',
+  const feedQueryPathAndInput: InferQueryPathAndInput<'project.feed'> = [
+    'project.feed',
     {
       ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
       filterTags,
@@ -46,8 +43,8 @@ const Home: NextPageWithAuthAndLayout = () => {
     },
   ]
   const feedQuery = trpc.useQuery(feedQueryPathAndInput)
-  const likeMutation = trpc.useMutation(['certificate.like'], {
-    onMutate: async (likedCertificateId) => {
+  const likeMutation = trpc.useMutation(['project.like'], {
+    onMutate: async (likedProjectId) => {
       await utils.cancelQuery(feedQueryPathAndInput)
 
       const previousQuery = utils.getQueryData(feedQueryPathAndInput)
@@ -55,18 +52,18 @@ const Home: NextPageWithAuthAndLayout = () => {
       if (previousQuery) {
         utils.setQueryData(feedQueryPathAndInput, {
           ...previousQuery,
-          certificates: previousQuery.certificates.map((certificate) =>
-            certificate.id === likedCertificateId
+          projects: previousQuery.projects.map((project) =>
+            project.id === likedProjectId
               ? {
-                  ...certificate,
+                  ...project,
                   likedBy: [
-                    ...certificate.likedBy,
+                    ...project.likedBy,
                     {
                       user: { id: session!.user.id, name: session!.user.name },
                     },
                   ],
                 }
-              : certificate
+              : project
           ),
         })
       }
@@ -79,8 +76,8 @@ const Home: NextPageWithAuthAndLayout = () => {
       }
     },
   })
-  const unlikeMutation = trpc.useMutation(['certificate.unlike'], {
-    onMutate: async (unlikedCertificateId) => {
+  const unlikeMutation = trpc.useMutation(['project.unlike'], {
+    onMutate: async (unlikedProjectId) => {
       await utils.cancelQuery(feedQueryPathAndInput)
 
       const previousQuery = utils.getQueryData(feedQueryPathAndInput)
@@ -88,15 +85,15 @@ const Home: NextPageWithAuthAndLayout = () => {
       if (previousQuery) {
         utils.setQueryData(feedQueryPathAndInput, {
           ...previousQuery,
-          certificates: previousQuery.certificates.map((certificate) =>
-            certificate.id === unlikedCertificateId
+          projects: previousQuery.projects.map((project) =>
+            project.id === unlikedProjectId
               ? {
-                  ...certificate,
-                  likedBy: certificate.likedBy.filter(
+                  ...project,
+                  likedBy: project.likedBy.filter(
                     (item) => item.user.id !== session!.user.id
                   ),
                 }
-              : certificate
+              : project
           ),
         })
       }
@@ -117,46 +114,48 @@ const Home: NextPageWithAuthAndLayout = () => {
           <title>Impact Markets</title>
         </Head>
 
-        <div>
-          <Filters
-            onFilterTagsUpdate={(tags) => setFilterTags(tags)}
-            onOrderByUpdate={(orderBy: string) =>
-              // A bit unhappy with this – https://stackoverflow.com/a/69007934/678861
-              (orderByValues.map((item) => item.value) as string[]).includes(
-                orderBy
-              ) && setOrderBy(orderBy as ProjectSortKey)
-            }
-            orderByValues={orderByValues}
-            defaultFilterTagValue={filterTags}
-            defaultOrderByValue={orderBy}
-          />
+        <div className="flex justify-between flex-row-reverse flex-wrap gap-2">
+          <div>
+            <ButtonLink href="/project/new" variant="highlight">
+              <span className="block shrink-0">New project</span>
+            </ButtonLink>
+          </div>
+          <div>
+            <Filters
+              onFilterTagsUpdate={(tags) => setFilterTags(tags)}
+              onOrderByUpdate={(orderBy: string) =>
+                // A bit unhappy with this – https://stackoverflow.com/a/69007934/678861
+                (orderByValues.map((item) => item.value) as string[]).includes(
+                  orderBy
+                ) && setOrderBy(orderBy as ProjectSortKey)
+              }
+              orderByValues={orderByValues}
+              defaultFilterTagValue={filterTags}
+              defaultOrderByValue={orderBy}
+              searchEndpoint="project.search"
+            />
+          </div>
         </div>
-        <Banner className="my-6">
-          This is an archive. Please see the{' '}
-          <Link href="/" className="link">
-            projects
-          </Link>{' '}
-          page for the current projects.
-        </Banner>
-        {feedQuery.data.certificateCount === 0 ? (
-          <div className="text-center text-secondary border rounded my-10 py-20 px-10">
-            There are no published certificates to show yet.
+
+        {feedQuery.data.projectCount === 0 ? (
+          <div className="text-center text-secondary border rounded my-12 py-20 px-10">
+            There are no published projects to show yet.
           </div>
         ) : (
-          <div className="flow-root">
-            <ul className="divide-y divide-transparent flex flex-wrap gap-2">
-              {feedQuery.data.certificates.map((certificate) => (
+          <div className="flow-root my-12">
+            <ul className="divide-y divide-transparent flex flex-wrap gap-x-[1%] gap-y-2">
+              {feedQuery.data.projects.map((project) => (
                 <li
-                  key={certificate.id}
-                  className="w-full max-w-full xl:w-[49%] xl:max-w-[49%] 2xl:w-[32%] 2xl:max-w-[32%]"
+                  key={project.id}
+                  className="w-full max-w-full xl:w-[49.5%] xl:max-w-[49.5%] 2xl:w-[32.6%] 2xl:max-w-[32.6%]"
                 >
-                  <CertificateSummary
-                    certificate={certificate}
+                  <ProjectSummary
+                    project={project}
                     onLike={() => {
-                      likeMutation.mutate(certificate.id)
+                      likeMutation.mutate(project.id)
                     }}
                     onUnlike={() => {
-                      unlikeMutation.mutate(certificate.id)
+                      unlikeMutation.mutate(project.id)
                     }}
                   />
                 </li>
@@ -166,7 +165,7 @@ const Home: NextPageWithAuthAndLayout = () => {
         )}
 
         <Pagination
-          itemCount={feedQuery.data.certificateCount}
+          itemCount={feedQuery.data.projectCount}
           itemsPerPage={ITEMS_PER_PAGE}
           currentPageNumber={currentPageNumber}
         />
@@ -191,8 +190,8 @@ const Home: NextPageWithAuthAndLayout = () => {
   )
 }
 
-Home.getLayout = function getLayout(page: React.ReactElement) {
+Projects.getLayout = function getLayout(page: React.ReactElement) {
   return <Layout>{page}</Layout>
 }
 
-export default Home
+export default Projects

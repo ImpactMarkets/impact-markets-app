@@ -9,23 +9,27 @@ import { InferQueryOutput, trpc } from '@/lib/trpc'
 import { CommentFormData } from '../utils'
 
 export function EditCommentForm({
-  projectId,
+  objectId,
+  objectType,
   comment,
   onDone,
 }: {
-  projectId: string
+  objectId: string
+  objectType: 'project' | 'bounty'
   comment:
     | InferQueryOutput<'project.detail'>['comments'][number]
     | InferQueryOutput<'project.detail'>['comments'][number]['children'][number]
+    | InferQueryOutput<'bounty.detail'>['comments'][number]
+    | InferQueryOutput<'bounty.detail'>['comments'][number]['children'][number]
   onDone: () => void
 }) {
   const utils = trpc.useContext()
   const editCommentMutation = trpc.useMutation('comment.edit', {
     onSuccess: () => {
       return utils.invalidateQueries([
-        'project.detail',
+        (objectType + '.detail') as 'project.detail' | 'bounty.detail',
         {
-          id: projectId,
+          id: objectId,
         },
       ])
     },

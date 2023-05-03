@@ -1,9 +1,4 @@
-export type IMTag = {
-  value: string
-  label: string
-  color: string
-  group: string
-}
+import { IMTag } from '../utils'
 
 export const TAGS: IMTag[] = [
   // Types of work
