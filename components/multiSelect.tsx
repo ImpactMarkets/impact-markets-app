@@ -39,6 +39,7 @@ export const IMMultiSelect = React.forwardRef<
           defaultValue: {
             justifyContent: 'center',
             padding: '0 4px 0 11px',
+            backgroundColor: 'rgba(231, 245, 255, 1)',
           },
         }}
         sx={{
