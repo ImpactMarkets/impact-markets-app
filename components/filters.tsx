@@ -17,6 +17,7 @@ export type FiltersProps = {
   defaultFilterTagValue: string
   defaultOrderByValue: string
   searchEndpoint?: 'project.search' | 'bounty.search'
+  tags: typeof TAGS
 }
 
 export function Filters(props: FiltersProps) {
@@ -34,7 +35,7 @@ export function Filters(props: FiltersProps) {
       <IMMultiSelect
         ref={tagsMultiSelect}
         placeholder="Filter by tags"
-        data={TAGS.map((tag) => ({
+        data={props.tags.map((tag) => ({
           value: tag.value,
           label: tag.label,
           group: tag.group,
