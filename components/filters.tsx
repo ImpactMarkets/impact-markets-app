@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 
-import { TAGS } from '@/components/project/tags'
 import { BountySortKey, ProjectSortKey } from '@/lib/constants'
 import { Button, Flex } from '@mantine/core'
 
