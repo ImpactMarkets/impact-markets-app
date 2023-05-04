@@ -130,7 +130,12 @@ export const TAGS: IMTag[] = [
     color: '#4fcdf7',
     group: 'Type of work',
   },
-  { value: 'thesis', label: 'Thesis', color: '#4fcdf7', group: 'Type of work' },
+  {
+    value: 'thesis',
+    label: 'Thesis',
+    color: '#4fcdf7',
+    group: 'Type of work',
+  },
   {
     value: 'website',
     label: 'Website',
