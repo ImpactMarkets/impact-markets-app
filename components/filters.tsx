@@ -52,7 +52,7 @@ export function Filters(props: FiltersProps) {
         }}
       />
       <IMSelect
-        placeholder="Sort by:"
+        placeholder="Sort by: Creation date"
         data={props.orderByValues}
         onChange={(value) => {
           const sortKeys = props.orderByValues.map((item) => item.value)
