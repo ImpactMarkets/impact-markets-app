@@ -9,6 +9,7 @@ import { SearchIcon } from './icons'
 import { IMMultiSelect } from './multiSelect'
 import { SearchDialog } from './searchDialog'
 import { IMSelect } from './select'
+import { IMTag } from './utils'
 
 export type FiltersProps = {
   onFilterTagsUpdate: (tags: string) => void
@@ -17,7 +18,7 @@ export type FiltersProps = {
   defaultFilterTagValue: string
   defaultOrderByValue: string
   searchEndpoint?: 'project.search' | 'bounty.search'
-  tags: typeof TAGS
+  tags: IMTag[]
 }
 
 export function Filters(props: FiltersProps) {
