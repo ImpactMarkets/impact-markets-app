@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 
 import type { SummaryProps } from '@/components/bounty/summary'
+import { TAGS } from '@/components/bounty/tags'
 import { ButtonLink } from '@/components/buttonLink'
 import { Filters } from '@/components/filters'
 import { Layout } from '@/components/layout'
@@ -120,6 +121,7 @@ const Home: NextPageWithAuthAndLayout = () => {
           </div>
           <div>
             <Filters
+              tags={TAGS}
               onFilterTagsUpdate={(tags) => setFilterTags(tags)}
               onOrderByUpdate={(orderBy: string) =>
                 // A bit unhappy with this – https://stackoverflow.com/a/69007934/678861

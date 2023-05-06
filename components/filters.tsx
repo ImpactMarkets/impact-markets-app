@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 
-import { TAGS } from '@/components/project/tags'
 import { BountySortKey, ProjectSortKey } from '@/lib/constants'
 import { Button, Flex } from '@mantine/core'
 
@@ -9,6 +8,7 @@ import { SearchIcon } from './icons'
 import { IMMultiSelect } from './multiSelect'
 import { SearchDialog } from './searchDialog'
 import { IMSelect } from './select'
+import { IMTag } from './utils'
 
 export type FiltersProps = {
   onFilterTagsUpdate: (tags: string) => void
@@ -17,6 +17,7 @@ export type FiltersProps = {
   defaultFilterTagValue: string
   defaultOrderByValue: string
   searchEndpoint?: 'project.search' | 'bounty.search'
+  tags: IMTag[]
 }
 
 export function Filters(props: FiltersProps) {
@@ -34,7 +35,7 @@ export function Filters(props: FiltersProps) {
       <IMMultiSelect
         ref={tagsMultiSelect}
         placeholder="Filter by tags"
-        data={TAGS.map((tag) => ({
+        data={props.tags.map((tag) => ({
           value: tag.value,
           label: tag.label,
           group: tag.group,
