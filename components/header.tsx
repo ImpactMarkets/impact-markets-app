@@ -26,16 +26,18 @@ export const Header = ({
       height={{ base: 50, sm: 0 }}
     >
       <div className="flex justify-between items-center h-full px-5">
-        {showMenu && (
-          <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
-            <Burger
-              opened={opened}
-              onClick={() => setOpened!((o) => !o)}
-              size="sm"
-              mr="xl"
-            />
-          </MediaQuery>
-        )}
+        <div className="flex-1">
+          {showMenu && (
+            <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
+              <Burger
+                opened={opened}
+                onClick={() => setOpened!((o) => !o)}
+                size="sm"
+                mr="xl"
+              />
+            </MediaQuery>
+          )}
+        </div>
         <div>
           <Link href="/">
             <span>
@@ -43,7 +45,7 @@ export const Header = ({
             </span>
           </Link>
         </div>
-        <div></div>
+        <div className="flex-1"></div>
       </div>
     </MantineHeader>
   )
