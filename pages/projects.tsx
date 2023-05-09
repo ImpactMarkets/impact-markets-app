@@ -27,13 +27,15 @@ const orderByValues: Array<{ value: ProjectSortKey; label: string }> = [
   { value: 'supporterCount', label: 'Supporters' },
 ]
 
+const defaultOrder: string = 'supporterCount'
+
 const Projects: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()
   const router = useRouter()
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
   const utils = trpc.useContext()
   const [filterTags, setFilterTags] = React.useState('')
-  const [orderBy, setOrderBy] = React.useState('' as ProjectSortKey)
+  const [orderBy, setOrderBy] = React.useState(defaultOrder as ProjectSortKey)
   const feedQueryPathAndInput: InferQueryPathAndInput<'project.feed'> = [
     'project.feed',
     {
