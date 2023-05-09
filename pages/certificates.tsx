@@ -30,7 +30,7 @@ const orderByValues: Array<{ value: ProjectSortKey; label: string }> = [
   { value: 'supporterCount', label: 'Supporters' },
 ]
 
-const defaultOrder: string = 'supporterCount'
+const defaultOrder = 'supporterCount'
 
 const Home: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()

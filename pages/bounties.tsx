@@ -25,7 +25,7 @@ const orderByValues: Array<{ value: BountySortKey; label: string }> = [
   { value: 'size', label: 'Bounty amount' },
 ]
 
-const defaultOrder: string = 'size'
+const defaultOrder = 'size'
 
 const Home: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()
