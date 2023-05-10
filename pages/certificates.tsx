@@ -10,6 +10,7 @@ import type { CertificateSummaryProps } from '@/components/certificate/summary'
 import { Filters } from '@/components/filters'
 import { Layout } from '@/components/layout'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
+import { TAGS } from '@/components/project/tags'
 import { SummarySkeleton } from '@/components/summarySkeleton'
 import { ITEMS_PER_PAGE, ProjectSortKey } from '@/lib/constants'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
@@ -119,6 +120,7 @@ const Home: NextPageWithAuthAndLayout = () => {
 
         <div>
           <Filters
+            tags={TAGS}
             onFilterTagsUpdate={(tags) => setFilterTags(tags)}
             onOrderByUpdate={(orderBy: string) =>
               // A bit unhappy with this – https://stackoverflow.com/a/69007934/678861
