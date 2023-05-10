@@ -73,13 +73,13 @@ export function LikeButton({
             />
             <span
               className={classNames(
-                'absolute w-4 h-4 top-0 left-[-.5px] rounded-full ring-inset ring-6 ring-gray-50 transition-all duration-300 transform-gpu z-10',
+                'absolute w-4 h-4 top-0 left-[-.5px] rounded-full ring-inset ring-6 ring-gray-50 transition-all duration-300 transform-gpu',
                 isLikingAnimation ? 'scale-150 !ring-0' : 'scale-0'
               )}
             ></span>
             <HeartFilledIcon
               className={classNames(
-                'absolute inset-0 transition-transform delay-200 duration-300 text-gray-50 transform-gpu z-10 ease-spring',
+                'absolute inset-0 transition-transform delay-200 duration-300 text-gray-50 transform-gpu ease-spring',
                 isLikingAnimation ? 'scale-1' : 'scale-0'
               )}
             />
@@ -88,7 +88,7 @@ export function LikeButton({
       </span>
       <span
         className={classNames(
-          'relative z-10 tabular-nums',
+          'relative tabular-nums',
           isLikingAnimation && 'transition-colors duration-100 text-gray-50'
         )}
       >
