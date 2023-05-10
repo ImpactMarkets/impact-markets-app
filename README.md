@@ -70,6 +70,6 @@ Try running `npx prisma generate`. These may be from schema changes someone else
 
 ### Styles
 
-This project uses [Tailwind CSS](https://tailwindcss.com/docs) and [Mantine] (https://mantine.dev/) to handle styles.
+This project uses [Tailwind CSS](https://tailwindcss.com/docs) and [Mantine] (https://mantine.dev/) to handle styles. If at all possible, please use Tailwind for styling components, even Mantine components, so we don’t incur so much complexity from mixing the two systems.
 
 To make changes to default Tailwind CSS values, modify the `tailwind.config.js` file located at the root of the project.
