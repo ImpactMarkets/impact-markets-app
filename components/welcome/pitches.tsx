@@ -55,18 +55,17 @@ export const Pitches = () => (
           expertise for follow-on donations, getting the project funded faster.
         </Feature>
         <Feature icon={IconTrendingUp} title="All donors" key="all donors">
-          Follow donors who have skin in the game! Impact Markets is a
-          crowd-sourced charity evaluator for all the small, speculative,
-          potentially-spectacular projects across all cause areas ranked by the
-          donations they’ve received from specialist donors. You can tap into
-          the wisdom of these donors and boost the impact of your donations.
+          Follow donors with skin in the game! Impact Markets is a crowd-sourced
+          charity evaluator for speculative, potentially spectacular projects,
+          ranked by the donations they’ve received from specialist donors. Tap
+          into the wisdom of these donors and boost the impact of your
+          donations.
         </Feature>
         <Feature icon={IconHeart} title="Philanthropic funders" key="funders">
-          Specialist donors research their donations in-depth, and they can
-          access local information to find exceptional funding gaps. We
-          signal-boost that knowledge and make it accessible to you. You can use
-          cash or regranting bounties to incentivize these donors, or you can
-          mine their findings for any funding gaps that you want to fill!
+          Specialist donors can find exceptional funding gaps. We signal-boost
+          their knowledge and make it accessible to you. Mine their findings to
+          guide your funding allocation, or incentivize these donors with cash
+          or regranting bounties!
         </Feature>
       </SimpleGrid>
     </Container>

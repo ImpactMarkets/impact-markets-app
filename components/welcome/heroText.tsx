@@ -81,8 +81,7 @@ export function HeroText() {
 
         <Container className="max-w-[600px]">
           <Text size="lg" color="dimmed">
-            Signal-boost the best projects or follow the signal to find the best
-            projects
+            Signal-boost – or follow the signal to find – the best projects
           </Text>
         </Container>
 
