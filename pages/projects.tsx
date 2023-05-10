@@ -21,10 +21,10 @@ const ProjectSummary = dynamic<ProjectSummaryProps>(
 )
 
 const orderByValues: Array<{ value: ProjectSortKey; label: string }> = [
-  { value: 'createdAt', label: 'Creation date' },
-  { value: 'actionStart', label: 'Start of work' },
-  { value: 'actionEnd', label: 'End of work' },
-  { value: 'supporterCount', label: 'Supporters' },
+  { value: 'createdAt', label: 'Sort by creation date' },
+  { value: 'actionStart', label: 'Sort by start of work' },
+  { value: 'actionEnd', label: 'Sort by end of work' },
+  { value: 'supporterCount', label: 'Sort by supporters' },
 ]
 
 const defaultOrder = 'supporterCount'
