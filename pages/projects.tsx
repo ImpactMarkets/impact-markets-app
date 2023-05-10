@@ -22,11 +22,13 @@ const ProjectSummary = dynamic<ProjectSummaryProps>(
 )
 
 const orderByValues: Array<{ value: ProjectSortKey; label: string }> = [
-  { value: 'createdAt', label: 'Creation date' },
-  { value: 'actionStart', label: 'Start of work' },
-  { value: 'actionEnd', label: 'End of work' },
-  { value: 'supporterCount', label: 'Supporters' },
+  { value: 'createdAt', label: 'Sort by creation date' },
+  { value: 'actionStart', label: 'Sort by start of work' },
+  { value: 'actionEnd', label: 'Sort by end of work' },
+  { value: 'supporterCount', label: 'Sort by supporters' },
 ]
+
+const defaultOrder = 'supporterCount'
 
 const Projects: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()
@@ -34,7 +36,7 @@ const Projects: NextPageWithAuthAndLayout = () => {
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
   const utils = trpc.useContext()
   const [filterTags, setFilterTags] = React.useState('')
-  const [orderBy, setOrderBy] = React.useState('' as ProjectSortKey)
+  const [orderBy, setOrderBy] = React.useState(defaultOrder as ProjectSortKey)
   const feedQueryPathAndInput: InferQueryPathAndInput<'project.feed'> = [
     'project.feed',
     {

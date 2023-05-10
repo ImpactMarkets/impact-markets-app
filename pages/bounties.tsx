@@ -21,10 +21,12 @@ const Summary = dynamic<SummaryProps>(
 )
 
 const orderByValues: Array<{ value: BountySortKey; label: string }> = [
-  { value: 'createdAt', label: 'Creation date' },
-  { value: 'deadline', label: 'Deadline' },
-  { value: 'size', label: 'Bounty amount' },
+  { value: 'createdAt', label: 'Sort by creation date' },
+  { value: 'deadline', label: 'Sort by deadline' },
+  { value: 'size', label: 'Sort by bounty amount' },
 ]
+
+const defaultOrder = 'size'
 
 const Home: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()
@@ -32,7 +34,7 @@ const Home: NextPageWithAuthAndLayout = () => {
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
   const utils = trpc.useContext()
   const [filterTags, setFilterTags] = React.useState('')
-  const [orderBy, setOrderBy] = React.useState('' as BountySortKey)
+  const [orderBy, setOrderBy] = React.useState(defaultOrder as BountySortKey)
   const feedQueryPathAndInput: InferQueryPathAndInput<'bounty.feed'> = [
     'bounty.feed',
     {
