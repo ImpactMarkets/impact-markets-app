@@ -31,51 +31,67 @@ export function Filters(props: FiltersProps) {
   )
 
   return (
-    <Flex gap={{ base: 'sm' }} align="center">
-      <IMMultiSelect
-        ref={tagsMultiSelect}
-        placeholder="Filter by tags"
-        data={props.tags.map((tag) => ({
-          value: tag.value,
-          label: tag.label,
-          group: tag.group,
-        }))}
-        onChange={(value) => {
-          if (Array.isArray(value)) {
-            setFilterTags(value)
-            props.onFilterTagsUpdate(value.join(','))
-          }
+    <Flex
+      gap={{ base: 'sm' }}
+      align="center"
+      style={{
+        flexWrap: 'wrap',
+      }}
+    >
+      <Flex
+        style={{
+          flexWrap: 'nowrap',
+          alignItems: 'center',
         }}
-        value={filterTags}
-        classNames={{
-          input: 'bg-none border-none',
-          searchInput: 'border-none placeholder:text-primary',
-        }}
-      />
-      <IMSelect
-        placeholder="Sort by:"
-        data={props.orderByValues}
-        onChange={(value) => {
-          const sortKeys = props.orderByValues.map((item) => item.value)
-          if (
-            value &&
-            typeof value === 'string' &&
-            (sortKeys as string[]).includes(value)
-          ) {
-            setOrderBy(value)
-            props.onOrderByUpdate(value)
-          }
-        }}
-        value={orderBy}
-        classNames={{
-          input: 'bg-none border-none placeholder:text-primary',
-        }}
-      />
+      >
+        <IMMultiSelect
+          ref={tagsMultiSelect}
+          placeholder="Filter by tags"
+          data={props.tags.map((tag) => ({
+            value: tag.value,
+            label: tag.label,
+            group: tag.group,
+          }))}
+          onChange={(value) => {
+            if (Array.isArray(value)) {
+              setFilterTags(value)
+              props.onFilterTagsUpdate(value.join(','))
+            }
+          }}
+          value={filterTags}
+          classNames={{
+            input: 'bg-none border-none',
+            searchInput: 'border-none placeholder:text-primary',
+          }}
+        />
+        <IMSelect
+          placeholder="Sort by:"
+          data={props.orderByValues}
+          onChange={(value) => {
+            const sortKeys = props.orderByValues.map((item) => item.value)
+            if (
+              value &&
+              typeof value === 'string' &&
+              (sortKeys as string[]).includes(value)
+            ) {
+              setOrderBy(value)
+              props.onOrderByUpdate(value)
+            }
+          }}
+          value={orderBy}
+          classNames={{
+            input: 'bg-none border-none placeholder:text-primary',
+          }}
+        />
+      </Flex>
       {props.searchEndpoint && (
         <IconButton
           variant="secondary"
           onClick={() => {
             setIsSearchDialogOpen(true)
+          }}
+          style={{
+            marginLeft: '10px',
           }}
         >
           <SearchIcon className="w-4 h-4" />
@@ -91,6 +107,7 @@ export function Filters(props: FiltersProps) {
           props.onFilterTagsUpdate('')
           props.onOrderByUpdate('')
         }}
+        style={{ marginLeft: 'auto' }}
       >
         Clear all
       </Button>

@@ -32,6 +32,16 @@ export const IMMultiSelect = React.forwardRef<
         id={id || name}
         name={name}
         aria-label={label as string}
+        styles={{
+          defaultValueLabel: {
+            overflow: 'visible',
+          },
+          defaultValue: {
+            justifyContent: 'center',
+            padding: '0 4px 0 11px',
+            backgroundColor: 'rgba(231, 245, 255, 1)',
+          },
+        }}
         sx={{
           'div > input::placeholder': {
             fontSize: 12,
