@@ -12,6 +12,7 @@ import { SimpleGrid } from '@mantine/core'
 import { Prisma } from '@prisma/client'
 
 import { IMMultiSelect } from '../multiSelect'
+import { IMSelect } from '../select'
 
 type FormData = {
   id: string
@@ -126,6 +127,16 @@ export const Form = ({
           defaultValue={getValues().tags ? getValues().tags.split(',') : []}
         />
       </div>
+      {isNew ? null : (
+        <div className="mt-6">
+          <IMSelect
+            label="Status"
+            description="Has anyone claimed or completed your bounty?"
+            placeholder="Active"
+            data={[]}
+          />
+        </div>
+      )}
       <div className="mt-6">
         <Controller
           name="content"
