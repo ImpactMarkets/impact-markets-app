@@ -128,22 +128,20 @@ export const Form = ({
           defaultValue={getValues().tags ? getValues().tags.split(',') : []}
         />
       </div>
-      {isNew ? null : (
-        <div className="mt-6">
-          <IMSelect
-            {...register('status')}
-            label="Status"
-            description="Has anyone claimed or completed your bounty?"
-            defaultValue="ACTIVE"
-            data={['ACTIVE', 'CLAIMED', 'CLOSED']}
-            onChange={(value) =>
-              typeof value === 'string'
-                ? setValue('status', value as 'ACTIVE' | 'CLAIMED' | 'CLOSED')
-                : null
-            }
-          />
-        </div>
-      )}
+      <div className="mt-6">
+        <IMSelect
+          {...register('status')}
+          label="Status"
+          description="Has anyone claimed or completed your bounty?"
+          defaultValue="ACTIVE"
+          data={['ACTIVE', 'CLAIMED', 'CLOSED']}
+          onChange={(value) =>
+            typeof value === 'string'
+              ? setValue('status', value as 'ACTIVE' | 'CLAIMED' | 'CLOSED')
+              : null
+          }
+        />
+      </div>
       <div className="mt-6">
         <Controller
           name="content"
