@@ -204,6 +204,12 @@ export const TAGS: IMTag[] = [
     group: 'Field of work',
   },
   {
+    value: 'agi_moratorium',
+    label: 'AGI moratorium',
+    color: colors.field,
+    group: 'Field of work',
+  },
+  {
     value: 'biosecurity',
     label: 'Biosecurity',
     color: colors.field,
