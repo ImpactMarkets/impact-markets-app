@@ -110,8 +110,8 @@ export function ProjectForm({
       <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
         <TextField
           {...register('actionEnd', { valueAsDate: true })}
-          label="End of the work period"
-          description="When did you (or will you) finish working on this? You can add or edit this later. (Optional)"
+          label="Review date"
+          description="When (just estimate) will the outputs of the project be ready for review? (Optional)"
           type="date"
         />
       </SimpleGrid>
