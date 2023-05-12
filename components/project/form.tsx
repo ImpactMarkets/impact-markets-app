@@ -107,14 +107,6 @@ export function ProjectForm({
         required
         className="my-6"
       />
-      <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
-        <TextField
-          {...register('actionEnd', { valueAsDate: true })}
-          label="Review date"
-          description="When (just estimate) will the outputs of the project be ready for review? (Optional)"
-          type="date"
-        />
-      </SimpleGrid>
       <div className="mt-6">
         <IMMultiSelect
           {...register('tags')}
@@ -142,13 +134,24 @@ export function ProjectForm({
           defaultValue={getValues().tags ? getValues().tags.split(',') : []}
         />
       </div>
-      <TextField
-        {...register('paymentUrl')}
-        label="Payment URL"
-        description="A link to a page where people can donate to the project. (Optional)"
-        placeholder="https://ko-fi.com/velvetillumnation"
-        className="my-6"
-      />
+      <SimpleGrid
+        cols={2}
+        breakpoints={[{ maxWidth: 'md', cols: 1 }]}
+        className="mt-6"
+      >
+        <TextField
+          {...register('actionEnd', { valueAsDate: true })}
+          label="Review date"
+          description="When (just estimate) will the outputs of the project be ready for a review? (Optional)"
+          type="date"
+        />
+        <TextField
+          {...register('paymentUrl')}
+          label="Payment URL"
+          description="A link to a page where people can donate to the project. (Optional)"
+          placeholder="https://ko-fi.com/velvetillumnation"
+        />
+      </SimpleGrid>
       <div className="mt-6">
         <Controller
           name="content"
