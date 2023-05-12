@@ -38,6 +38,7 @@ const NewBountyPage: NextPageWithAuthAndLayout = () => {
             deadline: '',
             sourceUrl: '',
             tags: '',
+            status: 'ACTIVE',
           }}
           backTo="/"
           onSubmit={(values) => {
@@ -50,6 +51,7 @@ const NewBountyPage: NextPageWithAuthAndLayout = () => {
                 deadline: values.deadline ? new Date(values.deadline) : null,
                 sourceUrl: values.sourceUrl,
                 tags: values.tags,
+                status: values.status,
               },
               {
                 onSuccess: (data) => router.push(`/bounty/${data.id}`),

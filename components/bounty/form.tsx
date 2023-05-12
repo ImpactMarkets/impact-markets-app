@@ -22,6 +22,7 @@ type FormData = {
   deadline?: string
   sourceUrl: string
   tags: string
+  status: 'ACTIVE' | 'CLAIMED' | 'CLOSED'
 }
 
 type FormProps = {
@@ -130,10 +131,16 @@ export const Form = ({
       {isNew ? null : (
         <div className="mt-6">
           <IMSelect
+            {...register('status')}
             label="Status"
             description="Has anyone claimed or completed your bounty?"
-            placeholder="Active"
-            data={[]}
+            defaultValue="ACTIVE"
+            data={['ACTIVE', 'CLAIMED', 'CLOSED']}
+            onChange={(value) =>
+              typeof value === 'string'
+                ? setValue('status', value as 'ACTIVE' | 'CLAIMED' | 'CLOSED')
+                : null
+            }
           />
         </div>
       )}

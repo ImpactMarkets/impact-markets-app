@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { BOUNTY_SORT_KEYS, BountySortKey } from '@/lib/constants'
 import { markdownToHtml } from '@/lib/editor'
 import { Prisma, User } from '@prisma/client'
-import { EventStatus, EventType, Role } from '@prisma/client'
+import { BountyStatus, EventStatus, EventType, Role } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
 import { createProtectedRouter } from '../createProtectedRouter'
@@ -258,6 +258,7 @@ export const bountyRouter = createProtectedRouter()
       deadline: z.date().nullable(),
       sourceUrl: z.string(),
       tags: z.string(),
+      status: z.nativeEnum(BountyStatus),
     }),
     async resolve({ ctx, input }) {
       const bounty = await ctx.prisma.bounty.create({
@@ -299,6 +300,7 @@ export const bountyRouter = createProtectedRouter()
         size: z.instanceof(Prisma.Decimal),
         sourceUrl: z.string(),
         tags: z.string(),
+        status: z.nativeEnum(BountyStatus),
       }),
     }),
     async resolve({ ctx, input }) {
@@ -313,6 +315,7 @@ export const bountyRouter = createProtectedRouter()
           deadline: data.deadline,
           sourceUrl: data.sourceUrl,
           tags: data.tags,
+          status: data.status,
         },
       })
 

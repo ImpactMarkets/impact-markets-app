@@ -48,6 +48,7 @@ const EditBountyPage: NextPageWithAuthAndLayout = () => {
                     : undefined,
                   sourceUrl: bountyQuery.data.sourceUrl,
                   tags: bountyQuery.data.tags || '',
+                  status: bountyQuery.data.status,
                 }}
                 backTo={`/bounty/${bountyQuery.data.id}`}
                 onSubmit={(values) => {
@@ -63,6 +64,7 @@ const EditBountyPage: NextPageWithAuthAndLayout = () => {
                           : null,
                         sourceUrl: values.sourceUrl,
                         tags: values.tags,
+                        status: values.status,
                       },
                     },
                     {
