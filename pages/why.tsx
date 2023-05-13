@@ -86,6 +86,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
                 width={1024}
                 height={631}
                 object-fit="contain"
+                className="max-w-screen-md mx-auto"
                 unoptimized
               />
             </p>
@@ -417,6 +418,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
                 width={1024}
                 height={631}
                 object-fit="contain"
+                className="max-w-screen-md mx-auto"
                 unoptimized
               />
             </p>
@@ -757,6 +759,175 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
               lists three remedies that funders can implement and four that
               charity entrepreneurs can implement. Or that we can implement for
               them to establish coordination.
+            </p>
+          </Accordion.Panel>
+        </Accordion.Item>
+        <Heading2 className="my-10">Questions from bounty posters</Heading2>
+        <Accordion.Item value="what-is-a-bounty">
+          <Accordion.Control>What is a bounty?</Accordion.Control>
+          <Accordion.Panel>
+            <p className="my-3">
+              If you want a task done without having to find and hire a
+              particular person to do it, you can create a bounty: a promise of
+              a specified reward to anyone who can prove they’ve performed the
+              task you want completed. Impact Markets’ bounty board functions as
+              a directory of tasks, the completion of which is valued by members
+              of the EA, rationalist, and adjacent communities.
+            </p>
+          </Accordion.Panel>
+        </Accordion.Item>
+        <Accordion.Item value="what-can-i-use-bounties-for">
+          <Accordion.Control>What is a bounty?</Accordion.Control>
+          <Accordion.Panel>
+            <p className="my-3">
+              Any (legal) tasks you’d like completed! They don’t have to be
+              philanthropy-related. You can, for example, make a bounty
+              requesting that someone find you a long-term partner, to be paid
+              in the event of your marriage!
+            </p>
+          </Accordion.Panel>
+        </Accordion.Item>
+        <Accordion.Item value="can-i-post-a-bounty-without-making-it-fully-public">
+          <Accordion.Control>
+            Can I post a bounty without making it fully public?
+          </Accordion.Control>
+          <Accordion.Panel>
+            <p className="my-3">
+              Not at the moment. But if this is a feature that you would like to
+              use, please let us know, e.g., through the Intercom button in the
+              bottom right.
+            </p>
+          </Accordion.Panel>
+        </Accordion.Item>
+        <Accordion.Item value="how-should-i-structure-my-bounty">
+          <Accordion.Control>
+            How should I structure my bounty?
+          </Accordion.Control>
+          <Accordion.Panel>
+            <p className="my-3">
+              Describe the task you want performed and the amount you will pay
+              to whoever completes it. You can also specify different bounty
+              amounts. For example, $5 for the first date, and $50 for the
+              second, so that you’ll be paying proportionally more for
+              milestones that are proportionately more valuable to you. In such
+              a case, please list the highest bounty you offer as a bounty
+              amount and describe the details in the description, or else your
+              bounty may get sorted lower than it has to be. You can also pay
+              for referrals to people who can solve your task, but bear in mind
+              that this will make your bounty more expensive for you as two
+              people can easily collude to pretend-refer the other and split the
+              reward.
+            </p>
+          </Accordion.Panel>
+        </Accordion.Item>
+        <Accordion.Item value="what-if-more-than-one-person-completes-my-task">
+          <Accordion.Control>
+            What if more than one person completes my task?
+          </Accordion.Control>
+          <Accordion.Panel>
+            <p className="my-3">
+              If this is a concern, describe how you’ll handle this situation in
+              the text of your bounty. E.g. if you want to pay $5 to the first
+              person who can find you a date, state this in your bounty
+              description. To prevent a second person from wasting their time,
+              please update your bounty promptly on completion! You can also ask
+              people to commit to working on the bounty in a comment. Then you
+              can acknowledge that in a reply. Everyone can see these comments
+              and replies and steer clear of the bounty if it has been
+              preliminarily claimed like that.
+            </p>
+            <p className="my-3">
+              Your bounty is initially in the “active” status. When you see that
+              someone is working on it and you don’t want a second person to
+              work on it too, you can switch it to the “claimed” status. You can
+              reverse this any time if the first person fails to deliver.
+              Finally, you can switch your bounty to the “completed” status.
+            </p>
+          </Accordion.Panel>
+        </Accordion.Item>
+        <Accordion.Item value="can-i-post-a-bounty-for-0">
+          <Accordion.Control>
+            Can I post a bounty for $0? And why would I want to do this?
+          </Accordion.Control>
+          <Accordion.Panel>
+            <p className="my-3">
+              You can! The downside is, of course, no monetary incentive for
+              anyone to complete your request. But the bounty board functions as
+              a directory for, among other things, personal dating docs. We’d
+              like the platform to act as a Schelling point for community
+              members’ dating profiles, which would mean that someone looking
+              for a partner or matchmakers looking to pair people up might
+              peruse the “personal dating doc” tag, regardless of whether a
+              dollar amount is attached to the bounty.
+            </p>
+          </Accordion.Panel>
+        </Accordion.Item>
+        <Accordion.Item value="whats-a-personal-dating-doc">
+          <Accordion.Control>What’s a “personal dating doc”?</Accordion.Control>
+          <Accordion.Panel>
+            <p className="my-3">
+              A personal dating doc (or a “date me” doc) can take the form of a
+              dating profile that isn’t attached to a particular app, a
+              personals ad, or an application for prospective partners to fill
+              out. There’s no standardized format or method of dissemination,
+              but they’re often written in Google docs and the links sent around
+              to friends or posted on social media.
+            </p>
+          </Accordion.Panel>
+        </Accordion.Item>
+        <Accordion.Item value="how-does-this-related-to-charity-evaluation">
+          <Accordion.Control>
+            How does this relate to charity evaluation?
+          </Accordion.Control>
+          <Accordion.Panel>
+            <p className="my-3">
+              It doesn’t directly; the bounty board is a directory for the sorts
+              of people interested in effective altruism. The bounty board is
+              open for all sorts of bounties, but bounties that may be of
+              particular value to the world are altruistic ones – also known as
+              prizes.
+            </p>
+            <p className="my-3">
+              You would like to understand how transformer networks implement
+              addition? Post a sizable prize and motivate researchers to find
+              out! If a researcher then needs to fundraise for a teaching buyout
+              to work on your bounty, they can use our projects section.
+            </p>
+          </Accordion.Panel>
+        </Accordion.Item>
+        <Heading2 className="my-10">Questions from bounty hunters</Heading2>
+        <Accordion.Item value="how-can-i-trust-that-bounty-posters-will-pay-up">
+          <Accordion.Control>
+            How can I trust that bounty posters will pay up?
+          </Accordion.Control>
+          <Accordion.Panel>
+            <p className="my-3">
+              At the moment, the platform’s bounty board is purely a directory.
+              We intend to make transactions reported to us by both parties
+              visible on users’ pages, so that users looking to fulfill bounties
+              can see whether someone submitting a bounty has a track record of
+              honesty.
+            </p>
+          </Accordion.Panel>
+        </Accordion.Item>
+        <Accordion.Item value="how-do-i-know-that-someone-else-isnt-already-working-on-a-bounty">
+          <Accordion.Control>
+            How do I know that someone else isn’t already working on a bounty?
+          </Accordion.Control>
+          <Accordion.Panel>
+            <p className="my-3">
+              See the question{' '}
+              <Link
+                href="#mantine-r69-control-what-if-more-than-one-person-completes-my-task"
+                className="link"
+              >
+                What if more than one person completes my task?
+              </Link>{' '}
+              above. In short: Watch out for the bounty status (“active” vs.
+              “claimed”) and whether someone in the comments already reserved it
+              for themselves and is working on it. Of course there are also
+              plenty of bounties for which it makes sense for several people to
+              work on them.
             </p>
           </Accordion.Panel>
         </Accordion.Item>
