@@ -259,10 +259,9 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
           </Accordion.Control>
           <Accordion.Panel>
             <p className="my-3">
-              Each project has an end date. The project creator can edit this
-              date in case things take longer than planned, but at some point
-              the date will be in the past and the project will really be
-              complete. At this point it can apply to be evaluated.
+              Each project has a review date estimating when the project will be
+              ready for evaluation. The project creator can edit this date in
+              case things take longer than planned.
             </p>
             <p className="my-3">
               We want to get a number of evaluators on board to consider the
