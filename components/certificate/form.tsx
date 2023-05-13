@@ -135,16 +135,24 @@ export function CertificateForm({
         required
         className="my-6"
       />
-      <div className="mt-6">
+      <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
         <TextField
-          {...register('actionEnd', { required: true, valueAsDate: true })}
-          label="Review date"
-          description="When (just estimate) will the outputs of the project be ready for a review? (Optional)"
+          {...register('actionStart', { required: true, valueAsDate: true })}
+          label="Start of the work period"
+          description="When did you (or will you) start working on this?"
           info="You can edit it later."
           type="date"
           required
         />
-      </div>
+        <TextField
+          {...register('actionEnd', { required: true, valueAsDate: true })}
+          label="End of the work period"
+          description="… finish working on this?"
+          info="You can edit it later."
+          type="date"
+          required
+        />
+      </SimpleGrid>
       <div className="mt-6">
         <Controller
           name="content"
