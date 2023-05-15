@@ -2,7 +2,9 @@ import Link from 'next/link'
 import * as React from 'react'
 
 import { Banner } from '@/components/banner'
+import { colors } from '@/components/colors'
 import { LikeButton } from '@/components/likeButton'
+import { Status } from '@/components/status'
 import { classNames } from '@/lib/classnames'
 import { num } from '@/lib/text'
 import { InferQueryOutput } from '@/lib/trpc'
@@ -62,7 +64,9 @@ function Left({ bounty }: SummaryProps) {
             </span>
             {bounty.title}
           </Heading2>
-          <Heading2>{bounty.status}</Heading2>
+          <div className="flex">
+            <Status color={colors[bounty.status]} status={bounty.status} />
+          </div>
         </Link>
         <Date
           date={bounty.deadline || bounty.createdAt}
