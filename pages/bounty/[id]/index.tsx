@@ -8,6 +8,7 @@ import { Avatar } from '@/components/avatar'
 import { Banner } from '@/components/banner'
 import { Menu } from '@/components/bounty/menu'
 import { TAGS } from '@/components/bounty/tags'
+import { colors } from '@/components/colors'
 import { AddCommentForm } from '@/components/comment/addCommentForm'
 import { Comment } from '@/components/comment/comment'
 import { CommentButton } from '@/components/commentButton'
@@ -16,6 +17,7 @@ import { Heading1 } from '@/components/heading1'
 import { HtmlView } from '@/components/htmlView'
 import { Layout } from '@/components/layout'
 import { LikeButton } from '@/components/likeButton'
+import { Status } from '@/components/status'
 import { Tags } from '@/components/tags'
 import { num } from '@/lib/text'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
@@ -104,7 +106,6 @@ function BountyPage({ bountyId }: { bountyId: string }) {
     }
     const isUserAdmin = session?.user.role === 'ADMIN'
     const bountyBelongsToUser = bounty.author.id === session?.user.id
-    const date = bounty.createdAt.toDateString()
 
     return (
       <>
@@ -130,13 +131,15 @@ function BountyPage({ bountyId }: { bountyId: string }) {
                   {bounty.size ? `$${num(bounty.size)}: ` : ''}
                 </span>
                 {bounty.title}
-                <div>{bounty.status}</div>
               </Heading1>
               <Menu
                 queryData={bounty}
                 isUserAdmin={isUserAdmin}
                 belongsToUser={bountyBelongsToUser}
               />
+            </div>
+            <div className="flex">
+              <Status color={colors[bounty.status]} status={bounty.status} />
             </div>
             <div className="flex">
               {bounty.deadline ? (
