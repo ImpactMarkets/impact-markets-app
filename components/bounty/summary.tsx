@@ -62,6 +62,7 @@ function Left({ bounty }: SummaryProps) {
             </span>
             {bounty.title}
           </Heading2>
+          <Heading2>{bounty.status}</Heading2>
         </Link>
         <Date
           date={bounty.deadline || bounty.createdAt}

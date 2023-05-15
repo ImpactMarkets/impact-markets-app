@@ -139,7 +139,9 @@ function BountyPage({ bountyId }: { bountyId: string }) {
               />
             </div>
             <div className="flex">
-              <Date date={bounty.createdAt} dateLabel={'Created'} />
+              {bounty.deadline ? (
+                <Date date={bounty.createdAt} dateLabel={'Created'} />
+              ) : null}
             </div>
             <div className="flex justify-between my-6">
               <AuthorWithDate
