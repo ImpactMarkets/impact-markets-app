@@ -110,6 +110,7 @@ function BountyPage({ bountyId }: { bountyId: string }) {
       <>
         <Head>
           <title>
+            {bounty.status === 'CLOSED' ? 'CLOSED ' : null}$
             {bounty.size ? num(bounty.size) + ': ' : ''}
             {bounty.title} – Impact Markets
           </title>
@@ -129,6 +130,7 @@ function BountyPage({ bountyId }: { bountyId: string }) {
                   {bounty.size ? `$${num(bounty.size)}: ` : ''}
                 </span>
                 {bounty.title}
+                <div>{bounty.status}</div>
               </Heading1>
               <Menu
                 queryData={bounty}
@@ -138,7 +140,6 @@ function BountyPage({ bountyId }: { bountyId: string }) {
             </div>
             <div className="flex">
               <Date date={bounty.createdAt} dateLabel={'Created'} />
-              <div>{bounty.status}</div>
             </div>
             <div className="flex justify-between my-6">
               <AuthorWithDate
