@@ -11,6 +11,7 @@ import { TAGS } from '@/components/bounty/tags'
 import { AddCommentForm } from '@/components/comment/addCommentForm'
 import { Comment } from '@/components/comment/comment'
 import { CommentButton } from '@/components/commentButton'
+import { Date } from '@/components/date'
 import { Heading1 } from '@/components/heading1'
 import { HtmlView } from '@/components/htmlView'
 import { Layout } from '@/components/layout'
@@ -103,6 +104,7 @@ function BountyPage({ bountyId }: { bountyId: string }) {
     }
     const isUserAdmin = session?.user.role === 'ADMIN'
     const bountyBelongsToUser = bounty.author.id === session?.user.id
+    const date = bounty.createdAt.toDateString()
 
     return (
       <>
@@ -112,7 +114,6 @@ function BountyPage({ bountyId }: { bountyId: string }) {
             {bounty.title} – Impact Markets
           </title>
         </Head>
-
         <div className="max-w-screen-lg mx-auto">
           <div className="pb-12">
             {bounty.hidden && (
@@ -135,12 +136,17 @@ function BountyPage({ bountyId }: { bountyId: string }) {
                 belongsToUser={bountyBelongsToUser}
               />
             </div>
+            <div className="flex">
+              <Date date={bounty.createdAt} dateLabel={'Created'} />
+              <div>{bounty.status}</div>
+            </div>
             <div className="flex justify-between my-6">
               <AuthorWithDate
                 author={bounty.author}
                 date={bounty.deadline || bounty.createdAt}
                 dateLabel={bounty.deadline ? 'Deadline' : 'Created'}
               />
+
               {bounty.sourceUrl && (
                 <a
                   className="text-sm text-secondary inline-block max-w-60 whitespace-nowrap overflow-hidden overflow-ellipsis"
