@@ -231,14 +231,17 @@ export const projectRouter = createProtectedRouter()
         donationTotal: Prisma.Decimal
         donationCount: number
       }[] = await ctx.prisma.$queryRaw`
-         SELECT sum(amount) as "donationTotal", count(1) as "donationCount"
-         FROM "Donation"
-         WHERE "projectId" = ${id} and "state" = 'CONFIRMED'
+        SELECT
+            COALESCE(SUM(amount), 0) AS "donationTotal",
+            count(1) AS "donationCount"
+        FROM
+            "Donation"
+        WHERE
+            "projectId" = ${id}
+            AND "state" = 'CONFIRMED'
       `
-      const { donationTotal = new Prisma.Decimal(0), donationCount = 0 } =
-        result ? result[0] : {}
 
-      return { ...project, donationTotal, donationCount }
+      return { ...project, ...result[0] }
     },
   })
   .query('search', {
