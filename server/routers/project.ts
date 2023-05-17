@@ -227,7 +227,18 @@ export const projectRouter = createProtectedRouter()
         })
       }
 
-      return project
+      const result: {
+        donationTotal: Prisma.Decimal
+        donationCount: number
+      }[] = await ctx.prisma.$queryRaw`
+         SELECT sum(amount) as "donationTotal", count(1) as "donationCount"
+         FROM "Donation"
+         WHERE "projectId" = ${id} and "state" = 'CONFIRMED'
+      `
+      const { donationTotal = new Prisma.Decimal(0), donationCount = 0 } =
+        result ? result[0] : {}
+
+      return { ...project, donationTotal, donationCount }
     },
   })
   .query('search', {
