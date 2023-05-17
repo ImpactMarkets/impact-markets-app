@@ -48,10 +48,7 @@ export function OutgoingDonations({
 
   const addDonationMutation = trpc.useMutation('donation.add', {
     onSuccess: () => {
-      utils.invalidateQueries([
-        'donation.feed',
-        { projectId: project.id, userId: session!.user.id },
-      ])
+      utils.invalidateQueries(['donation.feed'])
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
