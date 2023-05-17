@@ -110,9 +110,7 @@ async function emitNewDonationEvent(
         objectId: project.id,
         objectType: 'project',
         objectTitle: project.title,
-        text: `**${user.name}**’s **$${num(
-          amount
-        )}** donation is waiting for your confirmation`,
+        text: `**${user.name}** registered a donation of **$${num(amount)}**`,
       },
       status: EventStatus.PENDING,
       recipient: {
