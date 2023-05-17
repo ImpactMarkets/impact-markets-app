@@ -115,8 +115,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
           <div className="pb-12">
             {project.hidden && (
               <Banner className="mb-6">
-                This project will remain hidden until it’s published by the
-                curators.
+                This project was hidden by the curators.
               </Banner>
             )}
 

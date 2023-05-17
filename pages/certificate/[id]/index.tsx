@@ -118,8 +118,7 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
           <div className="pb-12">
             {certificate.hidden && (
               <Banner className="mb-6">
-                This project will remain hidden until it’s published by the
-                curators.
+                This project was hidden by the curators.
               </Banner>
             )}
             {!certificate.author.proofUrl && (
