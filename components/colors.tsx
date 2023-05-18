@@ -10,4 +10,7 @@ export const colors: Colors = {
   other: '#f2b600',
   community: '#a18Bf5',
   location: '#fd812d',
+  ACTIVE: '#4fcdf7',
+  CLAIMED: '#f2b600',
+  CLOSED: '#fd812d',
 }

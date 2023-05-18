@@ -8,15 +8,18 @@ import { Avatar } from '@/components/avatar'
 import { Banner } from '@/components/banner'
 import { Menu } from '@/components/bounty/menu'
 import { TAGS } from '@/components/bounty/tags'
+import { colors } from '@/components/colors'
 import { AddCommentForm } from '@/components/comment/addCommentForm'
 import { Comment } from '@/components/comment/comment'
 import { CommentButton } from '@/components/commentButton'
+import { Date } from '@/components/date'
 import { Heading1 } from '@/components/heading1'
 import { HtmlView } from '@/components/htmlView'
 import { Layout } from '@/components/layout'
 import { LikeButton } from '@/components/likeButton'
+import { Status } from '@/components/status'
 import { Tags } from '@/components/tags'
-import { num } from '@/lib/text'
+import { capitalize, num } from '@/lib/text'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { LoadingOverlay, Tabs } from '@mantine/core'
@@ -108,11 +111,13 @@ function BountyPage({ bountyId }: { bountyId: string }) {
       <>
         <Head>
           <title>
-            {bounty.size ? num(bounty.size) + ': ' : ''}
+            {bounty.status === 'CLOSED' ? '[Closed] ' : null}
+            {bounty.status !== 'CLOSED' && bounty.size
+              ? '$' + num(bounty.size) + ': '
+              : ''}
             {bounty.title} – Impact Markets
           </title>
         </Head>
-
         <div className="max-w-screen-lg mx-auto">
           <div className="pb-12">
             {bounty.hidden && (
@@ -124,7 +129,10 @@ function BountyPage({ bountyId }: { bountyId: string }) {
             <div className="flex items-center justify-between gap-4">
               <Heading1>
                 <span className="text-gray-500">
-                  {bounty.size ? `$${num(bounty.size)}: ` : ''}
+                  {bounty.status === 'CLOSED' ? '[Closed] ' : null}
+                  {bounty.status !== 'CLOSED' && bounty.size
+                    ? `$${num(bounty.size)}: `
+                    : ''}
                 </span>
                 {bounty.title}
               </Heading1>
@@ -134,23 +142,35 @@ function BountyPage({ bountyId }: { bountyId: string }) {
                 belongsToUser={bountyBelongsToUser}
               />
             </div>
+            <div className="flex">
+              {bounty.deadline ? (
+                <Date date={bounty.createdAt} dateLabel="Created" />
+              ) : null}
+            </div>
             <div className="flex justify-between my-6">
               <AuthorWithDate
                 author={bounty.author}
                 date={bounty.deadline || bounty.createdAt}
                 dateLabel={bounty.deadline ? 'Deadline' : 'Created'}
               />
-              {bounty.sourceUrl && (
-                <a
-                  className="text-sm text-secondary inline-block max-w-60 whitespace-nowrap overflow-hidden overflow-ellipsis"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={bounty.sourceUrl}
-                >
-                  <IconExternalLink className="inline h-5 align-text-bottom" />{' '}
-                  More information
-                </a>
-              )}
+
+              <div>
+                {bounty.sourceUrl && (
+                  <a
+                    className="text-sm text-secondary inline-block max-w-60 whitespace-nowrap overflow-hidden overflow-ellipsis"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={bounty.sourceUrl}
+                  >
+                    <IconExternalLink className="inline h-5 align-text-bottom" />{' '}
+                    More information
+                  </a>
+                )}
+                <Status
+                  color={colors[bounty.status]}
+                  status={capitalize(bounty.status.toLowerCase())}
+                />
+              </div>
             </div>
             <div className="flex my-6">
               <Tags queryData={bounty} tags={TAGS} />

@@ -40,7 +40,7 @@ export const IMSelect = React.forwardRef<HTMLInputElement, IMTextFieldProps>(
               fontSize: 12,
             },
             'div > input': {
-              padding: 21,
+              padding: 17,
               fontSize: 14,
               lineHeight: '0.2rem',
               height: 16,

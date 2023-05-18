@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useIntercom } from 'react-use-intercom'
+import { z } from 'zod'
 
 import { TAGS } from '@/components/bounty/tags'
 import { Button } from '@/components/button'
@@ -8,10 +9,12 @@ import { ButtonLink } from '@/components/buttonLink'
 import { MarkdownIcon } from '@/components/icons'
 import { MarkdownEditor } from '@/components/markdownEditor'
 import { TextField } from '@/components/textField'
+import { capitalize } from '@/lib/text'
 import { SimpleGrid } from '@mantine/core'
 import { Prisma } from '@prisma/client'
 
 import { IMMultiSelect } from '../multiSelect'
+import { IMSelect } from '../select'
 
 type FormData = {
   id: string
@@ -21,6 +24,7 @@ type FormData = {
   deadline?: string
   sourceUrl: string
   tags: string
+  status: 'ACTIVE' | 'CLAIMED' | 'CLOSED'
 }
 
 type FormProps = {
@@ -75,31 +79,52 @@ export const Form = ({
         autoFocus
         required
       />
-      <TextField
-        {...register('sourceUrl')}
-        label="Source URL"
-        description="Where can your clients find more information on your bounty? (Optional)"
-        placeholder="https://bit.ly/my-dating-doc"
-        className="my-6"
-      />
       <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
         <TextField
-          {...register('size', {})}
-          label="Bounty amount"
-          description="What is your maximum bounty payment? (Optional)"
-          rightSection="USD"
-          classNames={{ rightSection: 'w-14' }}
-          type="number"
-          step="0.01"
-          max={1e30}
+          {...register('sourceUrl')}
+          label="Source URL"
+          description="Where can your clients find more information on your bounty? (Optional)"
+          placeholder="https://bit.ly/my-dating-doc"
         />
-        <TextField
-          {...register('deadline', { valueAsDate: true })}
-          label="Deadline"
-          description="Will your bounty expire? (Optional)"
-          type="date"
+        <IMSelect
+          {...register('status')}
+          label="Status"
+          description="Has anyone claimed or completed your bounty?"
+          defaultValue="ACTIVE"
+          data={['ACTIVE', 'CLAIMED', 'CLOSED'].map((status) => ({
+            value: status,
+            label: capitalize(status.toLowerCase()),
+          }))}
+          disabled={isNew}
+          className={isNew ? 'opacity-50' : undefined}
+          onChange={(value) =>
+            setValue(
+              'status',
+              z.enum(['ACTIVE', 'CLAIMED', 'CLOSED']).parse(value)
+            )
+          }
         />
       </SimpleGrid>
+      <div className="mt-6">
+        <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
+          <TextField
+            {...register('size', {})}
+            label="Bounty amount"
+            description="What is your maximum bounty payment? (Optional)"
+            rightSection="USD"
+            classNames={{ rightSection: 'w-14' }}
+            type="number"
+            step="0.01"
+            max={1e30}
+          />
+          <TextField
+            {...register('deadline', { valueAsDate: true })}
+            label="Deadline"
+            description="Will your bounty expire? (Optional)"
+            type="date"
+          />
+        </SimpleGrid>
+      </div>
       <div className="mt-6">
         <IMMultiSelect
           {...register('tags')}
