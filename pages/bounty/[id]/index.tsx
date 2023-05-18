@@ -122,8 +122,7 @@ function BountyPage({ bountyId }: { bountyId: string }) {
           <div className="pb-12">
             {bounty.hidden && (
               <Banner className="mb-6">
-                This bounty will remain hidden until it’s published by the
-                curators.
+                This bounty was hidden by the curators.
               </Banner>
             )}
 
@@ -235,7 +234,7 @@ function BountyPage({ bountyId }: { bountyId: string }) {
                     ))}
                   </ul>
                 ) : (
-                  <p className="pb-6">No comments yet</p>
+                  <p className="pb-6 text-sm">No comments yet</p>
                 )}
                 {session && (
                   <div className="flex items-start gap-2 sm:gap-4">

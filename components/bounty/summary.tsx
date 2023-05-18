@@ -96,9 +96,7 @@ function Right({ bounty }: SummaryProps) {
 export const Summary = ({ bounty }: SummaryProps) => (
   <Card shadow="sm" p="lg" radius="md" withBorder>
     {bounty.hidden && (
-      <Banner className="mb-6">
-        This bounty will remain hidden until it’s published by the curators.
-      </Banner>
+      <Banner className="mb-6">This bounty was hidden by the curators.</Banner>
     )}
     <div
       className={classNames(

@@ -292,7 +292,7 @@ model Donation {
   amount    Decimal
   projectId String
   userId    String
-  state     DonationState @default(PENDING)
+  state     DonationState @default(CONFIRMED)
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
 

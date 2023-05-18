@@ -6,7 +6,7 @@ import { num } from '@/lib/text'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
 
 import { Author } from '../author'
-import { Button } from '../button'
+import { ButtonLink } from '../buttonLink'
 
 export function IncomingDonations({
   project,
@@ -22,22 +22,12 @@ export function IncomingDonations({
       'donation.feed',
       {
         projectId: project.id,
-        state: 'PENDING',
       },
     ])
     donations = donationsQuery.data ?? []
   }
 
   const cancelDonationMutation = trpc.useMutation('donation.cancel', {
-    onSuccess: () => {
-      utils.invalidateQueries(['donation.feed'])
-    },
-    onError: (error) => {
-      toast.error(<pre>{error.message}</pre>)
-    },
-  })
-
-  const confirmDonationMutation = trpc.useMutation('donation.confirm', {
     onSuccess: () => {
       utils.invalidateQueries(['donation.feed'])
     },
@@ -55,13 +45,13 @@ export function IncomingDonations({
   }
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center max-h-96 overflow-y-auto">
       <table className="text-sm">
         <thead>
           <tr>
             <th className="text-left w-64">Donor</th>
-            <th className="text-left w-32">Date</th>
-            <th className="text-right w-32">Amount</th>
+            <th className="text-right w-24">Date</th>
+            <th className="text-right w-24">Amount</th>
             <th className="text-left w-64"></th>
           </tr>
         </thead>
@@ -72,24 +62,26 @@ export function IncomingDonations({
               <td className="text-left">
                 <Author author={donation.user} />
               </td>
-              <td className="text-left">
+              <td className="text-right">
                 {donation.time.toISOString().slice(0, 10)}
               </td>
               <td className="text-right">${num(donation.amount)}</td>
-              <td className="text-left pl-2">
-                <Button
-                  type="button"
-                  onClick={() => cancelDonationMutation.mutate(donation.id)}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  className="ml-1"
-                  type="button"
-                  onClick={() => confirmDonationMutation.mutate(donation.id)}
-                >
-                  Confirm
-                </Button>
+              <td className="text-left pl-8">
+                {donation.state === 'CONFIRMED' ? (
+                  <ButtonLink
+                    href="#"
+                    type="button"
+                    className="!h-5"
+                    variant="secondary"
+                    onClick={() => cancelDonationMutation.mutate(donation.id)}
+                  >
+                    Veto
+                  </ButtonLink>
+                ) : donation.state === 'REJECTED' ? (
+                  'Deleted or vetoed'
+                ) : (
+                  ''
+                )}
               </td>
             </tr>
           ))}

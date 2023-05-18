@@ -1,0 +1,15 @@
+-- AlterTable
+ALTER TABLE "Comment"
+    ALTER COLUMN "updatedAt" DROP DEFAULT;
+
+-- AlterTable
+ALTER TABLE "Donation"
+    ALTER COLUMN "state" SET DEFAULT 'CONFIRMED',
+    ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP,
+    ALTER COLUMN "updatedAt" DROP DEFAULT;
+
+-- AlterTable
+ALTER TABLE "User"
+    ALTER COLUMN "createdAt" SET DEFAULT CURRENT_TIMESTAMP,
+    ALTER COLUMN "updatedAt" DROP DEFAULT;
+
