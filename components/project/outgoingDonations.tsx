@@ -8,6 +8,7 @@ import { InferQueryOutput, trpc } from '@/lib/trpc'
 import { Prisma } from '@prisma/client'
 
 import { Button } from '../button'
+import { ButtonLink } from '../buttonLink'
 import { TextField } from '../textField'
 
 type AddDonationFormData = {
@@ -47,10 +48,7 @@ export function OutgoingDonations({
 
   const addDonationMutation = trpc.useMutation('donation.add', {
     onSuccess: () => {
-      utils.invalidateQueries([
-        'donation.feed',
-        { projectId: project.id, userId: session!.user.id },
-      ])
+      utils.invalidateQueries(['donation.feed'])
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
@@ -81,7 +79,10 @@ export function OutgoingDonations({
         You can register all your donations here, regardless how long ago you
         made them and whether the project still accepts donations.
       </div>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="max-h-96 overflow-y-auto"
+      >
         <table>
           <thead>
             <tr>
@@ -124,27 +125,27 @@ export function OutgoingDonations({
               </td>
             </tr>
             {donations?.map((donation) => (
-              <tr key={donation.id}>
+              <tr key={donation.id} className="text-sm">
                 <td className="text-right pr-3">
                   {donation.time.toISOString().slice(0, 10)}
                 </td>
                 <td className="text-right pr-3">${num(donation.amount)}</td>
                 <td className="text-left pl-2">
                   {donation.user.id === session!.user.id &&
-                    (donation.state === 'PENDING' ? (
-                      <Button
-                        type="button"
+                    (donation.state === 'CONFIRMED' ? (
+                      <ButtonLink
+                        href="#"
                         variant="secondary"
+                        className="!h-5"
+                        disabled={addDonationMutation.isLoading}
                         onClick={() =>
                           cancelDonationMutation.mutate(donation.id)
                         }
                       >
-                        Cancel
-                      </Button>
+                        Delete
+                      </ButtonLink>
                     ) : donation.state === 'REJECTED' ? (
-                      'Canceled'
-                    ) : donation.state === 'CONFIRMED' ? (
-                      'Confirmed'
+                      'Deleted or vetoed'
                     ) : (
                       ''
                     ))}

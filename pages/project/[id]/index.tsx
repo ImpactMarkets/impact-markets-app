@@ -18,10 +18,11 @@ import { Menu } from '@/components/project/menu'
 import { OutgoingDonations } from '@/components/project/outgoingDonations'
 import { TAGS } from '@/components/project/tags'
 import { Tags } from '@/components/tags'
+import { num } from '@/lib/text'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { LoadingOverlay, Tabs } from '@mantine/core'
-import { IconCreditCard, IconCreditCardOff } from '@tabler/icons'
+import { IconCreditCard, IconCreditCardOff, IconMoneybag } from '@tabler/icons'
 
 // TODO: Maybe this could be made into a generic component ?
 const ProjectPageWrapper: NextPageWithAuthAndLayout = () => {
@@ -115,8 +116,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
           <div className="pb-12">
             {project.hidden && (
               <Banner className="mb-6">
-                This project will remain hidden until it’s published by the
-                curators.
+                This project was hidden by the curators.
               </Banner>
             )}
 
@@ -134,21 +134,29 @@ function ProjectPage({ projectId }: { projectId: string }) {
                 date={project.createdAt}
                 dateLabel="Created"
               />
-              {project.paymentUrl ? (
-                <a
-                  className="text-sm text-secondary inline-block max-w-60 whitespace-nowrap overflow-hidden overflow-ellipsis"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={project.paymentUrl}
-                >
-                  <IconCreditCard className="inline" /> Accepting donations
-                </a>
-              ) : (
-                <span className="text-sm text-secondary whitespace-nowrap">
-                  <IconCreditCardOff className="inline" /> Not accepting
-                  donations
-                </span>
-              )}
+              <div>
+                <div className="text-sm text-secondary whitespace-nowrap">
+                  <IconMoneybag className="inline" /> $
+                  {num(project.donationTotal)} in{' '}
+                  {project.donationCount.toLocaleString()}{' '}
+                  {project.donationCount === 1 ? 'donation' : 'donations'}
+                </div>
+                {project.paymentUrl ? (
+                  <a
+                    className="text-sm text-secondary inline-block max-w-60 whitespace-nowrap overflow-hidden overflow-ellipsis"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={project.paymentUrl}
+                  >
+                    <IconCreditCard className="inline" /> Accepting donations
+                  </a>
+                ) : (
+                  <span className="text-sm text-secondary whitespace-nowrap">
+                    <IconCreditCardOff className="inline" /> Not accepting new
+                    donations
+                  </span>
+                )}
+              </div>
             </div>
             <div className="flex my-6">
               <Tags queryData={project} tags={TAGS} />
@@ -245,7 +253,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
                     ))}
                   </ul>
                 ) : (
-                  <p className="pb-6">No comments yet</p>
+                  <p className="pb-6 text-sm">No comments yet</p>
                 )}
                 {session && (
                   <div className="flex items-start gap-2 sm:gap-4">

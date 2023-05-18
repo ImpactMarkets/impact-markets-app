@@ -83,9 +83,7 @@ function Right({ project }: ProjectSummaryProps) {
 export const ProjectSummary = ({ project }: ProjectSummaryProps) => (
   <Card shadow="sm" p="lg" radius="md" withBorder>
     {project.hidden && (
-      <Banner className="mb-6">
-        This project will remain hidden until it’s published by the curators.
-      </Banner>
+      <Banner className="mb-6">This project was hidden by the curators.</Banner>
     )}
     <div
       className={classNames(
