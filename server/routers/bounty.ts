@@ -271,6 +271,7 @@ export const bountyRouter = createProtectedRouter()
           sourceUrl: input.sourceUrl,
           deadline: input.deadline,
           tags: input.tags,
+          status: input.status,
           author: {
             connect: {
               id: ctx.session!.user.id,
