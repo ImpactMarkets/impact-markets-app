@@ -2,11 +2,9 @@ import Link from 'next/link'
 import * as React from 'react'
 
 import { Banner } from '@/components/banner'
-import { colors } from '@/components/colors'
 import { LikeButton } from '@/components/likeButton'
-import { Status } from '@/components/status'
 import { classNames } from '@/lib/classnames'
-import { num } from '@/lib/text'
+import { capitalize, num } from '@/lib/text'
 import { InferQueryOutput } from '@/lib/trpc'
 import { Card } from '@mantine/core'
 
@@ -60,18 +58,21 @@ function Left({ bounty }: SummaryProps) {
         <Link href={`/bounty/${bounty.id}`}>
           <Heading2 className="cursor-pointer w-[95%] whitespace-nowrap text-ellipsis overflow-hidden">
             <span className="text-gray-500">
-              {bounty.size ? `$${num(bounty.size)}: ` : ''}
+              {bounty.status === 'CLOSED' ? '[Closed] ' : null}
+              {bounty.status !== 'CLOSED' && bounty.size
+                ? '$' + num(bounty.size) + ': '
+                : ''}
             </span>
             {bounty.title}
           </Heading2>
-          <div className="flex">
-            <Status color={colors[bounty.status]} status={bounty.status} />
-          </div>
         </Link>
         <Date
           date={bounty.deadline || bounty.createdAt}
           dateLabel={bounty.deadline ? 'Deadline' : 'Created'}
-        />
+        />{' '}
+        <span className="text-gray-500 text-sm">
+          · {capitalize(bounty.status.toLowerCase())}
+        </span>
       </div>
       <div className="flex items-center gap-12 mt-6">{/* Donor chart */}</div>
     </div>
