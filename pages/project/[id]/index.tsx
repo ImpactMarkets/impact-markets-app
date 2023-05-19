@@ -103,7 +103,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
       // Redirect from old to new project URLs
       router.push('/project/' + project.id)
     }
-    const isUserAdmin = session?.user.role === 'ADMIN'
+    const isAdmin = session?.user.role === 'ADMIN'
     const projectBelongsToUser = project.author.id === session?.user.id
 
     return (
@@ -124,7 +124,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
               <Heading1>{project.title}</Heading1>
               <Menu
                 queryData={project}
-                isUserAdmin={isUserAdmin}
+                isUserAdmin={isAdmin}
                 belongsToUser={projectBelongsToUser}
               />
             </div>
@@ -175,7 +175,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
                       Register a donation
                     </Tabs.Tab>
                   )}
-                  {projectBelongsToUser && (
+                  {(isAdmin || projectBelongsToUser) && (
                     <Tabs.Tab value="incomingDonations">
                       Incoming donations
                     </Tabs.Tab>
@@ -187,7 +187,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
                     <OutgoingDonations project={project} />
                   </Tabs.Panel>
                 )}
-                {projectBelongsToUser && (
+                {(isAdmin || projectBelongsToUser) && (
                   <Tabs.Panel value="incomingDonations" pt="xs">
                     <IncomingDonations project={project} />
                   </Tabs.Panel>

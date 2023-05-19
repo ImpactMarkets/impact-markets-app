@@ -21,11 +21,14 @@ export const donationRouter = createProtectedRouter()
           projectId: input.projectId,
           userId: input.userId || undefined,
           state: input.state || undefined,
-          OR: [
-            { state: 'CONFIRMED' },
-            { userId: ctx.session?.user.id },
-            { project: { authorId: ctx.session?.user.id } },
-          ],
+          OR:
+            ctx.session?.user.role === 'ADMIN'
+              ? undefined
+              : [
+                  { state: 'CONFIRMED' },
+                  { userId: ctx.session?.user.id },
+                  { project: { authorId: ctx.session?.user.id } },
+                ],
         },
         select: {
           id: true,
