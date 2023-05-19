@@ -776,7 +776,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
           </Accordion.Panel>
         </Accordion.Item>
         <Accordion.Item value="what-can-i-use-bounties-for">
-          <Accordion.Control>What is a bounty?</Accordion.Control>
+          <Accordion.Control>What can I use bounties for?</Accordion.Control>
           <Accordion.Panel>
             <p className="my-3">
               Any (legal) tasks you’d like completed! They don’t have to be
