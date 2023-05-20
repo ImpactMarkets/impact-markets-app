@@ -63,6 +63,7 @@ type EditFormData = {
   title: string | null
   proofUrl: string | null
   paymentUrl: string | null
+  contact: string | null
 }
 
 function EditProfileDialog({
@@ -80,6 +81,7 @@ function EditProfileDialog({
       title: user.title,
       proofUrl: user.proofUrl,
       paymentUrl: user.paymentUrl,
+      contact: user.contact,
     },
   })
   const router = useRouter()
@@ -110,6 +112,7 @@ function EditProfileDialog({
         title: data.title || '',
         proofUrl: data.proofUrl || '',
         paymentUrl: data.paymentUrl || '',
+        contact: data.contact || '',
       },
       {
         onSuccess: () => onClose(),
@@ -162,6 +165,12 @@ function EditProfileDialog({
               label="Payment link"
               placeholder="https://ko-fi.com/velvetillumnation"
               description="A page for people can pay you (Stripe, PayPal, Ko-Fi, etc.). Only needed for certificates."
+            />
+            <TextField
+              {...register('contact')}
+              label="Contact"
+              description="(this information is public)"
+              placeholder="hi@impactmarkets.io"
             />
           </div>
           <DialogCloseButton onClick={handleClose} />
