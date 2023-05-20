@@ -24,7 +24,12 @@ import { uploadImage } from '@/lib/cloudinary'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
 import { Tooltip } from '@mantine/core'
 import { Button as MantineButton } from '@mantine/core'
-import { IconAlertCircle, IconCreditCard, IconShieldLock } from '@tabler/icons'
+import {
+  IconAlertCircle,
+  IconCreditCard,
+  IconMail,
+  IconShieldLock,
+} from '@tabler/icons'
 
 function DotPattern() {
   return (
@@ -169,7 +174,7 @@ function EditProfileDialog({
             <TextField
               {...register('contact')}
               label="Contact"
-              description="(this information is public)"
+              description="This information is public."
               placeholder="hi@impactmarkets.io"
             />
           </div>
@@ -404,6 +409,11 @@ export function ProfileInfo({
                 >
                   <IconCreditCard className="inline" /> {user.paymentUrl}
                 </a>
+              )}
+              {user.contact && (
+                <div className="text-lg text-secondary inline-block w-60 whitespace-nowrap overflow-hidden overflow-ellipsis">
+                  <IconMail className="inline" /> {user.contact}
+                </div>
               )}
             </div>
           </div>
