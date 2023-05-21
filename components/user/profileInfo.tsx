@@ -63,6 +63,36 @@ function DotPattern() {
   )
 }
 
+interface ContactLinkProps {
+  contact: string | null
+}
+
+function ContactLink({ contact }: ContactLinkProps) {
+  if (!contact) return null
+
+  const isLink = contact.startsWith('http://') || contact.startsWith('https://')
+  const isEmail =
+    contact.includes('@') && contact.includes('.') && !contact.startsWith('@')
+
+  return (
+    <div className="text-lg text-secondary inline-block w-60 whitespace-nowrap overflow-hidden overflow-ellipsis">
+      {isLink ? (
+        <a href={contact} target="_blank" rel="noreferrer">
+          <IconMail className="inline" /> {contact}
+        </a>
+      ) : isEmail ? (
+        <a href={`mailto:${contact}`}>
+          <IconMail className="inline" /> {contact}
+        </a>
+      ) : (
+        <>
+          <IconMail className="inline" /> {contact}
+        </>
+      )}
+    </div>
+  )
+}
+
 type EditFormData = {
   name: string
   title: string | null
@@ -410,11 +440,7 @@ export function ProfileInfo({
                   <IconCreditCard className="inline" /> {user.paymentUrl}
                 </a>
               )}
-              {user.contact && (
-                <div className="text-lg text-secondary inline-block w-60 whitespace-nowrap overflow-hidden overflow-ellipsis">
-                  <IconMail className="inline" /> {user.contact}
-                </div>
-              )}
+              <ContactLink contact={user.contact} />
             </div>
           </div>
 
