@@ -137,6 +137,8 @@ export const bountyRouter = createProtectedRouter()
               paymentUrl: true,
               proofUrl: true,
               contact: true,
+              bio: true,
+              bioHtml: true,
             },
           },
           likedBy: {

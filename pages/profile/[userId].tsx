@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 
 import { Layout } from '@/components/layout'
+import { Bio } from '@/components/user/bio'
 import { CertificateFeed } from '@/components/user/certificateFeed'
 import { ProfileInfo } from '@/components/user/profileInfo'
 import { TransactionFeed } from '@/components/user/transactionFeed'
@@ -35,12 +36,17 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
         <ProfileInfo user={profileQuery.data} />
         <Tabs defaultValue="certificates">
           <Tabs.List>
+            <Tabs.Tab value="bio">Bio</Tabs.Tab>
             <Tabs.Tab value="certificates">Projects</Tabs.Tab>
             <Tabs.Tab value="transactions">Transactions</Tabs.Tab>
             {router.query.userId === session?.user.id ? (
               <Tabs.Tab value="preferences">Preferences</Tabs.Tab>
             ) : null}
           </Tabs.List>
+
+          <Tabs.Panel value="bio" pt="xs">
+            <Bio user={profileQuery.data} />
+          </Tabs.Panel>
 
           <Tabs.Panel value="certificates" pt="xs">
             <CertificateFeed user={profileQuery.data} />

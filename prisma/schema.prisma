@@ -104,6 +104,8 @@ model User {
   proofUrl      String    @default("")
   paymentUrl    String    @default("")
   contact       String    @default("")
+  bio           String    @default("")
+  bioHtml       String    @default("")
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 

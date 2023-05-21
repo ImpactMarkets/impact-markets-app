@@ -99,6 +99,8 @@ type EditFormData = {
   proofUrl: string | null
   paymentUrl: string | null
   contact: string | null
+  bio: string | null
+  bioHtml: string | null
 }
 
 function EditProfileDialog({
@@ -117,6 +119,8 @@ function EditProfileDialog({
       proofUrl: user.proofUrl,
       paymentUrl: user.paymentUrl,
       contact: user.contact,
+      bio: user.bio,
+      bioHtml: user.bioHtml,
     },
   })
   const router = useRouter()

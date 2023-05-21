@@ -163,6 +163,8 @@ export const certificateRouter = createProtectedRouter()
               paymentUrl: true,
               proofUrl: true,
               contact: true,
+              bio: true,
+              bioHtml: true,
             },
           },
           issuers: {
