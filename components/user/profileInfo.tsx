@@ -22,7 +22,6 @@ import { TextField } from '@/components/textField'
 import { browserEnv } from '@/env/browser'
 import { uploadImage } from '@/lib/cloudinary'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
-import { Textarea } from '@mantine/core'
 import { Tooltip } from '@mantine/core'
 import { Button as MantineButton } from '@mantine/core'
 import {

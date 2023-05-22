@@ -36,22 +36,23 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
         <ProfileInfo user={profileQuery.data} />
         <Tabs defaultValue="certificates">
           <Tabs.List>
-            <Tabs.Tab value="bio">Bio</Tabs.Tab>
             <Tabs.Tab value="certificates">Projects</Tabs.Tab>
+            {profileQuery.data.bio && <Tabs.Tab value="bio">Bio</Tabs.Tab>}
             <Tabs.Tab value="transactions">Transactions</Tabs.Tab>
             {router.query.userId === session?.user.id ? (
               <Tabs.Tab value="preferences">Preferences</Tabs.Tab>
             ) : null}
           </Tabs.List>
 
-          <Tabs.Panel value="bio" pt="xs">
-            <Bio user={profileQuery.data} />
-          </Tabs.Panel>
-
           <Tabs.Panel value="certificates" pt="xs">
             <CertificateFeed user={profileQuery.data} />
           </Tabs.Panel>
 
+          {profileQuery.data.bio && (
+            <Tabs.Panel value="bio" pt="xs">
+              <Bio user={profileQuery.data} />
+            </Tabs.Panel>
+          )}
           <Tabs.Panel value="transactions" pt="xs">
             <TransactionFeed user={profileQuery.data} />
           </Tabs.Panel>
