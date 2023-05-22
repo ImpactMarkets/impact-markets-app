@@ -148,7 +148,6 @@ export const projectRouter = createProtectedRouter()
               proofUrl: true,
               contact: true,
               bio: true,
-              bioHtml: true,
             },
           },
           likedBy: {

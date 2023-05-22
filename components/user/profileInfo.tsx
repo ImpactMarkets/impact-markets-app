@@ -101,7 +101,6 @@ type EditFormData = {
   paymentUrl: string | null
   contact: string | null
   bio: string | null
-  bioHtml: string | null
 }
 
 function EditProfileDialog({
@@ -121,7 +120,6 @@ function EditProfileDialog({
       paymentUrl: user.paymentUrl,
       contact: user.contact,
       bio: user.bio,
-      bioHtml: user.bioHtml,
     },
   })
   const router = useRouter()
@@ -153,6 +151,7 @@ function EditProfileDialog({
         proofUrl: data.proofUrl || '',
         paymentUrl: data.paymentUrl || '',
         contact: data.contact || '',
+        bio: data.bio || '',
       },
       {
         onSuccess: () => onClose(),
@@ -212,7 +211,7 @@ function EditProfileDialog({
               description="This information is public."
               placeholder="hi@impactmarkets.io"
             />
-            <Textarea
+            <TextField
               {...register('bio')}
               label="Bio"
               description="Your background and values."

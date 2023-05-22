@@ -25,7 +25,6 @@ export const userRouter = createProtectedRouter()
           paymentUrl: true,
           contact: true,
           bio: true,
-          bioHtml: true,
           prefersAnonymity: true,
           prefersEventNotifications: true,
           email: ctx.session?.user.role === 'ADMIN',
@@ -56,13 +55,8 @@ export const userRouter = createProtectedRouter()
       paymentUrl: z.string().optional(),
       contact: z.string().optional(),
       bio: z.string().optional(),
-      bioHtml: z.string().optional(),
     }),
     async resolve({ ctx, input }) {
-      let bioHtml
-      if (input.bio !== undefined) {
-        bioHtml = markdownToHtml(input.bio)
-      }
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session!.user.id },
         data: {
@@ -72,7 +66,6 @@ export const userRouter = createProtectedRouter()
           paymentUrl: input.paymentUrl,
           contact: input.contact,
           bio: input.bio,
-          bioHtml,
         },
       })
 
