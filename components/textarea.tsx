@@ -1,38 +1,41 @@
 import * as React from 'react'
 
 import { classNames } from '@/lib/classnames'
+import { Textarea, TextareaProps } from '@mantine/core'
 
 import { Label } from './label'
 
-export type TextareaOwnProps = {
+export type TextAreaOwnProps = {
   label?: string
 }
 
-type TextareaProps = TextareaOwnProps &
+type TextAreaProps = TextAreaOwnProps &
+  TextareaProps &
   React.ComponentPropsWithoutRef<'textarea'>
 
-export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
   ({ label, id, name, className, ...rest }, forwardedRef) => {
     return (
       <div>
         {label && (
-          <Label htmlFor={id || name} className="block mb-2">
+          <Label htmlFor={id || name} className="block text-s">
             {label}
           </Label>
         )}
-        <textarea
+        <Textarea
           {...rest}
           ref={forwardedRef}
           id={id || name}
           name={name}
-          className={classNames(
-            'block w-full rounded shadow-sm bg-secondary border-secondary focus-ring',
-            className
-          )}
+          classNames={{
+            input:
+              'block w-full py-1 rounded shadow-sm bg-secondary border-secondary focus-ring',
+            ...classNames,
+          }}
         />
       </div>
     )
   }
 )
 
-Textarea.displayName = 'Textarea'
+TextArea.displayName = 'Textarea'
