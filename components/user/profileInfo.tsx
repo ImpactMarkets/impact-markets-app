@@ -24,6 +24,7 @@ import { uploadImage } from '@/lib/cloudinary'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
 import { Tooltip } from '@mantine/core'
 import { Button as MantineButton } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import { IconAlertCircle, IconCreditCard, IconShieldLock } from '@tabler/icons'
 
 function DotPattern() {
@@ -327,11 +328,16 @@ export function ProfileInfo({
   user: InferQueryOutput<'user.profile'>
 }) {
   const { data: session } = useSession()
+  const router = useRouter()
 
   const [isEditProfileDialogOpen, setIsEditProfileDialogOpen] =
     React.useState(false)
   const [isUpdateAvatarDialogOpen, setIsUpdateAvatarDialogOpen] =
     React.useState(false)
+
+  // Tailwind md breakpoint is 768px https://tailwindcss.com/docs/responsive-design
+  const isLargeScreen = useMediaQuery('(min-width: 768px)')
+  const avatarSize = isLargeScreen ? 'lg' : 'md'
 
   if (user) {
     const profileBelongsToUser = user.id === session?.user.id
@@ -342,29 +348,29 @@ export function ProfileInfo({
           <title>{user.name} – Impact Markets</title>
         </Head>
 
-        <div className="relative flex items-start gap-4 py-8 overflow-hidden">
-          <div className="flex items-center gap-8">
-            {browserEnv.NEXT_PUBLIC_ENABLE_IMAGE_UPLOAD &&
-            profileBelongsToUser ? (
-              <button
-                type="button"
-                className="relative inline-flex group"
-                onClick={() => {
-                  setIsUpdateAvatarDialogOpen(true)
-                }}
-              >
-                <Avatar name={user.name!} src={user.image} size="lg" />
-                <div className="absolute inset-0 transition-opacity bg-gray-900 rounded-full opacity-0 group-hover:opacity-50" />
-                <div className="absolute inline-flex items-center justify-center transition-opacity -translate-x-1/2 -translate-y-1/2 bg-gray-900 border border-white rounded-full opacity-0 top-1/2 left-1/2 h-9 w-9 group-hover:opacity-100">
-                  <EditIcon className="w-4 h-4 text-white" />
-                </div>
-              </button>
-            ) : (
+        <div className="relative flex gap-4 py-8 overflow-hidden">
+          {browserEnv.NEXT_PUBLIC_ENABLE_IMAGE_UPLOAD &&
+          profileBelongsToUser ? (
+            <button
+              type="button"
+              className="relative inline-flex group"
+              onClick={() => {
+                setIsUpdateAvatarDialogOpen(true)
+              }}
+            >
               <Avatar name={user.name!} src={user.image} size="lg" />
-            )}
+              <div className="absolute inset-0 transition-opacity bg-gray-900 rounded-full opacity-0 group-hover:opacity-50" />
+              <div className="absolute inline-flex items-center justify-center transition-opacity -translate-x-1/2 -translate-y-1/2 bg-gray-900 border border-white rounded-full opacity-0 top-1/2 left-1/2 h-9 w-9 group-hover:opacity-100">
+                <EditIcon className="w-4 h-4 text-white" />
+              </div>
+            </button>
+          ) : (
+            <Avatar name={user.name!} src={user.image} size={avatarSize} />
+          )}
 
-            <div className="flex-1">
-              <Heading1 className="whitespace-nowrap">
+          <div className="min-w-0 flex flex-col justify-between gap-4">
+            <div className="flex-1 flex flex-col justify-center items-start">
+              <Heading1 className="whitespace-nowrap overflow-ellipsis overflow-hidden min-w-0">
                 {user.name}{' '}
                 {user.proofUrl ? (
                   <a
@@ -397,28 +403,34 @@ export function ProfileInfo({
                 </a>
               )}
             </div>
+
+            {profileBelongsToUser && (
+              <div className="flex items-center gap-2">
+                <MantineButton
+                  className="bg-red-600 hover:bg-red-400"
+                  onClick={async () => {
+                    const data = await signOut({
+                      redirect: false,
+                      callbackUrl: '/',
+                    })
+                    router.push(data.url)
+                  }}
+                >
+                  Sign out
+                </MantineButton>
+                <IconButton
+                  variant="secondary"
+                  onClick={() => {
+                    setIsEditProfileDialogOpen(true)
+                  }}
+                >
+                  <EditIcon className="w-4 h-4" />
+                </IconButton>
+              </div>
+            )}
+
+            <DotPattern />
           </div>
-
-          {profileBelongsToUser && (
-            <div className="ml-auto mr-10 flex items-center gap-2">
-              <IconButton
-                variant="secondary"
-                onClick={() => {
-                  setIsEditProfileDialogOpen(true)
-                }}
-              >
-                <EditIcon className="w-4 h-4" />
-              </IconButton>
-              <MantineButton
-                className="bg-red-600 hover:bg-red-400"
-                onClick={async () => signOut({ redirect: false })}
-              >
-                Sign out
-              </MantineButton>
-            </div>
-          )}
-
-          <DotPattern />
         </div>
 
         <EditProfileDialog
