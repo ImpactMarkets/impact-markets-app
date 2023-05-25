@@ -19,7 +19,7 @@ import { Heading1 } from '@/components/heading1'
 import { IconButton } from '@/components/iconButton'
 import { EditIcon } from '@/components/icons'
 import { TextField } from '@/components/textField'
-import { TextArea } from '@/components/textarea'
+import { LargeTextField } from '@/components/textarea'
 import { browserEnv } from '@/env/browser'
 import { uploadImage } from '@/lib/cloudinary'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
@@ -211,7 +211,7 @@ function EditProfileDialog({
               description="This information is public."
               placeholder="hi@impactmarkets.io"
             />
-            <TextArea
+            <LargeTextField
               {...register('bio')}
               label="Bio"
               description="Your background and values."
