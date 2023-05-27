@@ -208,7 +208,7 @@ function EditProfileDialog({
             <TextField
               {...register('contact')}
               label="Contact"
-              description="This information is public."
+              description="Any email address or social media profile where people can reach you. This information is public."
               placeholder="hi@impactmarkets.io"
             />
             <LargeTextField
