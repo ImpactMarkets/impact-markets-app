@@ -57,6 +57,12 @@ export const TAGS: IMTag[] = [
     group: 'Community',
   },
   {
+    value: 'vibecamp',
+    label: 'Vibecamp',
+    color: colors.community,
+    group: 'Community',
+  },
+  {
     value: 'africa',
     label: 'Africa',
     color: colors.location,
