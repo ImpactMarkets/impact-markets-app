@@ -76,21 +76,25 @@ function ContactLink({ contact }: ContactLinkProps) {
     contact.includes('@') && contact.includes('.') && !contact.startsWith('@')
 
   return (
-    <div className="text-lg text-secondary inline-block w-60 whitespace-nowrap overflow-hidden overflow-ellipsis">
-      {isLink ? (
-        <a href={contact} target="_blank" rel="noreferrer">
-          <IconMail className="inline" /> {contact}
-        </a>
-      ) : isEmail ? (
-        <a href={`mailto:${contact}`}>
-          <IconMail className="inline" /> {contact}
-        </a>
-      ) : (
-        <>
-          <IconMail className="inline" /> {contact}
-        </>
-      )}
-    </div>
+    <>
+      <div className="text-lg text-secondary inline-block w-60 hyphens-auto">
+        <span>
+          {isLink ? (
+            <a href={contact} target="_blank" rel="noreferrer">
+              <IconMail className="inline" /> {contact}
+            </a>
+          ) : isEmail ? (
+            <a href={`mailto:${contact}`}>
+              <IconMail className="inline" /> {contact}
+            </a>
+          ) : (
+            <>
+              <IconMail className="inline" /> {contact}
+            </>
+          )}
+        </span>
+      </div>
+    </>
   )
 }
 
@@ -437,20 +441,24 @@ export function ProfileInfo({
                   </Tooltip>
                 )}
               </Heading1>
-              {user.title && (
-                <p className="text-lg text-secondary">{user.title}</p>
-              )}
-              {user.paymentUrl && (
-                <a
-                  className="text-lg text-secondary inline-block w-60 whitespace-nowrap overflow-hidden overflow-ellipsis"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={user.paymentUrl}
-                >
-                  <IconCreditCard className="inline" /> {user.paymentUrl}
-                </a>
-              )}
-              <ContactLink contact={user.contact} />
+              <div>
+                {user.title && (
+                  <p className="text-lg text-secondary">{user.title}</p>
+                )}
+                {user.paymentUrl && (
+                  <a
+                    className="text-lg text-secondary inline-block w-60 whitespace-nowrap overflow-hidden overflow-ellipsis"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={user.paymentUrl}
+                  >
+                    <IconCreditCard className="inline" /> {user.paymentUrl}
+                  </a>
+                )}
+              </div>
+              <div>
+                <ContactLink contact={user.contact} />
+              </div>
             </div>
           </div>
 
