@@ -1,9 +1,11 @@
 import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
+import { Banner } from '@/components/banner'
 import type { SummaryProps } from '@/components/bounty/summary'
 import { TAGS } from '@/components/bounty/tags'
 import { ButtonLink } from '@/components/buttonLink'
@@ -138,6 +140,14 @@ const Home: NextPageWithAuthAndLayout = () => {
             />
           </div>
         </div>
+
+        <Banner className="mt-6 text-sm p-4">
+          Need seed funding to work on any of these?{' '}
+          <Link href="/projects" className="link">
+            Fundraise by creating a project
+          </Link>
+          !
+        </Banner>
 
         {feedQuery.data.bountyCount === 0 ? (
           <div className="text-center text-secondary border rounded my-12 py-20 px-10">
