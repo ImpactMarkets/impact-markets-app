@@ -6,6 +6,7 @@ import * as React from 'react'
 import { AuthorWithDate } from '@/components/authorWithDate'
 import { Avatar } from '@/components/avatar'
 import { Banner } from '@/components/banner'
+import { buttonClasses } from '@/components/button'
 import { AddCommentForm } from '@/components/comment/addCommentForm'
 import { Comment } from '@/components/comment/comment'
 import { CommentButton } from '@/components/commentButton'
@@ -18,6 +19,7 @@ import { Menu } from '@/components/project/menu'
 import { OutgoingDonations } from '@/components/project/outgoingDonations'
 import { TAGS } from '@/components/project/tags'
 import { Tags } from '@/components/tags'
+import { classNames } from '@/lib/classnames'
 import { num } from '@/lib/text'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
@@ -135,20 +137,18 @@ function ProjectPage({ projectId }: { projectId: string }) {
                 dateLabel="Created"
               />
               <div>
-                <div className="text-sm text-secondary whitespace-nowrap">
-                  <IconMoneybag className="inline" /> $
-                  {num(project.donationTotal)} in{' '}
-                  {project.donationCount.toLocaleString()}{' '}
-                  {project.donationCount === 1 ? 'donation' : 'donations'}
-                </div>
                 {project.paymentUrl ? (
                   <a
-                    className="text-sm text-secondary inline-block max-w-60 whitespace-nowrap overflow-hidden overflow-ellipsis"
+                    href={project.paymentUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    href={project.paymentUrl}
+                    className={classNames(
+                      buttonClasses({ variant: 'highlight' }),
+                      'ml-[-1rem] mb-1 inline-block max-w-60 whitespace-nowrap overflow-hidden overflow-ellipsis'
+                    )}
                   >
-                    <IconCreditCard className="inline" /> Accepting donations
+                    <IconCreditCard className="inline" />
+                    &nbsp;Accepting donations
                   </a>
                 ) : (
                   <span className="text-sm text-secondary whitespace-nowrap">
@@ -156,6 +156,12 @@ function ProjectPage({ projectId }: { projectId: string }) {
                     donations
                   </span>
                 )}
+                <div className="text-sm text-secondary whitespace-nowrap">
+                  <IconMoneybag className="inline" /> $
+                  {num(project.donationTotal)} in{' '}
+                  {project.donationCount.toLocaleString()}{' '}
+                  {project.donationCount === 1 ? 'donation' : 'donations'}
+                </div>
               </div>
             </div>
             <div className="flex my-6">
