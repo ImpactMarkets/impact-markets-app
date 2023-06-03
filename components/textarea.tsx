@@ -1,6 +1,5 @@
 import * as React from 'react'
 
-import { classNames } from '@/lib/classnames'
 import { Textarea, TextareaProps } from '@mantine/core'
 
 import { Label } from './label'
@@ -16,7 +15,7 @@ type LargeTextFieldProps = LargeTextFieldOwnProps &
 export const LargeTextField = React.forwardRef<
   HTMLTextAreaElement,
   LargeTextFieldProps
->(({ label, id, name, className, ...rest }, forwardedRef) => {
+>(({ label, id, name, classNames, ...rest }, forwardedRef) => {
   return (
     <div>
       {label && (
@@ -31,7 +30,7 @@ export const LargeTextField = React.forwardRef<
         name={name}
         classNames={{
           input:
-            'block w-full py-1 rounded shadow-sm bg-secondary border-secondary focus-ring',
+            'block w-full py-1 rounded shadow-sm bg-secondary border-secondary focus-ring text-base',
           ...classNames,
         }}
       />
