@@ -391,11 +391,18 @@ export function ProfileInfo({
   const [isUpdateAvatarDialogOpen, setIsUpdateAvatarDialogOpen] =
     React.useState(false)
 
+  // Fresh keys to force re-mounting of the dialogs
+  // https://stackoverflow.com/a/66772917/678861
+  const [childKey, setChildKey] = React.useState(1)
+  React.useEffect(() => {
+    setChildKey((prev) => prev + 1)
+  }, [isEditProfileDialogOpen, isUpdateAvatarDialogOpen])
+
   if (user) {
     const profileBelongsToUser = user.id === session?.user.id
 
     return (
-      <>
+      <div key={childKey}>
         <Head>
           <title>{user.name} – Impact Markets</title>
         </Head>
@@ -500,7 +507,7 @@ export function ProfileInfo({
             setIsUpdateAvatarDialogOpen(false)
           }}
         />
-      </>
+      </div>
     )
   }
 
