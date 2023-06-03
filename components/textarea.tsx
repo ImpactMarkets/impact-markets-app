@@ -1,38 +1,41 @@
 import * as React from 'react'
 
-import { classNames } from '@/lib/classnames'
+import { Textarea, TextareaProps } from '@mantine/core'
 
 import { Label } from './label'
 
-export type TextareaOwnProps = {
+export type LargeTextFieldOwnProps = {
   label?: string
 }
 
-type TextareaProps = TextareaOwnProps &
+type LargeTextFieldProps = LargeTextFieldOwnProps &
+  TextareaProps &
   React.ComponentPropsWithoutRef<'textarea'>
 
-export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ label, id, name, className, ...rest }, forwardedRef) => {
-    return (
-      <div>
-        {label && (
-          <Label htmlFor={id || name} className="block mb-2">
-            {label}
-          </Label>
-        )}
-        <textarea
-          {...rest}
-          ref={forwardedRef}
-          id={id || name}
-          name={name}
-          className={classNames(
-            'block w-full rounded shadow-sm bg-secondary border-secondary focus-ring',
-            className
-          )}
-        />
-      </div>
-    )
-  }
-)
+export const LargeTextField = React.forwardRef<
+  HTMLTextAreaElement,
+  LargeTextFieldProps
+>(({ label, id, name, classNames, ...rest }, forwardedRef) => {
+  return (
+    <div>
+      {label && (
+        <Label htmlFor={id || name} className="block text-s">
+          {label}
+        </Label>
+      )}
+      <Textarea
+        {...rest}
+        ref={forwardedRef}
+        id={id || name}
+        name={name}
+        classNames={{
+          input:
+            'block w-full py-1 rounded shadow-sm bg-secondary border-secondary focus-ring text-base',
+          ...classNames,
+        }}
+      />
+    </div>
+  )
+})
 
-Textarea.displayName = 'Textarea'
+LargeTextField.displayName = 'LargeTextArea'

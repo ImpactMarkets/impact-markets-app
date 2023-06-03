@@ -148,7 +148,7 @@ export function ProjectForm({
         <TextField
           {...register('actionEnd', { valueAsDate: true })}
           label="Review date"
-          description="When (appox.) will your outputs be ready for a review? (Optional)"
+          description="When (approx.) will your outputs be ready for a review? (Optional)"
           type="date"
         />
       </SimpleGrid>

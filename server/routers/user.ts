@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+import { markdownToHtml } from '@/lib/editor'
 import { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
@@ -22,6 +23,8 @@ export const userRouter = createProtectedRouter()
           title: true,
           proofUrl: true,
           paymentUrl: true,
+          contact: true,
+          bio: true,
           prefersAnonymity: true,
           prefersEventNotifications: true,
           email: ctx.session?.user.role === 'ADMIN',
@@ -50,6 +53,8 @@ export const userRouter = createProtectedRouter()
       title: z.string().optional(),
       proofUrl: z.string().optional(),
       paymentUrl: z.string().optional(),
+      contact: z.string().optional(),
+      bio: z.string().optional(),
     }),
     async resolve({ ctx, input }) {
       const user = await ctx.prisma.user.update({
@@ -59,6 +64,8 @@ export const userRouter = createProtectedRouter()
           title: input.title,
           proofUrl: input.proofUrl,
           paymentUrl: input.paymentUrl,
+          contact: input.contact,
+          bio: input.bio,
         },
       })
 

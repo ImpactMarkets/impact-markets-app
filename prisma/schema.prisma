@@ -103,6 +103,8 @@ model User {
   role          Role      @default(USER)
   proofUrl      String    @default("")
   paymentUrl    String    @default("")
+  contact       String    @default("")
+  bio           String    @default("")
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 

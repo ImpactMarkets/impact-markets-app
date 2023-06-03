@@ -19,12 +19,18 @@ import { Heading1 } from '@/components/heading1'
 import { IconButton } from '@/components/iconButton'
 import { EditIcon } from '@/components/icons'
 import { TextField } from '@/components/textField'
+import { LargeTextField } from '@/components/textarea'
 import { browserEnv } from '@/env/browser'
 import { uploadImage } from '@/lib/cloudinary'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
 import { Tooltip } from '@mantine/core'
 import { Button as MantineButton } from '@mantine/core'
-import { IconAlertCircle, IconCreditCard, IconShieldLock } from '@tabler/icons'
+import {
+  IconAlertCircle,
+  IconCreditCard,
+  IconMail,
+  IconShieldLock,
+} from '@tabler/icons'
 
 function DotPattern() {
   return (
@@ -58,11 +64,47 @@ function DotPattern() {
   )
 }
 
+interface ContactLinkProps {
+  contact: string | null
+}
+
+function ContactLink({ contact }: ContactLinkProps) {
+  if (!contact) return null
+
+  const isLink = contact.startsWith('http://') || contact.startsWith('https://')
+  const isEmail =
+    contact.includes('@') && contact.includes('.') && !contact.startsWith('@')
+
+  return (
+    <>
+      <div className="text-lg text-secondary inline-block w-60 hyphens-auto">
+        <span>
+          {isLink ? (
+            <a href={contact} target="_blank" rel="noreferrer">
+              <IconMail className="inline" /> {contact}
+            </a>
+          ) : isEmail ? (
+            <a href={`mailto:${contact}`}>
+              <IconMail className="inline" /> {contact}
+            </a>
+          ) : (
+            <>
+              <IconMail className="inline" /> {contact}
+            </>
+          )}
+        </span>
+      </div>
+    </>
+  )
+}
+
 type EditFormData = {
   name: string
   title: string | null
   proofUrl: string | null
   paymentUrl: string | null
+  contact: string | null
+  bio: string | null
 }
 
 function EditProfileDialog({
@@ -80,6 +122,8 @@ function EditProfileDialog({
       title: user.title,
       proofUrl: user.proofUrl,
       paymentUrl: user.paymentUrl,
+      contact: user.contact,
+      bio: user.bio,
     },
   })
   const router = useRouter()
@@ -110,6 +154,8 @@ function EditProfileDialog({
         title: data.title || '',
         proofUrl: data.proofUrl || '',
         paymentUrl: data.paymentUrl || '',
+        contact: data.contact || '',
+        bio: data.bio || '',
       },
       {
         onSuccess: () => onClose(),
@@ -162,6 +208,18 @@ function EditProfileDialog({
               label="Payment link"
               placeholder="https://ko-fi.com/velvetillumnation"
               description="A page for people can pay you (Stripe, PayPal, Ko-Fi, etc.). Only needed for certificates."
+            />
+            <TextField
+              {...register('contact')}
+              label="Contact"
+              description="Any email address or social media profile where people can reach you. This information is public."
+              placeholder="hi@impactmarkets.io"
+            />
+            <LargeTextField
+              {...register('bio')}
+              label="Bio"
+              description="Your background and values."
+              placeholder="Please describe where you’re coming from in terms of your worldview – ethics, epistemics, etc."
             />
           </div>
           <DialogCloseButton onClick={handleClose} />
@@ -333,11 +391,18 @@ export function ProfileInfo({
   const [isUpdateAvatarDialogOpen, setIsUpdateAvatarDialogOpen] =
     React.useState(false)
 
+  // Fresh keys to force re-mounting of the dialogs
+  // https://stackoverflow.com/a/66772917/678861
+  const [childKey, setChildKey] = React.useState(1)
+  React.useEffect(() => {
+    setChildKey((prev) => prev + 1)
+  }, [isEditProfileDialogOpen, isUpdateAvatarDialogOpen])
+
   if (user) {
     const profileBelongsToUser = user.id === session?.user.id
 
     return (
-      <>
+      <div key={childKey}>
         <Head>
           <title>{user.name} – Impact Markets</title>
         </Head>
@@ -383,19 +448,24 @@ export function ProfileInfo({
                   </Tooltip>
                 )}
               </Heading1>
-              {user.title && (
-                <p className="text-lg text-secondary">{user.title}</p>
-              )}
-              {user.paymentUrl && (
-                <a
-                  className="text-lg text-secondary inline-block w-60 whitespace-nowrap overflow-hidden overflow-ellipsis"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href={user.paymentUrl}
-                >
-                  <IconCreditCard className="inline" /> {user.paymentUrl}
-                </a>
-              )}
+              <div>
+                {user.title && (
+                  <p className="text-lg text-secondary">{user.title}</p>
+                )}
+                {user.paymentUrl && (
+                  <a
+                    className="text-lg text-secondary inline-block w-60 whitespace-nowrap overflow-hidden overflow-ellipsis"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={user.paymentUrl}
+                  >
+                    <IconCreditCard className="inline" /> {user.paymentUrl}
+                  </a>
+                )}
+              </div>
+              <div>
+                <ContactLink contact={user.contact} />
+              </div>
             </div>
           </div>
 
@@ -437,7 +507,7 @@ export function ProfileInfo({
             setIsUpdateAvatarDialogOpen(false)
           }}
         />
-      </>
+      </div>
     )
   }
 
