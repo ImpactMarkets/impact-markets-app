@@ -9,7 +9,6 @@ import { Card } from '@mantine/core'
 
 import { Author } from '../author'
 import { CommentButton } from '../commentButton'
-import { Date } from '../date'
 import { Heading2 } from '../heading2'
 import { Tags } from '../tags'
 import { TAGS } from './tags'
