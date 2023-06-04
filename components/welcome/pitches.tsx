@@ -2,9 +2,8 @@ import * as React from 'react'
 
 import { Container, SimpleGrid, Text } from '@mantine/core'
 import {
-  IconHeart,
-  IconSearch,
   IconShovel,
+  IconTelescope,
   IconTrendingUp,
   TablerIcon,
 } from '@tabler/icons'
@@ -34,38 +33,31 @@ export const Pitches = () => (
     <div className="flex justify-center text-3xl font-bold">A market for …</div>
     <Container mt={30} mb={30} size="lg">
       <SimpleGrid
-        cols={4}
+        cols={3}
         breakpoints={[{ maxWidth: 'sm', cols: 1 }]}
         spacing={40}
       >
-        <Feature icon={IconShovel} title="Creators" key="projects">
+        <Feature icon={IconShovel} title="Projects" key="projects">
           We score donors by their track record of finding new high-impact
           projects such as yours. A good donation track record signal-boosts the
           projects that they support. You’ll be discovered by more donors, which
           can snowball into greater and greater success.
         </Feature>
+        <Feature icon={IconTelescope} title="Project scouts" key="Scouts">
+          Scout out and signal-boost the best projects! You get a “donor score”
+          based on your track record, and the higher your score, the greater
+          your boost to the projects you support. You will leverage your
+          expertise for follow-on donations, getting the projects funded faster.
+        </Feature>
         <Feature
-          icon={IconSearch}
-          title="Specialist donors"
-          key="specialist donors"
+          icon={IconTrendingUp}
+          title="Donors & funders"
+          key="Donors & funders"
         >
-          Signal-boost the best projects! You get a “donor score” based on your
-          track record of impact, and the higher your score, the greater your
-          boost to the projects you support. This lets you leverage your
-          expertise for follow-on donations, getting the project funded faster.
-        </Feature>
-        <Feature icon={IconTrendingUp} title="All donors" key="all donors">
-          Follow donors with skin in the game! Impact Markets is a crowd-sourced
-          charity evaluator for speculative, potentially spectacular projects,
-          ranked by the donations they’ve received from specialist donors. Tap
-          into the wisdom of these donors and boost the impact of your
-          donations.
-        </Feature>
-        <Feature icon={IconHeart} title="Philanthropic funders" key="funders">
-          Specialist donors can find exceptional funding gaps. We signal-boost
-          their knowledge and make it accessible to you. Mine their findings to
-          guide your funding allocation, or incentivize these donors with cash
-          or regranting bounties!
+          Scouts find speculative, potentially spectacular projects! We make
+          their diverse, specialized knowledge accessible to you. Follow our top
+          scouts, tap into their wisdom, and boost the impact of your donations
+          or grants.
         </Feature>
       </SimpleGrid>
     </Container>

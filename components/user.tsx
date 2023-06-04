@@ -2,7 +2,7 @@ import { signIn, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import React from 'react'
 
-import { Box } from '@mantine/core'
+import { Box, Tooltip } from '@mantine/core'
 import { IconChevronRight } from '@tabler/icons'
 
 import { Avatar } from './avatar'
@@ -31,12 +31,21 @@ export function User() {
               src={session.user.image}
               size="sm"
             />
-            <div className="grow">
-              <p className="text-sm">{session.user.name}</p>
-              <p className="text-xs color text-gray-500">
-                {session.user.email}
-              </p>
-            </div>
+            <Tooltip
+              label={
+                <p>
+                  The first disbursement of Impact Marks is planned for 2024.
+                  <br />
+                  They’ll have various functions on the platform.
+                </p>
+              }
+              events={{ hover: true, focus: true, touch: true }}
+            >
+              <div className="grow">
+                <p className="text-sm">{session.user.name}</p>
+                <p className="text-xs text-gray-500">0 Impact Marks</p>
+              </div>
+            </Tooltip>
 
             <IconChevronRight size={18} />
           </div>

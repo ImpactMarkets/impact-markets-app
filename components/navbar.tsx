@@ -118,9 +118,9 @@ export const Navbar = ({ hidden }: { hidden: boolean }) => (
       <NavbarLink link="/" label="Home" icon={IconHome} />
       <NavbarLink link="/projects" label="Projects" icon={IconRocket} />
       <NavbarLink link="/bounties" label="Bounties" icon={IconPigMoney} />
-      <NavbarLink link="/ranking" label="Top donors" icon={IconTrophy} />
     </MantineNavbar.Section>
     <MantineNavbar.Section className="m-4">
+      <NavbarLink link="/ranking" label="Top donors" icon={IconTrophy} />
       <NavbarLink link="/why" label="Questions & answers" icon={IconBolt} />
       <NavbarLink link="/rules" label="Rules & terms" icon={IconFile} />
       <NavbarLink link="/support" label="Help & support" icon={IconLifebuoy} />

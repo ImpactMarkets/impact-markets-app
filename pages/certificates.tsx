@@ -135,13 +135,15 @@ const Home: NextPageWithAuthAndLayout = () => {
             defaultOrderByValue={orderBy}
           />
         </div>
-        <Banner className="my-6">
+
+        <Banner className="mt-6 text-sm p-4">
           This is an archive. Please see the{' '}
-          <Link href="/" className="link">
+          <Link href="/projects" className="link">
             projects
           </Link>{' '}
           page for the current projects.
         </Banner>
+
         {feedQuery.data.certificateCount === 0 ? (
           <div className="text-center text-secondary border rounded my-10 py-20 px-10">
             There are no published certificates to show yet.

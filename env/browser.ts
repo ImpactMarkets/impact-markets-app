@@ -11,10 +11,6 @@ export const browserEnv = envsafe({
     input: process.env.NEXT_PUBLIC_ENABLE_IMAGE_UPLOAD,
     default: false,
   }),
-  NEXT_PUBLIC_INTERCOM_APP_ID: str({
-    input: process.env.NEXT_PUBLIC_INTERCOM_APP_ID,
-    default: '',
-  }),
   NEXT_PUBLIC_MIXPANEL_TOKEN: str({
     input: process.env.NEXT_PUBLIC_MIXPANEL_TOKEN,
     default: '',

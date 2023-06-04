@@ -48,8 +48,8 @@ export const Comparisons = () => (
           Carbon credits (or “offsets”) are an asset like money, but just like
           money they are also a way to keep score. Our donor score can be seen
           as a kind of “impact credit,” a generalized carbon credit. Once our
-          scoring algorithm has matured we may actually introduce such a
-          playmoney “impact credit,” so that top donors can double as
+          scoring algorithm has matured we want to introduce such a playmoney
+          “impact credit,” the Impact Mark, so that top donors can double as
           evaluators.
         </div>
       </div>
@@ -71,10 +71,10 @@ export const Comparisons = () => (
         </div>
         <div>
           Your donations inform the giving of individuals and foundations – a
-          multiplier on the money that you can give yourself. If a funder
-          provides cash prizes, you may even receive a literal payment for your
-          work. And since the score rewards donation prescience as much as size,
-          you can even make a surplus to pay your rent.
+          multiplier on the money that you can give yourself. One day, laws
+          permitting, we want to make it possible for you to even get paid in
+          cash for your work. Our score rewards donation prescience as much as
+          size, so you will then be able to generate a surplus to pay your rent.
         </div>
       </div>
     </div>

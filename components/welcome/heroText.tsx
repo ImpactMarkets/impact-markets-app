@@ -71,7 +71,7 @@ export function HeroText() {
     <Container className="max-w-[1400px] pb-24 text-center">
       <div className={classes.inner}>
         <Title className={classes.title}>
-          Your crowdsourced, meritocratic
+          Your crowdsourced
           <div>
             <Text component="span" className={classes.highlight} inherit>
               charity evaluator

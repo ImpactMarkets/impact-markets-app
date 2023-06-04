@@ -2,7 +2,6 @@ import { useSession } from 'next-auth/react'
 import * as React from 'react'
 import { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { useIntercom } from 'react-use-intercom'
 
 import { Button } from '@/components/button'
 import { ButtonLink } from '@/components/buttonLink'
@@ -101,8 +100,6 @@ export function CertificateForm({
   // useLeaveConfirm({ formState })
 
   const { isSubmitSuccessful } = formState
-
-  const { show } = useIntercom()
 
   const { data: session } = useSession()
 
@@ -211,12 +208,8 @@ export function CertificateForm({
               label="Tags"
               description={
                 <>
-                  Please select all that apply or{' '}
-                  <span className="link" onClick={() => show()}>
-                    leave us feedback
-                  </span>{' '}
-                  if you can’t find suitable tags for your field and type of
-                  work so we can add them.
+                  Please select all that apply or leave us feedback (e.g., using
+                  the support button) if you can’t find suitable tags.
                 </>
               }
               placeholder="Pick all that apply"
@@ -414,14 +407,6 @@ export function CertificateForm({
           <ButtonLink href={backTo} variant="secondary">
             Cancel
           </ButtonLink>
-        </div>
-        <div>
-          <a
-            onClick={show}
-            className="text-sm font-medium transition-colors link"
-          >
-            🗣️ Do you have any feedback or tips for us?
-          </a>
         </div>
       </div>
     </form>

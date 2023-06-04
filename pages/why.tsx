@@ -24,7 +24,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
       >
         <p>
           If your question is not answered here, please hit us up on Discord or
-          use the Intercom button in the bottom right!
+          use the support button in the bottom right!
         </p>
         <Heading2 className="my-10">General questions</Heading2>
         <Accordion.Item value="h.supl8yeuzjp">
@@ -478,8 +478,8 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
               don’t include any classified information or info hazards in the
               description because all projects are public. (Would you like to
               make your project only accessible to logged-in users? Send us a
-              message through the Intercom button in the bottom right to
-              indicate your interest in this feature!)
+              message through the support button in the bottom right to indicate
+              your interest in this feature!)
             </p>
             <p className="my-3">
               The ideal project is something finite that produces artifacts. Our
@@ -595,7 +595,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
             </p>
             <p className="my-3">
               Does that sound interesting? Please let us know, e.g., through the
-              Intercom button in the lower right. We’ll prioritize the feature
+              support button in the lower right. We’ll prioritize the feature
               more highly.
             </p>
           </Accordion.Panel>
@@ -706,7 +706,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
             </p>
             <p className="my-3">
               If that sounds interesting to you, please get in touch, e.g.,
-              through the Intercom button to the lower right or via
+              through the support button to the lower right or via
               hi@impactmarkets.io.
             </p>
           </Accordion.Panel>
@@ -720,8 +720,8 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
               Are you? If so, we can easily build a custom score for you. You
               score the projects, and we aggregate all of your project scores
               into your own custom donor ranking. Please get in touch if that
-              sounds interesting to you, e.g., through the Intercom button to
-              the lower right or via{' '}
+              sounds interesting to you, e.g., through the support button to the
+              lower right or via{' '}
               <Link className="link" href="mailto:hi@impactmarkets.io">
                 hi@impactmarkets.io
               </Link>
@@ -793,7 +793,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
           <Accordion.Panel>
             <p className="my-3">
               Not at the moment. But if this is a feature that you would like to
-              use, please let us know, e.g., through the Intercom button in the
+              use, please let us know, e.g., through the support button in the
               bottom right.
             </p>
           </Accordion.Panel>
