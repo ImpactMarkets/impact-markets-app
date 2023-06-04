@@ -59,9 +59,7 @@ function Left({ project }: ProjectSummaryProps) {
             {project.title}
           </Heading2>
         </Link>
-        <Date date={project.createdAt} />
       </div>
-      <div className="flex items-center gap-12 mt-6">{/* Donor chart */}</div>
     </div>
   )
 }
@@ -83,7 +81,9 @@ function Right({ project }: ProjectSummaryProps) {
 export const ProjectSummary = ({ project }: ProjectSummaryProps) => (
   <Card shadow="sm" p="lg" radius="md" withBorder>
     {project.hidden && (
-      <Banner className="mb-6">This project was hidden by the curators.</Banner>
+      <Banner className="mb-6 p-4">
+        This project was hidden by the curators.
+      </Banner>
     )}
     <div
       className={classNames(

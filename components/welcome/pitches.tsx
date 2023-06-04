@@ -2,9 +2,6 @@ import * as React from 'react'
 
 import { Container, SimpleGrid, Text } from '@mantine/core'
 import {
-  IconBook,
-  IconHeart,
-  IconSearch,
   IconShovel,
   IconTelescope,
   IconTrendingUp,
