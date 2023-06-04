@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { useIntercom } from 'react-use-intercom'
 import { z } from 'zod'
 
 import { TAGS } from '@/components/bounty/tags'
@@ -59,8 +58,6 @@ export const Form = ({
   // useLeaveConfirm({ formState })
 
   const { isSubmitSuccessful } = formState
-
-  const { show } = useIntercom()
 
   React.useEffect(() => {
     if (isSubmitSuccessful) {
@@ -131,11 +128,8 @@ export const Form = ({
           label="Tags"
           description={
             <>
-              Please select all that apply or{' '}
-              <span className="link" onClick={() => show()}>
-                leave us feedback
-              </span>{' '}
-              if you can’t find suitable tags so we can add them. (Optional)
+              Please select all that apply or leave us feedback (e.g., using the
+              support button) if you can’t find suitable tags. (Optional)
             </>
           }
           placeholder="Pick all that apply"
@@ -197,14 +191,6 @@ export const Form = ({
           <ButtonLink href={backTo} variant="secondary">
             Cancel
           </ButtonLink>
-        </div>
-        <div>
-          <a
-            onClick={show}
-            className="text-sm font-medium transition-colors link"
-          >
-            🗣️ Do you have any feedback or tips for us?
-          </a>
         </div>
       </div>
     </form>

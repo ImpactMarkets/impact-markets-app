@@ -3,7 +3,6 @@ import { ThemeProvider } from 'next-themes'
 import type { AppProps } from 'next/app'
 import * as React from 'react'
 import { Toaster } from 'react-hot-toast'
-import { IntercomProvider } from 'react-use-intercom'
 
 import { browserEnv } from '@/env/browser'
 import { emotionCache } from '@/lib/emotionCache'
@@ -13,6 +12,7 @@ import { AppRouter } from '@/server/routers/_app'
 import { MantineProvider } from '@mantine/core'
 import { Barlow_Condensed, Open_Sans } from '@next/font/google'
 import { Provider as RollbarProvider } from '@rollbar/react'
+import TawkMessengerReact from '@tawk.to/tawk-messenger-react'
 import { httpBatchLink } from '@trpc/client/links/httpBatchLink'
 import { loggerLink } from '@trpc/client/links/loggerLink'
 import { withTRPC } from '@trpc/next'
@@ -54,44 +54,46 @@ function MyApp({
 
   return (
     <RollbarProvider config={rollbarConfig}>
-      <IntercomProvider appId={browserEnv.NEXT_PUBLIC_INTERCOM_APP_ID} autoBoot>
-        <MantineProvider
-          emotionCache={emotionCache}
-          withCSSVariables
-          withGlobalStyles
-          withNormalizeCSS
-        >
-          <SessionProvider session={session} refetchOnWindowFocus>
-            <ThemeProvider
-              forcedTheme="light"
-              attribute="class"
-              disableTransitionOnChange
-            >
-              {/* Hack because the default variable definitions don’t seem to work because they
+      <MantineProvider
+        emotionCache={emotionCache}
+        withCSSVariables
+        withGlobalStyles
+        withNormalizeCSS
+      >
+        <SessionProvider session={session} refetchOnWindowFocus>
+          <ThemeProvider
+            forcedTheme="light"
+            attribute="class"
+            disableTransitionOnChange
+          >
+            {/* Hack because the default variable definitions don’t seem to work because they
               are namespaced within the class openSans.variable */}
-              <style jsx global>{`
-                body {
-                  --font-barlow-condensed: ${barlowCondensed.style.fontFamily};
-                  --font-open-sans: ${openSans.style.fontFamily};
-                }
-              `}</style>
-              {Component.auth ? (
-                <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
-              ) : (
-                getLayout(<Component {...pageProps} />)
-              )}
-              <Toaster
-                toastOptions={{
-                  className: 'text-xs',
-                  style: {
-                    maxWidth: '100%',
-                  },
-                }}
-              />
-            </ThemeProvider>
-          </SessionProvider>
-        </MantineProvider>
-      </IntercomProvider>
+            <style jsx global>{`
+              body {
+                --font-barlow-condensed: ${barlowCondensed.style.fontFamily};
+                --font-open-sans: ${openSans.style.fontFamily};
+              }
+            `}</style>
+            {Component.auth ? (
+              <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
+            ) : (
+              getLayout(<Component {...pageProps} />)
+            )}
+            <Toaster
+              toastOptions={{
+                className: 'text-xs',
+                style: {
+                  maxWidth: '100%',
+                },
+              }}
+            />
+            <TawkMessengerReact
+              propertyId="6477604974285f0ec46ec1c0"
+              widgetId="1h1p508cl"
+            />
+          </ThemeProvider>
+        </SessionProvider>
+      </MantineProvider>
     </RollbarProvider>
   )
 }
