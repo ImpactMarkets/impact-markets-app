@@ -49,6 +49,7 @@ export function OutgoingDonations({
   const addDonationMutation = trpc.useMutation('donation.add', {
     onSuccess: () => {
       utils.invalidateQueries(['donation.feed'])
+      utils.invalidateQueries(['project.detail'])
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
@@ -58,6 +59,17 @@ export function OutgoingDonations({
   const cancelDonationMutation = trpc.useMutation('donation.cancel', {
     onSuccess: () => {
       utils.invalidateQueries(['donation.feed'])
+      utils.invalidateQueries(['project.detail'])
+    },
+    onError: (error) => {
+      toast.error(<pre>{error.message}</pre>)
+    },
+  })
+
+  const confirmDonationMutation = trpc.useMutation('donation.confirm', {
+    onSuccess: () => {
+      utils.invalidateQueries(['donation.feed'])
+      utils.invalidateQueries(['project.detail'])
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
@@ -117,6 +129,7 @@ export function OutgoingDonations({
                   type="submit"
                   variant="highlight"
                   isLoading={addDonationMutation.isLoading}
+                  disabled={addDonationMutation.isLoading}
                   loadingChildren="Saving"
                   data-testid="submit"
                 >
@@ -125,8 +138,16 @@ export function OutgoingDonations({
               </td>
             </tr>
             {donations?.map((donation) => (
-              <tr key={donation.id} className="text-sm">
-                <td className="text-right pr-3">
+              <tr
+                key={donation.id}
+                className={
+                  'text-sm' +
+                  (donation.state === 'REJECTED'
+                    ? ' line-through opacity-50'
+                    : '')
+                }
+              >
+                <td className={'text-right pr-3'}>
                   {donation.time.toISOString().slice(0, 10)}
                 </td>
                 <td className="text-right pr-3">${num(donation.amount)}</td>
@@ -137,7 +158,7 @@ export function OutgoingDonations({
                         href="#"
                         variant="secondary"
                         className="!h-5"
-                        disabled={addDonationMutation.isLoading}
+                        disabled={cancelDonationMutation.isLoading}
                         onClick={() =>
                           cancelDonationMutation.mutate(donation.id)
                         }
@@ -145,7 +166,17 @@ export function OutgoingDonations({
                         Delete
                       </ButtonLink>
                     ) : donation.state === 'REJECTED' ? (
-                      'Deleted or vetoed'
+                      <ButtonLink
+                        href="#"
+                        variant="secondary"
+                        className="!h-5"
+                        disabled={confirmDonationMutation.isLoading}
+                        onClick={() =>
+                          confirmDonationMutation.mutate(donation.id)
+                        }
+                      >
+                        Restore
+                      </ButtonLink>
                     ) : (
                       ''
                     ))}
