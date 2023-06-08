@@ -15,8 +15,8 @@ import { CommentButton } from '@/components/commentButton'
 import { Date } from '@/components/date'
 import { Heading1 } from '@/components/heading1'
 import { HtmlView } from '@/components/htmlView'
+import { InterestButton } from '@/components/interestButton'
 import { Layout } from '@/components/layout'
-import { LikeButton } from '@/components/likeButton'
 import { Status } from '@/components/status'
 import { Tags } from '@/components/tags'
 import { capitalize, num } from '@/lib/text'
@@ -177,7 +177,7 @@ function BountyPage({ bountyId }: { bountyId: string }) {
             </div>
             <HtmlView html={bounty.contentHtml} className="mt-8" />
             <div className="flex gap-4 mt-6">
-              <LikeButton
+              <InterestButton
                 disabled={!session}
                 likedBy={bounty.likedBy}
                 onLike={() => {

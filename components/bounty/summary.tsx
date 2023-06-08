@@ -2,7 +2,7 @@ import Link from 'next/link'
 import * as React from 'react'
 
 import { Banner } from '@/components/banner'
-import { LikeButton } from '@/components/likeButton'
+import { InterestButton } from '@/components/interestButton'
 import { classNames } from '@/lib/classnames'
 import { capitalize, num } from '@/lib/text'
 import { InferQueryOutput } from '@/lib/trpc'
@@ -86,7 +86,7 @@ function Right({ bounty }: SummaryProps) {
         <Author author={bounty.author} />
       </div>
       <div className="flex justify-around h-8">
-        <LikeButton likedBy={bounty.likedBy} disabled />
+        <InterestButton likedBy={bounty.likedBy} disabled />
         <CommentButton commentCount={bounty._count.comments} disabled />
       </div>
     </div>
