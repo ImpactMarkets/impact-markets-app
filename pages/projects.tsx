@@ -112,7 +112,7 @@ const Projects: NextPageWithAuthAndLayout = () => {
 
   if (feedQuery.data) {
     return (
-      <>
+      <div className="max-w-screen-lg mx-auto">
         <Head>
           <title>Impact Markets</title>
         </Head>
@@ -149,10 +149,8 @@ const Projects: NextPageWithAuthAndLayout = () => {
           <div className="flow-root my-12">
             <ul className="divide-y divide-transparent flex flex-wrap gap-x-[1%] gap-y-2">
               {feedQuery.data.projects.map((project) => (
-                <li
-                  key={project.id}
-                  className="w-full max-w-full xl:w-[49.5%] xl:max-w-[49.5%] 2xl:w-[32.6%] 2xl:max-w-[32.6%]"
-                >
+                <li key={project.id} className="w-full max-w-full">
+                  {/* Classes for the tiled arrangement: w-full max-w-full xl:w-[49.5%] xl:max-w-[49.5%] 2xl:w-[32.6%] 2xl:max-w-[32.6%] */}
                   <ProjectSummary
                     project={project}
                     onLike={() => {
@@ -173,7 +171,7 @@ const Projects: NextPageWithAuthAndLayout = () => {
           itemsPerPage={ITEMS_PER_PAGE}
           currentPageNumber={currentPageNumber}
         />
-      </>
+      </div>
     )
   }
 
@@ -182,7 +180,7 @@ const Projects: NextPageWithAuthAndLayout = () => {
   }
 
   return (
-    <div className="flow-root">
+    <div className="flow-root max-w-screen-lg mx-auto">
       <ul className="my-10 divide-y divide-transparent">
         {[...Array(3)].map((_, idx) => (
           <li key={idx} className="py-10">
