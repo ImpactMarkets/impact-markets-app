@@ -10,6 +10,7 @@ import { Card } from '@mantine/core'
 import { Author } from '../author'
 import { CommentButton } from '../commentButton'
 import { Heading2 } from '../heading2'
+import { HtmlView } from '../htmlView'
 import { Tags } from '../tags'
 import { TAGS } from './tags'
 
@@ -54,9 +55,10 @@ function Left({ project }: ProjectSummaryProps) {
       )}
       <div className={classNames(project.hidden ? 'opacity-50' : '')}>
         <Link href={`/project/${project.id}`}>
-          <Heading2 className="cursor-pointer w-[95%] whitespace-nowrap text-ellipsis overflow-hidden">
+          <Heading2 className="cursor-pointer w-[95%] mb-6 whitespace-nowrap text-ellipsis overflow-hidden">
             {project.title}
           </Heading2>
+          <HtmlView html={summary} />
         </Link>
       </div>
     </div>
