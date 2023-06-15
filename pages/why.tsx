@@ -48,8 +48,8 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
       </p>
       <p className="my-3">
         Maybe you are a <strong>charity entrepreneur</strong> and you’re
-        fundraising for a project: We want to make it easier for your project
-        to find donors. We score donors by their track record of finding new
+        fundraising for a project: We want to make it easier for your project to
+        find donors. We score donors by their track record of finding new
         high-impact projects, which signal-boosts the projects that they
         support. Attention from top donors helps you be discovered by more
         donors, which can snowball into greater and greater success.
