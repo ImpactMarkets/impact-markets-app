@@ -8,6 +8,7 @@ import { num } from '@/lib/text'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { Tabs } from '@mantine/core'
+import { Prisma } from '@prisma/client'
 import { IconTrophy } from '@tabler/icons'
 
 const RankingPage: NextPageWithAuthAndLayout = () => {
@@ -22,23 +23,18 @@ const RankingPage: NextPageWithAuthAndLayout = () => {
       <p className="py-6 text-sm">
         The algorithm behind this ranking is still under active development and
         subject to change. By default, it takes into account the size of the
-        donation, how early it was made, and how well the project panned out.
-        (One version of the algorithm even ignores the size of the donation.) It
+        donation, how early it was made, and how well the project panned out. It
         highlights donors with great foresight even if they are not rich.
       </p>
 
       <Tabs defaultValue="rankingWithSizesAllTime">
         <Tabs.List>
           <Tabs.Tab value="rankingWithSizesAllTime">Standard</Tabs.Tab>
-          <Tabs.Tab value="rankingWithoutSizesAllTime">Without sizes</Tabs.Tab>
           <Tabs.Tab value="rankingWithSizesLastYear">Last 365 days</Tabs.Tab>
         </Tabs.List>
 
         <Tabs.Panel value="rankingWithSizesAllTime" pt="xs">
           <Ranking />
-        </Tabs.Panel>
-        <Tabs.Panel value="rankingWithoutSizesAllTime" pt="xs">
-          <Ranking ignoreSize />
         </Tabs.Panel>
         <Tabs.Panel value="rankingWithSizesLastYear" pt="xs">
           <Ranking pastDays={365} />
@@ -49,17 +45,20 @@ const RankingPage: NextPageWithAuthAndLayout = () => {
 }
 
 const Ranking = ({
-  ignoreSize = false,
   pastDays,
+  ignoreSize = false,
+  includeAnonymous = false,
 }: {
-  ignoreSize?: boolean
   pastDays?: number
+  ignoreSize?: boolean
+  includeAnonymous?: boolean
 }) => {
   const rankingQuery = trpc.useQuery([
     'user.topDonors',
     {
       ignoreSize,
       pastDays,
+      includeAnonymous,
     },
   ])
 
@@ -90,7 +89,9 @@ const Ranking = ({
                         <Author author={user} />
                       </td>
                       <td className="text-right">
-                        {num(user.totalCredits, 0)}
+                        {user.totalCredits >= new Prisma.Decimal(1)
+                          ? num(user.totalCredits, 0)
+                          : '< 1'}
                       </td>
                       <td className="w-10 text-right">
                         {index < 3 && (
