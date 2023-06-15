@@ -1,5 +1,6 @@
 import { Container, Text, Title, createStyles } from '@mantine/core'
 
+import { buttonClasses } from '../button'
 import { ButtonLink } from '../buttonLink'
 
 const useStyles = createStyles((theme) => ({
@@ -71,27 +72,35 @@ export function HeroText() {
     <Container className="max-w-[1400px] pb-24 text-center">
       <div className={classes.inner}>
         <Title className={classes.title}>
-          Your crowdsourced
+          The AI Safety
           <div>
             <Text component="span" className={classes.highlight} inherit>
-              charity evaluator
+              Charity Evaluator
             </Text>
           </div>
         </Title>
 
         <Container className="max-w-[600px]">
           <Text size="lg" color="dimmed">
-            Signal-boost – or follow the signal to find – the best projects
+            Find or promote the best early-stage AI safety projects
           </Text>
         </Container>
 
         <div className="mt-6">
           <ButtonLink href="/why" variant="primary" className="mr-2">
-            What?
+            Read the FAQs
           </ButtonLink>
-          <ButtonLink href="/projects" variant="highlight" className="">
-            Explore projects
+          <ButtonLink href="/projects" variant="primary" className="mr-2">
+            Explore the projects
           </ButtonLink>
+          <a
+            href="https://airtable.com/shr1eRlbcr43os6SX"
+            className={buttonClasses({ variant: 'highlight' })}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Register your interest
+          </a>
         </div>
       </div>
     </Container>

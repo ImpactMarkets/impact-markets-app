@@ -3,7 +3,10 @@ import * as React from 'react'
 
 export const Comparisons = () => (
   <>
-    <div className="max-w-screen-lg m-auto items-center flex mb-20 mt-12 flex-col sm:flex-row">
+    <div className="flex justify-center my-12 text-3xl font-bold">
+      AI Safety Impact Markets is a …
+    </div>
+    <div className="max-w-screen-lg m-auto items-center flex mb-20 flex-col sm:flex-row">
       <div className="basis-full m-6">
         <Image
           src="/images/collaborating.png"
@@ -16,16 +19,16 @@ export const Comparisons = () => (
       </div>
       <div className="basis-full">
         <div className="text-xl font-bold mb-4">
-          It’s like a charity evaluator for all cause areas
+          Crowdsourced charity evaluator
         </div>
         <div>
           Charity evaluators have sophisticated and trusted processes, but they
           can’t scale down to projects so small and numerous that the evaluation
           costs more than what they can absorb in funding. Charity evaluators
-          also don’t exist for many cause areas. But only because there is no
-          one who can evaluate <em>all</em> these projects, doesn’t mean that
-          there is no one who can evaluate <em>any</em> of them. We aggregate
-          the knowledge that is already out there.
+          also don’t exist for many cause areas such as AI safety. But only
+          because there is no one who can evaluate <em>all</em> these projects,
+          doesn’t mean that there is no one who can evaluate <em>any</em> of
+          them. We aggregate the knowledge that is already out there.
         </div>
       </div>
     </div>
@@ -42,7 +45,7 @@ export const Comparisons = () => (
       </div>
       <div className="basis-full">
         <div className="text-xl font-bold mb-4">
-          It’s like carbon credits for any kind of positive impact
+          Currency of existential security
         </div>
         <div>
           Carbon credits (or “offsets”) are an asset like money, but just like
@@ -67,7 +70,7 @@ export const Comparisons = () => (
       </div>
       <div className="basis-full">
         <div className="text-xl font-bold mb-4">
-          It’s like getting paid as a grantmaker
+          Network of grantmakers/regrantors
         </div>
         <div>
           Your donations inform the giving of individuals and foundations – a
