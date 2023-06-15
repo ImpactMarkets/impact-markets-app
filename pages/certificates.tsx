@@ -136,7 +136,7 @@ const Home: NextPageWithAuthAndLayout = () => {
           />
         </div>
 
-        <Banner className="mt-6 text-sm p-4">
+        <Banner className="my-6 text-sm p-4">
           This is an archive. Please see the{' '}
           <Link href="/projects" className="link">
             projects
@@ -154,7 +154,7 @@ const Home: NextPageWithAuthAndLayout = () => {
               {feedQuery.data.certificates.map((certificate) => (
                 <li
                   key={certificate.id}
-                  className="w-full max-w-full xl:w-[49%] xl:max-w-[49%] 2xl:w-[32%] 2xl:max-w-[32%]"
+                  className="w-full max-w-full xl:w-[49.5%] xl:max-w-[49.5%] 2xl:w-[32.6%] 2xl:max-w-[32.6%]"
                 >
                   <CertificateSummary
                     certificate={certificate}
