@@ -1,6 +1,5 @@
 import { z } from 'zod'
 
-import { markdownToHtml } from '@/lib/editor'
 import { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
@@ -149,10 +148,14 @@ export const userRouter = createProtectedRouter()
   })
   .query('topDonors', {
     input: z.object({
-      ignoreSize: z.boolean().optional(),
       pastDays: z.number().optional(),
+      ignoreSize: z.boolean().optional(),
+      includeAnonymous: z.boolean().optional(),
     }),
-    async resolve({ ctx, input: { ignoreSize = false, pastDays = 1e6 } }) {
+    async resolve({
+      ctx,
+      input: { pastDays = 1e6, ignoreSize = false, includeAnonymous = false },
+    }) {
       const users: {
         id: string
         name: string
@@ -180,7 +183,8 @@ export const userRouter = createProtectedRouter()
             WHERE
               "Project"."credits" > 0 AND
               "Donation"."state" = 'CONFIRMED' AND
-              "Donation"."time" > now() - make_interval(days => ${pastDays}::int)
+              "Donation"."time" > now() - make_interval(days => ${pastDays}::int) AND
+              (${includeAnonymous} OR NOT "User"."prefersAnonymity")
             ORDER BY "Donation"."projectId" ASC, "Donation"."time" ASC
           ),
           donations AS (

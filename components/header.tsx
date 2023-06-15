@@ -1,7 +1,7 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import * as React from 'react'
 
-import { Logo } from '@/components/icons'
 import { Burger, Header as MantineHeader, MediaQuery } from '@mantine/core'
 
 interface HeaderProps {
@@ -41,7 +41,14 @@ export const Header = ({
         <div>
           <Link href="/">
             <span>
-              <Logo className="w-auto h-[32px] cursor-pointer" />
+              <Image
+                src="/images/logo-light.svg"
+                alt=""
+                width={90}
+                height={38}
+                className="cursor-pointer"
+                unoptimized
+              />
             </span>
           </Link>
         </div>

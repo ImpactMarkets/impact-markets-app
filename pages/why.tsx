@@ -17,81 +17,65 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
 
       <Heading1 className="mb-6">Frequently asked questions</Heading1>
 
+      <p>
+        If your question is not answered here, please hit us up on Discord or
+        use the support button in the bottom right!
+      </p>
+
+      <Heading2 className="my-6">Overview</Heading2>
+
+      <p className="my-3">There are three groups of users on our platform:</p>
+      <p className="my-3">
+        Maybe you’re a <strong>philanthropic funder</strong> looking for more
+        funding opportunities, or you’re a <strong>donor</strong>, no matter how
+        small, who doesn’t want to spend a lot of time on researching your
+        donations: You’ll be able to follow sophisticated donors who have skin
+        in the game. We’re building a crowdsourced charity evaluator for all the
+        small, speculative, potentially-spectacular projects across all cause
+        areas ranked by the donations they’ve received from expert donors. You
+        can tap into the wisdom of these donors and boost the impact of your
+        donations.
+      </p>
+      <p className="my-3">
+        Maybe you’re an <strong>experienced donor or grantmaker</strong>, a{' '}
+        <strong>domain expert</strong>, an{' '}
+        <strong>insider of some impactful field</strong>, or an{' '}
+        <strong>expert in startup picking</strong>: You can use the platform to
+        signal-boost the best projects. You get a “donor score” based on your
+        track record of impact, and the higher your score, the greater your
+        boost to the project. This lets you leverage your expertise for
+        follow-on donations, getting the project funded faster.
+      </p>
+      <p className="my-3">
+        Maybe you are a <strong>charity entrepreneur</strong> and you’re
+        fundraising for a project: We want to make it easier for your project to
+        find donors. We score donors by their track record of finding new
+        high-impact projects, which signal-boosts the projects that they
+        support. Attention from top donors helps you be discovered by more
+        donors, which can snowball into greater and greater success.
+      </p>
+      <p className="my-3">
+        Eventually we want to grow this into an ecosystem akin to the voluntary
+        carbon credit market (phase 3). But for now only phase 1 is relevant.
+      </p>
+      <p className="my-3">
+        <Image
+          src="/images/phases.png"
+          alt="Phases"
+          width={1024}
+          height={631}
+          object-fit="contain"
+          className="md:max-w-screen-md max-w-full mx-auto"
+          unoptimized
+        />
+      </p>
+
       <Accordion
         chevronPosition="right"
         defaultValue="h.supl8yeuzjp"
         variant="separated"
       >
-        <p>
-          If your question is not answered here, please hit us up on Discord or
-          use the support button in the bottom right!
-        </p>
         <Heading2 className="my-10">General questions</Heading2>
-        <Accordion.Item value="h.supl8yeuzjp">
-          <Accordion.Control>What is this all about?</Accordion.Control>
-          <Accordion.Panel>
-            <p className="my-3">That depends on who you are:</p>
-            <p className="my-3">
-              <strong>
-                If you’re a donor who doesn’t want to spend a lot of time
-                researching your donations
-              </strong>
-              , you’ll be able to follow sophisticated donors who have skin in
-              the game. We’re building a crowdsourced charity evaluator for all
-              the small, speculative, potentially-spectacular projects across
-              all cause areas ranked by the donations they’ve received from
-              expert donors. You can tap into the wisdom of these donors and
-              boost the impact of your donations.
-            </p>
-            <p className="my-3">
-              <strong>
-                If you’re a donor who has insider knowledge of some space of
-                nonprofit work or likes to thoroughly research your donations
-              </strong>
-              , you can use the platform to signal-boost the best projects. You
-              get a “donor score” based on your track record of impact, and the
-              higher your score, the greater your boost to the project. This
-              lets you leverage your expertise for follow-on donations, getting
-              the project funded faster.
-            </p>
-            <p className="my-3">
-              <strong>
-                If you are a charity entrepreneur and you’re fundraising for a
-                project
-              </strong>
-              , we want to make it easier for your project to find donors. We
-              score donors by their track record of finding new high-impact
-              projects, which signal-boosts the projects that they support.
-              Attention from top donors helps you be discovered by more donors,
-              which can snowball into greater and greater success.
-            </p>
-            <p className="my-3">
-              <strong>If you are a philanthropic funder</strong>, we want to
-              make all the local information accessible to you that is
-              distributed across thousands of sophisticated donors and helps
-              them find exceptional funding gaps. We signal-boost that knowledge
-              and make it accessible to you. You can use cash or regranting
-              prizes to incentivize these donors, or you can mine their findings
-              for any funding gaps that you want to fill.
-            </p>
-            <p className="my-3">
-              Eventually we want to grow this into an ecosystem akin to the
-              voluntary carbon credit market (phase 3). But for now only phase 1
-              is relevant.
-            </p>
-            <p className="my-3">
-              <Image
-                src="/images/phases.png"
-                alt="Phases"
-                width={1024}
-                height={631}
-                object-fit="contain"
-                className="max-w-screen-md mx-auto"
-                unoptimized
-              />
-            </p>
-          </Accordion.Panel>
-        </Accordion.Item>
         <Accordion.Item value="h.fiwjvi9zluh9">
           <Accordion.Control>What problems does it solve?</Accordion.Control>
           <Accordion.Panel>
@@ -417,7 +401,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
                 width={1024}
                 height={631}
                 object-fit="contain"
-                className="max-w-screen-md mx-auto"
+                className="md:max-w-screen-md max-w-full mx-auto"
                 unoptimized
               />
             </p>

@@ -1,5 +1,6 @@
 import mixpanel from 'mixpanel-browser'
 import { useSession } from 'next-auth/react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
@@ -16,7 +17,6 @@ import {
   TablerIcon,
 } from '@tabler/icons'
 
-import { Logo } from './icons'
 import { User } from './user'
 
 mixpanel.init(browserEnv.NEXT_PUBLIC_MIXPANEL_TOKEN, {
@@ -111,7 +111,14 @@ export const Navbar = ({ hidden }: { hidden: boolean }) => (
   >
     <MantineNavbar.Section className="hidden md:block m-4">
       <Link href="/">
-        <Logo className="w-auto md:h-[64px] cursor-pointer" />
+        <Image
+          src="/images/logo-light.svg"
+          alt="Impact Markets logo"
+          width={180}
+          height={76}
+          className="cursor-pointer"
+          unoptimized
+        />
       </Link>
     </MantineNavbar.Section>
     <MantineNavbar.Section grow className="mx-4 my-3">
