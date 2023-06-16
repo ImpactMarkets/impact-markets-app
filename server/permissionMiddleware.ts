@@ -186,7 +186,6 @@ export const permissionMiddleware: MiddlewareFunction = async ({
     'certificate.feed': allow,
     'certificate.detail': allow,
     'certificate.search': allow,
-    'certificate.add': isAuthenticated,
     'certificate.edit': async () =>
       and(
         await isAuthenticated(),
@@ -234,11 +233,6 @@ export const permissionMiddleware: MiddlewareFunction = async ({
         or(await isAdmin(), await commentBelongsToUser())
       ),
     'holding.feed': allow,
-    'holding.edit': async () =>
-      and(
-        await isAuthenticated(),
-        or(await isAdmin(), await holdingBelongsToUser())
-      ),
     'donation.feed': isAuthenticated,
     'donation.add': isAuthenticated,
     'donation.confirm': async () =>
@@ -253,22 +247,6 @@ export const permissionMiddleware: MiddlewareFunction = async ({
           await isAdmin(),
           await donationProjectBelongsToUser(),
           await donationBelongsToUser()
-        )
-      ),
-    'transaction.feed': isAuthenticated,
-    'transaction.add': isAuthenticated,
-    'transaction.confirm': async () =>
-      and(
-        await isAuthenticated(),
-        or(await isAdmin(), await sellingHoldingBelongsToUser())
-      ),
-    'transaction.cancel': async () =>
-      and(
-        await isAuthenticated(),
-        or(
-          await isAdmin(),
-          await buyingHoldingBelongsToUser(),
-          await sellingHoldingBelongsToUser()
         )
       ),
     'user.topDonors': allow,
