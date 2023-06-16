@@ -9,6 +9,14 @@ export function markdownToHtml(markdown: string) {
   return DOMPurify.sanitize(marked.parse(markdown, { breaks: true }))
 }
 
+export function markdownToPlainHtml(markdown: string) {
+  return DOMPurify.sanitize(marked.parse(markdown, { breaks: true }), {
+    ALLOWED_TAGS: ['em'],
+    ALLOWED_ATTR: [],
+    FORBID_CONTENTS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+  })
+}
+
 function replacePlaceholder(
   cursor: Cursor,
   placeholder: string,
