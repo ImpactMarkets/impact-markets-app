@@ -9,7 +9,6 @@ import { MarkdownIcon } from '@/components/icons'
 import { MarkdownEditor } from '@/components/markdownEditor'
 import { TAGS } from '@/components/project/tags'
 import { TextField } from '@/components/textField'
-import { num } from '@/lib/text'
 import {
   isListOfEmails,
   isListOfEmailsValidationMessage,

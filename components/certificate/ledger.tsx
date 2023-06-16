@@ -20,7 +20,7 @@ type LedgerProps = {
 const Holding = ({
   holding,
   userId, // eslint-disable-line @typescript-eslint/no-unused-vars
-  isActive,
+  isActive, // eslint-disable-line @typescript-eslint/no-unused-vars
   simplified = false,
 }: {
   holding: InferQueryOutput<'holding.feed'>[0]
