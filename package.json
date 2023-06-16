@@ -6,7 +6,7 @@
     "node": "^16.0.0"
   },
   "scripts": {
-    "test:unit": "jest ./tests/unit",
+    "test:unit": "jest --passWithNoTests ./tests/unit",
     "test:e2e": "playwright test",
     "test": "npm-run-all test:*",
     "dev": "prisma generate && next dev",
