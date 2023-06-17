@@ -4,9 +4,8 @@ import * as React from 'react'
 
 import { Layout } from '@/components/layout'
 import { Bio } from '@/components/user/bio'
-import { CertificateFeed } from '@/components/user/certificateFeed'
 import { ProfileInfo } from '@/components/user/profileInfo'
-import { TransactionFeed } from '@/components/user/transactionFeed'
+import { ProjectFeed } from '@/components/user/projectFeed'
 import { refreshSession } from '@/components/utils'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
@@ -34,18 +33,17 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
     return (
       <div className="max-w-screen-lg mx-auto">
         <ProfileInfo user={profileQuery.data} />
-        <Tabs defaultValue="certificates">
+        <Tabs defaultValue="projects">
           <Tabs.List>
-            <Tabs.Tab value="certificates">Projects</Tabs.Tab>
+            <Tabs.Tab value="projects">Projects</Tabs.Tab>
             {profileQuery.data.bio && <Tabs.Tab value="bio">Bio</Tabs.Tab>}
-            <Tabs.Tab value="transactions">Transactions</Tabs.Tab>
             {router.query.userId === session?.user.id ? (
               <Tabs.Tab value="preferences">Preferences</Tabs.Tab>
             ) : null}
           </Tabs.List>
 
-          <Tabs.Panel value="certificates" pt="xs">
-            <CertificateFeed user={profileQuery.data} />
+          <Tabs.Panel value="projects" pt="xs">
+            <ProjectFeed user={profileQuery.data} />
           </Tabs.Panel>
 
           {profileQuery.data.bio && (
@@ -53,9 +51,6 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
               <Bio user={profileQuery.data} />
             </Tabs.Panel>
           )}
-          <Tabs.Panel value="transactions" pt="xs">
-            <TransactionFeed user={profileQuery.data} />
-          </Tabs.Panel>
           {router.query.userId === session?.user.id ? (
             <Tabs.Panel value="preferences" pt="xs" className="p-6">
               <Switch

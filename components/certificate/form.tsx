@@ -9,9 +9,6 @@ import { MarkdownIcon } from '@/components/icons'
 import { MarkdownEditor } from '@/components/markdownEditor'
 import { TAGS } from '@/components/project/tags'
 import { TextField } from '@/components/textField'
-import { BondingCurve } from '@/lib/auction'
-import { DEFAULT_TARGET, DEFAULT_VALUATION, SHARE_COUNT } from '@/lib/constants'
-import { num } from '@/lib/text'
 import {
   isListOfEmails,
   isListOfEmailsValidationMessage,
@@ -89,7 +86,6 @@ export function CertificateForm({
     getValues,
     reset,
     handleSubmit,
-    watch,
     setValue,
   } = useForm<FormData>({
     mode: 'onSubmit',
@@ -108,10 +104,6 @@ export function CertificateForm({
       reset(getValues())
     }
   }, [isSubmitSuccessful, reset, getValues])
-
-  const one = new Prisma.Decimal(1)
-  const watchValuation = watch('valuation')
-  const watchTarget = watch('target')
 
   const [issuerEmailsData, setIssuerEmailsData] = useState(
     (getValues().issuerEmails || session!.user.email)
@@ -232,102 +224,6 @@ export function CertificateForm({
         >
           <Accordion.Control>Advanced options</Accordion.Control>
           <Accordion.Panel className="text-sm">
-            {isNew ? (
-              <>
-                <SimpleGrid
-                  cols={2}
-                  breakpoints={[{ maxWidth: 'md', cols: 1 }]}
-                >
-                  <div className="mt-6 space-y-6">
-                    <TextField
-                      {...register('valuation', {
-                        required: true,
-                      })}
-                      label="Minimum valuation"
-                      description="You won’t sell a single share below what valuation?"
-                      rightSection="USD"
-                      classNames={{ rightSection: 'w-16' }}
-                      type="number"
-                      step="1"
-                      min="1"
-                      max="1e30"
-                      required
-                    />
-                  </div>
-                  <div className="mt-6 space-y-6">
-                    <TextField
-                      {...register('target', {
-                        required: true,
-                      })}
-                      label="Fundraising target"
-                      description="How much do you hope to raise?"
-                      rightSection="USD"
-                      classNames={{ rightSection: 'w-16' }}
-                      type="number"
-                      step="1"
-                      min="1"
-                      max="1e30"
-                      required
-                    />
-                  </div>
-                </SimpleGrid>
-                <table className="text-sm mx-auto mt-6">
-                  <tbody>
-                    <tr>
-                      <td className="text-right pr-4">Shares:</td>
-                      <td className="text-right pr-4">
-                        {num(new Prisma.Decimal(SHARE_COUNT))}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="text-right pr-4">Maximum valuation:</td>
-                      <td className="text-right pr-4">
-                        $
-                        {num(
-                          new BondingCurve(
-                            new Prisma.Decimal(watchTarget || DEFAULT_TARGET)
-                          ).valuationOfSize(
-                            new Prisma.Decimal(
-                              watchValuation || DEFAULT_VALUATION
-                            ),
-                            one
-                          ),
-                          0
-                        )}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="text-right pr-4">Maximum fundraise:</td>
-                      <td className="text-right pr-4">
-                        $
-                        {num(
-                          new BondingCurve(
-                            new Prisma.Decimal(watchTarget || DEFAULT_TARGET)
-                          ).costOfSize(
-                            new Prisma.Decimal(
-                              watchValuation || DEFAULT_VALUATION
-                            ),
-                            one
-                          ),
-                          0
-                        )}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-
-                <div className="mt-6 space-y-6 text-sm">
-                  You can edit these later through the edit function of your
-                  holding.
-                </div>
-              </>
-            ) : (
-              <div className="mt-6 space-y-6 text-sm">
-                Please go through the edit function of your holding to change
-                starting and target valuation.
-              </div>
-            )}
-
             <IMMultiSelect
               {...register('issuerEmails', {
                 validate: (value) => isListOfEmails(value),

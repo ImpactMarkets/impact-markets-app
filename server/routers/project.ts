@@ -70,7 +70,7 @@ export const projectRouter = createProtectedRouter()
         select: {
           id: true,
           title: true,
-          contentHtml: true,
+          content: true,
           createdAt: true,
           hidden: true,
           tags: true,

@@ -123,29 +123,6 @@ export const userRouter = createProtectedRouter()
       return users
     },
   })
-  .query('topRetirers', {
-    async resolve({ ctx }) {
-      const users: {
-        id: string
-        name: string
-        image: string
-        credits: Prisma.Decimal
-      }[] = await ctx.prisma.$queryRaw`
-        SELECT
-          "User"."id",
-          "User"."name",
-          "User"."image",
-          SUM("Certificate"."credits" * "Holding"."size") as "credits"
-        FROM "User"
-        JOIN "Holding" ON "User"."id" = "Holding"."userId"
-        JOIN "Certificate" ON "Holding"."certificateId" = "Certificate"."id"
-        WHERE "Certificate"."credits" > 0 and "Holding"."type" = 'CONSUMPTION'
-        GROUP BY "User"."id", "User"."name", "User"."image"
-        ORDER BY "credits" DESC;
-      `
-      return users
-    },
-  })
   .query('topDonors', {
     input: z.object({
       pastDays: z.number().optional(),
