@@ -26,6 +26,7 @@ export const userRouter = createProtectedRouter()
           bio: true,
           prefersAnonymity: true,
           prefersEventNotifications: true,
+          donations: true,
           email: ctx.session?.user.role === 'ADMIN',
         },
       })

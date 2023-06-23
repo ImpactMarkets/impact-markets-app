@@ -4,12 +4,20 @@ import * as React from 'react'
 
 import { Layout } from '@/components/layout'
 import { Bio } from '@/components/user/bio'
+import { Donations } from '@/components/user/donations'
 import { ProfileInfo } from '@/components/user/profileInfo'
 import { ProjectFeed } from '@/components/user/projectFeed'
 import { refreshSession } from '@/components/utils'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { Switch, Tabs } from '@mantine/core'
+
+// TODO
+// There should be a tab on the profile where we list all projects
+// that a user has donated to and possibly such things as the date of the earliest donation,
+// the total size of the donations to a project, the donor rank, etc.
+// But for now just listing them there would be an improvement.
+// add "DONATIONS" tab to left of "TRANSACTIONS"
 
 const ProfilePage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
@@ -37,6 +45,7 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
           <Tabs.List>
             <Tabs.Tab value="projects">Projects</Tabs.Tab>
             {profileQuery.data.bio && <Tabs.Tab value="bio">Bio</Tabs.Tab>}
+            <Tabs.Tab value="donations">Donations</Tabs.Tab>
             {router.query.userId === session?.user.id ? (
               <Tabs.Tab value="preferences">Preferences</Tabs.Tab>
             ) : null}
@@ -51,6 +60,11 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
               <Bio user={profileQuery.data} />
             </Tabs.Panel>
           )}
+
+          <Tabs.Panel value="donations" pt="xs">
+            <Donations user={profileQuery.data} />
+          </Tabs.Panel>
+
           {router.query.userId === session?.user.id ? (
             <Tabs.Panel value="preferences" pt="xs" className="p-6">
               <Switch
