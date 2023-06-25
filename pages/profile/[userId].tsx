@@ -4,12 +4,12 @@ import * as React from 'react'
 
 import { Layout } from '@/components/layout'
 import { Bio } from '@/components/user/bio'
+import { Preferences } from '@/components/user/preferences'
 import { ProfileInfo } from '@/components/user/profileInfo'
 import { ProjectFeed } from '@/components/user/projectFeed'
-import { refreshSession } from '@/components/utils'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
-import { Switch, Tabs } from '@mantine/core'
+import { Tabs } from '@mantine/core'
 
 const ProfilePage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
@@ -24,10 +24,6 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
   if (profileQuery.isError) {
     return <div>Error: {profileQuery.error.message}</div>
   }
-
-  const preferencesMutation = trpc.useMutation(['user.preferences'], {
-    onSuccess: refreshSession,
-  })
 
   if (profileQuery.data) {
     return (
@@ -53,39 +49,7 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
           )}
           {router.query.userId === session?.user.id ? (
             <Tabs.Panel value="preferences" pt="xs" className="p-6">
-              <Switch
-                label="Show detailed certificate view"
-                classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
-                disabled={preferencesMutation.isLoading}
-                checked={session?.user.prefersDetailView}
-                onChange={(event) => {
-                  preferencesMutation.mutate({
-                    prefersDetailView: event.target.checked,
-                  })
-                }}
-              />
-              <Switch
-                label="Hide name from rankings"
-                classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
-                disabled={preferencesMutation.isLoading}
-                checked={session?.user.prefersAnonymity}
-                onChange={(event) => {
-                  preferencesMutation.mutate({
-                    prefersAnonymity: event.target.checked,
-                  })
-                }}
-              />
-              <Switch
-                label="Send me daily email notifications for activity on my projects"
-                classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
-                disabled={preferencesMutation.isLoading}
-                checked={session?.user.prefersEventNotifications}
-                onChange={(event) => {
-                  preferencesMutation.mutate({
-                    prefersEventNotifications: event.target.checked,
-                  })
-                }}
-              />
+              <Preferences />
             </Tabs.Panel>
           ) : null}
         </Tabs>
