@@ -98,9 +98,11 @@ const renderSection = (events: Event[]) => {
     <>
       <MjmlText>
         <h2>
+          Project “
           <a href={`https://app.impactmarkets.io/${objectType}/${objectId}`}>
             {objectTitle}
           </a>
+          ”
         </h2>
         {events.map((event) => (
           <p key={event.id}>
@@ -129,6 +131,7 @@ export async function sendEmail(recipientAddress: string, emailHtml: string) {
     recipientAddress.endsWith('@impactmarkets.io') ||
     recipientAddress === 'telofy@gmail.com'
   ) {
+    console.log(`Sending email to ${recipientAddress}`)
     await transporter.sendMail({
       from: process.env.EMAIL_FROM,
       to: recipientAddress,
