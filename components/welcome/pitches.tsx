@@ -71,7 +71,7 @@ export const Pitches = () => (
           <p>
             Are you an experienced donor or grantmaker? Do you want to leverage
             some of the{' '}
-            <span className="text-gray-700">$250,000 donation budget</span> of
+            <span className="text-gray-700">$300,000 donation budget</span> of
             the donors we have waiting for you?
           </p>
 
