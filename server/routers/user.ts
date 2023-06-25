@@ -91,18 +91,13 @@ export const userRouter = createProtectedRouter()
       prefersDetailView: z.boolean().optional(),
       prefersAnonymity: z.boolean().optional(),
       prefersEventNotifications: z.boolean().optional(),
+      prefersProjectNotifications: z.boolean().optional(),
+      prefersBountyNotifications: z.boolean().optional(),
     }),
-    async resolve({
-      input: { prefersDetailView, prefersAnonymity, prefersEventNotifications },
-      ctx,
-    }) {
+    async resolve({ input, ctx }) {
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session!.user.id },
-        data: {
-          prefersDetailView: prefersDetailView,
-          prefersAnonymity: prefersAnonymity,
-          prefersEventNotifications: prefersEventNotifications,
-        },
+        data: input,
       })
 
       return user

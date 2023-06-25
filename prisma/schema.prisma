@@ -110,9 +110,11 @@ model User {
   updatedAt     DateTime  @updatedAt
 
   // This should only change the interface but not anything functionally
-  prefersDetailView         Boolean @default(false)
-  prefersAnonymity          Boolean @default(false)
-  prefersEventNotifications Boolean @default(true)
+  prefersDetailView           Boolean @default(false)
+  prefersAnonymity            Boolean @default(false)
+  prefersEventNotifications   Boolean @default(true)
+  prefersProjectNotifications Boolean @default(false)
+  prefersBountyNotifications  Boolean @default(false)
 
   accounts           Account[]
   sessions           Session[]

@@ -28,6 +28,8 @@ export const Event = z.object({
     name: z.string(),
     email: z.string(),
     prefersEventNotifications: z.boolean(),
+    prefersProjectNotifications: z.boolean(),
+    prefersBountyNotifications: z.boolean(),
   }),
   parameters: z.object({
     objectId: z.string(),
