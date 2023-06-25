@@ -3,9 +3,9 @@ import slugify from 'slugify'
 import { z } from 'zod'
 
 import { BOUNTY_SORT_KEYS, BountySortKey } from '@/lib/constants'
-import { markdownToHtml } from '@/lib/editor'
+import { markdownToHtml, markdownToPlainHtml } from '@/lib/editor'
 import { Prisma, User } from '@prisma/client'
-import { BountyStatus, EventStatus, EventType, Role } from '@prisma/client'
+import { BountyStatus, EventStatus, EventType } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
 import { createProtectedRouter } from '../createProtectedRouter'
@@ -284,6 +284,7 @@ export const bountyRouter = createProtectedRouter()
           id: true,
           title: true,
           author: true,
+          content: true,
         },
       })
 
@@ -398,22 +399,33 @@ async function emitNewBountyEvents(
     id,
     title,
     author,
+    content,
   }: {
     id: string
     title: string
     author: User
+    content: string
   }
 ) {
-  const adminUsers = await ctx.prisma.user.findMany({
+  const subscribers = await ctx.prisma.user.findMany({
     where: {
-      role: Role.ADMIN,
+      prefersBountyNotifications: true,
     },
     select: {
       id: true,
     },
   })
 
-  for (const adminUser of adminUsers) {
+  let summary = content
+  if (summary.length > 300) {
+    summary = summary.substring(0, 300) + '…'
+  }
+  summary = markdownToPlainHtml(summary)
+
+  for (const subscriber of subscribers) {
+    if (subscriber.id === author.id) {
+      continue
+    }
     await ctx.prisma.event.create({
       data: {
         type: EventType.BOUNTY,
@@ -421,12 +433,12 @@ async function emitNewBountyEvents(
           objectId: id,
           objectType: 'bounty',
           objectTitle: title,
-          text: `Bounty created by **${author.name}**`,
+          text: `**${author.name}**: “${summary}”`,
         },
         status: EventStatus.PENDING,
         recipient: {
           connect: {
-            id: adminUser.id,
+            id: subscriber.id,
           },
         },
       },
