@@ -41,10 +41,8 @@ export const jobRouter = createProtectedRouter()
       )
       for (const events of Object.values(eventsByRecipient)) {
         const recipient = events[0].recipient
-        if (recipient.prefersEventNotifications && recipient.email) {
-          const emailHtml = createEmail(recipient, events)
-          await sendEmail(recipient.email, emailHtml)
-        }
+        const emailHtml = createEmail(recipient, events)
+        await sendEmail(recipient.email, emailHtml)
         await markEventsCompleted(ctx, events)
       }
     },
