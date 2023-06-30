@@ -19,9 +19,14 @@ const getOrderBy = (
     createdAt: { createdAt: desc },
     actionStart: { actionStart: { sort: desc, nulls: last } },
     actionEnd: { actionEnd: { sort: desc, nulls: last } },
+    supportScore: {
+      supportScore: {
+        score: desc,
+      },
+    },
     supporterCount: {
-      donations: {
-        _count: desc,
+      supportScore: {
+        count: desc,
       },
     },
   }
@@ -102,6 +107,7 @@ export const projectRouter = createProtectedRouter()
               },
             },
           },
+          supportScore: true,
           _count: {
             select: {
               comments: true,

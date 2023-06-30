@@ -1,10 +1,11 @@
 export const ITEMS_PER_PAGE = 30
 
 export const PROJECT_SORT_KEYS = [
+  'supportScore',
+  'supporterCount',
   'createdAt',
   'actionStart',
   'actionEnd',
-  'supporterCount',
   '',
 ] as const
 export type ProjectSortKey = (typeof PROJECT_SORT_KEYS)[number]

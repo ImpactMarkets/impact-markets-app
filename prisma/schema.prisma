@@ -163,7 +163,7 @@ model Project {
   likedBy       LikedProject[]
   comments      Comment[]
   contributions Contribution[]
-  projectScore  ProjectScore?
+  supportScore  SupportScore?
 
   @@index([authorId])
 }
@@ -384,7 +384,7 @@ view UserScore {
   @@id([userId])
 }
 
-view ProjectScore {
+view SupportScore {
   projectId String  @unique
   count     Int
   score     Decimal

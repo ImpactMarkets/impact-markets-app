@@ -22,13 +22,14 @@ const ProjectSummary = dynamic<ProjectSummaryProps>(
 )
 
 const orderByValues: Array<{ value: ProjectSortKey; label: string }> = [
+  { value: 'supportScore', label: 'Sort by support score' },
+  { value: 'supporterCount', label: 'Sort by supporters' },
   { value: 'createdAt', label: 'Sort by creation date' },
   { value: 'actionStart', label: 'Sort by start of work' },
   { value: 'actionEnd', label: 'Sort by review date' },
-  { value: 'supporterCount', label: 'Sort by supporters' },
 ]
 
-const defaultOrder = 'supporterCount'
+const defaultOrder = 'supportScore'
 
 const Projects: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()

@@ -65,7 +65,7 @@ CREATE VIEW "UserScore" AS (
         "userId"
 );
 
-CREATE VIEW "ProjectScore" AS (
+CREATE VIEW "SupportScore" AS (
     SELECT
         "Project"."id" as "projectId",
         COUNT("User"."id") :: numeric as "count",
