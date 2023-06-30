@@ -89,7 +89,11 @@ function Right({ certificate }: CertificateSummaryProps) {
         )(certificate.issuers)}
       </div>
       <div className="flex justify-around h-8">
-        <LikeButton likedBy={certificate.likedBy} disabled />
+        <LikeButton
+          likedBy={certificate.likedBy}
+          tooltip={'No likes yet'}
+          disabled
+        />
       </div>
     </div>
   )

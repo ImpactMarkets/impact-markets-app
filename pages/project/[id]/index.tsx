@@ -203,6 +203,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
             <HtmlView html={project.contentHtml} className="mt-8" />
             <div className="flex gap-4 mt-6">
               <LikeButton
+                tooltip={'No likes yet'}
                 disabled={!session}
                 likedBy={project.likedBy}
                 onLike={() => {

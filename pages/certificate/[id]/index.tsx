@@ -172,6 +172,7 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
               <LikeButton
                 disabled={!session}
                 likedBy={certificate.likedBy}
+                tooltip={'No likes yet'}
                 onLike={() => {
                   likeMutation.mutate(certificate.id)
                 }}

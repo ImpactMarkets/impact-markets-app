@@ -70,7 +70,11 @@ function Right({ project }: ProjectSummaryProps) {
         <Author author={project.author} />
       </div>
       <div className="flex justify-around h-8">
-        <LikeButton likedBy={project.likedBy} disabled />
+        <LikeButton
+          likedBy={project.likedBy}
+          tooltip={'No likes yet'}
+          disabled
+        />
         <CommentButton commentCount={project._count.comments} disabled />
       </div>
     </div>

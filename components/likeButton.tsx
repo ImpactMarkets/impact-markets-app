@@ -16,7 +16,9 @@ type LikeButtonProps = {
       name: string | null
     }
   }[]
+  label?: string
   responsive?: boolean
+  tooltip: string
   disabled?: boolean
   onLike?: () => void
   onUnlike?: () => void
@@ -24,7 +26,9 @@ type LikeButtonProps = {
 
 export function LikeButton({
   likedBy,
+  label,
   responsive,
+  tooltip,
   disabled,
   onLike,
   onUnlike,
@@ -92,7 +96,7 @@ export function LikeButton({
           isLikingAnimation && 'transition-colors duration-100 text-gray-50'
         )}
       >
-        {likeCount}
+        {likeCount} {label ? label : null}
       </span>
     </>
   )
@@ -129,7 +133,7 @@ export function LikeButton({
             .map((item) =>
               item.user.id === session?.user.id ? 'You' : item.user.name
             )
-            .join(', ') || 'No likes yet'}
+            .join(', ') || tooltip}
           {likeCount > MAX_LIKED_BY_SHOWN &&
             ` and ${likeCount - MAX_LIKED_BY_SHOWN} more`}
         </p>
