@@ -19,7 +19,7 @@ export const Tags = ({ queryData, tags: knownTags }: TagsProps) => {
   if (!queryData.tags) return null
   const tags = queryData.tags.split(',')
   return (
-    <div className="flex flex-wrap gap-1">
+    <span className="inline-flex flex-wrap gap-1">
       {knownTags.map(
         ({ value, label, color }) =>
           tags.includes(value) && (
@@ -34,6 +34,6 @@ export const Tags = ({ queryData, tags: knownTags }: TagsProps) => {
             </span>
           )
       )}
-    </div>
+    </span>
   )
 }
