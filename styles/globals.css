@@ -209,4 +209,9 @@ html {
     @apply cursor-pointer;
     @apply underline;
   }
+
+  .hint {
+    @apply underline;
+    @apply decoration-dotted;
+  }
 }
