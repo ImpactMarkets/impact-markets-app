@@ -25,7 +25,6 @@ export function CommentButton({
       <div className="inline-flex items-center justify-center font-semibold px-3 h-8 text-xs sm:px-4 sm:text-sm sm:h-button">
         <MessageIcon className="w-4 h-4 text-secondary" />
         <span className="ml-1.5">{commentCount}</span>
-        <span className="font-light">{label}</span>
       </div>
     )
   }
@@ -33,7 +32,7 @@ export function CommentButton({
     <ButtonLink href={href || ''} {...buttonProps}>
       <MessageIcon className="w-4 h-4 text-secondary" />
       <span className="ml-1.5">{commentCount}</span>
-      <span className="font-light">{label}</span>
+      <span className="font-light pl-2">{label}</span>
     </ButtonLink>
   )
 }
