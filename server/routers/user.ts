@@ -126,14 +126,10 @@ export const userRouter = createProtectedRouter()
     async resolve({ ctx, input: { pastDays, includeAnonymous } }) {
       const scoreField = pastDays ? 'score365' : 'score'
 
-      const prisma = new PrismaClient({
-        log: ['query', 'info', 'warn', 'error'],
-      })
       // This first sends the normal query with the UserScore fields missing from SELECT, and then sends a second query to get the UserScore fields. Wtf?
       // SELECT "public"."User"."id", "public"."User"."name", "public"."User"."image" FROM "public"."User" LEFT JOIN "public"."UserScore" AS "orderby_1_UserScore" ON ("public"."User"."id" = "orderby_1_UserScore"."userId") WHERE ("public"."User"."prefersAnonymity" = $1 AND ("public"."User"."id") IN (SELECT "t0"."id" FROM "public"."User" AS "t0" INNER JOIN "public"."UserScore" AS "j0" ON ("j0"."userId") = ("t0"."id") WHERE ("j0"."score365" > $2 AND "t0"."id" IS NOT NULL))) ORDER BY "orderby_1_UserScore"."score365" DESC LIMIT $3 OFFSET $4
       // SELECT "public"."UserScore"."userId", "public"."UserScore"."score", "public"."UserScore"."score365" FROM "public"."UserScore" WHERE "public"."UserScore"."userId" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) OFFSET $13
-
-      return await prisma.user.findMany({
+      return await ctx.prisma.user.findMany({
         select: {
           id: true,
           name: true,
