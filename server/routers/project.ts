@@ -3,9 +3,9 @@ import slugify from 'slugify'
 import { z } from 'zod'
 
 import { PROJECT_SORT_KEYS, ProjectSortKey } from '@/lib/constants'
-import { markdownToHtml } from '@/lib/editor'
+import { markdownToHtml, markdownToPlainHtml } from '@/lib/editor'
 import { Prisma, User } from '@prisma/client'
-import { EventStatus, EventType, Role } from '@prisma/client'
+import { EventStatus, EventType } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
 import { createProtectedRouter } from '../createProtectedRouter'
@@ -70,7 +70,7 @@ export const projectRouter = createProtectedRouter()
         select: {
           id: true,
           title: true,
-          contentHtml: true,
+          content: true,
           createdAt: true,
           hidden: true,
           tags: true,
@@ -306,6 +306,7 @@ export const projectRouter = createProtectedRouter()
           id: true,
           title: true,
           author: true,
+          content: true,
         },
       })
 
@@ -418,22 +419,34 @@ async function emitNewProjectEvents(
     id,
     title,
     author,
+    content,
   }: {
     id: string
     title: string
     author: User
+    content: string
   }
 ) {
-  const adminUsers = await ctx.prisma.user.findMany({
+  const subscribers = await ctx.prisma.user.findMany({
     where: {
-      role: Role.ADMIN,
+      prefersProjectNotifications: true,
+      email: { contains: '@' },
     },
     select: {
       id: true,
     },
   })
 
-  for (const adminUser of adminUsers) {
+  let summary = content
+  if (summary.length > 300) {
+    summary = summary.substring(0, 300) + '…'
+  }
+  summary = markdownToPlainHtml(summary)
+
+  for (const subscriber of subscribers) {
+    if (subscriber.id === author.id) {
+      continue
+    }
     await ctx.prisma.event.create({
       data: {
         type: EventType.PROJECT,
@@ -441,12 +454,12 @@ async function emitNewProjectEvents(
           objectId: id,
           objectType: 'project',
           objectTitle: title,
-          text: `Project created by **${author.name}**`,
+          text: `**${author.name}**: “${summary}”`,
         },
         status: EventStatus.PENDING,
         recipient: {
           connect: {
-            id: adminUser.id,
+            id: subscriber.id,
           },
         },
       },

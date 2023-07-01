@@ -2,14 +2,14 @@ import Link from 'next/link'
 import * as React from 'react'
 
 import { Banner } from '@/components/banner'
-import { LikeButton } from '@/components/likeButton'
-import { classNames } from '@/lib/classnames'
+import { markdownToPlainHtml } from '@/lib/editor'
 import { InferQueryOutput } from '@/lib/trpc'
 import { Card } from '@mantine/core'
+import { LikeButton } from '@/components/likeButton'
 
 import { Author } from '../author'
-import { CommentButton } from '../commentButton'
 import { Heading2 } from '../heading2'
+import { HtmlView } from '../htmlView'
 import { Tags } from '../tags'
 import { TAGS } from './tags'
 
@@ -20,31 +20,6 @@ export type ProjectSummaryProps = {
 }
 
 function Left({ project }: ProjectSummaryProps) {
-  const contentDocument = React.useMemo(
-    () => new DOMParser().parseFromString(project.contentHtml, 'text/html'),
-    [project.contentHtml]
-  )
-  //   TODO: decide on the order of the allowed tags
-  //   and research on how to truncate html to a max amount of characters
-  let summary = React.useMemo(() => {
-    const allowedTags = ['p', 'ul', 'ol', 'h3', 'pre', 'img']
-
-    for (const tag of allowedTags) {
-      const element = contentDocument.body.querySelector(tag)
-      if (element) {
-        return element.outerHTML
-      }
-    }
-
-    return "<p>Summary couldn't be generated</p>"
-  }, [contentDocument])
-
-  summary = summary.replace('<p>', '')
-  summary = summary.replace('</p>', '')
-  if (summary.length > 300) {
-    summary = summary.substring(0, 300) + '...'
-  }
-
   return (
     <div className="grow relative flex flex-col justify-between max-w-[calc(100%-140px-1rem)]">
       {project.tags && (
@@ -52,13 +27,6 @@ function Left({ project }: ProjectSummaryProps) {
           <Tags queryData={project} tags={TAGS} />
         </div>
       )}
-      <div className={classNames(project.hidden ? 'opacity-50' : '')}>
-        <Link href={`/project/${project.id}`}>
-          <Heading2 className="cursor-pointer w-[95%] whitespace-nowrap text-ellipsis overflow-hidden">
-            {project.title}
-          </Heading2>
-        </Link>
-      </div>
     </div>
   )
 }
@@ -81,21 +49,44 @@ function Right({ project }: ProjectSummaryProps) {
   )
 }
 
+function Bottom({ project }: ProjectSummaryProps) {
+  const summary = React.useMemo(() => {
+    let summary = project.content
+    if (summary.length > 300) {
+      summary = summary.substring(0, 300) + '…'
+    }
+    return markdownToPlainHtml(summary)
+  }, [project.content])
+
+  return (
+    <>
+      <Link href={`/project/${project.id}`}>
+        <Heading2 className="cursor-pointer w-[95%] mb-6 whitespace-nowrap text-ellipsis overflow-hidden">
+          {project.title}
+        </Heading2>
+      </Link>
+      <HtmlView html={summary} />
+    </>
+  )
+}
+
 export const ProjectSummary = ({ project }: ProjectSummaryProps) => (
-  <Card shadow="sm" p="lg" radius="md" withBorder>
+  <Card
+    shadow="sm"
+    p="lg"
+    radius="md"
+    withBorder
+    className={project.hidden ? 'opacity-50' : ''}
+  >
     {project.hidden && (
       <Banner className="mb-6 p-4">
         This project was hidden by the curators.
       </Banner>
     )}
-    <div
-      className={classNames(
-        'flex items-stretch',
-        project.hidden ? 'opacity-50' : ''
-      )}
-    >
+    <div className="flex items-stretch">
       <Left project={project} />
       <Right project={project} />
     </div>
+    <Bottom project={project} />
   </Card>
 )

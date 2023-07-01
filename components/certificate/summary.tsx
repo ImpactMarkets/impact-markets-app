@@ -4,10 +4,10 @@ import * as React from 'react'
 
 import { Banner } from '@/components/banner'
 import { HoldingsChart } from '@/components/certificate/holdingsChart'
-import { LikeButton } from '@/components/likeButton'
 import { classNames } from '@/lib/classnames'
 import { InferQueryOutput } from '@/lib/trpc'
 import { Card } from '@mantine/core'
+import { LikeButton } from '@/components/likeButton'
 
 import { Author } from '../author'
 import { Date } from '../date'
@@ -64,12 +64,6 @@ function Left({ certificate }: CertificateSummaryProps) {
         </Link>
         <Date date={certificate.createdAt} />
       </div>
-      <div className="flex items-center gap-12 mt-6">
-        <HoldingsChart
-          holdings={certificate.holdings}
-          issuers={certificate.issuers}
-        />
-      </div>
     </div>
   )
 }
@@ -117,6 +111,12 @@ export const CertificateSummary = ({
     >
       <Left certificate={certificate} />
       <Right certificate={certificate} />
+    </div>
+    <div className="flex items-center gap-12 mt-6">
+      <HoldingsChart
+        holdings={certificate.holdings}
+        issuers={certificate.issuers}
+      />
     </div>
   </Card>
 )

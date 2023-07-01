@@ -112,7 +112,7 @@ const Home: NextPageWithAuthAndLayout = () => {
 
   if (feedQuery.data) {
     return (
-      <>
+      <div className="max-w-screen-lg mx-auto">
         <Head>
           <title>Impact Markets</title>
         </Head>
@@ -157,10 +157,8 @@ const Home: NextPageWithAuthAndLayout = () => {
           <div className="flow-root my-12">
             <ul className="divide-y divide-transparent flex flex-wrap gap-2">
               {feedQuery.data.bounties.map((bounty) => (
-                <li
-                  key={bounty.id}
-                  className="w-full max-w-full xl:w-[49.5%] xl:max-w-[49.5%] 2xl:w-[32.6%] 2xl:max-w-[32.6%]"
-                >
+                <li key={bounty.id} className="w-full max-w-full">
+                  {/* Classes for the tiled arrangement: w-full max-w-full xl:w-[49.5%] xl:max-w-[49.5%] 2xl:w-[32.6%] 2xl:max-w-[32.6%] */}
                   <Summary
                     bounty={bounty}
                     onLike={() => {
@@ -181,7 +179,7 @@ const Home: NextPageWithAuthAndLayout = () => {
           itemsPerPage={ITEMS_PER_PAGE}
           currentPageNumber={currentPageNumber}
         />
-      </>
+      </div>
     )
   }
 
@@ -190,7 +188,7 @@ const Home: NextPageWithAuthAndLayout = () => {
   }
 
   return (
-    <div className="flow-root">
+    <div className="flow-root max-w-screen-lg mx-auto">
       <ul className="my-10 divide-y divide-transparent">
         {[...Array(3)].map((_, idx) => (
           <li key={idx} className="py-10">

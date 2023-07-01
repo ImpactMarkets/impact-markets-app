@@ -3,7 +3,6 @@ import { z } from 'zod'
 
 import { PROJECT_SORT_KEYS, ProjectSortKey } from '@/lib/constants'
 import { markdownToHtml } from '@/lib/editor'
-import { postToSlackIfEnabled } from '@/lib/slack'
 import { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
@@ -237,73 +236,6 @@ export const certificateRouter = createProtectedRouter()
       })
 
       return certificates
-    },
-  })
-  .mutation('add', {
-    input: z.object({
-      id: z.string().min(1),
-      title: z.string().min(1),
-      content: z.string().min(1),
-      counterfactual: z.string(),
-      location: z.string(),
-      rights: z.string(),
-      actionStart: z.date(),
-      actionEnd: z.date(),
-      tags: z.string(),
-      issuerEmails: z.string(),
-      valuation: z.instanceof(Prisma.Decimal),
-      target: z.instanceof(Prisma.Decimal),
-    }),
-    async resolve({ ctx, input }) {
-      const certificate = await ctx.prisma.certificate.create({
-        data: {
-          id: input.id,
-          title: input.title,
-          content: input.content,
-          contentHtml: markdownToHtml(input.content),
-          counterfactual: input.counterfactual,
-          location: input.location,
-          rights: 'RETROACTIVE_FUNDING',
-          actionStart: input.actionStart,
-          actionEnd: input.actionEnd,
-          tags: input.tags,
-          author: {
-            connect: {
-              id: ctx.session!.user.id,
-            },
-          },
-        },
-      })
-      await ctx.prisma.holding.create({
-        data: {
-          certificateId: certificate.id,
-          userId: ctx.session!.user.id,
-          type: 'OWNERSHIP',
-          size: 1,
-          cost: 0,
-          valuation: input.valuation,
-          target: input.target,
-        },
-      })
-      const issuerEmails = input.issuerEmails
-        .split(',')
-        .concat([ctx.session!.user.email])
-      const issuers = await ctx.prisma.user.findMany({
-        where: { email: { in: issuerEmails } },
-      })
-      await ctx.prisma.certificateIssuer.createMany({
-        data: issuers.map((issuer) => {
-          return { certificateId: certificate.id, userId: issuer.id }
-        }),
-        skipDuplicates: true,
-      })
-
-      await postToSlackIfEnabled({
-        certificate,
-        authorName: ctx.session!.user.name,
-      })
-
-      return certificate
     },
   })
   .mutation('edit', {

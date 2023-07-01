@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import * as React from 'react'
 
 import { Container, SimpleGrid, Text } from '@mantine/core'
@@ -37,27 +38,88 @@ export const Pitches = () => (
         breakpoints={[{ maxWidth: 'sm', cols: 1 }]}
         spacing={40}
       >
-        <Feature icon={IconShovel} title="Projects" key="projects">
-          We score donors by their track record of finding new high-impact
-          projects such as yours. A good donation track record signal-boosts the
-          projects that they support. You’ll be discovered by more donors, which
-          can snowball into greater and greater success.
+        <Feature icon={IconShovel} title="AI safety projects" key="projects">
+          <p>
+            Are you an independent researcher or someone launching a new AI
+            safety venture? Your fundraising goal is &lt; $100,000 for now?
+          </p>
+
+          <p className="my-3">
+            We score donors by their track record of finding{' '}
+            <span className="text-gray-700">
+              early-stage high-impact projects
+            </span>{' '}
+            such as yours. A good donation track record signal-boosts the
+            projects that they support. You’ll be discovered by more donors,
+            which can snowball into greater and greater success.
+          </p>
+
+          <p className="my-3 text-gray-700">
+            Just{' '}
+            <Link href="/project/new" className="link">
+              publish your project
+            </Link>{' '}
+            to start fundraising. Onboard your existing donors and ask them to
+            register their donations and express their support.
+          </p>
         </Feature>
-        <Feature icon={IconTelescope} title="Project scouts" key="Scouts">
-          Scout out and signal-boost the best projects! You get a “donor score”
-          based on your track record, and the higher your score, the greater
-          your boost to the projects you support. You will leverage your
-          expertise for follow-on donations, getting the projects funded faster.
+        <Feature
+          icon={IconTelescope}
+          title="Project scouts & regrantors"
+          key="scouts"
+        >
+          <p>
+            Are you an experienced donor or grantmaker? Do you want to leverage
+            some of the{' '}
+            <span className="text-gray-700">$300,000 donation budget</span> of
+            the donors we have waiting for you?
+          </p>
+
+          <p className="my-3">
+            Scout out and signal-boost the best projects! You get a “donor
+            score” based on your track record, and the higher your score, the
+            greater your boost to the projects you support. You will leverage
+            your expertise for follow-on donations, getting the projects funded
+            faster.
+          </p>
+
+          <p className="my-3 text-gray-700">
+            Get your top projects to{' '}
+            <Link href="/project/new" className="link">
+              join the platform
+            </Link>{' '}
+            and register your past and present donations.
+          </p>
         </Feature>
         <Feature
           icon={IconTrendingUp}
           title="Donors & funders"
           key="Donors & funders"
         >
-          Scouts find speculative, potentially spectacular projects! We make
-          their diverse, specialized knowledge accessible to you. Follow our top
-          scouts, tap into their wisdom, and boost the impact of your donations
-          or grants.
+          <p>
+            Do you want to donate to funding-constrained{' '}
+            <span className="text-gray-700">AI safety projects</span> and grow
+            the ecosystem but don’t know where to start?
+          </p>
+          <p className="my-3">
+            Project scouts find speculative, potentially spectacular projects!
+            We make their diverse, specialized knowledge accessible to you.
+            Follow our top scouts, tap into their wisdom, and boost the impact
+            of your donations or grants.
+          </p>
+
+          <p className="my-3 text-gray-700">
+            The scouts are just getting started. Meanwhile{' '}
+            <a
+              href="https://airtable.com/shr1eRlbcr43os6SX"
+              className="link"
+              target="_blank"
+              rel="noreferrer"
+            >
+              please register your interest in this 1-minute survey
+            </a>{' '}
+            to give them an incentive!
+          </p>
         </Feature>
       </SimpleGrid>
     </Container>

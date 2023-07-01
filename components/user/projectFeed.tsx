@@ -2,50 +2,47 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
-import type { CertificateSummaryProps } from '@/components/certificate/summary'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
+import type { ProjectSummaryProps } from '@/components/project/summary'
 import { SummarySkeleton } from '@/components/summarySkeleton'
 import { ITEMS_PER_PAGE } from '@/lib/constants'
 import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc'
 
-const CertificateSummary = dynamic<CertificateSummaryProps>(
+const ProjectSummary = dynamic<ProjectSummaryProps>(
   () =>
-    import('@/components/certificate/summary').then(
-      (mod) => mod.CertificateSummary
-    ),
+    import('@/components/project/summary').then((mod) => mod.ProjectSummary),
   { ssr: false }
 )
 
-export function CertificateFeed({
+export function ProjectFeed({
   user: _,
 }: {
   user: InferQueryOutput<'user.profile'>
 }) {
   const router = useRouter()
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
-  const profileFeedQueryPathAndInput: InferQueryPathAndInput<'certificate.feed'> =
-    [
-      'certificate.feed',
-      {
-        ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
-        authorId: String(router.query.userId),
-      },
-    ]
+  const profileFeedQueryPathAndInput: InferQueryPathAndInput<'project.feed'> = [
+    'project.feed',
+    {
+      ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
+      authorId: String(router.query.userId),
+    },
+  ]
   const profileFeedQuery = trpc.useQuery(profileFeedQueryPathAndInput)
 
   if (profileFeedQuery.data) {
     return (
       <>
         <div className="flow-root mt-6">
-          {profileFeedQuery.data.certificateCount === 0 ? (
+          {profileFeedQuery.data.projectCount === 0 ? (
             <div className="text-center text-secondary border rounded py-20 px-10">
-              This user hasn&apos;t published any certificates yet.
+              This user hasn’t published any projects yet.
             </div>
           ) : (
-            <ul className="-my-12 divide-y divide-primary">
-              {profileFeedQuery.data.certificates.map((certificate) => (
-                <li key={certificate.id} className="py-10">
-                  <CertificateSummary certificate={certificate} />
+            <ul className="-my-3">
+              {profileFeedQuery.data.projects.map((project) => (
+                <li key={project.id} className="py-3">
+                  <ProjectSummary project={project} />
                 </li>
               ))}
             </ul>
@@ -53,7 +50,7 @@ export function CertificateFeed({
         </div>
 
         <Pagination
-          itemCount={profileFeedQuery.data.certificateCount}
+          itemCount={profileFeedQuery.data.projectCount}
           itemsPerPage={ITEMS_PER_PAGE}
           currentPageNumber={currentPageNumber}
         />
@@ -67,9 +64,9 @@ export function CertificateFeed({
 
   return (
     <div className="flow-root mt-6">
-      <ul className="-my-12 divide-y divide-primary">
+      <ul className="-my-3">
         {[...Array(3)].map((_, idx) => (
-          <li key={idx} className="py-10">
+          <li key={idx} className="py-3">
             <SummarySkeleton />
           </li>
         ))}

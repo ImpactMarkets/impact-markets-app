@@ -1,6 +1,5 @@
 import { z } from 'zod'
 
-import { markdownToHtml } from '@/lib/editor'
 import { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
@@ -92,18 +91,13 @@ export const userRouter = createProtectedRouter()
       prefersDetailView: z.boolean().optional(),
       prefersAnonymity: z.boolean().optional(),
       prefersEventNotifications: z.boolean().optional(),
+      prefersProjectNotifications: z.boolean().optional(),
+      prefersBountyNotifications: z.boolean().optional(),
     }),
-    async resolve({
-      input: { prefersDetailView, prefersAnonymity, prefersEventNotifications },
-      ctx,
-    }) {
+    async resolve({ input, ctx }) {
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session!.user.id },
-        data: {
-          prefersDetailView: prefersDetailView,
-          prefersAnonymity: prefersAnonymity,
-          prefersEventNotifications: prefersEventNotifications,
-        },
+        data: input,
       })
 
       return user
@@ -124,35 +118,16 @@ export const userRouter = createProtectedRouter()
       return users
     },
   })
-  .query('topRetirers', {
-    async resolve({ ctx }) {
-      const users: {
-        id: string
-        name: string
-        image: string
-        credits: Prisma.Decimal
-      }[] = await ctx.prisma.$queryRaw`
-        SELECT
-          "User"."id",
-          "User"."name",
-          "User"."image",
-          SUM("Certificate"."credits" * "Holding"."size") as "credits"
-        FROM "User"
-        JOIN "Holding" ON "User"."id" = "Holding"."userId"
-        JOIN "Certificate" ON "Holding"."certificateId" = "Certificate"."id"
-        WHERE "Certificate"."credits" > 0 and "Holding"."type" = 'CONSUMPTION'
-        GROUP BY "User"."id", "User"."name", "User"."image"
-        ORDER BY "credits" DESC;
-      `
-      return users
-    },
-  })
   .query('topDonors', {
     input: z.object({
-      ignoreSize: z.boolean().optional(),
       pastDays: z.number().optional(),
+      ignoreSize: z.boolean().optional(),
+      includeAnonymous: z.boolean().optional(),
     }),
-    async resolve({ ctx, input: { ignoreSize = false, pastDays = 1e6 } }) {
+    async resolve({
+      ctx,
+      input: { pastDays = 1e6, ignoreSize = false, includeAnonymous = false },
+    }) {
       const users: {
         id: string
         name: string
@@ -180,7 +155,8 @@ export const userRouter = createProtectedRouter()
             WHERE
               "Project"."credits" > 0 AND
               "Donation"."state" = 'CONFIRMED' AND
-              "Donation"."time" > now() - make_interval(days => ${pastDays}::int)
+              "Donation"."time" > now() - make_interval(days => ${pastDays}::int) AND
+              (${includeAnonymous} OR NOT "User"."prefersAnonymity")
             ORDER BY "Donation"."projectId" ASC, "Donation"."time" ASC
           ),
           donations AS (
