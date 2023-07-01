@@ -9,12 +9,14 @@ export const MAX_LIKED_BY_SHOWN = 50
 type CommentButtonProps = {
   commentCount: number
   disabled?: boolean
+  label?: string
   href?: Url | string
 } & Omit<ButtonLinkProps, 'href'>
 
 export function CommentButton({
   commentCount,
   disabled = false,
+  label = 'comments',
   href,
   ...buttonProps
 }: CommentButtonProps) {
@@ -30,6 +32,7 @@ export function CommentButton({
     <ButtonLink href={href || ''} {...buttonProps}>
       <MessageIcon className="w-4 h-4 text-secondary" />
       <span className="ml-1.5">{commentCount}</span>
+      <span className="font-light pl-1.5">{label}</span>
     </ButtonLink>
   )
 }
