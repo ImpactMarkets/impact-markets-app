@@ -13,11 +13,12 @@ import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { Switch, Tabs } from '@mantine/core'
 
 // TODO
-// There should be a tab on the profile where we list all projects
-// that a user has donated to and possibly such things as the date of the earliest donation,
-// the total size of the donations to a project, the donor rank, etc.
-// But for now just listing them there would be an improvement.
-// add "DONATIONS" tab to left of "TRANSACTIONS"
+// list NAMES of projects
+// link projects to the actual project
+// organize into a table
+// list dates of donation
+// combine donations to show total amount donated to 1 project?
+// add donor rank
 
 const ProfilePage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
