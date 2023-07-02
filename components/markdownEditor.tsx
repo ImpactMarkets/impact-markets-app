@@ -174,7 +174,7 @@ export function MarkdownEditor({
         </Input.Description>
       )}
       <div>
-        <div className="flex items-center justify-between gap-4 px-4 py-px border rounded bg-primary">
+        <div className="flex items-center justify-between gap-4 px-4 py-px border rounded">
           <div className="flex gap-2 -ml-2">
             {TOOLBAR_ITEMS.map((toolbarItem) => (
               <button
@@ -187,7 +187,7 @@ export function MarkdownEditor({
                 }}
                 className={classNames(
                   'rounded inline-flex items-center justify-center h-8 w-8 disabled:opacity-50 disabled:cursor-default focus:border focus-ring',
-                  !showPreview && 'transition-colors hover:text-blue'
+                  !showPreview && 'link'
                 )}
                 disabled={showPreview}
                 title={toolbarItem.name}

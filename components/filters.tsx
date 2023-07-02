@@ -61,7 +61,8 @@ export function Filters(props: FiltersProps) {
           value={filterTags}
           classNames={{
             input: 'bg-none border-none',
-            searchInput: 'border-none placeholder:text-primary',
+            searchInput:
+              'border-none placeholder:text-secondary placeholder:!text-sm',
           }}
         />
         <IMSelect
@@ -80,7 +81,8 @@ export function Filters(props: FiltersProps) {
           }}
           value={orderBy}
           classNames={{
-            input: 'bg-none border-none placeholder:text-primary',
+            input:
+              'bg-none border-none text-secondary placeholder:text-secondary',
           }}
         />
       </Flex>

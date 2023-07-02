@@ -93,7 +93,7 @@ export function Comment({
         <HtmlView html={comment.contentHtml} />
 
         {session && !comment.parent && !isReplying && (
-          <div className="text-secondary hover:text-blue text-sm">
+          <div className="text-secondary text-sm link">
             <button
               type="submit"
               onClick={() => {

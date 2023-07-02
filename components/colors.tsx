@@ -3,14 +3,14 @@ interface Colors {
 }
 
 export const colors: Colors = {
-  work: '#4fcdf7',
-  field: '#47d6ab',
-  bounty: '#4fcdf7',
-  prize: '#47d6ab',
-  other: '#f2b600',
-  community: '#a18Bf5',
-  location: '#fd812d',
-  ACTIVE: '#4fcdf7',
-  CLAIMED: '#f2b600',
-  CLOSED: '#fd812d',
+  work: 'bg-sky-400',
+  field: 'bg-emerald-400',
+  bounty: 'bg-sky-400',
+  prize: 'bg-emerald-400',
+  other: 'bg-yellow-500',
+  community: 'bg-violet-400',
+  location: 'bg-orange-400',
+  ACTIVE: 'bg-sky-400',
+  CLAIMED: 'bg-yellow-500',
+  CLOSED: 'bg-orange-400',
 }
