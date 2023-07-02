@@ -26,7 +26,12 @@ import { num } from '@/lib/text'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { LoadingOverlay, Tabs } from '@mantine/core'
-import { IconCreditCard, IconCreditCardOff, IconMoneybag } from '@tabler/icons'
+import {
+  IconCreditCard,
+  IconCreditCardOff,
+  IconMoneybag,
+  IconWoman,
+} from '@tabler/icons'
 
 // TODO: Maybe this could be made into a generic component ?
 const ProjectPageWrapper: NextPageWithAuthAndLayout = () => {
@@ -160,7 +165,10 @@ function ProjectPage({ projectId }: { projectId: string }) {
                 )}
                 <div className="text-sm text-secondary whitespace-nowrap">
                   <IconMoneybag className="inline" /> $
-                  {num(project.donationTotal)} in{' '}
+                  {num(project.donationTotal, 0)}
+                </div>
+                <div className="text-sm text-secondary whitespace-nowrap">
+                  <IconWoman className="inline" />{' '}
                   {project.donationCount.toLocaleString()}{' '}
                   {project.donationCount === 1 ? 'donation' : 'donations'}
                 </div>
