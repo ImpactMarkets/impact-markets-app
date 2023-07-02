@@ -21,7 +21,7 @@ export const Comparisons = () => (
         <div className="text-xl font-bold mb-4">
           Crowdsourced charity evaluator
         </div>
-        <div>
+        <div className="[hyphens:auto]">
           Charity evaluators have sophisticated and trusted processes, but they
           can’t scale down to projects so small and numerous that the evaluation
           costs more than what they can absorb in funding. Charity evaluators
@@ -47,13 +47,15 @@ export const Comparisons = () => (
         <div className="text-xl font-bold mb-4">
           Currency of existential security
         </div>
-        <div>
+        <div className="[hyphens:auto]">
           Carbon credits (or “offsets”) are an asset like money, but just like
           money they are also a way to keep score. Our donor score can be seen
           as a kind of “impact credit,” a generalized carbon credit. Once our
           scoring algorithm has matured we want to introduce such a playmoney
           “impact credit,” the Impact Mark, so that top donors can double as
-          evaluators.
+          evaluators. As AI safety enters the mainstream, it’ll become more and
+          more important to provide a scalable method to render donation
+          recommendations.
         </div>
       </div>
     </div>
@@ -72,7 +74,7 @@ export const Comparisons = () => (
         <div className="text-xl font-bold mb-4">
           Network of grantmakers/regrantors
         </div>
-        <div>
+        <div className="[hyphens:auto]">
           Your donations inform the giving of individuals and foundations – a
           multiplier on the money that you can give yourself. One day, laws
           permitting, we want to make it possible for you to even get paid in
