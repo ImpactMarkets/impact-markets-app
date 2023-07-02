@@ -18,6 +18,7 @@ import { IncomingDonations } from '@/components/project/incomingDonations'
 import { Menu } from '@/components/project/menu'
 import { OutgoingDonations } from '@/components/project/outgoingDonations'
 import { TAGS } from '@/components/project/tags'
+import { Scores } from '@/components/scores'
 import { Tags } from '@/components/tags'
 import { classNames } from '@/lib/classnames'
 import { num } from '@/lib/text'
@@ -165,6 +166,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
               </div>
             </div>
             <div className="flex my-6">
+              <Scores project={project} />
               <Tags queryData={project} tags={TAGS} />
             </div>
             <div className="my-6">
