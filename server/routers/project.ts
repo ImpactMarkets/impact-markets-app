@@ -79,6 +79,7 @@ export const projectRouter = createProtectedRouter()
           createdAt: true,
           hidden: true,
           tags: true,
+          credits: true,
           author: {
             select: {
               id: true,
@@ -145,6 +146,7 @@ export const projectRouter = createProtectedRouter()
           actionEnd: true,
           paymentUrl: true,
           tags: true,
+          credits: true,
           author: {
             select: {
               id: true,
@@ -211,6 +213,7 @@ export const projectRouter = createProtectedRouter()
               },
             },
           },
+          supportScore: true,
           _count: {
             select: {
               comments: true,
@@ -416,6 +419,38 @@ export const projectRouter = createProtectedRouter()
         },
       })
       return project
+    },
+  })
+  .query('topContributors', {
+    input: z.object({
+      id: z.string().min(1),
+      includeAnonymous: z.boolean().optional(),
+    }),
+    async resolve({ ctx, input: { id, includeAnonymous } }) {
+      return await ctx.prisma.contribution.findMany({
+        select: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+              userScore: true,
+            },
+          },
+          totalAmount: true,
+          relativeContribution: true,
+        },
+        where: {
+          projectId: id,
+          user: {
+            prefersAnonymity: includeAnonymous ? undefined : false,
+          },
+        },
+        orderBy: {
+          relativeContribution: 'desc',
+        },
+        take: 10,
+      })
     },
   })
 
