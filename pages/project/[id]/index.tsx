@@ -18,6 +18,7 @@ import { IncomingDonations } from '@/components/project/incomingDonations'
 import { Menu } from '@/components/project/menu'
 import { OutgoingDonations } from '@/components/project/outgoingDonations'
 import { TAGS } from '@/components/project/tags'
+import { TopContributors } from '@/components/project/topContributors'
 import { Scores } from '@/components/scores'
 import { Tags } from '@/components/tags'
 import { classNames } from '@/lib/classnames'
@@ -172,12 +173,15 @@ function ProjectPage({ projectId }: { projectId: string }) {
             <div className="my-6">
               <Tabs
                 defaultValue={
-                  projectBelongsToUser
-                    ? 'incomingDonations'
-                    : 'outgoingDonations'
+                  projectBelongsToUser ? 'incomingDonations' : 'topContributors'
                 }
               >
                 <Tabs.List>
+                  {project.donationCount && (
+                    <Tabs.Tab value="topContributors">
+                      Top contributors
+                    </Tabs.Tab>
+                  )}
                   {session && (
                     <Tabs.Tab value="outgoingDonations">
                       Register a donation
@@ -190,6 +194,11 @@ function ProjectPage({ projectId }: { projectId: string }) {
                   )}
                 </Tabs.List>
 
+                {session && (
+                  <Tabs.Panel value="topContributors" pt="xs">
+                    <TopContributors project={project} />
+                  </Tabs.Panel>
+                )}
                 {session && (
                   <Tabs.Panel value="outgoingDonations" pt="xs">
                     <OutgoingDonations project={project} />
