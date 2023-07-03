@@ -72,7 +72,7 @@ export function Donations({
 
   return (
     <table className="border rounded table-auto w-full">
-      <thead className="text-secondary bg-secondary border">
+      <thead className="border bg-gray-200 text-gray-500">
         <tr>
           <th className="p-4 text-left">Project</th>
           <th className="p-4 text-left">Total Amount</th>
