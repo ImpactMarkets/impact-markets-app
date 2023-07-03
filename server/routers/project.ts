@@ -47,6 +47,7 @@ export const projectRouter = createProtectedRouter()
         filterTags: z.string().optional(),
         orderBy: z.enum(PROJECT_SORT_KEYS).optional(),
         showHidden: z.boolean().optional(),
+        hideClosed: z.boolean().optional(),
       })
       .optional(),
     async resolve({ input, ctx }) {
@@ -67,6 +68,7 @@ export const projectRouter = createProtectedRouter()
             }))
           : undefined,
         authorId: input?.authorId,
+        paymentUrl: input?.hideClosed ? { contains: '/' } : undefined,
       }
 
       const projects = await ctx.prisma.project.findMany({

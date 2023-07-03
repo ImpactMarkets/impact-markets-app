@@ -12,6 +12,7 @@ export const TopProjects = () => {
     {
       take: 3,
       showHidden: false,
+      hideClosed: true,
       orderBy: 'supportScore',
     },
   ]
