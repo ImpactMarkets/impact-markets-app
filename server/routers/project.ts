@@ -19,9 +19,14 @@ const getOrderBy = (
     createdAt: { createdAt: desc },
     actionStart: { actionStart: { sort: desc, nulls: last } },
     actionEnd: { actionEnd: { sort: desc, nulls: last } },
+    supportScore: {
+      supportScore: {
+        score: desc,
+      },
+    },
     supporterCount: {
-      donations: {
-        _count: desc,
+      supportScore: {
+        count: desc,
       },
     },
   }
@@ -41,13 +46,15 @@ export const projectRouter = createProtectedRouter()
         authorId: z.string().optional(),
         filterTags: z.string().optional(),
         orderBy: z.enum(PROJECT_SORT_KEYS).optional(),
+        showHidden: z.boolean().optional(),
       })
       .optional(),
     async resolve({ input, ctx }) {
       const take = input?.take ?? 60
       const skip = input?.skip
+      const showHidden = input?.showHidden ?? true
       const baseQuery: Array<Prisma.ProjectWhereInput> | undefined =
-        ctx.session?.user.role === 'ADMIN'
+        ctx.session?.user.role === 'ADMIN' && showHidden
           ? undefined
           : [{ hidden: false }, { authorId: ctx.session?.user.id }]
       const where = {
@@ -74,6 +81,7 @@ export const projectRouter = createProtectedRouter()
           createdAt: true,
           hidden: true,
           tags: true,
+          credits: true,
           author: {
             select: {
               id: true,
@@ -102,6 +110,7 @@ export const projectRouter = createProtectedRouter()
               },
             },
           },
+          supportScore: true,
           _count: {
             select: {
               comments: true,
@@ -139,6 +148,7 @@ export const projectRouter = createProtectedRouter()
           actionEnd: true,
           paymentUrl: true,
           tags: true,
+          credits: true,
           author: {
             select: {
               id: true,
@@ -205,6 +215,7 @@ export const projectRouter = createProtectedRouter()
               },
             },
           },
+          supportScore: true,
           _count: {
             select: {
               comments: true,
@@ -410,6 +421,38 @@ export const projectRouter = createProtectedRouter()
         },
       })
       return project
+    },
+  })
+  .query('topContributors', {
+    input: z.object({
+      id: z.string().min(1),
+      includeAnonymous: z.boolean().optional(),
+    }),
+    async resolve({ ctx, input: { id, includeAnonymous } }) {
+      return await ctx.prisma.contribution.findMany({
+        select: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+              userScore: true,
+            },
+          },
+          totalAmount: true,
+          relativeContribution: true,
+        },
+        where: {
+          projectId: id,
+          user: {
+            prefersAnonymity: includeAnonymous ? undefined : false,
+          },
+        },
+        orderBy: {
+          relativeContribution: 'desc',
+        },
+        take: 10,
+      })
     },
   })
 

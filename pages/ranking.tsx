@@ -1,3 +1,4 @@
+import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 import * as React from 'react'
 
@@ -7,11 +8,13 @@ import { Layout } from '@/components/layout'
 import { num } from '@/lib/text'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
-import { Tabs } from '@mantine/core'
+import { Tabs, Tooltip } from '@mantine/core'
 import { Prisma } from '@prisma/client'
 import { IconTrophy } from '@tabler/icons'
 
 const RankingPage: NextPageWithAuthAndLayout = () => {
+  const { data: session } = useSession()
+  const isAdmin = session?.user.role === 'ADMIN'
   return (
     <div className="max-w-screen-lg mx-auto">
       <Head>
@@ -22,23 +25,78 @@ const RankingPage: NextPageWithAuthAndLayout = () => {
 
       <p className="py-6 text-sm">
         The algorithm behind this ranking is still under active development and
-        subject to change. By default, it takes into account the size of the
-        donation, how early it was made, and how well the project panned out. It
-        highlights donors with great foresight even if they are not rich.
+        subject to change. It takes into account the{' '}
+        <Tooltip
+          multiline
+          width={400}
+          label={
+            <span>
+              This is a bit unfortunate, but it is necessary as a proxy for the
+              donors’ confidence. We don’t want donors to get high scores for
+              randomly sending out tiny donations. Neither do we want tiny
+              donations to have the power to erase the incentives for the next
+              donor or many projects might never get funded.
+            </span>
+          }
+        >
+          <span className="hint">size of the donation</span>
+        </Tooltip>
+        ,{' '}
+        <Tooltip
+          multiline
+          width={400}
+          label={
+            <span>
+              This is in terms of the order of the donations. It rewards donors
+              who add the most information to the market.
+            </span>
+          }
+        >
+          <span className="hint">how early it was made</span>
+        </Tooltip>
+        , and{' '}
+        <Tooltip
+          multiline
+          width={400}
+          label={
+            <span>
+              We do retroactive evaluations. It’s much easier to check whether
+              something happened (and is of decent quality) than whether
+              something will happen. That means that donors can only receive
+              positive scores for a project once the project has actually
+              produced something.
+            </span>
+          }
+        >
+          <span className="hint">how well the project panned out</span>
+        </Tooltip>
+        . It highlights donors with great foresight even if they are not rich.
       </p>
 
       <Tabs defaultValue="rankingWithSizesAllTime">
         <Tabs.List>
-          <Tabs.Tab value="rankingWithSizesAllTime">Standard</Tabs.Tab>
-          <Tabs.Tab value="rankingWithSizesLastYear">Last 365 days</Tabs.Tab>
+          <Tabs.Tab value="rankingWithSizesAllTime">Top donors</Tabs.Tab>
+          {isAdmin && (
+            <Tabs.Tab value="rankingWithSizesLastYear">Last 365 days</Tabs.Tab>
+          )}
+          {isAdmin && (
+            <Tabs.Tab value="rankingWithAnonymous">Complete</Tabs.Tab>
+          )}
         </Tabs.List>
 
         <Tabs.Panel value="rankingWithSizesAllTime" pt="xs">
           <Ranking />
         </Tabs.Panel>
-        <Tabs.Panel value="rankingWithSizesLastYear" pt="xs">
-          <Ranking pastDays={365} />
-        </Tabs.Panel>
+        {isAdmin && (
+          <Tabs.Panel value="rankingWithSizesLastYear" pt="xs">
+            <Ranking pastDays={365} />
+          </Tabs.Panel>
+        )}
+        {isAdmin && (
+          <Tabs.Panel value="rankingWithAnonymous" pt="xs">
+            <Ranking includeAnonymous />
+          </Tabs.Panel>
+        )}
       </Tabs>
     </div>
   )
@@ -46,23 +104,23 @@ const RankingPage: NextPageWithAuthAndLayout = () => {
 
 const Ranking = ({
   pastDays,
-  ignoreSize = false,
   includeAnonymous = false,
 }: {
-  pastDays?: number
+  pastDays?: 365
   ignoreSize?: boolean
   includeAnonymous?: boolean
 }) => {
   const rankingQuery = trpc.useQuery([
     'user.topDonors',
     {
-      ignoreSize,
       pastDays,
       includeAnonymous,
     },
   ])
 
   if (rankingQuery.data) {
+    const zero = new Prisma.Decimal(0)
+    const one = new Prisma.Decimal(1)
     return (
       <>
         {rankingQuery.data.length === 0 ? (
@@ -89,8 +147,11 @@ const Ranking = ({
                         <Author author={user} />
                       </td>
                       <td className="text-right">
-                        {user.totalCredits >= new Prisma.Decimal(1)
-                          ? num(user.totalCredits, 0)
+                        {user.userScore == null
+                          ? '0' // Should never happen
+                          : user.userScore?.score === zero ||
+                            user.userScore?.score >= one
+                          ? num(user.userScore.score, 0)
                           : '< 1'}
                       </td>
                       <td className="w-10 text-right">

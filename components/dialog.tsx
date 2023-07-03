@@ -35,7 +35,7 @@ export function Dialog({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <HeadlessDialog.Overlay className="fixed inset-0 transition-opacity bg-gray-700 opacity-90 dark:bg-gray-900" />
+            <HeadlessDialog.Overlay className="fixed inset-0 bg-black transition-opacity opacity-10" />
           </Transition.Child>
 
           <Transition.Child
@@ -47,7 +47,7 @@ export function Dialog({
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="inline-block w-full max-w-md mt-[15vh] mb-8 text-left align-middle transition-all transform bg-primary rounded-lg shadow-xl dark:border">
+            <div className="inline-block bg-white w-full max-w-md mt-[15vh] mb-8 text-left align-middle transition-all transform rounded-lg shadow-xl dark:border">
               {children}
             </div>
           </Transition.Child>
@@ -92,7 +92,7 @@ export function DialogCloseButton({ onClick }: { onClick: () => void }) {
     <div className="absolute top-0 right-0 pt-6 pr-6">
       <button
         type="button"
-        className="inline-flex items-center justify-center transition-colors rounded-sm text-secondary hover:text-primary hover:bg-secondary"
+        className="inline-flex items-center justify-center rounded-sm text-secondary hover:text-primary hover:bg-secondary"
         onClick={onClick}
       >
         <span className="sr-only">Close</span>

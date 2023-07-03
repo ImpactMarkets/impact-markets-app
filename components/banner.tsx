@@ -11,7 +11,7 @@ export function Banner({ children, className }: BannerProps) {
   return (
     <div
       className={classNames(
-        'p-6 font-semibold leading-snug border rounded bg-yellow-light border-yellow-light',
+        'p-3 font-semibold leading-snug border rounded bg-yellow-50 border-yellow-200',
         className
       )}
     >

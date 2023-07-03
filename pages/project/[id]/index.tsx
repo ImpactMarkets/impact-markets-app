@@ -18,13 +18,20 @@ import { IncomingDonations } from '@/components/project/incomingDonations'
 import { Menu } from '@/components/project/menu'
 import { OutgoingDonations } from '@/components/project/outgoingDonations'
 import { TAGS } from '@/components/project/tags'
+import { TopContributors } from '@/components/project/topContributors'
+import { Scores } from '@/components/scores'
 import { Tags } from '@/components/tags'
 import { classNames } from '@/lib/classnames'
 import { num } from '@/lib/text'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { LoadingOverlay, Tabs } from '@mantine/core'
-import { IconCreditCard, IconCreditCardOff, IconMoneybag } from '@tabler/icons'
+import {
+  IconCreditCard,
+  IconCreditCardOff,
+  IconMoneybag,
+  IconWoman,
+} from '@tabler/icons'
 
 // TODO: Maybe this could be made into a generic component ?
 const ProjectPageWrapper: NextPageWithAuthAndLayout = () => {
@@ -158,24 +165,31 @@ function ProjectPage({ projectId }: { projectId: string }) {
                 )}
                 <div className="text-sm text-secondary whitespace-nowrap">
                   <IconMoneybag className="inline" /> $
-                  {num(project.donationTotal)} in{' '}
+                  {num(project.donationTotal, 0)}
+                </div>
+                <div className="text-sm text-secondary whitespace-nowrap">
+                  <IconWoman className="inline" />{' '}
                   {project.donationCount.toLocaleString()}{' '}
                   {project.donationCount === 1 ? 'donation' : 'donations'}
                 </div>
               </div>
             </div>
             <div className="flex my-6">
+              <Scores project={project} />
               <Tags queryData={project} tags={TAGS} />
             </div>
             <div className="my-6">
               <Tabs
                 defaultValue={
-                  projectBelongsToUser
-                    ? 'incomingDonations'
-                    : 'outgoingDonations'
+                  projectBelongsToUser ? 'incomingDonations' : 'topContributors'
                 }
               >
                 <Tabs.List>
+                  {project.donationCount && (
+                    <Tabs.Tab value="topContributors">
+                      Top contributors
+                    </Tabs.Tab>
+                  )}
                   {session && (
                     <Tabs.Tab value="outgoingDonations">
                       Register a donation
@@ -188,6 +202,11 @@ function ProjectPage({ projectId }: { projectId: string }) {
                   )}
                 </Tabs.List>
 
+                {session && (
+                  <Tabs.Panel value="topContributors" pt="xs">
+                    <TopContributors project={project} />
+                  </Tabs.Panel>
+                )}
                 {session && (
                   <Tabs.Panel value="outgoingDonations" pt="xs">
                     <OutgoingDonations project={project} />

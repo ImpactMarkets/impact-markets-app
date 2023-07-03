@@ -52,7 +52,7 @@ export function ConfirmDeleteCommentDialog({
       </DialogContent>
       <DialogActions>
         <Button
-          variant="secondary"
+          variant="primary"
           className="!text-red"
           isLoading={deleteCommentMutation.isLoading}
           loadingChildren="Deleting comment"
