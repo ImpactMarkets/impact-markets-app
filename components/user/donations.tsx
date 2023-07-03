@@ -21,6 +21,12 @@ export function Donations({
   }
 
   const groupedDonations = user.donations.reduce((acc, donation) => {
+    // skip donations that are not confirmed or have totalAmount of 0
+    if (donation.state !== 'CONFIRMED' || Number(donation.amount) === 0) {
+      return acc
+    }
+
+    // if the project id is not in the accumulator, add it with the following properties
     if (!acc[donation.projectId]) {
       acc[donation.projectId] = {
         projectId: donation.projectId,
@@ -28,6 +34,8 @@ export function Donations({
         earliestDate: donation.createdAt,
       }
     }
+
+    // adds donation amount to totalAmount
     acc[donation.projectId].totalAmount += Number(donation.amount)
 
     // replaces date with date of earliest donation
@@ -43,15 +51,17 @@ export function Donations({
       (project) => project.id === donation.projectId
     )
 
+    if (!matchingProject) {
+      return null
+    }
+
     return (
       <tr className="border" key={donation.projectId}>
-        {matchingProject ? (
-          <td className="p-4">
-            <Link href={`/project/${matchingProject.id}`}>
-              {matchingProject.title}
-            </Link>
-          </td>
-        ) : null}
+        <td className="p-4">
+          <Link href={`/project/${matchingProject.id}`}>
+            {matchingProject.title}
+          </Link>
+        </td>
         <td className="p-4">${donation.totalAmount}</td>
         <td className="p-4">
           <Date date={donation.earliestDate} />
