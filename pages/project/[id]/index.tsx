@@ -224,7 +224,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
               <LikeButton
                 disabled={!session}
                 likedBy={project.likedBy}
-                tooltip={'No likes yet'}
+                defaultTooltip="No likes yet"
                 onLike={() => {
                   likeMutation.mutate(project.id)
                 }}

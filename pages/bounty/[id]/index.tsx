@@ -180,8 +180,8 @@ function BountyPage({ bountyId }: { bountyId: string }) {
               <LikeButton
                 disabled={!session}
                 likedBy={bounty.likedBy}
-                label={'interested'}
-                tooltip={'No expressions of interest yet'}
+                label="interested"
+                defaultTooltip="No expressions of interest yet"
                 onLike={() => {
                   likeMutation.mutate(bounty.id)
                 }}

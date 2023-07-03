@@ -88,7 +88,7 @@ function Right({ bounty }: SummaryProps) {
       <div className="flex justify-around h-8">
         <LikeButton
           likedBy={bounty.likedBy}
-          tooltip={'No expressions of interest yet'}
+          defaultTooltip="No expressions of interest yet"
           disabled
         />
         <CommentButton commentCount={bounty._count.comments} disabled />
