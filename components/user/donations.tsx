@@ -9,19 +9,8 @@ export function Donations({
 }: {
   user: InferQueryOutput<'user.profile'>
 }) {
-  //TODO
-  // change date format?
-  // style date normally
-  // donor rank (? how will this be displayed)
-  // then see if there's a way to clean up the matchingProject ternary that prevents us from running into an issue if it's undefined
-
   const projectQuery = trpc.useQuery(['project.feed'])
   const project = projectQuery.data?.projects || []
-
-  // maps over all donations and writes them in order
-  // instead we want to map over all projects and display
-  // the total amount of donations per project
-  // and the date of the earliest donation per project
 
   interface GroupedDonations {
     [projectId: string]: {
