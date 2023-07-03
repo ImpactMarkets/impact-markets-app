@@ -1,4 +1,3 @@
-import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -32,10 +31,8 @@ const orderByValues: Array<{ value: ProjectSortKey; label: string }> = [
 const defaultOrder = 'supportScore'
 
 const Projects: NextPageWithAuthAndLayout = () => {
-  const { data: session } = useSession()
   const router = useRouter()
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
-  const utils = trpc.useContext()
   const [filterTags, setFilterTags] = React.useState('')
   const [orderBy, setOrderBy] = React.useState(defaultOrder as ProjectSortKey)
   const feedQueryPathAndInput: InferQueryPathAndInput<'project.feed'> = [
@@ -47,69 +44,6 @@ const Projects: NextPageWithAuthAndLayout = () => {
     },
   ]
   const feedQuery = trpc.useQuery(feedQueryPathAndInput)
-  const likeMutation = trpc.useMutation(['project.like'], {
-    onMutate: async (likedProjectId) => {
-      await utils.cancelQuery(feedQueryPathAndInput)
-
-      const previousQuery = utils.getQueryData(feedQueryPathAndInput)
-
-      if (previousQuery) {
-        utils.setQueryData(feedQueryPathAndInput, {
-          ...previousQuery,
-          projects: previousQuery.projects.map((project) =>
-            project.id === likedProjectId
-              ? {
-                  ...project,
-                  likedBy: [
-                    ...project.likedBy,
-                    {
-                      user: { id: session!.user.id, name: session!.user.name },
-                    },
-                  ],
-                }
-              : project
-          ),
-        })
-      }
-
-      return { previousQuery }
-    },
-    onError: (err, id, context: any) => {
-      if (context?.previousQuery) {
-        utils.setQueryData(feedQueryPathAndInput, context.previousQuery)
-      }
-    },
-  })
-  const unlikeMutation = trpc.useMutation(['project.unlike'], {
-    onMutate: async (unlikedProjectId) => {
-      await utils.cancelQuery(feedQueryPathAndInput)
-
-      const previousQuery = utils.getQueryData(feedQueryPathAndInput)
-
-      if (previousQuery) {
-        utils.setQueryData(feedQueryPathAndInput, {
-          ...previousQuery,
-          projects: previousQuery.projects.map((project) =>
-            project.id === unlikedProjectId
-              ? {
-                  ...project,
-                  likedBy: project.likedBy.filter(
-                    (item) => item.user.id !== session!.user.id
-                  ),
-                }
-              : project
-          ),
-        })
-      }
-
-      return { previousQuery }
-    },
-    onError: (err, id, context: any) => {
-      if (context?.previousQuery) {
-        utils.setQueryData(feedQueryPathAndInput, context.previousQuery)
-      }
-    },
-  })
 
   if (feedQuery.data) {
     return (
@@ -152,15 +86,7 @@ const Projects: NextPageWithAuthAndLayout = () => {
               {feedQuery.data.projects.map((project) => (
                 <li key={project.id} className="w-full max-w-full">
                   {/* Classes for the tiled arrangement: w-full max-w-full xl:w-[49.5%] xl:max-w-[49.5%] 2xl:w-[32.6%] 2xl:max-w-[32.6%] */}
-                  <ProjectSummary
-                    project={project}
-                    onLike={() => {
-                      likeMutation.mutate(project.id)
-                    }}
-                    onUnlike={() => {
-                      unlikeMutation.mutate(project.id)
-                    }}
-                  />
+                  <ProjectSummary project={project} />
                 </li>
               ))}
             </ul>
