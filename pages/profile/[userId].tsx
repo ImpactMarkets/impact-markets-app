@@ -5,19 +5,12 @@ import * as React from 'react'
 import { Layout } from '@/components/layout'
 import { Bio } from '@/components/user/bio'
 import { Donations } from '@/components/user/donations'
+import { Preferences } from '@/components/user/preferences'
 import { ProfileInfo } from '@/components/user/profileInfo'
 import { ProjectFeed } from '@/components/user/projectFeed'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { Tabs } from '@mantine/core'
-
-// TODO
-// list NAMES of projects
-// link projects to the actual project
-// organize into a table
-// list dates of donation
-// combine donations to show total amount donated to 1 project?
-// add donor rank
 
 const ProfilePage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
