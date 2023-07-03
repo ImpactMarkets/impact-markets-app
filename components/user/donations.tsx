@@ -22,7 +22,7 @@ export function Donations({
 
   const groupedDonations = user.donations.reduce((acc, donation) => {
     // skip donations that are not confirmed or have totalAmount of 0
-    if (donation.state !== 'CONFIRMED' || Number(donation.amount) === 0) {
+    if (donation.state !== 'CONFIRMED') {
       return acc
     }
 

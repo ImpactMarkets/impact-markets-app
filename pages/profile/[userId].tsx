@@ -46,7 +46,11 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
           <Tabs.List>
             <Tabs.Tab value="projects">Projects</Tabs.Tab>
             {profileQuery.data.bio && <Tabs.Tab value="bio">Bio</Tabs.Tab>}
-            <Tabs.Tab value="donations">Donations</Tabs.Tab>
+            {profileQuery.data.donations.some(
+              (donation) => donation.state === 'CONFIRMED'
+            ) ? (
+              <Tabs.Tab value="donations">Donations</Tabs.Tab>
+            ) : null}
             {router.query.userId === session?.user.id ? (
               <Tabs.Tab value="preferences">Preferences</Tabs.Tab>
             ) : null}
