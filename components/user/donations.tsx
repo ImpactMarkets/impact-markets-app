@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+import { Date } from '@/components/date'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
 
 export function Donations({
@@ -8,6 +9,8 @@ export function Donations({
   user: InferQueryOutput<'user.profile'>
 }) {
   //TODO
+  // change date format?
+  // style date normally
   // link projectTitle to project page
   // organize in table format
   // ideally add:
@@ -26,15 +29,26 @@ export function Donations({
     const projectTitle = matchingProject ? matchingProject.title : ''
 
     return (
-      <div key={donation.id} className="flex items-center justify-between">
-        donated ${donationAmount} to {projectTitle}
-      </div>
+      <tr className="border" key={donation.id}>
+        <td className="p-4">${donationAmount}</td>
+        <td className="p-4">{projectTitle}</td>
+        <td className="p-4">
+          <Date date={donation.createdAt} />
+        </td>
+      </tr>
     )
   })
 
   return (
-    <div className="flow-root mt-6">
-      <div className="border rounded py-10 px-10">{donations}</div>
-    </div>
+    <table className="border rounded table-auto w-full">
+      <thead className="text-secondary bg-secondary border">
+        <tr>
+          <th className="p-4 text-left">Amount</th>
+          <th className="p-4 text-left">Project</th>
+          <th className="p-4 text-left">Date</th>
+        </tr>
+      </thead>
+      <tbody>{donations}</tbody>
+    </table>
   )
 }
