@@ -1,9 +1,7 @@
-import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import { browserEnv } from '@/env/browser'
 import { Navbar as MantineNavbar, createStyles } from '@mantine/core'
 import {
   IconBolt,
