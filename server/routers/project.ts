@@ -46,13 +46,15 @@ export const projectRouter = createProtectedRouter()
         authorId: z.string().optional(),
         filterTags: z.string().optional(),
         orderBy: z.enum(PROJECT_SORT_KEYS).optional(),
+        showHidden: z.boolean().optional(),
       })
       .optional(),
     async resolve({ input, ctx }) {
       const take = input?.take ?? 60
       const skip = input?.skip
+      const showHidden = input?.showHidden ?? true
       const baseQuery: Array<Prisma.ProjectWhereInput> | undefined =
-        ctx.session?.user.role === 'ADMIN'
+        ctx.session?.user.role === 'ADMIN' && showHidden
           ? undefined
           : [{ hidden: false }, { authorId: ctx.session?.user.id }]
       const where = {
