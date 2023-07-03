@@ -1,7 +1,7 @@
 import slugify from 'slugify'
 import { z } from 'zod'
 
-import { PROJECT_SORT_KEYS, ProjectSortKey } from '@/lib/constants'
+import { CERTIFICATE_SORT_KEYS, CertificateSortKey } from '@/lib/constants'
 import { markdownToHtml } from '@/lib/editor'
 import { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
@@ -9,7 +9,7 @@ import { TRPCError } from '@trpc/server'
 import { createProtectedRouter } from '../createProtectedRouter'
 
 const getOrderBy = (
-  orderByKey: ProjectSortKey | undefined
+  orderByKey: CertificateSortKey | undefined
 ):
   | Prisma.Enumerable<Prisma.CertificateOrderByWithRelationAndSearchRelevanceInput>
   | undefined => {
@@ -43,7 +43,7 @@ export const certificateRouter = createProtectedRouter()
         skip: z.number().min(1).optional(),
         authorId: z.string().optional(),
         filterTags: z.string().optional(),
-        orderBy: z.enum(PROJECT_SORT_KEYS).optional(),
+        orderBy: z.enum(CERTIFICATE_SORT_KEYS).optional(),
       })
       .optional(),
     async resolve({ input, ctx }) {

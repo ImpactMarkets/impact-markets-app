@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { Prisma } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
 import { createProtectedRouter } from '../createProtectedRouter'
@@ -92,18 +92,13 @@ export const userRouter = createProtectedRouter()
       prefersDetailView: z.boolean().optional(),
       prefersAnonymity: z.boolean().optional(),
       prefersEventNotifications: z.boolean().optional(),
+      prefersProjectNotifications: z.boolean().optional(),
+      prefersBountyNotifications: z.boolean().optional(),
     }),
-    async resolve({
-      input: { prefersDetailView, prefersAnonymity, prefersEventNotifications },
-      ctx,
-    }) {
+    async resolve({ input, ctx }) {
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session!.user.id },
-        data: {
-          prefersDetailView: prefersDetailView,
-          prefersAnonymity: prefersAnonymity,
-          prefersEventNotifications: prefersEventNotifications,
-        },
+        data: input,
       })
 
       return user
@@ -126,98 +121,34 @@ export const userRouter = createProtectedRouter()
   })
   .query('topDonors', {
     input: z.object({
-      pastDays: z.number().optional(),
-      ignoreSize: z.boolean().optional(),
+      pastDays: z.literal(365).optional(),
       includeAnonymous: z.boolean().optional(),
     }),
-    async resolve({
-      ctx,
-      input: { pastDays = 1e6, ignoreSize = false, includeAnonymous = false },
-    }) {
-      const users: {
-        id: string
-        name: string
-        image: string
-        prefersAnonymity: boolean
-        totalCredits: Prisma.Decimal
-      }[] = await ctx.prisma.$queryRaw`
-        WITH
-          raw_donations AS (
-            SELECT
-              "User"."id",
-              "User"."name",
-              "User"."image",
-              "User"."prefersAnonymity",
-              CASE
-                WHEN ${ignoreSize} THEN 100
-                ELSE "Donation"."amount"
-              END as "amount",
-              "Donation"."projectId",
-              "Donation"."time",
-              "Project"."credits"
-            FROM "Donation"
-            JOIN "User" ON "User"."id" = "Donation"."userId"
-            JOIN "Project" ON "Donation"."projectId" = "Project"."id"
-            WHERE
-              "Project"."credits" > 0 AND
-              "Donation"."state" = 'CONFIRMED' AND
-              "Donation"."time" > now() - make_interval(days => ${pastDays}::int) AND
-              (${includeAnonymous} OR NOT "User"."prefersAnonymity")
-            ORDER BY "Donation"."projectId" ASC, "Donation"."time" ASC
-          ),
-          donations AS (
-            SELECT
-              "id",
-              "name",
-              "image",
-              "prefersAnonymity",
-              "projectId",
-              "credits",
-              "amount",
-              (100 + SUM("amount")
-                OVER (
-                  PARTITION BY "projectId"
-                  ORDER BY "time" ASC, "id" ASC
-                )
-              ) as "runningTotal",
-              (100 + SUM("amount")
-                OVER (
-                  PARTITION BY "projectId"
-                )
-              ) as "projectTotal"
-            FROM raw_donations
-        ),
-        contributions AS (
-          SELECT
-            "id",
-            "name",
-            "image",
-            "amount",
-            "projectId",
-            "credits",
-            "prefersAnonymity",
-            "runningTotal",
-            "projectTotal",
-            "amount" / "runningTotal"::float as "contribution",
-            SUM("amount" / "runningTotal"::float)
-              OVER (PARTITION BY "projectId") as "contributionTotal"
-          FROM donations
-        )
-        SELECT
-          "id",
-          "name",
-          "image",
-          "prefersAnonymity",
-          SUM(("contribution" / "contributionTotal") * "credits")::numeric as "totalCredits"
-        FROM contributions
-        GROUP BY "id", "name", "image", "prefersAnonymity"
-        ORDER BY "totalCredits" DESC
-        LIMIT 100;
-      `
-      return users.map(({ name, image, prefersAnonymity, ...rest }) => ({
-        name: prefersAnonymity ? name[0] + '. Anonymous' : name,
-        image: prefersAnonymity ? '' : image,
-        ...rest,
-      }))
+    async resolve({ ctx, input: { pastDays, includeAnonymous } }) {
+      const scoreField = pastDays ? 'score365' : 'score'
+
+      // This first sends the normal query with the UserScore fields missing from SELECT, and then sends a second query to get the UserScore fields. Wtf?
+      // SELECT "public"."User"."id", "public"."User"."name", "public"."User"."image" FROM "public"."User" LEFT JOIN "public"."UserScore" AS "orderby_1_UserScore" ON ("public"."User"."id" = "orderby_1_UserScore"."userId") WHERE ("public"."User"."prefersAnonymity" = $1 AND ("public"."User"."id") IN (SELECT "t0"."id" FROM "public"."User" AS "t0" INNER JOIN "public"."UserScore" AS "j0" ON ("j0"."userId") = ("t0"."id") WHERE ("j0"."score365" > $2 AND "t0"."id" IS NOT NULL))) ORDER BY "orderby_1_UserScore"."score365" DESC LIMIT $3 OFFSET $4
+      // SELECT "public"."UserScore"."userId", "public"."UserScore"."score", "public"."UserScore"."score365" FROM "public"."UserScore" WHERE "public"."UserScore"."userId" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) OFFSET $13
+      return await ctx.prisma.user.findMany({
+        select: {
+          id: true,
+          name: true,
+          image: true,
+          userScore: true,
+        },
+        where: {
+          prefersAnonymity: includeAnonymous ? undefined : false,
+          userScore: {
+            [scoreField]: { gt: 0 },
+          },
+        },
+        orderBy: {
+          userScore: {
+            [scoreField]: 'desc',
+          },
+        },
+        take: 100,
+      })
     },
   })

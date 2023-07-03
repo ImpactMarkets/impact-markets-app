@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+import { classNames } from '@/lib/classnames'
 import { InferQueryOutput } from '@/lib/trpc'
 
 import { IMTag } from './utils'
@@ -19,21 +20,21 @@ export const Tags = ({ queryData, tags: knownTags }: TagsProps) => {
   if (!queryData.tags) return null
   const tags = queryData.tags.split(',')
   return (
-    <div className="flex flex-wrap gap-1">
+    <>
       {knownTags.map(
         ({ value, label, color }) =>
           tags.includes(value) && (
             <span
               key={value}
-              className="border text-highlight border-secondary bg-primary font-bold text-xs px-1 rounded"
-              style={{
-                backgroundColor: color,
-              }}
+              className={classNames(
+                'inline-block text-highlight font-bold text-xs px-1 p-[1px] mr-1 rounded',
+                color
+              )}
             >
               {label}
             </span>
           )
       )}
-    </div>
+    </>
   )
 }

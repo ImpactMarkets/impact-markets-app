@@ -41,7 +41,7 @@ export function CenteredFooter() {
       <div className={classes.inner}>
         Good Exchange, PBC. Images by pch.vector on Freepik.
         <Group className={classes.links}>
-          <Link key="blog" href="/ranking">
+          <Link key="ranking" href="/ranking">
             Ranking
           </Link>
           <Link key="blog" href="https://impactmarkets.substack.com/">

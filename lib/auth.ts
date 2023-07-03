@@ -52,6 +52,10 @@ export const authOptions: NextAuthOptions = {
           prefersDetailView: (user || token).prefersDetailView,
           prefersAnonymity: (user || token).prefersAnonymity,
           prefersEventNotifications: (user || token).prefersEventNotifications,
+          prefersProjectNotifications: (user || token)
+            .prefersProjectNotifications,
+          prefersBountyNotifications: (user || token)
+            .prefersBountyNotifications,
         },
       } as Session
     },
@@ -83,6 +87,8 @@ if (serverEnv.MOCK_LOGIN) {
         prefersDetailView: true,
         prefersAnonymity: true,
         prefersEventNotifications: true,
+        prefersProjectNotifications: true,
+        prefersBountyNotifications: true,
       },
       where: { email },
       create: { email, name, image, role },
@@ -103,6 +109,8 @@ declare module 'next-auth' {
       prefersDetailView: boolean
       prefersAnonymity: boolean
       prefersEventNotifications: boolean
+      prefersProjectNotifications: boolean
+      prefersBountyNotifications: boolean
     }
     expires: string
   }
@@ -112,5 +120,7 @@ declare module 'next-auth' {
     prefersDetailView: boolean
     prefersAnonymity: boolean
     prefersEventNotifications: boolean
+    prefersProjectNotifications: boolean
+    prefersBountyNotifications: boolean
   }
 }

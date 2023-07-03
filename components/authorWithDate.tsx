@@ -33,9 +33,7 @@ export function AuthorWithDate({
       <div className="flex-1">
         <div>
           <Link href={`/profile/${author.id}`}>
-            <span className="font-medium transition-colors hover:text-blue">
-              {author.name}
-            </span>
+            <span className="font-medium link">{author.name}</span>
           </Link>
         </div>
         <div className="text-gray-500 text-sm">

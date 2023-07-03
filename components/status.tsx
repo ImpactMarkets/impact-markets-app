@@ -1,5 +1,7 @@
 import * as React from 'react'
 
+import { classNames } from '@/lib/classnames'
+
 interface StatusProps {
   color: string
   status: string
@@ -8,10 +10,10 @@ interface StatusProps {
 export const Status: React.FC<StatusProps> = ({ color, status }) => {
   return (
     <div
-      className="border text-sm text-center text-highlight border-secondary bg-primary font-bold px-2 py-1 mt-1 rounded-lg"
-      style={{
-        backgroundColor: color,
-      }}
+      className={classNames(
+        'border text-sm text-center text-highlight border-secondary font-bold px-2 py-1 mt-1 rounded-lg',
+        color
+      )}
     >
       {status}
     </div>
