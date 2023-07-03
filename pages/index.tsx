@@ -1,14 +1,13 @@
 import Head from 'next/head'
 
-import { buttonClasses } from '@/components/button'
-import { ButtonLink } from '@/components/buttonLink'
 import { CenteredFooter } from '@/components/centeredFooter'
 import { Layout } from '@/components/layout'
+import { CallToAction } from '@/components/welcome/callToAction'
 import { Comparisons } from '@/components/welcome/comparisons'
 import { HeroText } from '@/components/welcome/heroText'
 import { Pitches } from '@/components/welcome/pitches'
+import { TopProjects } from '@/components/welcome/topProjects'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
-import { Card } from '@mantine/core'
 
 const LandingPage: NextPageWithAuthAndLayout = () => (
   <div className="mx-auto max-w-screen-lg my-5 pt-6">
@@ -18,6 +17,8 @@ const LandingPage: NextPageWithAuthAndLayout = () => (
     <HeroText />
     <div className="border"></div>
     <Pitches />
+    <div className="border"></div>
+    <TopProjects />
     <div className="border"></div>
     <Comparisons />
     <CallToAction />
@@ -29,7 +30,7 @@ const LandingPage: NextPageWithAuthAndLayout = () => (
         scrolling="no"
       ></iframe>
     </div>
-    <CenteredFooter></CenteredFooter>
+    <CenteredFooter />
   </div>
 )
 
