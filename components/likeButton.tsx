@@ -96,7 +96,7 @@ export function LikeButton({
           isLikingAnimation && 'transition-colors duration-100 text-gray-50'
         )}
       >
-        {likeCount} <span className="font-normal">{label ? label : null}</span>
+        {likeCount} <span className="font-normal">{!disabled && label}</span>
       </span>
     </>
   )
