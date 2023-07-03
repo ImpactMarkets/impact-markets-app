@@ -50,7 +50,7 @@ function Left({ bounty }: SummaryProps) {
   return (
     <div className="grow relative flex flex-col justify-between max-w-[calc(100%-140px-1rem)]">
       {bounty.tags && (
-        <div className="mb-6 max-h-10 overflow-hidden">
+        <div className="mb-6 max-h-20 overflow-hidden">
           <Tags queryData={bounty} tags={TAGS} />
         </div>
       )}

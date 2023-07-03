@@ -1,10 +1,7 @@
-import mixpanel from 'mixpanel-browser'
-import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import { browserEnv } from '@/env/browser'
 import { Navbar as MantineNavbar, createStyles } from '@mantine/core'
 import {
   IconBolt,
@@ -18,10 +15,6 @@ import {
 } from '@tabler/icons'
 
 import { User } from './user'
-
-mixpanel.init(browserEnv.NEXT_PUBLIC_MIXPANEL_TOKEN, {
-  debug: browserEnv.NEXT_PUBLIC_DEBUG,
-})
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
@@ -71,7 +64,6 @@ const NavbarLink = ({
   label: string
   icon: TablerIcon
 }) => {
-  const { data: session } = useSession()
   const { classes, cx } = useStyles()
   const router = useRouter()
 
@@ -83,16 +75,6 @@ const NavbarLink = ({
             [classes.linkActive]: link === router.pathname,
           }) + ' flex text-sm items-center cursor-pointer'
         }
-        onClick={() => {
-          try {
-            mixpanel.track('Click - ' + label, {
-              user: session?.user.id,
-              datetime: Date(),
-            })
-          } catch (error) {
-            console.log('error: ' + error)
-          }
-        }}
       >
         <Icon className={classes.linkIcon} />
         <span>{label}</span>

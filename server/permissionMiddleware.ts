@@ -126,51 +126,6 @@ export const permissionMiddleware: MiddlewareFunction = async ({
     return comment?.authorId === ctx.session!.user.id
   }
 
-  const holdingBelongsToUser = async () => {
-    const { id } = <
-      {
-        id: number
-      }
-    >rawInput
-    const holding = await ctx.prisma.holding.findUnique({
-      where: { id },
-      select: {
-        userId: true,
-      },
-    })
-    return holding?.userId === ctx.session!.user.id
-  }
-
-  const sellingHoldingBelongsToUser = async () => {
-    const id = <number>rawInput
-    const transaction = await ctx.prisma.transaction.findUnique({
-      where: { id },
-      select: {
-        sellingHolding: {
-          select: {
-            userId: true,
-          },
-        },
-      },
-    })
-    return transaction?.sellingHolding.userId === ctx.session!.user.id
-  }
-
-  const buyingHoldingBelongsToUser = async () => {
-    const id = <number>rawInput
-    const transaction = await ctx.prisma.transaction.findUnique({
-      where: { id },
-      select: {
-        buyingHolding: {
-          select: {
-            userId: true,
-          },
-        },
-      },
-    })
-    return transaction?.buyingHolding.userId === ctx.session!.user.id
-  }
-
   const requestComesFromLocalhost = async () => {
     const expectedHash =
       '9a71f29fc25843711e279ec1da9ef43eb455ea13592d2b1888449f52b6c19ef995e7ec591a8868544e4b650f83946da39f3f7607ee0fa655abe521eecd36753f'
@@ -198,6 +153,7 @@ export const permissionMiddleware: MiddlewareFunction = async ({
     'project.feed': allow,
     'project.detail': allow,
     'project.search': allow,
+    'project.topContributors': allow,
     'project.add': isAuthenticated,
     'project.edit': async () =>
       and(

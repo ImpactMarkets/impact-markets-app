@@ -4,7 +4,7 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch", "fullTextIndex", "orderByNulls"]
+  previewFeatures = ["fullTextSearch", "fullTextIndex", "views"]
 }
 
 datasource db {
@@ -129,6 +129,8 @@ model User {
   likedProjects      LikedProject[]
   bounties           Bounty[]
   likedBounties      LikedBounty[]
+  contributions      Contribution[]
+  userScore          UserScore?
 }
 
 model VerificationToken {
@@ -155,11 +157,13 @@ model Project {
   paymentUrl     String    @default("")
   solvesBountyId String?
 
-  author       User           @relation(fields: [authorId], references: [id], onDelete: Restrict)
-  donations    Donation[]
-  certificates Certificate[]
-  likedBy      LikedProject[]
-  comments     Comment[]
+  author        User           @relation(fields: [authorId], references: [id], onDelete: Restrict)
+  donations     Donation[]
+  certificates  Certificate[]
+  likedBy       LikedProject[]
+  comments      Comment[]
+  contributions Contribution[]
+  supportScore  SupportScore?
 
   @@index([authorId])
 }
@@ -356,4 +360,36 @@ model Event {
   recipientId String
 
   recipient User @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+}
+
+view Contribution {
+  projectId            String
+  userId               String
+  totalAmount          Decimal
+  relativeContribution Decimal
+
+  user    User    @relation(fields: [userId], references: [id])
+  project Project @relation(fields: [projectId], references: [id])
+
+  @@id([projectId, userId])
+}
+
+view UserScore {
+  userId   String  @unique
+  score    Decimal
+  score365 Decimal
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@id([userId])
+}
+
+view SupportScore {
+  projectId String  @unique
+  count     Int
+  score     Decimal
+
+  project Project @relation(fields: [projectId], references: [id])
+
+  @@id([projectId])
 }

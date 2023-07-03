@@ -9,23 +9,22 @@ import { Card } from '@mantine/core'
 import { Author } from '../author'
 import { Heading2 } from '../heading2'
 import { HtmlView } from '../htmlView'
+import { Scores } from '../scores'
 import { Tags } from '../tags'
 import { TAGS } from './tags'
 
 export type ProjectSummaryProps = {
   project: InferQueryOutput<'project.feed'>['projects'][number]
-  onLike?: () => void
-  onUnlike?: () => void
+  hideRight?: boolean
 }
 
 function Left({ project }: ProjectSummaryProps) {
   return (
-    <div className="grow relative flex flex-col justify-between max-w-[calc(100%-140px-1rem)]">
-      {project.tags && (
-        <div className="mb-6 max-h-10 overflow-hidden">
-          <Tags queryData={project} tags={TAGS} />
-        </div>
-      )}
+    <div className="grow relative flex flex-col justify-between">
+      <div className="mb-6 max-h-20 overflow-hidden">
+        <Scores project={project} />
+        <Tags queryData={project} tags={TAGS} />
+      </div>
     </div>
   )
 }
@@ -50,18 +49,19 @@ function Bottom({ project }: ProjectSummaryProps) {
   }, [project.content])
 
   return (
-    <>
-      <Link href={`/project/${project.id}`}>
-        <Heading2 className="cursor-pointer w-[95%] mb-6 whitespace-nowrap text-ellipsis overflow-hidden">
-          {project.title}
-        </Heading2>
-      </Link>
+    <Link href={`/project/${project.id}`}>
+      <Heading2 className="cursor-pointer w-[95%] mb-6 whitespace-nowrap text-ellipsis overflow-hidden">
+        {project.title}
+      </Heading2>
       <HtmlView html={summary} />
-    </>
+    </Link>
   )
 }
 
-export const ProjectSummary = ({ project }: ProjectSummaryProps) => (
+export const ProjectSummary = ({
+  project,
+  hideRight = false,
+}: ProjectSummaryProps) => (
   <Card
     shadow="sm"
     p="lg"
@@ -76,7 +76,7 @@ export const ProjectSummary = ({ project }: ProjectSummaryProps) => (
     )}
     <div className="flex items-stretch">
       <Left project={project} />
-      <Right project={project} />
+      {!hideRight && <Right project={project} />}
     </div>
     <Bottom project={project} />
   </Card>

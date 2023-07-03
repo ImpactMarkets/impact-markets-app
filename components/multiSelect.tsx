@@ -44,7 +44,7 @@ export const IMMultiSelect = React.forwardRef<
         }}
         sx={{
           'div > input::placeholder': {
-            fontSize: 12,
+            fontSize: 16,
           },
           'div > input': {
             padding: 0,

@@ -12,7 +12,7 @@ import { Layout } from '@/components/layout'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import { TAGS } from '@/components/project/tags'
 import { SummarySkeleton } from '@/components/summarySkeleton'
-import { ITEMS_PER_PAGE, ProjectSortKey } from '@/lib/constants'
+import { CertificateSortKey, ITEMS_PER_PAGE } from '@/lib/constants'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
@@ -24,7 +24,7 @@ const CertificateSummary = dynamic<CertificateSummaryProps>(
   { ssr: false }
 )
 
-const orderByValues: Array<{ value: ProjectSortKey; label: string }> = [
+const orderByValues: Array<{ value: CertificateSortKey; label: string }> = [
   { value: 'createdAt', label: 'Sort by creation date' },
   { value: 'actionStart', label: 'Sort by start of work' },
   { value: 'actionEnd', label: 'Sort by end of work' },
@@ -39,7 +39,9 @@ const Home: NextPageWithAuthAndLayout = () => {
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
   const utils = trpc.useContext()
   const [filterTags, setFilterTags] = React.useState('')
-  const [orderBy, setOrderBy] = React.useState(defaultOrder as ProjectSortKey)
+  const [orderBy, setOrderBy] = React.useState(
+    defaultOrder as CertificateSortKey
+  )
   const feedQueryPathAndInput: InferQueryPathAndInput<'certificate.feed'> = [
     'certificate.feed',
     {
@@ -128,7 +130,7 @@ const Home: NextPageWithAuthAndLayout = () => {
               // A bit unhappy with this – https://stackoverflow.com/a/69007934/678861
               (orderByValues.map((item) => item.value) as string[]).includes(
                 orderBy
-              ) && setOrderBy(orderBy as ProjectSortKey)
+              ) && setOrderBy(orderBy as CertificateSortKey)
             }
             orderByValues={orderByValues}
             defaultFilterTagValue={filterTags}

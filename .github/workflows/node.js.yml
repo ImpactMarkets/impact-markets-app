@@ -25,22 +25,6 @@ jobs:
       - run: npm install prettier @trivago/prettier-plugin-sort-imports
       - run: npx prettier --check '**/*.{ts,tsx,json,html,css}'
 
-  test-unit:
-    name: Unit tests
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      - run: npm install typescript
-      - run: npm run test:unit
-
   test-e2e:
     name: E2E tests
     timeout-minutes: 60

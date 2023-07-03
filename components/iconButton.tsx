@@ -21,11 +21,10 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         ref={forwardedRef}
         type={type}
         className={classNames(
-          'inline-flex items-center justify-center flex-shrink-0 transition-colors rounded-full h-button w-icon-button focus-ring',
-          variant === 'primary' &&
-            'text-secondary-inverse bg-secondary-inverse hover:text-primary-inverse hover:bg-primary-inverse',
+          'inline-flex items-center justify-center flex-shrink-0 rounded-full h-button w-icon-button focus-ring',
+          variant === 'primary' && 'text-primary bg-primary hover:opacity-80',
           variant === 'secondary' &&
-            'border text-primary border-secondary bg-primary hover:bg-secondary',
+            'border text-secondary border-secondary bg-secondary hover:opacity-80',
           className
         )}
       />
