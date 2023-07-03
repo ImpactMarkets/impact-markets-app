@@ -21,8 +21,9 @@ export const TopProjects = () => {
     return (
       <div className="my-12">
         <div className="flex justify-center my-12 text-3xl font-bold">
-          Our current top project
-          <span className="hidden xl:inline 2xl:inline">s</span> is …
+          Our current top&nbsp;
+          <span className="hidden xl:inline 2xl:inline">projects are</span>
+          <span className="inline xl:hidden 2xl:hidden">project is</span>&nbsp;…
         </div>
         <ul className="divide-y divide-transparent flex flex-wrap gap-x-[1%] gap-y-2">
           {feedQuery.data.projects.map((project) => (
