@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import * as React from 'react'
 
 import { Date } from '@/components/date'
@@ -26,12 +27,15 @@ export function Donations({
     const matchingProject = project.find(
       (project) => project.id === donation.projectId
     )
-    const projectTitle = matchingProject ? matchingProject.title : ''
 
     return (
       <tr className="border" key={donation.id}>
         <td className="p-4">${donationAmount}</td>
-        <td className="p-4">{projectTitle}</td>
+        {matchingProject ? (
+          <Link href={`/project/${matchingProject.id}`}>
+            <td className="p-4">{matchingProject.title}</td>
+          </Link>
+        ) : null}
         <td className="p-4">
           <Date date={donation.createdAt} />
         </td>
