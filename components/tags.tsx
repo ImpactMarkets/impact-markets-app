@@ -27,7 +27,7 @@ export const Tags = ({ queryData, tags: knownTags }: TagsProps) => {
             <span
               key={value}
               className={classNames(
-                'inline-block text-highlight font-bold text-xs px-1 p-[1px] mr-1 rounded',
+                'inline-block text-highlight font-bold text-xs px-1 p-[1px] rounded',
                 color
               )}
             >

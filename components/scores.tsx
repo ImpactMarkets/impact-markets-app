@@ -25,7 +25,7 @@ export const Scores = ({ project }: ScoresProps) => {
           </>
         }
       >
-        <span className="inline-block cursor-help text-highlight bg-emerald-600 font-bold text-xs px-1 p-[1px] mr-1 rounded">
+        <span className="inline-block cursor-help text-highlight bg-emerald-600 font-bold text-xs px-1 p-[1px] rounded">
           {project.supportScore ? (
             <>Support score: {num(project.supportScore.score, 0)}</>
           ) : (
@@ -45,7 +45,7 @@ export const Scores = ({ project }: ScoresProps) => {
           </>
         }
       >
-        <span className="inline-block cursor-help text-highlight bg-emerald-700 font-bold text-xs px-1 p-[1px] mr-1 rounded">
+        <span className="inline-block cursor-help text-highlight bg-emerald-700 font-bold text-xs px-1 p-[1px] rounded">
           {project.credits > zero ? (
             <>Project score: {num(project.credits, 0)}</>
           ) : (

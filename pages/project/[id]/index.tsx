@@ -174,7 +174,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
                 </div>
               </div>
             </div>
-            <div className="flex my-6">
+            <div className="flex flex-wrap gap-1 my-6">
               <Scores project={project} />
               <Tags queryData={project} tags={TAGS} />
             </div>
