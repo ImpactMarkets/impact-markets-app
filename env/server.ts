@@ -81,6 +81,5 @@ export const serverEnv = {
       allowEmpty: false,
       devDefault: 'foobar',
     }),
-    // MIXPANEL_AUTH_TOKEN:
   }),
 }

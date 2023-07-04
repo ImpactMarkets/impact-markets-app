@@ -14,7 +14,7 @@ export function markdownToPlainHtml(markdown: string) {
     ALLOWED_TAGS: ['em'],
     ALLOWED_ATTR: [],
     FORBID_CONTENTS: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
-  })
+  }).trim()
 }
 
 function replacePlaceholder(

@@ -51,13 +51,12 @@ export const Pitches = () => (
             </span>{' '}
             such as yours. A good donation track record signal-boosts the
             projects that they support. You’ll be discovered by more donors,
-            which can snowball into greater and greater success.
+            which snowballs into greater success.
           </p>
 
           <p className="my-3 text-gray-700">
-            Just{' '}
             <Link href="/project/new" className="link">
-              publish your project
+              Publish your project
             </Link>{' '}
             to start fundraising. Onboard your existing donors and ask them to
             register their donations and express their support.
@@ -71,16 +70,15 @@ export const Pitches = () => (
           <p>
             Are you an experienced donor or grantmaker? Do you want to leverage
             some of the{' '}
-            <span className="text-gray-700">$250,000 donation budget</span> of
-            the donors we have waiting for you?
+            <span className="text-gray-700">$300,000 donation budget</span> of
+            our interested donors? Or even more once larger funders join?
           </p>
 
           <p className="my-3">
-            Scout out and signal-boost the best projects! You get a “donor
-            score” based on your track record, and the higher your score, the
-            greater your boost to the projects you support. You will leverage
-            your expertise for follow-on donations, getting the projects funded
-            faster.
+            Scout out and signal-boost the best projects you can find! Your{' '}
+            <em>donor score</em> is based on your track record: The higher your
+            score, the greater your boost to the projects you support. You’ll
+            leverage your expertise for follow-on donations!
           </p>
 
           <p className="my-3 text-gray-700">

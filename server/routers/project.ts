@@ -3,9 +3,9 @@ import slugify from 'slugify'
 import { z } from 'zod'
 
 import { PROJECT_SORT_KEYS, ProjectSortKey } from '@/lib/constants'
-import { markdownToHtml } from '@/lib/editor'
+import { markdownToHtml, markdownToPlainHtml } from '@/lib/editor'
 import { Prisma, User } from '@prisma/client'
-import { EventStatus, EventType, Role } from '@prisma/client'
+import { EventStatus, EventType } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
 import { createProtectedRouter } from '../createProtectedRouter'
@@ -19,9 +19,14 @@ const getOrderBy = (
     createdAt: { createdAt: desc },
     actionStart: { actionStart: { sort: desc, nulls: last } },
     actionEnd: { actionEnd: { sort: desc, nulls: last } },
+    supportScore: {
+      supportScore: {
+        score: desc,
+      },
+    },
     supporterCount: {
-      donations: {
-        _count: desc,
+      supportScore: {
+        count: desc,
       },
     },
   }
@@ -41,13 +46,16 @@ export const projectRouter = createProtectedRouter()
         authorId: z.string().optional(),
         filterTags: z.string().optional(),
         orderBy: z.enum(PROJECT_SORT_KEYS).optional(),
+        showHidden: z.boolean().optional(),
+        hideClosed: z.boolean().optional(),
       })
       .optional(),
     async resolve({ input, ctx }) {
       const take = input?.take ?? 60
       const skip = input?.skip
+      const showHidden = input?.showHidden ?? true
       const baseQuery: Array<Prisma.ProjectWhereInput> | undefined =
-        ctx.session?.user.role === 'ADMIN'
+        ctx.session?.user.role === 'ADMIN' && showHidden
           ? undefined
           : [{ hidden: false }, { authorId: ctx.session?.user.id }]
       const where = {
@@ -60,6 +68,7 @@ export const projectRouter = createProtectedRouter()
             }))
           : undefined,
         authorId: input?.authorId,
+        paymentUrl: input?.hideClosed ? { contains: '/' } : undefined,
       }
 
       const projects = await ctx.prisma.project.findMany({
@@ -74,6 +83,7 @@ export const projectRouter = createProtectedRouter()
           createdAt: true,
           hidden: true,
           tags: true,
+          credits: true,
           author: {
             select: {
               id: true,
@@ -102,6 +112,7 @@ export const projectRouter = createProtectedRouter()
               },
             },
           },
+          supportScore: true,
           _count: {
             select: {
               comments: true,
@@ -139,6 +150,7 @@ export const projectRouter = createProtectedRouter()
           actionEnd: true,
           paymentUrl: true,
           tags: true,
+          credits: true,
           author: {
             select: {
               id: true,
@@ -205,6 +217,7 @@ export const projectRouter = createProtectedRouter()
               },
             },
           },
+          supportScore: true,
           _count: {
             select: {
               comments: true,
@@ -306,6 +319,7 @@ export const projectRouter = createProtectedRouter()
           id: true,
           title: true,
           author: true,
+          content: true,
         },
       })
 
@@ -411,6 +425,38 @@ export const projectRouter = createProtectedRouter()
       return project
     },
   })
+  .query('topContributors', {
+    input: z.object({
+      id: z.string().min(1),
+      includeAnonymous: z.boolean().optional(),
+    }),
+    async resolve({ ctx, input: { id, includeAnonymous } }) {
+      return await ctx.prisma.contribution.findMany({
+        select: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+              userScore: true,
+            },
+          },
+          totalAmount: true,
+          relativeContribution: true,
+        },
+        where: {
+          projectId: id,
+          user: {
+            prefersAnonymity: includeAnonymous ? undefined : false,
+          },
+        },
+        orderBy: {
+          relativeContribution: 'desc',
+        },
+        take: 10,
+      })
+    },
+  })
 
 async function emitNewProjectEvents(
   ctx: Context,
@@ -418,22 +464,34 @@ async function emitNewProjectEvents(
     id,
     title,
     author,
+    content,
   }: {
     id: string
     title: string
     author: User
+    content: string
   }
 ) {
-  const adminUsers = await ctx.prisma.user.findMany({
+  const subscribers = await ctx.prisma.user.findMany({
     where: {
-      role: Role.ADMIN,
+      prefersProjectNotifications: true,
+      email: { contains: '@' },
     },
     select: {
       id: true,
     },
   })
 
-  for (const adminUser of adminUsers) {
+  let summary = content
+  if (summary.length > 300) {
+    summary = summary.substring(0, 300) + '…'
+  }
+  summary = markdownToPlainHtml(summary)
+
+  for (const subscriber of subscribers) {
+    if (subscriber.id === author.id) {
+      continue
+    }
     await ctx.prisma.event.create({
       data: {
         type: EventType.PROJECT,
@@ -441,12 +499,12 @@ async function emitNewProjectEvents(
           objectId: id,
           objectType: 'project',
           objectTitle: title,
-          text: `Project created by **${author.name}**`,
+          text: `**${author.name}**: “${summary}”`,
         },
         status: EventStatus.PENDING,
         recipient: {
           connect: {
-            id: adminUser.id,
+            id: subscriber.id,
           },
         },
       },
