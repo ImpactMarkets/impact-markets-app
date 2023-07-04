@@ -51,7 +51,7 @@ function Left({ certificate }: CertificateSummaryProps) {
   return (
     <div className="grow relative flex flex-col justify-between max-w-[calc(100%-140px-1rem)]">
       {certificate.tags && (
-        <div className="mb-6 max-h-20 overflow-hidden">
+        <div className="flex flex-wrap gap-1 mb-6">
           <Tags queryData={certificate} tags={TAGS} />
         </div>
       )}

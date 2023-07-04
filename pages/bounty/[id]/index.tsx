@@ -172,7 +172,7 @@ function BountyPage({ bountyId }: { bountyId: string }) {
                 />
               </div>
             </div>
-            <div className="flex my-6">
+            <div className="flex flex-wrap gap-1 my-6">
               <Tags queryData={bounty} tags={TAGS} />
             </div>
             <HtmlView html={bounty.contentHtml} className="mt-8" />

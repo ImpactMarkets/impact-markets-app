@@ -135,7 +135,7 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
                 date={certificate.createdAt}
               />
             </div>
-            <div className="my-6">
+            <div className="flex flex-wrap gap-1 my-6">
               <Tags queryData={certificate} tags={TAGS} />
             </div>
             <div className="my-6">

@@ -20,11 +20,9 @@ export type ProjectSummaryProps = {
 
 function Left({ project }: ProjectSummaryProps) {
   return (
-    <div className="grow relative flex flex-col justify-between">
-      <div className="mb-6 max-h-20 overflow-hidden">
-        <Scores project={project} />
-        <Tags queryData={project} tags={TAGS} />
-      </div>
+    <div className="flex flex-wrap gap-1 mb-6">
+      <Scores project={project} />
+      <Tags queryData={project} tags={TAGS} />
     </div>
   )
 }
