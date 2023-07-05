@@ -75,7 +75,9 @@ export const createEmail = (
             <MjmlText>
               <p>
                 You can change your notification preferences on your{' '}
-                <a href="https://app.impactmarkets.io/profile/${recipient.id}">
+                <a
+                  href={`https://app.impactmarkets.io/profile/${recipient.id}`}
+                >
                   Impact Markets profile
                 </a>
                 .
