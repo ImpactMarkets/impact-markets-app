@@ -114,6 +114,13 @@ export const Navbar = ({ hidden }: { hidden: boolean }) => (
       <NavbarLink link="/rules" label="Rules & terms" icon={IconFile} />
       <NavbarLink link="/support" label="Help & support" icon={IconLifebuoy} />
     </MantineNavbar.Section>
+    <Image
+      src="https://www.facebook.com/tr?id=144902331947551&ev=PageView&noscript=1"
+      alt=""
+      height={1}
+      width={1}
+      unoptimized
+    />
     <MantineNavbar.Section>
       <User />
     </MantineNavbar.Section>
