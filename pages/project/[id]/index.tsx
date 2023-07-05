@@ -241,11 +241,14 @@ function ProjectPage({ projectId }: { projectId: string }) {
             </div>
           </div>
 
-          <Tabs defaultValue="questions-and-answers">
+          <Tabs defaultValue="comments">
             <Tabs.List>
+              <Tabs.Tab value="comments">Comments</Tabs.Tab>
               <Tabs.Tab value="questions-and-answers">
                 Questions and answers
               </Tabs.Tab>
+              <Tabs.Tab value="reasons">Reasons</Tabs.Tab>
+              <Tabs.Tab value="endorsements">Endorsements</Tabs.Tab>
             </Tabs.List>
 
             <Tabs.Panel value="questions-and-answers" pt="xs">
