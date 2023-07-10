@@ -9,9 +9,10 @@ type ScoresProps = {
   project:
     | InferQueryOutput<'project.detail'>
     | InferQueryOutput<'project.feed'>['projects'][number]
+  showProjectScore?: boolean
 }
 
-export const Scores = ({ project }: ScoresProps) => {
+export const Scores = ({ project, showProjectScore = false }: ScoresProps) => {
   const zero = new Prisma.Decimal(0)
   return (
     <>
@@ -33,26 +34,28 @@ export const Scores = ({ project }: ScoresProps) => {
           )}
         </span>
       </Tooltip>
-      <Tooltip
-        multiline
-        label={
-          <>
-            The project score is determined retrospectively by our evaluators.
-            The first cohort of projects has yet to reach a state where
-            sufficiently many of them can be evaluated, so we’ve not performed
-            any serious evaluations yet. Meanwhile please don’t take the initial
-            values too seriously.
-          </>
-        }
-      >
-        <span className="inline-block cursor-help text-highlight bg-emerald-700 font-bold text-xs px-1 p-[1px] rounded">
-          {project.credits > zero ? (
-            <>Project score: {num(project.credits, 0)}</>
-          ) : (
-            <>No project score yet</>
-          )}
-        </span>
-      </Tooltip>
+      {showProjectScore && (
+        <Tooltip
+          multiline
+          label={
+            <>
+              The project score is determined retrospectively by our evaluators.
+              The first cohort of projects has yet to reach a state where
+              sufficiently many of them can be evaluated, so we’ve not performed
+              any serious evaluations yet. Meanwhile please don’t take the
+              initial values too seriously.
+            </>
+          }
+        >
+          <span className="inline-block cursor-help text-highlight bg-emerald-700 font-bold text-xs px-1 p-[1px] rounded">
+            {project.credits > zero ? (
+              <>Project score: {num(project.credits, 0)}</>
+            ) : (
+              <>No project score yet</>
+            )}
+          </span>
+        </Tooltip>
+      )}
     </>
   )
 }
