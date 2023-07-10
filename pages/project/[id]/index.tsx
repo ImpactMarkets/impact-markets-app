@@ -175,7 +175,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
               </div>
             </div>
             <div className="flex flex-wrap gap-1 my-6">
-              <Scores project={project} />
+              <Scores project={project} showProjectScore />
               <Tags queryData={project} tags={TAGS} />
             </div>
             <div className="my-6">
@@ -202,11 +202,9 @@ function ProjectPage({ projectId }: { projectId: string }) {
                   )}
                 </Tabs.List>
 
-                {session && (
-                  <Tabs.Panel value="topContributors" pt="xs">
-                    <TopContributors project={project} />
-                  </Tabs.Panel>
-                )}
+                <Tabs.Panel value="topContributors" pt="xs">
+                  <TopContributors project={project} />
+                </Tabs.Panel>
                 {session && (
                   <Tabs.Panel value="outgoingDonations" pt="xs">
                     <OutgoingDonations project={project} />
