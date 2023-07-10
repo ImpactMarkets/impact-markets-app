@@ -113,7 +113,7 @@ model User {
   prefersDetailView           Boolean @default(false)
   prefersAnonymity            Boolean @default(false)
   prefersEventNotifications   Boolean @default(true)
-  prefersProjectNotifications Boolean @default(false)
+  prefersProjectNotifications Boolean @default(true)
   prefersBountyNotifications  Boolean @default(false)
 
   accounts           Account[]
