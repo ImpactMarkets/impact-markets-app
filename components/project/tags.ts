@@ -48,7 +48,7 @@ export const TAGS: IMTag[] = sortBy('label', [
     color: colors.work,
     group: 'Type of work',
   },
-  { value: 'film', label: 'Film', color: '#4fcdf7', group: 'Type of work' },
+  { value: 'film', label: 'Film', color: colors.work, group: 'Type of work' },
   {
     value: 'historical_document',
     label: 'Historical document',
