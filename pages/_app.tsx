@@ -1,8 +1,8 @@
 import { SessionProvider, signIn, useSession } from 'next-auth/react'
 import { ThemeProvider } from 'next-themes'
 import type { AppProps } from 'next/app'
+import dynamic from 'next/dynamic'
 import * as React from 'react'
-import { Toaster } from 'react-hot-toast'
 
 import { browserEnv } from '@/env/browser'
 import { emotionCache } from '@/lib/emotionCache'
@@ -19,6 +19,14 @@ import { withTRPC } from '@trpc/next'
 import { TRPCError } from '@trpc/server'
 
 import '../styles/globals.css'
+
+// https://github.com/timolins/react-hot-toast/issues/46#issuecomment-1368169443
+const Toaster = dynamic(
+  () => import('react-hot-toast').then((c) => c.Toaster),
+  {
+    ssr: false,
+  }
+)
 
 const barlowCondensed = Barlow_Condensed({
   subsets: ['latin'],
@@ -74,19 +82,20 @@ function MyApp({
                 --font-open-sans: ${openSans.style.fontFamily};
               }
             `}</style>
-            {Component.auth ? (
-              <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
-            ) : (
-              getLayout(<Component {...pageProps} />)
-            )}
             <Toaster
               toastOptions={{
+                duration: 5000,
                 className: 'text-xs',
                 style: {
                   maxWidth: '100%',
                 },
               }}
             />
+            {Component.auth ? (
+              <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
+            ) : (
+              getLayout(<Component {...pageProps} />)
+            )}
             <TawkMessengerReact
               propertyId="6477604974285f0ec46ec1c0"
               widgetId="1h1p508cl"

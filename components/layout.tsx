@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import * as React from 'react'
 import { useCallback, useEffect, useState } from 'react'
+import { toast } from 'react-hot-toast'
 
 import { Header } from '@/components/header'
 import { Navbar } from '@/components/navbar'
@@ -14,6 +15,14 @@ export function Layout({ children }: LayoutProps) {
   const [opened, setOpened] = useState<boolean>(false)
   const router = useRouter()
 
+  useEffect(() => {
+    if (router?.asPath.indexOf('?') > -1) {
+      toast.success(<span>Success! Thank you!</span>, {
+        id: 'generic-confirmation',
+      })
+    }
+  })
+
   const closeMenu = useCallback(() => {
     if (opened) {
       setOpened(false)
@@ -23,7 +32,6 @@ export function Layout({ children }: LayoutProps) {
   // Hook to close the menu when a link is clicked
   useEffect(() => {
     router.events.on('routeChangeStart', closeMenu)
-
     return () => router.events.off('routeChangeStart', closeMenu)
   })
 
