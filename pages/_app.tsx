@@ -82,19 +82,20 @@ function MyApp({
                 --font-open-sans: ${openSans.style.fontFamily};
               }
             `}</style>
-            {Component.auth ? (
-              <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
-            ) : (
-              getLayout(<Component {...pageProps} />)
-            )}
             <Toaster
               toastOptions={{
+                duration: 5000,
                 className: 'text-xs',
                 style: {
                   maxWidth: '100%',
                 },
               }}
             />
+            {Component.auth ? (
+              <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
+            ) : (
+              getLayout(<Component {...pageProps} />)
+            )}
             <TawkMessengerReact
               propertyId="6477604974285f0ec46ec1c0"
               widgetId="1h1p508cl"
