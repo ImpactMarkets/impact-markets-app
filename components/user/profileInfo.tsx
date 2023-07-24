@@ -84,7 +84,7 @@ function ContactLink({ contact }: ContactLinkProps) {
               <IconMail className="inline" /> {contact}
             </a>
           ) : isEmail ? (
-            <a href={`mailto:${contact}`}>
+            <a href={`mailto:${contact}`} className="whitespace-nowrap">
               <IconMail className="inline" /> {contact}
             </a>
           ) : (

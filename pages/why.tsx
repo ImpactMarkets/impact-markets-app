@@ -211,30 +211,61 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
 
         <Heading2 className="my-10">Questions about the platform</Heading2>
         <Accordion.Item value="h.a960frelo8vn">
-          <Accordion.Control>What is the donor score?</Accordion.Control>
+          <Accordion.Control>
+            What are donor, support, and project score? What does contribution
+            mean?
+          </Accordion.Control>
           <Accordion.Panel>
-            <p className="my-3">The score is computed in three steps:</p>
-            <ol className="list-decimal list-outside m-2 ml-10">
-              <li>
-                The contribution of each donor to a given project is calculated
-                as a fraction that is greater if the donor contributed to a
-                project earlier. Earliness here is not about sidereal time but
-                about the order of the donations, so it doesn’t matter whether
-                there’s a day or a year between the first and the second
-                donation. The standard score also takes the size of the donation
-                into account.
-              </li>
-              <li>
-                Eventually many projects will complete and then get evaluated.
-                The result is a score that expresses the evaluators aggregate
-                opinion on the relative impact of the project.
-              </li>
-              <li>
-                Finally the per-project contributions and the per-project scores
-                are multiplied and summed up for each donor. This results in the
-                scores that form the donor ranking.
-              </li>
-            </ol>
+            <p className="my-3">
+              The <strong>contribution</strong> of each donor to a given project
+              is calculated as a fraction that is greater if the donor
+              contributed to a project <em>earlier</em> and if they contributed{' '}
+              <em>more</em>. (Eventually, we also want to take a marginal
+              utility function for the project into account.) Earliness here is
+              not about sidereal time but about the order of the donations, so
+              it doesn’t matter whether there’s a day or a year between the
+              first and the second donation. Taking the donation sizes into
+              account prevents the case where a project receives many small
+              donations, so that donors soon have no further incentive to
+              donate, long before the project is funded.
+            </p>
+            <p className="my-3">
+              The <em>contribution</em> is not designed to have any metaphysical
+              meaning. It shouldn’t be relied upon to decide whose actions are
+              how praiseworthy. It’s designed to create an incentive for donors
+              to seek out underfunded projects and to counteract the{' '}
+              <a
+                href="https://blog.givewell.org/2014/12/02/donor-coordination-and-the-givers-dilemma/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link"
+              >
+                Giver’s Dilemma
+              </a>
+              .
+            </p>
+            <p className="my-3">
+              Eventually many projects will complete and then get evaluated. The
+              result is the <strong>project score</strong>, which expresses the
+              evaluators aggregate opinion on the relative impact of the
+              project.
+            </p>
+            <p className="my-3">
+              Multiply <em>contribution</em> and <em>project score</em> per
+              project and donor and then sum them up for each donor, and you get
+              the <strong>donor score</strong>. This is the score that forms the
+              donor ranking.
+            </p>
+            <p className="my-3">
+              But of course we’re interested in how projects rank that are still
+              fundraising, projects that are not ready for a retroactive
+              evaluation. This is where the <strong>support score</strong> comes
+              in: As soon as a project has received any donations, we multiply
+              the <em>contribution</em> of each donor and the donor’s{' '}
+              <em>donor score</em>. The sum of those products is the{' '}
+              <em>support score</em>. This score is not about how much money a
+              project has received but how sophisticated its donors are.
+            </p>
           </Accordion.Panel>
         </Accordion.Item>
         <Accordion.Item value="h.2vyw7iqj7vgi">

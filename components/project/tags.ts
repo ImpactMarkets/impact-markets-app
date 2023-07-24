@@ -208,6 +208,12 @@ export const TAGS: IMTag[] = sortBy('label', [
   // Fields of work
   { value: 'aixi', label: 'AIXI', color: colors.field, group: 'Field' },
   {
+    value: 'builder_breaker',
+    label: 'Builder/Breaker',
+    color: colors.field,
+    group: 'Field',
+  },
+  {
     value: 'coherent_extrapolated_volition',
     label: 'Coherent Extrapolated Volition',
     color: colors.field,
