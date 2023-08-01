@@ -13,12 +13,20 @@ export const commentRouter = createProtectedRouter()
       objectType: z.enum(['project', 'bounty']),
       content: z.string().min(1),
       parentId: z.optional(z.number().int()),
+      category: z.enum([
+        'COMMENT',
+        'Q_AND_A',
+        'REASONING',
+        'ENDORSEMENT',
+        'REPLY',
+      ]),
     }),
     async resolve({ ctx, input }) {
       const comment = await ctx.prisma.comment.create({
         data: {
           content: input.content,
           contentHtml: markdownToHtml(input.content),
+          category: input.category,
           author: {
             connect: {
               id: ctx.session!.user.id,

@@ -5,15 +5,18 @@ import toast from 'react-hot-toast'
 import { Button } from '@/components/button'
 import { MarkdownEditor } from '@/components/markdownEditor'
 import { trpc } from '@/lib/trpc'
+import { CommentType } from '@prisma/client'
 
 import { CommentFormData } from '../utils'
 
 export function AddCommentForm({
   objectId,
   objectType,
+  category,
 }: {
   objectId: string
   objectType: 'project' | 'bounty'
+  category: CommentType
 }) {
   const [markdownEditorKey, setMarkdownEditorKey] = React.useState(0)
   const utils = trpc.useContext()
@@ -33,13 +36,17 @@ export function AddCommentForm({
   const { control, handleSubmit, reset } = useForm<CommentFormData>()
 
   const onSubmit: SubmitHandler<CommentFormData> = (data) => {
+    console.log(`the data to be submitted is: ${data}`)
     addCommentMutation.mutate(
       {
         objectId,
         objectType,
         content: data.content,
+        category,
       },
       {
+        // IS THIS DOING ANYTHING?
+        // when i try logging to the console on the line above "reset," nothing happens
         onSuccess: () => {
           reset({ content: '' })
           setMarkdownEditorKey((markdownEditorKey) => markdownEditorKey + 1)
@@ -60,7 +67,7 @@ export function AddCommentForm({
             value={field.value}
             onChange={field.onChange}
             onTriggerSubmit={handleSubmit(onSubmit)}
-            placeholder="Questions, comments, or feedback?"
+            placeholder="Type your comment here."
             minRows={4}
             data-testid="comment-form"
             required

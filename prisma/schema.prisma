@@ -39,6 +39,7 @@ enum CommentType {
   Q_AND_A
   REASONING
   ENDORSEMENT
+  REPLY
 }
 
 enum DonationState {
