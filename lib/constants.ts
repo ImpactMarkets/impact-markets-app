@@ -10,7 +10,13 @@ export const PROJECT_SORT_KEYS = [
 ] as const
 export type ProjectSortKey = (typeof PROJECT_SORT_KEYS)[number]
 
-export const BOUNTY_SORT_KEYS = ['deadline', 'size', 'createdAt', ''] as const
+export const BOUNTY_SORT_KEYS = [
+  'deadline',
+  'size',
+  'createdAt',
+  'likeCount',
+  '',
+] as const
 export type BountySortKey = (typeof BOUNTY_SORT_KEYS)[number]
 
 export const CERTIFICATE_SORT_KEYS = [

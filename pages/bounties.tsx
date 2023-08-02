@@ -26,6 +26,7 @@ const orderByValues: Array<{ value: BountySortKey; label: string }> = [
   { value: 'createdAt', label: 'Sort by creation date' },
   { value: 'deadline', label: 'Sort by deadline' },
   { value: 'size', label: 'Sort by bounty amount' },
+  { value: 'likeCount', label: 'Sort by interest' },
 ]
 
 const defaultOrder = 'size'
