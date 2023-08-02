@@ -31,7 +31,7 @@ export function Donations({
       acc[donation.projectId] = {
         projectId: donation.projectId,
         totalAmount: 0,
-        earliestDate: donation.createdAt,
+        earliestDate: donation.time,
       }
     }
 
@@ -39,8 +39,8 @@ export function Donations({
     acc[donation.projectId].totalAmount += Number(donation.amount)
 
     // replaces date with date of earliest donation
-    if (acc[donation.projectId].earliestDate > donation.createdAt) {
-      acc[donation.projectId].earliestDate = donation.createdAt
+    if (acc[donation.projectId].earliestDate > donation.time) {
+      acc[donation.projectId].earliestDate = donation.time
     }
 
     return acc
