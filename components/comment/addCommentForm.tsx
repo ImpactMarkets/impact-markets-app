@@ -69,7 +69,7 @@ export function AddCommentForm({
             onTriggerSubmit={handleSubmit(onSubmit)}
             placeholder="Type your comment here."
             minRows={4}
-            data-testid="comment-form"
+            data-testid={`comment-form-${category}`}
             required
           />
         )}
