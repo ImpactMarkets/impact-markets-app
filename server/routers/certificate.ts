@@ -17,13 +17,8 @@ const getOrderBy = (
     createdAt: { createdAt: Prisma.SortOrder.desc },
     actionStart: { actionStart: Prisma.SortOrder.desc },
     actionEnd: { actionEnd: Prisma.SortOrder.desc },
-    supporterCount: {
-      holdings: {
-        // Sadly not supported:
-        // where: {
-        //   size: { gt: 0 },
-        //   type: { in: ['OWNERSHIP', 'CONSUMPTION'] },
-        // },
+    likeCount: {
+      likedBy: {
         _count: Prisma.SortOrder.desc,
       },
     },

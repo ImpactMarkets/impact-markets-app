@@ -2,7 +2,7 @@ export const ITEMS_PER_PAGE = 30
 
 export const PROJECT_SORT_KEYS = [
   'supportScore',
-  'supporterCount',
+  'likeCount',
   'createdAt',
   'actionStart',
   'actionEnd',
@@ -14,7 +14,7 @@ export const BOUNTY_SORT_KEYS = ['deadline', 'size', 'createdAt', ''] as const
 export type BountySortKey = (typeof BOUNTY_SORT_KEYS)[number]
 
 export const CERTIFICATE_SORT_KEYS = [
-  'supporterCount',
+  'likeCount',
   'createdAt',
   'actionStart',
   'actionEnd',
