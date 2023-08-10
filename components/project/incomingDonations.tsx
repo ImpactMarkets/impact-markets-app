@@ -49,10 +49,10 @@ export function IncomingDonations({
       <table className="text-sm">
         <thead>
           <tr>
-            <th className="text-left w-64">Donor</th>
-            <th className="text-right w-24">Date</th>
-            <th className="text-right w-24">Amount</th>
-            <th className="text-left w-64"></th>
+            <th className="font-normal pb-6 text-left w-64">Donor</th>
+            <th className="font-normal pb-6 text-right w-24">Date</th>
+            <th className="font-normal pb-6 text-right w-24">Amount</th>
+            <th className="font-normal pb-6 text-left w-64"></th>
           </tr>
         </thead>
         <tbody>

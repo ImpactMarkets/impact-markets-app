@@ -12,7 +12,6 @@ import { colors } from '@/components/colors'
 import { AddCommentForm } from '@/components/comment/addCommentForm'
 import { Comment } from '@/components/comment/comment'
 import { CommentButton } from '@/components/commentButton'
-import { Date } from '@/components/date'
 import { Heading1 } from '@/components/heading1'
 import { HtmlView } from '@/components/htmlView'
 import { Layout } from '@/components/layout'
@@ -141,11 +140,6 @@ function BountyPage({ bountyId }: { bountyId: string }) {
                 isUserAdmin={isUserAdmin}
                 belongsToUser={bountyBelongsToUser}
               />
-            </div>
-            <div className="flex">
-              {bounty.deadline ? (
-                <Date date={bounty.createdAt} dateLabel="Created" />
-              ) : null}
             </div>
             <div className="flex justify-between my-6">
               <AuthorWithDate
