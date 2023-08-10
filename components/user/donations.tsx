@@ -71,12 +71,13 @@ export function Donations({
   })
 
   return (
-    <table className="border rounded table-auto w-full">
-      <thead className="border bg-gray-200 text-gray-500">
+    <table className="table-auto w-full">
+      <thead className="text-sm">
         <tr>
-          <th className="p-4 text-left">Project</th>
-          <th className="p-4 text-left">Total Amount</th>
-          <th className="p-4 text-left">Earliest Donation</th>
+          <th className="font-normal p-4 text-left">Project</th>
+          <th className="font-normal p-4 text-left">Earliest donation</th>
+          <th className="font-normal p-4 text-left">Latest donation</th>
+          <th className="font-normal p-4 text-right">Total amount</th>
         </tr>
       </thead>
       <tbody>{projectDonations}</tbody>
