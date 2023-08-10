@@ -61,7 +61,7 @@ function Left({ certificate }: CertificateSummaryProps) {
             {certificate.title}
           </Heading2>
         </Link>
-        <Date date={certificate.createdAt} />
+        <Date date={certificate.createdAt} className="text-gray-500 text-sm" />
       </div>
     </div>
   )

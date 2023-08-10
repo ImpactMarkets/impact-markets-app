@@ -69,6 +69,7 @@ function Left({ bounty }: SummaryProps) {
         <Date
           date={bounty.deadline || bounty.createdAt}
           dateLabel={bounty.deadline ? 'Deadline' : 'Created'}
+          className="text-gray-500 text-sm"
         />{' '}
         <span className="text-gray-500 text-sm">
           · {capitalize(bounty.status.toLowerCase())}

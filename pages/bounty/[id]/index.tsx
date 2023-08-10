@@ -142,11 +142,6 @@ function BountyPage({ bountyId }: { bountyId: string }) {
                 belongsToUser={bountyBelongsToUser}
               />
             </div>
-            <div className="flex">
-              {bounty.deadline ? (
-                <Date date={bounty.createdAt} dateLabel="Created" />
-              ) : null}
-            </div>
             <div className="flex justify-between my-6">
               <AuthorWithDate
                 author={bounty.author}
