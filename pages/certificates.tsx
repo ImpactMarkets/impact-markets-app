@@ -28,10 +28,10 @@ const orderByValues: Array<{ value: CertificateSortKey; label: string }> = [
   { value: 'createdAt', label: 'Sort by creation date' },
   { value: 'actionStart', label: 'Sort by start of work' },
   { value: 'actionEnd', label: 'Sort by end of work' },
-  { value: 'supporterCount', label: 'Sort by supporters' },
+  { value: 'likeCount', label: 'Sort by likes' },
 ]
 
-const defaultOrder = 'supporterCount'
+const defaultOrder = 'likeCount'
 
 const Home: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()

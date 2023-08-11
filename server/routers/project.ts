@@ -24,9 +24,9 @@ const getOrderBy = (
         score: desc,
       },
     },
-    supporterCount: {
-      supportScore: {
-        count: desc,
+    likeCount: {
+      likedBy: {
+        _count: desc,
       },
     },
   }
