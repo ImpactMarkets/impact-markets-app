@@ -187,6 +187,7 @@ export const projectRouter = createProtectedRouter()
               content: true,
               contentHtml: true,
               createdAt: true,
+              category: true,
               author: {
                 select: {
                   id: true,

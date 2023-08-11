@@ -5,6 +5,7 @@ import toast from 'react-hot-toast'
 import { Button } from '@/components/button'
 import { MarkdownEditor } from '@/components/markdownEditor'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
+import { CommentType } from '@prisma/client'
 
 import { CommentFormData } from '../utils'
 
@@ -44,6 +45,7 @@ export function AddReplyForm({
       {
         objectId,
         objectType,
+        category: CommentType.REPLY,
         content: data.content,
         parentId: parent?.id,
       },

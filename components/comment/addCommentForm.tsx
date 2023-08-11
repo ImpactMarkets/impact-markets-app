@@ -5,15 +5,18 @@ import toast from 'react-hot-toast'
 import { Button } from '@/components/button'
 import { MarkdownEditor } from '@/components/markdownEditor'
 import { trpc } from '@/lib/trpc'
+import { CommentType } from '@prisma/client'
 
 import { CommentFormData } from '../utils'
 
 export function AddCommentForm({
   objectId,
   objectType,
+  category,
 }: {
   objectId: string
   objectType: 'project' | 'bounty'
+  category: CommentType
 }) {
   const [markdownEditorKey, setMarkdownEditorKey] = React.useState(0)
   const utils = trpc.useContext()
@@ -38,8 +41,13 @@ export function AddCommentForm({
         objectId,
         objectType,
         content: data.content,
+        category,
       },
       {
+        // FIXME: When I try logging to the console on the line above "reset," nothing happens.
+        // Might be related to “Please keep in mind that those additional callbacks won't run if
+        // your component unmounts before the mutation finishes.”
+        // https://tanstack.com/query/v4/docs/react/guides/mutations
         onSuccess: () => {
           reset({ content: '' })
           setMarkdownEditorKey((markdownEditorKey) => markdownEditorKey + 1)
@@ -60,9 +68,9 @@ export function AddCommentForm({
             value={field.value}
             onChange={field.onChange}
             onTriggerSubmit={handleSubmit(onSubmit)}
-            placeholder="Questions, comments, or feedback?"
+            placeholder="Type your comment here."
             minRows={4}
-            data-testid="comment-form"
+            data-testid={`comment-form-${category}`}
             required
           />
         )}

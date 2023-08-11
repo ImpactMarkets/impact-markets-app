@@ -22,6 +22,7 @@ import { capitalize, num } from '@/lib/text'
 import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { LoadingOverlay, Tabs } from '@mantine/core'
+import { CommentType } from '@prisma/client'
 import { IconExternalLink } from '@tabler/icons'
 
 // TODO: Maybe this could be made into a generic component ?
@@ -106,6 +107,65 @@ function BountyPage({ bountyId }: { bountyId: string }) {
     const isUserAdmin = session?.user.role === 'ADMIN'
     const bountyBelongsToUser = bounty.author.id === session?.user.id
 
+    const CommentPanel = ({ category }: { category: CommentType }) => {
+      // CURRENTLY UNFILTERED BY CATEGORY
+      // if you decide to add tabs, take filteredComments code from project page
+
+      return (
+        <div id="comments" className="pt-6 space-y-12">
+          {bounty.comments.length > 0 ? (
+            <ul className="space-y-12">
+              {bounty.comments.map((comment) => (
+                <li key={comment.id}>
+                  <Comment
+                    objectId={bounty.id}
+                    objectType="bounty"
+                    comment={comment}
+                  />
+
+                  <div id="replies" className="pt-12 pl-14 space-y-12">
+                    {comment.children.length > 0 && (
+                      <ul className="space-y-12">
+                        {comment.children.map((reply) => (
+                          <li key={reply.id}>
+                            <Comment
+                              objectId={bounty.id}
+                              objectType="bounty"
+                              comment={reply}
+                            />
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="pb-6 text-sm">No comments yet</p>
+          )}
+          {session && (
+            <div className="flex items-start gap-2 sm:gap-4">
+              <span className="hidden sm:inline-block">
+                <Avatar name={session!.user.name} src={session!.user.image} />
+              </span>
+              <span className="inline-block sm:hidden">
+                <Avatar
+                  name={session!.user.name}
+                  src={session!.user.image}
+                  size="sm"
+                />
+              </span>
+              <AddCommentForm
+                objectId={bounty.id}
+                objectType="bounty"
+                category={category}
+              />
+            </div>
+          )}
+        </div>
+      )
+    }
     return (
       <>
         <Head>
@@ -192,65 +252,13 @@ function BountyPage({ bountyId }: { bountyId: string }) {
             </div>
           </div>
 
-          <Tabs defaultValue="questions-and-answers">
+          <Tabs defaultValue="Q_AND_A">
             <Tabs.List>
-              <Tabs.Tab value="questions-and-answers">
-                Questions and answers
-              </Tabs.Tab>
+              <Tabs.Tab value="Q_AND_A">Questions and answers</Tabs.Tab>
             </Tabs.List>
 
-            <Tabs.Panel value="questions-and-answers" pt="xs">
-              <div id="comments" className="pt-6 space-y-12">
-                {bounty.comments.length > 0 ? (
-                  <ul className="space-y-12">
-                    {bounty.comments.map((comment) => (
-                      <li key={comment.id}>
-                        <Comment
-                          objectId={bounty.id}
-                          objectType="bounty"
-                          comment={comment}
-                        />
-
-                        <div id="replies" className="pt-12 pl-14 space-y-12">
-                          {comment.children.length > 0 && (
-                            <ul className="space-y-12">
-                              {comment.children.map((reply) => (
-                                <li key={reply.id}>
-                                  <Comment
-                                    objectId={bounty.id}
-                                    objectType="bounty"
-                                    comment={reply}
-                                  />
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="pb-6 text-sm">No comments yet</p>
-                )}
-                {session && (
-                  <div className="flex items-start gap-2 sm:gap-4">
-                    <span className="hidden sm:inline-block">
-                      <Avatar
-                        name={session!.user.name}
-                        src={session!.user.image}
-                      />
-                    </span>
-                    <span className="inline-block sm:hidden">
-                      <Avatar
-                        name={session!.user.name}
-                        src={session!.user.image}
-                        size="sm"
-                      />
-                    </span>
-                    <AddCommentForm objectId={bounty.id} objectType="bounty" />
-                  </div>
-                )}
-              </div>
+            <Tabs.Panel value={CommentType.Q_AND_A} pt="xs">
+              <CommentPanel category={CommentType.Q_AND_A} />
             </Tabs.Panel>
           </Tabs>
         </div>

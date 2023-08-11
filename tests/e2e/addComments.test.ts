@@ -1,4 +1,5 @@
 import { type Page, expect, test } from '@playwright/test'
+import { CommentType } from '@prisma/client'
 
 async function fillInAndCreateCert(page: Page, titleText: string) {
   await page.getByRole('textbox', { name: 'title' }).fill(titleText)
@@ -17,13 +18,19 @@ test.beforeEach(async ({ page }) => {
   await page.goto('http://localhost:3001/project/new')
 })
 
+function getDataTestId(category: CommentType): string {
+  return `comment-form-${category}`
+}
+
 test.describe('Submits and Replies', () => {
   test('should allow creating a comment', async ({ page }) => {
     const titleText = '0'
     await fillInAndCreateCert(page, titleText)
 
     const commentText0 = 'toplevel comment 0'
-    await page.locator('[data-testid="comment-form"]').fill(commentText0)
+    await page
+      .locator('[data-testid="' + getDataTestId(CommentType.COMMENT) + '"]')
+      .fill(commentText0)
     await page.click('text=Submit')
 
     await expect(page.locator('text=' + commentText0)).toBeVisible({
@@ -41,7 +48,9 @@ test.describe('Submits and Replies', () => {
       'toplevel comment 2',
     ]
     for (const commentText of commentTexts) {
-      await page.locator('[data-testid="comment-form"]').fill(commentText)
+      await page
+        .locator('[data-testid="' + getDataTestId(CommentType.COMMENT) + '"]')
+        .fill(commentText)
       await page.click('text=Submit')
 
       // TODO: Replace these delays with an await for some less brittle confirmation of submission.
@@ -64,7 +73,7 @@ test.describe('Submits and Replies', () => {
     await fillInAndCreateCert(page, titleText)
 
     await page
-      .locator('[data-testid="comment-form"]')
+      .locator('[data-testid="' + getDataTestId(CommentType.COMMENT) + '"]')
       .fill('toplevel comment 0')
     await page.click('text=Submit')
     await delay(200)
@@ -92,7 +101,9 @@ test.describe('Submits and Replies', () => {
       'toplevel comment 2',
     ]
     for (const commentText of commentTexts) {
-      await page.locator('[data-testid="comment-form"]').fill(commentText)
+      await page
+        .locator('[data-testid="' + getDataTestId(CommentType.COMMENT) + '"]')
+        .fill(commentText)
       await page.click('text=Submit')
       await delay(200)
     }
