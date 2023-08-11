@@ -36,7 +36,6 @@ export function AddCommentForm({
   const { control, handleSubmit, reset } = useForm<CommentFormData>()
 
   const onSubmit: SubmitHandler<CommentFormData> = (data) => {
-    console.log(`the data to be submitted is: ${data}`)
     addCommentMutation.mutate(
       {
         objectId,
@@ -45,8 +44,10 @@ export function AddCommentForm({
         category,
       },
       {
-        // IS THIS DOING ANYTHING?
-        // when i try logging to the console on the line above "reset," nothing happens
+        // FIXME: When I try logging to the console on the line above "reset," nothing happens.
+        // Might be related to “Please keep in mind that those additional callbacks won't run if
+        // your component unmounts before the mutation finishes.”
+        // https://tanstack.com/query/v4/docs/react/guides/mutations
         onSuccess: () => {
           reset({ content: '' })
           setMarkdownEditorKey((markdownEditorKey) => markdownEditorKey + 1)
