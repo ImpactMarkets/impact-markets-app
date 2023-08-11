@@ -17,6 +17,7 @@ const getOrderBy = (
     createdAt: { createdAt: Prisma.SortOrder.desc },
     deadline: { deadline: Prisma.SortOrder.asc },
     size: { size: Prisma.SortOrder.desc },
+    likeCount: { likedBy: { _count: Prisma.SortOrder.desc } },
   }
   const orderBy = orderByKey && orderOptions[orderByKey]
   if (!orderBy) {
