@@ -306,24 +306,35 @@ function ProjectPage({ projectId }: { projectId: string }) {
             </div>
           </div>
 
-          <Tabs defaultValue="COMMENT">
+          <Tabs defaultValue={CommentType.COMMENT}>
             <Tabs.List>
-              <Tabs.Tab value="COMMENT">Comments</Tabs.Tab>
-              <Tabs.Tab value="Q_AND_A">Questions and answers</Tabs.Tab>
-              <Tabs.Tab value="REASONING">Reasons</Tabs.Tab>
-              <Tabs.Tab value="ENDORSEMENT">Endorsements</Tabs.Tab>
+              <Tabs.Tab value={CommentType.COMMENT}>Comments</Tabs.Tab>
+              <Tabs.Tab value={CommentType.Q_AND_A}>
+                Questions and answers
+              </Tabs.Tab>
+              <Tabs.Tab value={CommentType.REASONING}>Reasons</Tabs.Tab>
+              <Tabs.Tab value={CommentType.ENDORSEMENT}>Endorsements</Tabs.Tab>
             </Tabs.List>
 
-            <Tabs.Panel value={CommentType.COMMENT} pt="xs">
+            <Tabs.Panel value={CommentType.COMMENT} className="p-6">
+              <p className="text-sm">General comments on the project.</p>
               <CommentPanel category={CommentType.COMMENT} />
             </Tabs.Panel>
-            <Tabs.Panel value={CommentType.Q_AND_A} pt="xs">
+            <Tabs.Panel value={CommentType.Q_AND_A} className="p-6">
+              <p className="text-sm">Questions about the project.</p>
               <CommentPanel category={CommentType.Q_AND_A} />
             </Tabs.Panel>
-            <Tabs.Panel value={CommentType.REASONING} pt="xs">
+            <Tabs.Panel value={CommentType.REASONING} className="p-6">
+              <p className="text-sm">
+                Donors’ reasoning behind their donations.
+              </p>
               <CommentPanel category={CommentType.REASONING} />
             </Tabs.Panel>
-            <Tabs.Panel value={CommentType.ENDORSEMENT} pt="xs">
+            <Tabs.Panel value={CommentType.ENDORSEMENT} className="p-6">
+              <p className="text-sm">
+                Endorsements of the project or links to such endorsements
+                elsewhere.
+              </p>
               <CommentPanel category={CommentType.ENDORSEMENT} />
             </Tabs.Panel>
           </Tabs>
