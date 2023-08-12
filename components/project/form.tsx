@@ -115,11 +115,7 @@ export function ProjectForm({
             </>
           }
           placeholder="Pick all that apply"
-          data={TAGS.map((tag) => ({
-            value: tag.value,
-            label: tag.label,
-            group: tag.group,
-          }))}
+          data={TAGS}
           searchable
           onChange={(value) =>
             Array.isArray(value) ? setValue('tags', value.join(',')) : null
