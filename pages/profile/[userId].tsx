@@ -5,6 +5,7 @@ import * as React from 'react'
 import { Layout } from '@/components/layout'
 import { Bio } from '@/components/user/bio'
 import { Donations } from '@/components/user/donations'
+import { Likes } from '@/components/user/likes'
 import { Preferences } from '@/components/user/preferences'
 import { ProfileInfo } from '@/components/user/profileInfo'
 import { ProjectFeed } from '@/components/user/projectFeed'
@@ -39,6 +40,7 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
               <Tabs.Tab value="donations">Donations</Tabs.Tab>
             ) : null}
             <Tabs.Tab value="projects">Projects</Tabs.Tab>
+            <Tabs.Tab value="likes">Likes</Tabs.Tab>
             {router.query.userId === session?.user.id ? (
               <Tabs.Tab value="preferences">Preferences</Tabs.Tab>
             ) : null}
@@ -54,6 +56,10 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
 
           <Tabs.Panel value="projects" pt="xs">
             <ProjectFeed user={profileQuery.data} />
+          </Tabs.Panel>
+
+          <Tabs.Panel value="likes" pt="xs">
+            <Likes user={profileQuery.data} />
           </Tabs.Panel>
 
           {router.query.userId === session?.user.id ? (

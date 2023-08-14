@@ -41,6 +41,30 @@ export const userRouter = createProtectedRouter()
               },
             },
           },
+          likedProjects: {
+            select: {
+              projectId: true,
+              project: {
+                select: {
+                  id: true,
+                  title: true,
+                  hidden: true,
+                },
+              },
+            },
+          },
+          likedBounties: {
+            select: {
+              bountyId: true,
+              bounty: {
+                select: {
+                  id: true,
+                  title: true,
+                  hidden: true,
+                },
+              },
+            },
+          },
           email: ctx.session?.user.role === 'ADMIN',
         },
       })
