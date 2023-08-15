@@ -11,8 +11,7 @@ import {
   IconPigMoney,
   IconRocket,
   IconTrophy,
-  TablerIcon,
-} from '@tabler/icons'
+} from '@tabler/icons-react'
 
 import { User } from './user'
 

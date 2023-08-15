@@ -32,7 +32,7 @@ import {
   IconCreditCardOff,
   IconMoneybag,
   IconWoman,
-} from '@tabler/icons'
+} from '@tabler/icons-react'
 
 // TODO:
 // fix the color of the heart in likes

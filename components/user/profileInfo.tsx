@@ -30,7 +30,7 @@ import {
   IconCreditCard,
   IconMail,
   IconShieldLock,
-} from '@tabler/icons'
+} from '@tabler/icons-react'
 
 function DotPattern() {
   return (

@@ -7,7 +7,7 @@ import {
   IconTelescope,
   IconTrendingUp,
   TablerIcon,
-} from '@tabler/icons'
+} from '@tabler/icons-react'
 
 interface FeatureProps extends React.ComponentPropsWithoutRef<'div'> {
   icon: TablerIcon

@@ -3,7 +3,7 @@ import * as React from 'react'
 import { num } from '@/lib/text'
 import { InferQueryOutput, trpc } from '@/lib/trpc'
 import { Prisma } from '@prisma/client'
-import { IconTrophy } from '@tabler/icons'
+import { IconTrophy } from '@tabler/icons-react'
 
 import { Author } from '../author'
 

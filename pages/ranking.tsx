@@ -10,7 +10,7 @@ import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { Tabs, Tooltip } from '@mantine/core'
 import { Prisma } from '@prisma/client'
-import { IconTrophy } from '@tabler/icons'
+import { IconTrophy } from '@tabler/icons-react'
 
 const RankingPage: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()

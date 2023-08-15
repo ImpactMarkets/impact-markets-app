@@ -23,7 +23,7 @@ import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { LoadingOverlay, Tabs } from '@mantine/core'
 import { CommentType } from '@prisma/client'
-import { IconExternalLink } from '@tabler/icons'
+import { IconExternalLink } from '@tabler/icons-react'
 
 // TODO: Maybe this could be made into a generic component ?
 const BountyPageWrapper: NextPageWithAuthAndLayout = () => {
