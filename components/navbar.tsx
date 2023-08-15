@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import { Navbar as MantineNavbar, createStyles } from '@mantine/core'
+import { Navbar as MantineNavbar, createStyles, getStylesRef } from '@mantine/core'
 import {
   IconBolt,
   IconFile,
@@ -15,8 +15,8 @@ import {
 
 import { User } from './user'
 
-const useStyles = createStyles((theme, _params, getRef) => {
-  const icon = getRef('icon')
+const useStyles = createStyles((theme, _params) => {
+  const icon = getStylesRef('icon')
   return {
     link: {
       ...theme.fn.focusStyles(),
@@ -61,7 +61,7 @@ const NavbarLink = ({
 }: {
   link: string
   label: string
-  icon: TablerIcon
+  icon: JSX.Element
 }) => {
   const { classes, cx } = useStyles()
   const router = useRouter()
