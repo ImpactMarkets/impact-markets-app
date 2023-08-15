@@ -1,4 +1,4 @@
-import cuid from 'cuid'
+import cuid from '@paralleldrive/cuid2'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
