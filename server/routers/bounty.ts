@@ -8,10 +8,11 @@ import { Prisma, User } from '@prisma/client'
 import { BountyStatus, EventStatus, EventType } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
-import { createProtectedRouter } from '../createProtectedRouter'
+import { protectedProcedure } from '../procedures'
+import { router } from '../router'
 
 const getOrderBy = (
-  orderByKey: BountySortKey | undefined
+  orderByKey: BountySortKey | undefined,
 ): Prisma.BountyOrderByWithRelationAndSearchRelevanceInput => {
   const orderOptions = {
     createdAt: { createdAt: Prisma.SortOrder.desc },
@@ -26,18 +27,20 @@ const getOrderBy = (
   return orderBy
 }
 
-export const bountyRouter = createProtectedRouter()
-  .query('feed', {
-    input: z
-      .object({
-        take: z.number().min(1).max(60).optional(),
-        skip: z.number().min(1).optional(),
-        authorId: z.string().optional(),
-        filterTags: z.string().optional(),
-        orderBy: z.enum(BOUNTY_SORT_KEYS).optional(),
-      })
-      .optional(),
-    async resolve({ input, ctx }) {
+export const bountyRouter = router({
+  feed: protectedProcedure
+    .input(
+      z
+        .object({
+          take: z.number().min(1).max(60).optional(),
+          skip: z.number().min(1).optional(),
+          authorId: z.string().optional(),
+          filterTags: z.string().optional(),
+          orderBy: z.enum(BOUNTY_SORT_KEYS).optional(),
+        })
+        .optional(),
+    )
+    .query(async ({ input, ctx }) => {
       const take = input?.take ?? 60
       const skip = input?.skip
       const baseQuery: Array<Prisma.BountyWhereInput> | undefined =
@@ -108,13 +111,14 @@ export const bountyRouter = createProtectedRouter()
         bounties,
         bountyCount,
       }
-    },
-  })
-  .query('detail', {
-    input: z.object({
-      id: z.string().min(1),
     }),
-    async resolve({ ctx, input }) {
+  detail: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
       const { id } = input
       const bounty = await ctx.prisma.bounty.findUnique({
         where: { id },
@@ -221,13 +225,14 @@ export const bountyRouter = createProtectedRouter()
       }
 
       return bounty
-    },
-  })
-  .query('search', {
-    input: z.object({
-      query: z.string().min(1),
     }),
-    async resolve({ input, ctx }) {
+  search: protectedProcedure
+    .input(
+      z.object({
+        query: z.string().min(1),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
       const query = slugify(input.query, ' & ')
       const bounties = await ctx.prisma.bounty.findMany({
         take: 10,
@@ -250,20 +255,21 @@ export const bountyRouter = createProtectedRouter()
         link: '/bounty/' + id,
         ...rest,
       }))
-    },
-  })
-  .mutation('add', {
-    input: z.object({
-      id: z.string().min(1),
-      title: z.string().min(1),
-      content: z.string().min(1),
-      size: z.instanceof(Prisma.Decimal),
-      deadline: z.date().nullable(),
-      sourceUrl: z.string(),
-      tags: z.string(),
-      status: z.nativeEnum(BountyStatus),
     }),
-    async resolve({ ctx, input }) {
+  add: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+        title: z.string().min(1),
+        content: z.string().min(1),
+        size: z.instanceof(Prisma.Decimal),
+        deadline: z.date().nullable(),
+        sourceUrl: z.string(),
+        tags: z.string(),
+        status: z.nativeEnum(BountyStatus),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
       const bounty = await ctx.prisma.bounty.create({
         data: {
           id: input.id,
@@ -293,22 +299,23 @@ export const bountyRouter = createProtectedRouter()
       emitNewBountyEvents(ctx, bounty)
 
       return bounty
-    },
-  })
-  .mutation('edit', {
-    input: z.object({
-      id: z.string().min(1),
-      data: z.object({
-        title: z.string().min(1),
-        content: z.string().min(1),
-        deadline: z.date().nullable(),
-        size: z.instanceof(Prisma.Decimal),
-        sourceUrl: z.string(),
-        tags: z.string(),
-        status: z.nativeEnum(BountyStatus),
-      }),
     }),
-    async resolve({ ctx, input }) {
+  edit: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+        data: z.object({
+          title: z.string().min(1),
+          content: z.string().min(1),
+          deadline: z.date().nullable(),
+          size: z.instanceof(Prisma.Decimal),
+          sourceUrl: z.string(),
+          tags: z.string(),
+          status: z.nativeEnum(BountyStatus),
+        }),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
       const { id, data } = input
       const updatedbounty = await ctx.prisma.bounty.update({
         where: { id },
@@ -325,11 +332,10 @@ export const bountyRouter = createProtectedRouter()
       })
 
       return updatedbounty
-    },
-  })
-  .mutation('like', {
-    input: z.string().min(1),
-    async resolve({ input: id, ctx }) {
+    }),
+  like: protectedProcedure
+    .input(z.string().min(1))
+    .mutation(async ({ input: id, ctx }) => {
       await ctx.prisma.likedBounty.create({
         data: {
           bounty: {
@@ -346,11 +352,10 @@ export const bountyRouter = createProtectedRouter()
       })
 
       return id
-    },
-  })
-  .mutation('unlike', {
-    input: z.string().min(1),
-    async resolve({ input: id, ctx }) {
+    }),
+  unlike: protectedProcedure
+    .input(z.string().min(1))
+    .mutation(async ({ input: id, ctx }) => {
       await ctx.prisma.likedBounty.delete({
         where: {
           bountyId_userId: {
@@ -361,11 +366,10 @@ export const bountyRouter = createProtectedRouter()
       })
 
       return id
-    },
-  })
-  .mutation('hide', {
-    input: z.string().min(1),
-    async resolve({ input: id, ctx }) {
+    }),
+  hide: protectedProcedure
+    .input(z.string().min(1))
+    .mutation(async ({ input: id, ctx }) => {
       const bounty = await ctx.prisma.bounty.update({
         where: { id },
         data: {
@@ -376,11 +380,10 @@ export const bountyRouter = createProtectedRouter()
         },
       })
       return bounty
-    },
-  })
-  .mutation('unhide', {
-    input: z.string().min(1),
-    async resolve({ input: id, ctx }) {
+    }),
+  unhide: protectedProcedure
+    .input(z.string().min(1))
+    .mutation(async ({ input: id, ctx }) => {
       const bounty = await ctx.prisma.bounty.update({
         where: { id },
         data: {
@@ -391,8 +394,8 @@ export const bountyRouter = createProtectedRouter()
         },
       })
       return bounty
-    },
-  })
+    }),
+})
 
 async function emitNewBountyEvents(
   ctx: Context,
@@ -406,7 +409,7 @@ async function emitNewBountyEvents(
     title: string
     author: User
     content: string
-  }
+  },
 ) {
   const subscribers = await ctx.prisma.user.findMany({
     where: {

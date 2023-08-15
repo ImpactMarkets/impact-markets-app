@@ -3,9 +3,9 @@ import { z } from 'zod'
 import { PrismaClient } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
-import { createProtectedRouter } from '../createProtectedRouter'
+import { protectedProcedure } from '../procedures'
 
-export const userRouter = createProtectedRouter()
+export const userRouter = protectedProcedure
   .query('profile', {
     input: z.object({
       id: z.string(),

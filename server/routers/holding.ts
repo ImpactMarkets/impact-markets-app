@@ -3,9 +3,9 @@ import { z } from 'zod'
 import { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
-import { createProtectedRouter } from '../createProtectedRouter'
+import { protectedProcedure } from '../procedures'
 
-export const holdingRouter = createProtectedRouter().query('feed', {
+export const holdingRouter = protectedProcedure.query('feed', {
   input: z.object({
     certificateId: z.string().min(1),
   }),

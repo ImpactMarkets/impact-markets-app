@@ -5,16 +5,19 @@ import { num } from '@/lib/text'
 import { DonationState, Prisma, Project, User } from '@prisma/client'
 import { EventStatus, EventType } from '@prisma/client'
 
-import { createProtectedRouter } from '../createProtectedRouter'
+import { protectedProcedure } from '../procedures'
+import { router } from '../router'
 
-export const donationRouter = createProtectedRouter()
-  .query('feed', {
-    input: z.object({
-      projectId: z.string(),
-      userId: z.string().optional(),
-      state: z.nativeEnum(DonationState).optional(),
-    }),
-    async resolve({ input, ctx }) {
+export const donationRouter = router({
+  feed: protectedProcedure
+    .input(
+      z.object({
+        projectId: z.string(),
+        userId: z.string().optional(),
+        state: z.nativeEnum(DonationState).optional(),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
       return await ctx.prisma.donation.findMany({
         orderBy: [{ time: 'desc' }, { createdAt: 'desc' }],
         where: {
@@ -39,16 +42,17 @@ export const donationRouter = createProtectedRouter()
           projectId: true,
         },
       })
-    },
-  })
-  .mutation('add', {
-    input: z.object({
-      projectId: z.string().min(1),
-      userId: z.string().min(1),
-      amount: z.instanceof(Prisma.Decimal),
-      time: z.instanceof(Date),
     }),
-    async resolve({ ctx, input: { projectId, userId, amount, time } }) {
+  add: protectedProcedure
+    .input(
+      z.object({
+        projectId: z.string().min(1),
+        userId: z.string().min(1),
+        amount: z.instanceof(Prisma.Decimal),
+        time: z.instanceof(Date),
+      }),
+    )
+    .mutation(async ({ ctx, input: { projectId, userId, amount, time } }) => {
       const donation = await ctx.prisma.donation.create({
         data: {
           projectId,
@@ -68,30 +72,28 @@ export const donationRouter = createProtectedRouter()
       emitNewDonationEvent(ctx, donation)
 
       return donation
-    },
-  })
-  .mutation('confirm', {
-    input: z.number(),
-    async resolve({ input: id, ctx }) {
+    }),
+  confirm: protectedProcedure
+    .input(z.number())
+    .mutation(async ({ input: id, ctx }) => {
       return await ctx.prisma.donation.update({
         where: { id },
         data: {
           state: 'CONFIRMED',
         },
       })
-    },
-  })
-  .mutation('cancel', {
-    input: z.number(),
-    async resolve({ input: id, ctx }) {
+    }),
+  cancel: protectedProcedure
+    .input(z.number())
+    .mutation(async ({ input: id, ctx }) => {
       return await ctx.prisma.donation.update({
         where: { id },
         data: {
           state: 'REJECTED',
         },
       })
-    },
-  })
+    }),
+})
 
 async function emitNewDonationEvent(
   ctx: Context,
@@ -104,7 +106,7 @@ async function emitNewDonationEvent(
     project: Project
     id: number
     amount: Prisma.Decimal
-  }
+  },
 ) {
   await ctx.prisma.event.create({
     data: {
