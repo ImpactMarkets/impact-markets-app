@@ -252,7 +252,7 @@ function UpdateAvatarDialog({
 }) {
   const fileInputRef = React.useRef<HTMLInputElement>(null)
   const [uploadedImage, setUploadedImage] = React.useState(user.image)
-  const updateUserAvatarMutation = trpc.useMutation('user.update-avatar', {
+  const updateUserAvatarMutation = trpc.useMutation('user.updateAvatar', {
     onSuccess: () => {
       window.location.reload()
     },

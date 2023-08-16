@@ -202,7 +202,7 @@ export const permissionMiddleware = middleware(
       'user.topDonors': allow,
       'user.profile': allow,
       'user.edit': isAuthenticated, // Always edits the same user
-      'user.update-avatar': isAuthenticated, // Always edits the same user
+      'user.updateAvatar': isAuthenticated, // Always edits the same user
       'user.preferences': isAuthenticated, // Always edits the same user
       'user.mentionList': isAuthenticated,
       'job.sendEmails': requestComesFromLocalhost,
