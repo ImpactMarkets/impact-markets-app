@@ -48,7 +48,45 @@ export const userRouter = createProtectedRouter()
                 select: {
                   id: true,
                   title: true,
+                  content: true,
+                  createdAt: true,
                   hidden: true,
+                  tags: true,
+                  credits: true,
+                  author: {
+                    select: {
+                      id: true,
+                      name: true,
+                      image: true,
+                    },
+                  },
+                  donations: {
+                    select: {
+                      id: true,
+                      time: true,
+                      amount: true,
+                      user: true,
+                    },
+                  },
+                  likedBy: {
+                    orderBy: {
+                      createdAt: 'asc',
+                    },
+                    select: {
+                      user: {
+                        select: {
+                          id: true,
+                          name: true,
+                        },
+                      },
+                    },
+                  },
+                  supportScore: true,
+                  _count: {
+                    select: {
+                      comments: true,
+                    },
+                  },
                 },
               },
             },
@@ -61,6 +99,14 @@ export const userRouter = createProtectedRouter()
                   id: true,
                   title: true,
                   hidden: true,
+                  author: {
+                    select: {
+                      id: true,
+                      name: true,
+                      image: true,
+                    },
+                  },
+                  content: true,
                 },
               },
             },
