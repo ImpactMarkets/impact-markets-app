@@ -1,11 +1,13 @@
-import { Context } from './context'
-import { initTRPC } from '@trpc/server'
 import superjson from 'superjson'
+
+import { initTRPC } from '@trpc/server'
+
+import { Context } from './context'
 
 const t = initTRPC.context<Context>().create({
   transformer: superjson,
   errorFormatter(opts) {
-    return opts.shape;
+    return opts.shape
   },
 })
 

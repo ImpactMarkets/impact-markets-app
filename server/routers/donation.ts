@@ -1,9 +1,10 @@
 import { Context } from 'server/context'
 import { z } from 'zod'
 
-import { num } from '@/lib/text'
 import { DonationState, Prisma, Project, User } from '@prisma/client'
 import { EventStatus, EventType } from '@prisma/client'
+
+import { num } from '@/lib/text'
 
 import { protectedProcedure } from '../procedures'
 import { router } from '../router'

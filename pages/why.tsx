@@ -2,11 +2,12 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { Accordion } from '@mantine/core'
+
 import { Heading1 } from '@/components/heading1'
 import { Heading2 } from '@/components/heading2'
 import { Layout } from '@/components/layout'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
-import { Accordion } from '@mantine/core'
 
 const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
   return (

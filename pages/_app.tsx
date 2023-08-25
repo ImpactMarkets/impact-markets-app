@@ -4,13 +4,14 @@ import dynamic from 'next/dynamic'
 import { Barlow_Condensed, Open_Sans } from 'next/font/google'
 import * as React from 'react'
 
+import { MantineProvider } from '@mantine/core'
+import { Provider as RollbarProvider } from '@rollbar/react'
+import TawkMessengerReact from '@tawk.to/tawk-messenger-react'
+
 import { browserEnv } from '@/env/browser'
 import { emotionCache } from '@/lib/emotionCache'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
-import { MantineProvider } from '@mantine/core'
-import { Provider as RollbarProvider } from '@rollbar/react'
-import TawkMessengerReact from '@tawk.to/tawk-messenger-react'
 
 import '../styles/globals.css'
 

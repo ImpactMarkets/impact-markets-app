@@ -1,9 +1,10 @@
 import * as React from 'react'
 
-import { num } from '@/lib/text'
-import { RouterOutput, trpc } from '@/lib/trpc'
 import { Prisma } from '@prisma/client'
 import { IconTrophy } from '@tabler/icons-react'
+
+import { num } from '@/lib/text'
+import { RouterOutput, trpc } from '@/lib/trpc'
 
 import { Author } from '../author'
 

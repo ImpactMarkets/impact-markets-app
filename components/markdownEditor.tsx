@@ -1,13 +1,16 @@
 import { matchSorter } from 'match-sorter'
 import * as React from 'react'
 import { useDetectClickOutside } from 'react-detect-click-outside'
-import { useQuery } from '@tanstack/react-query'
 import TextareaAutosize, {
   TextareaAutosizeProps,
 } from 'react-textarea-autosize'
 import getCaretCoordinates from 'textarea-caret'
 import TextareaMarkdown, { TextareaMarkdownRef } from 'textarea-markdown-editor'
 import { ItemOptions, useItemList } from 'use-item-list'
+
+import { Switch } from '@headlessui/react'
+import { Input } from '@mantine/core'
+import { useQuery } from '@tanstack/react-query'
 
 import { HtmlView } from '@/components/htmlView'
 import { BoldIcon, ItalicIcon, LinkIcon, ListIcon } from '@/components/icons'
@@ -19,8 +22,6 @@ import {
   uploadImageCommandHandler,
 } from '@/lib/editor'
 import { trpc } from '@/lib/trpc'
-import { Switch } from '@headlessui/react'
-import { Input } from '@mantine/core'
 
 import { InfoTooltip } from './infoTooltip'
 import { Label } from './label'

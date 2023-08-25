@@ -5,16 +5,15 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 
 import { Banner } from '@/components/banner'
+import type { SummaryProps } from '@/components/bounty/summary'
 import { TAGS } from '@/components/bounty/tags'
 import { ButtonLink } from '@/components/buttonLink'
 import { Filters } from '@/components/filters'
 import { Layout } from '@/components/layout'
-import { getQueryPaginationInput, Pagination } from '@/components/pagination'
+import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import { SummarySkeleton } from '@/components/summarySkeleton'
 import { BountySortKey, ITEMS_PER_PAGE } from '@/lib/constants'
 import { trpc } from '@/lib/trpc'
-
-import type { SummaryProps } from '@/components/bounty/summary'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
 const Summary = dynamic<SummaryProps>(

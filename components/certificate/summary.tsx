@@ -2,11 +2,12 @@ import * as fp from 'lodash/fp'
 import Link from 'next/link'
 import * as React from 'react'
 
+import { Card } from '@mantine/core'
+
 import { Banner } from '@/components/banner'
 import { HoldingsChart } from '@/components/certificate/holdingsChart'
 import { classNames } from '@/lib/classnames'
 import { RouterOutput } from '@/lib/trpc'
-import { Card } from '@mantine/core'
 
 import { Author } from '../author'
 import { Date } from '../date'

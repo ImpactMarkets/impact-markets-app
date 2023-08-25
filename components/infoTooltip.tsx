@@ -1,7 +1,8 @@
 import * as React from 'react'
 
-import { Tooltip } from '@/lib/mantine'
 import { IconHelpOctagon } from '@tabler/icons-react'
+
+import { Tooltip } from '@/lib/mantine'
 
 type InfoTooltipProps = {
   text?: string | React.ReactElement

@@ -3,6 +3,15 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
+import { LoadingOverlay, Tabs } from '@mantine/core'
+import { CommentType } from '@prisma/client'
+import {
+  IconCreditCard,
+  IconCreditCardOff,
+  IconMoneybag,
+  IconWoman,
+} from '@tabler/icons-react'
+
 import { AuthorWithDate } from '@/components/authorWithDate'
 import { Avatar } from '@/components/avatar'
 import { Banner } from '@/components/banner'
@@ -25,14 +34,6 @@ import { classNames } from '@/lib/classnames'
 import { num } from '@/lib/text'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
-import { LoadingOverlay, Tabs } from '@mantine/core'
-import { CommentType } from '@prisma/client'
-import {
-  IconCreditCard,
-  IconCreditCardOff,
-  IconMoneybag,
-  IconWoman,
-} from '@tabler/icons-react'
 
 // TODO: Maybe this could be made into a generic component?
 const ProjectPageWrapper: NextPageWithAuthAndLayout = () => {

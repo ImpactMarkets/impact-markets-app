@@ -1,9 +1,10 @@
 import * as fp from 'lodash/fp'
 
-import { num } from '@/lib/text'
-import { RouterOutput } from '@/lib/trpc'
 import { Progress } from '@mantine/core'
 import { Prisma } from '@prisma/client'
+
+import { num } from '@/lib/text'
+import { RouterOutput } from '@/lib/trpc'
 
 interface HoldingsChartProps {
   holdings:

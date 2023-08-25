@@ -2,9 +2,10 @@ import * as React from 'react'
 
 import { MultiSelectProps } from '@mantine/core'
 
+import { MultiSelect } from '@/lib/mantine'
+
 import { InfoTooltip } from './infoTooltip'
 import { Label } from './label'
-import { MultiSelect } from '@/lib/mantine'
 
 export type MultiSelectOwnProps = {
   label?: string | React.ReactElement

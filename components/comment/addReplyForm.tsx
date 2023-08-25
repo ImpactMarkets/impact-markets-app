@@ -2,10 +2,11 @@ import * as React from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
+import { CommentType } from '@prisma/client'
+
 import { Button } from '@/components/button'
 import { MarkdownEditor } from '@/components/markdownEditor'
 import { RouterOutput, trpc } from '@/lib/trpc'
-import { CommentType } from '@prisma/client'
 
 import { CommentFormData } from '../utils'
 

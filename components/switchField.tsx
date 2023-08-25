@@ -20,7 +20,7 @@ export const SwitchField = React.forwardRef<HTMLInputElement, SwitchFieldProps>(
         {info && <InfoTooltip text={info} />}
       </Label>
     )
-  }
+  },
 )
 
 SwitchField.displayName = 'SwitchField'

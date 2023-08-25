@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 
+import { Button } from '@mantine/core'
+
 import { BountySortKey, ProjectSortKey } from '@/lib/constants'
 
 import { IconButton } from './iconButton'
@@ -8,7 +10,6 @@ import { IMMultiSelect } from './multiSelect'
 import { SearchDialog } from './searchDialog'
 import { IMSelect } from './select'
 import { IMTag } from './utils'
-import { Button } from '@mantine/core'
 
 export type FiltersProps = {
   onFilterTagsUpdate: (tags: string) => void

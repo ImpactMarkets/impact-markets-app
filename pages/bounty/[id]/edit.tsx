@@ -12,7 +12,9 @@ import type { NextPageWithAuthAndLayout } from '@/lib/types'
 const EditBountyPage: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()
   const router = useRouter()
-  const bountyQuery = trpc.bounty.detail.useQuery({ id: String(router.query.id) })
+  const bountyQuery = trpc.bounty.detail.useQuery({
+    id: String(router.query.id),
+  })
   const editBountyMutation = trpc.bounty.edit.useMutation({
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
@@ -67,7 +69,7 @@ const EditBountyPage: NextPageWithAuthAndLayout = () => {
                     {
                       onSuccess: () =>
                         router.push(`/bounty/${bountyQuery.data.id}`),
-                    }
+                    },
                   )
                 }}
               />

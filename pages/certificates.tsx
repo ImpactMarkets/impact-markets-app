@@ -5,15 +5,14 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 
 import { Banner } from '@/components/banner'
+import type { CertificateSummaryProps } from '@/components/certificate/summary'
 import { Filters } from '@/components/filters'
 import { Layout } from '@/components/layout'
-import { getQueryPaginationInput, Pagination } from '@/components/pagination'
+import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import { TAGS } from '@/components/project/tags'
 import { SummarySkeleton } from '@/components/summarySkeleton'
 import { CertificateSortKey, ITEMS_PER_PAGE } from '@/lib/constants'
 import { trpc } from '@/lib/trpc'
-
-import type { CertificateSummaryProps } from '@/components/certificate/summary'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
 const CertificateSummary = dynamic<CertificateSummaryProps>(

@@ -1,6 +1,5 @@
 // Load completely on the client to avoid SSR error
 // https://github.com/mantinedev/mantine/issues/2880#issuecomment-1617136855
-
 import dynamic from 'next/dynamic'
 
 export const Select = dynamic(

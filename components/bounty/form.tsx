@@ -2,6 +2,9 @@ import * as React from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import { SimpleGrid } from '@mantine/core'
+import { Prisma } from '@prisma/client'
+
 import { TAGS } from '@/components/bounty/tags'
 import { Button } from '@/components/button'
 import { ButtonLink } from '@/components/buttonLink'
@@ -9,8 +12,6 @@ import { MarkdownIcon } from '@/components/icons'
 import { MarkdownEditor } from '@/components/markdownEditor'
 import { TextField } from '@/components/textField'
 import { capitalize } from '@/lib/text'
-import { SimpleGrid } from '@mantine/core'
-import { Prisma } from '@prisma/client'
 
 import { IMMultiSelect } from '../multiSelect'
 import { IMSelect } from '../select'
@@ -97,7 +98,7 @@ export const Form = ({
           onChange={(value) =>
             setValue(
               'status',
-              z.enum(['ACTIVE', 'CLAIMED', 'CLOSED']).parse(value)
+              z.enum(['ACTIVE', 'CLAIMED', 'CLOSED']).parse(value),
             )
           }
         />

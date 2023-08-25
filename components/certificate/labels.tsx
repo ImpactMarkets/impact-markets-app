@@ -1,5 +1,6 @@
-import { RouterOutput } from '@/lib/trpc'
 import * as React from 'react'
+
+import { RouterOutput } from '@/lib/trpc'
 
 type LabelsProps = {
   queryData: RouterOutput['certificate']['detail']

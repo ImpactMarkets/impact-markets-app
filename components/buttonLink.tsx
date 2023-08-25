@@ -28,7 +28,7 @@ export const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
       variant = 'primary',
       disabled = false,
     },
-    forwardedRef
+    forwardedRef,
   ) => {
     if (disabled) {
       return (
@@ -68,7 +68,7 @@ export const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
         </span>
       </Link>
     )
-  }
+  },
 )
 
 ButtonLink.displayName = 'ButtonLink'

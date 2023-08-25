@@ -12,7 +12,9 @@ import type { NextPageWithAuthAndLayout } from '@/lib/types'
 const EditCertificatePage: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()
   const router = useRouter()
-  const certificateQuery = trpc.certificate.detail.useQuery({ id: String(router.query.id) })
+  const certificateQuery = trpc.certificate.detail.useQuery({
+    id: String(router.query.id),
+  })
   const editCertificateMutation = trpc.certificate.edit.useMutation({
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
@@ -76,7 +78,7 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
                     {
                       onSuccess: () =>
                         router.push(`/certificate/${certificateQuery.data.id}`),
-                    }
+                    },
                   )
                 }}
               />

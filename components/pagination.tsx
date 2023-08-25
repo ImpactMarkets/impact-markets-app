@@ -11,7 +11,7 @@ type PaginationProps = {
 
 export function getQueryPaginationInput(
   itemsPerPage: number,
-  currentPageNumber: number
+  currentPageNumber: number,
 ) {
   return {
     take: itemsPerPage,

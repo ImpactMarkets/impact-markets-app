@@ -4,6 +4,14 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+
+import { Button as MantineButton } from '@mantine/core'
+import {
+  IconAlertCircle,
+  IconCreditCard,
+  IconMail,
+  IconShieldLock,
+} from '@tabler/icons-react'
 import { useMutation } from '@tanstack/react-query'
 
 import { Avatar } from '@/components/avatar'
@@ -22,15 +30,8 @@ import { TextField } from '@/components/textField'
 import { LargeTextField } from '@/components/textarea'
 import { browserEnv } from '@/env/browser'
 import { uploadImage } from '@/lib/cloudinary'
-import { RouterOutput, trpc } from '@/lib/trpc'
 import { Tooltip } from '@/lib/mantine'
-import { Button as MantineButton } from '@mantine/core'
-import {
-  IconAlertCircle,
-  IconCreditCard,
-  IconMail,
-  IconShieldLock,
-} from '@tabler/icons-react'
+import { RouterOutput, trpc } from '@/lib/trpc'
 
 function DotPattern() {
   return (
@@ -183,7 +184,7 @@ function EditProfileDialog({
                 <span>
                   This is your profile link:{' '}
                   <a
-                    href={window.location.href}
+                    href={router.asPath}
                     target="_blank"
                     rel="noreferrer"
                     className="link italic"

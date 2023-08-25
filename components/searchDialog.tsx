@@ -4,10 +4,11 @@ import * as React from 'react'
 import { useDebounce } from 'use-debounce'
 import { ItemOptions, useItemList } from 'use-item-list'
 
+import { Dialog, Transition } from '@headlessui/react'
+
 import { SearchIcon, SpinnerIcon } from '@/components/icons'
 import { classNames } from '@/lib/classnames'
 import { RouterOutput, trpc } from '@/lib/trpc'
-import { Dialog, Transition } from '@headlessui/react'
 
 type SearchDialogProps = {
   isOpen: boolean

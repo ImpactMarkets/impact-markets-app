@@ -2,15 +2,16 @@ import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 import * as React from 'react'
 
+import { Tabs, Tooltip } from '@mantine/core'
+import { Prisma } from '@prisma/client'
+import { IconTrophy } from '@tabler/icons-react'
+
 import { Author } from '@/components/author'
 import { Heading1 } from '@/components/heading1'
 import { Layout } from '@/components/layout'
 import { num } from '@/lib/text'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
-import { Tabs, Tooltip } from '@mantine/core'
-import { Prisma } from '@prisma/client'
-import { IconTrophy } from '@tabler/icons-react'
 
 const RankingPage: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()

@@ -1,11 +1,12 @@
 import { useSession } from 'next-auth/react'
 import * as React from 'react'
 
+import { Tabs } from '@mantine/core'
+import { Prisma } from '@prisma/client'
+
 import { classNames } from '@/lib/classnames'
 import { num } from '@/lib/text'
 import { RouterOutput, trpc } from '@/lib/trpc'
-import { Tabs } from '@mantine/core'
-import { Prisma } from '@prisma/client'
 
 import { Author } from '../author'
 import { HoldingsChart } from './holdingsChart'

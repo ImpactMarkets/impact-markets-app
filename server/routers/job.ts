@@ -2,8 +2,9 @@ import { groupBy } from 'lodash'
 import { Context } from 'server/context'
 import { z } from 'zod'
 
-import { Event, createEmail, sendEmail } from '@/lib/emailEvents'
 import { EventStatus } from '@prisma/client'
+
+import { Event, createEmail, sendEmail } from '@/lib/emailEvents'
 
 import { protectedProcedure } from '../procedures'
 import { router } from '../router'

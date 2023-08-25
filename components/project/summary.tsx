@@ -1,10 +1,11 @@
 import Link from 'next/link'
 import * as React from 'react'
 
+import { Card } from '@mantine/core'
+
 import { Banner } from '@/components/banner'
 import { markdownToPlainHtml } from '@/lib/editor'
 import { RouterOutput } from '@/lib/trpc'
-import { Card } from '@mantine/core'
 
 import { Author } from '../author'
 import { Heading2 } from '../heading2'

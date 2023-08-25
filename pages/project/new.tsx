@@ -1,7 +1,8 @@
-import { createId } from '@paralleldrive/cuid2'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
+
+import { createId } from '@paralleldrive/cuid2'
 
 import { Heading1 } from '@/components/heading1'
 import { Layout } from '@/components/layout'

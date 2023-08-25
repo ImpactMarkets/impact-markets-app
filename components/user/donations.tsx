@@ -3,10 +3,11 @@ import { map, reverse, sortBy } from 'lodash/fp'
 import Link from 'next/link'
 import * as React from 'react'
 
+import { Prisma } from '@prisma/client'
+
 import { Date } from '@/components/date'
 import { num } from '@/lib/text'
 import { RouterOutput } from '@/lib/trpc'
-import { Prisma } from '@prisma/client'
 
 interface DonationGroup {
   projectId: string

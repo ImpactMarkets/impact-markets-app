@@ -1,9 +1,10 @@
 import * as React from 'react'
 
+import { Prisma } from '@prisma/client'
+
+import { Tooltip } from '@/lib/mantine'
 import { num } from '@/lib/text'
 import { RouterOutput } from '@/lib/trpc'
-import { Tooltip } from '@/lib/mantine'
-import { Prisma } from '@prisma/client'
 
 type ScoresProps = {
   project:

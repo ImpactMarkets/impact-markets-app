@@ -1,11 +1,13 @@
 import Link from 'next/link'
 import * as React from 'react'
 
+import { Card } from '@mantine/core'
+
 import { Banner } from '@/components/banner'
 import { LikeButton } from '@/components/likeButton'
 import { classNames } from '@/lib/classnames'
 import { capitalize, num } from '@/lib/text'
-import { Card } from '@mantine/core'
+import { RouterOutput } from '@/lib/trpc'
 
 import { Author } from '../author'
 import { CommentButton } from '../commentButton'
@@ -13,7 +15,6 @@ import { Date } from '../date'
 import { Heading2 } from '../heading2'
 import { Tags } from '../tags'
 import { TAGS } from './tags'
-import { RouterOutput } from '@/lib/trpc'
 
 export type SummaryProps = {
   bounty: RouterOutput['bounty']['feed']['bounties'][number]

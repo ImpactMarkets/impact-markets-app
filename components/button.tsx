@@ -30,7 +30,7 @@ export function buttonClasses({
     variant === 'highlight' && 'text-highlight bg-highlight hover:opacity-90',
     (disabled || isLoading) &&
       'opacity-50 !cursor-not-allowed bg-gray-300 hover:bg-gray-300',
-    className
+    className,
   )
 }
 
@@ -47,7 +47,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       ...rest
     },
-    forwardedRef
+    forwardedRef,
   ) => {
     return (
       <button
@@ -69,7 +69,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {isLoading && loadingChildren ? loadingChildren : children}
       </button>
     )
-  }
+  },
 )
 
 Button.displayName = 'Button'

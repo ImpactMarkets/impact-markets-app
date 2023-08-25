@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import React from 'react'
 
 import {
   Navbar as MantineNavbar,
@@ -18,7 +19,6 @@ import {
 } from '@tabler/icons-react'
 
 import { User } from './user'
-import React from 'react'
 
 const useStyles = createStyles((theme, _params) => {
   const icon = getStylesRef('icon')

@@ -1,8 +1,9 @@
 import { Context } from 'server/context'
 import { z } from 'zod'
 
-import { markdownToHtml } from '@/lib/editor'
 import { EventStatus, EventType } from '@prisma/client'
+
+import { markdownToHtml } from '@/lib/editor'
 
 import { protectedProcedure } from '../procedures'
 import { router } from '../router'

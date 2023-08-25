@@ -1,3 +1,4 @@
+import { router } from '../router'
 import { bountyRouter } from './bounty'
 import { certificateRouter } from './certificate'
 import { commentRouter } from './comment'
@@ -6,7 +7,6 @@ import { holdingRouter } from './holding'
 import { jobRouter } from './job'
 import { projectRouter } from './project'
 import { userRouter } from './user'
-import { router } from '../router'
 
 export const appRouter = router({
   project: projectRouter,

@@ -1,11 +1,11 @@
 import * as React from 'react'
 
 import { classNames } from '@/lib/classnames'
+import { ProjectSortKey } from '@/lib/constants'
 import { trpc } from '@/lib/trpc'
 
 import { ButtonLink } from '../buttonLink'
 import { ProjectSummary } from '../project/summary'
-import { ProjectSortKey } from '@/lib/constants'
 
 export const TopProjects = () => {
   const feedQuery = trpc.project.feed.useQuery({

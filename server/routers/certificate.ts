@@ -1,10 +1,11 @@
 import slugify from 'slugify'
 import { z } from 'zod'
 
-import { CERTIFICATE_SORT_KEYS, CertificateSortKey } from '@/lib/constants'
-import { markdownToHtml } from '@/lib/editor'
 import { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
+
+import { CERTIFICATE_SORT_KEYS, CertificateSortKey } from '@/lib/constants'
+import { markdownToHtml } from '@/lib/editor'
 
 import { protectedProcedure } from '../procedures'
 import { router } from '../router'

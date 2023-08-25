@@ -3,6 +3,8 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
+import { LoadingOverlay } from '@mantine/core'
+
 import { AuthorWithDate } from '@/components/authorWithDate'
 import { Banner } from '@/components/banner'
 import { Labels } from '@/components/certificate/labels'
@@ -16,7 +18,6 @@ import { TAGS } from '@/components/project/tags'
 import { Tags } from '@/components/tags'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
-import { LoadingOverlay } from '@mantine/core'
 
 // TODO: Maybe this could be made into a generic component?
 const CertificatePageWrapper: NextPageWithAuthAndLayout = () => {
