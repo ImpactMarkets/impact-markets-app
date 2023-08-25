@@ -13,7 +13,7 @@ type IconButtonProps = IconButtonOwnProps &
 export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
   (
     { className, variant = 'primary', type = 'button', ...rest },
-    forwardedRef
+    forwardedRef,
   ) => {
     return (
       <button
@@ -25,11 +25,11 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
           variant === 'primary' && 'text-primary bg-primary hover:opacity-80',
           variant === 'secondary' &&
             'border text-secondary border-secondary bg-secondary hover:opacity-80',
-          className
+          className,
         )}
       />
     )
-  }
+  },
 )
 
 IconButton.displayName = 'IconButton'

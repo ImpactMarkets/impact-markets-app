@@ -1,11 +1,22 @@
-import * as trpc from '@trpc/server'
+import superjson from 'superjson'
+
+import { initTRPC } from '@trpc/server'
 
 import { Context } from './context'
 
-const trpcRouter = () => trpc.router<Context>()
+const t = initTRPC.context<Context>().create({
+  transformer: superjson,
+  errorFormatter(opts) {
+    return opts.shape
+  },
+})
 
-export const router = trpcRouter()
+export const router = t.router
 
-const init = router.middleware<Context>
+export const publicProcedure = t.procedure
 
-export type MiddlewareFunction = Parameters<typeof init>[0]
+export const middleware = t.middleware
+
+export type MiddlewareFunction = Parameters<typeof middleware>[0]
+
+export const mergeRouters = t.mergeRouters

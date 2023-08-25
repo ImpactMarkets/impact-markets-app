@@ -2,10 +2,11 @@ import * as React from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
+import { CommentType } from '@prisma/client'
+
 import { Button } from '@/components/button'
 import { MarkdownEditor } from '@/components/markdownEditor'
-import { InferQueryOutput, trpc } from '@/lib/trpc'
-import { CommentType } from '@prisma/client'
+import { RouterOutput, trpc } from '@/lib/trpc'
 
 import { CommentFormData } from '../utils'
 
@@ -18,21 +19,18 @@ export function AddReplyForm({
   objectId: string
   objectType: 'project' | 'bounty'
   parent:
-    | InferQueryOutput<'project.detail'>['comments'][number]
-    | InferQueryOutput<'project.detail'>['comments'][number]['children'][number]
-    | InferQueryOutput<'bounty.detail'>['comments'][number]
-    | InferQueryOutput<'bounty.detail'>['comments'][number]['children'][number]
+    | RouterOutput['project']['detail']['comments'][number]
+    | RouterOutput['project']['detail']['comments'][number]['children'][number]
+    | RouterOutput['bounty']['detail']['comments'][number]
+    | RouterOutput['bounty']['detail']['comments'][number]['children'][number]
   onDone: () => void
 }) {
   const utils = trpc.useContext()
-  const addReplyMutation = trpc.useMutation('comment.add', {
+  const addReplyMutation = trpc.comment.add.useMutation({
     onSuccess: () => {
-      return utils.invalidateQueries([
-        (objectType + '.detail') as 'project.detail' | 'bounty.detail',
-        {
-          id: objectId,
-        },
-      ])
+      return utils[objectType]['detail'].invalidate({
+        id: objectId,
+      })
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
@@ -51,7 +49,7 @@ export function AddReplyForm({
       },
       {
         onSuccess: () => onDone(),
-      }
+      },
     )
   }
 

@@ -12,7 +12,7 @@ export const Status: React.FC<StatusProps> = ({ color, status }) => {
     <div
       className={classNames(
         'border text-sm text-center text-highlight border-secondary font-bold px-2 py-1 mt-1 rounded-lg',
-        color
+        color,
       )}
     >
       {status}

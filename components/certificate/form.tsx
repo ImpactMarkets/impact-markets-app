@@ -3,6 +3,9 @@ import * as React from 'react'
 import { useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
+import { Accordion, SimpleGrid, Switch } from '@mantine/core'
+import { Prisma } from '@prisma/client'
+
 import { Button } from '@/components/button'
 import { ButtonLink } from '@/components/buttonLink'
 import { MarkdownIcon } from '@/components/icons'
@@ -13,8 +16,6 @@ import {
   isListOfEmails,
   isListOfEmailsValidationMessage,
 } from '@/lib/validations'
-import { Accordion, SimpleGrid, Switch } from '@mantine/core'
-import { Prisma } from '@prisma/client'
 
 import { IMMultiSelect } from '../multiSelect'
 
@@ -110,7 +111,7 @@ export function CertificateForm({
       .split(',')
       .map((email) => {
         return { value: email, label: email }
-      })
+      }),
   )
 
   return (

@@ -1,22 +1,10 @@
 import { sortBy } from 'lodash/fp'
 
-import { InferQueryPathAndInput } from '@/lib/trpc'
 import { Author } from '@/lib/types'
 
 export function refreshSession() {
   const event = new Event('visibilitychange')
   document.dispatchEvent(event)
-}
-
-export function getCertificateQueryPathAndInput(
-  id: string
-): InferQueryPathAndInput<'certificate.detail'> {
-  return [
-    'certificate.detail',
-    {
-      id,
-    },
-  ]
 }
 
 export type CommentFormData = {

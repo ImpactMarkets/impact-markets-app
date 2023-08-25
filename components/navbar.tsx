@@ -1,8 +1,13 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import React from 'react'
 
-import { Navbar as MantineNavbar, createStyles } from '@mantine/core'
+import {
+  Navbar as MantineNavbar,
+  createStyles,
+  getStylesRef,
+} from '@mantine/core'
 import {
   IconBolt,
   IconFile,
@@ -11,13 +16,12 @@ import {
   IconPigMoney,
   IconRocket,
   IconTrophy,
-  TablerIcon,
-} from '@tabler/icons'
+} from '@tabler/icons-react'
 
 import { User } from './user'
 
-const useStyles = createStyles((theme, _params, getRef) => {
-  const icon = getRef('icon')
+const useStyles = createStyles((theme, _params) => {
+  const icon = getStylesRef('icon')
   return {
     link: {
       ...theme.fn.focusStyles(),
@@ -62,7 +66,7 @@ const NavbarLink = ({
 }: {
   link: string
   label: string
-  icon: TablerIcon
+  icon: React.ElementType
 }) => {
   const { classes, cx } = useStyles()
   const router = useRouter()
@@ -73,7 +77,7 @@ const NavbarLink = ({
         className={
           cx(classes.link, {
             [classes.linkActive]: link === router.pathname,
-          }) + ' flex text-sm items-center cursor-pointer'
+          }) + ' p-3 flex text-sm items-center cursor-pointer'
         }
       >
         <Icon className={classes.linkIcon} />
@@ -100,6 +104,7 @@ export const Navbar = ({ hidden }: { hidden: boolean }) => (
           height={76}
           className="cursor-pointer"
           unoptimized
+          priority
         />
       </Link>
     </MantineNavbar.Section>

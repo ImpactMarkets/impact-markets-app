@@ -4,11 +4,12 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import EmailProvider from 'next-auth/providers/email'
 import GoogleProvider from 'next-auth/providers/google'
 
-import { serverEnv } from '@/env/server'
-import { prisma } from '@/lib/prisma'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 // import { PrismaClient } from '@prisma/client'
 import { Role } from '@prisma/client'
+
+import { serverEnv } from '@/env/server'
+import { prisma } from '@/lib/prisma'
 
 // Helpful example: https://github.com/mikemajara/nextjs-prisma-next-auth-credentials/blob/main/pages/api/auth/%5B...nextauth%5D.ts
 
@@ -69,8 +70,8 @@ if (serverEnv.MOCK_LOGIN) {
     CredentialsProvider({
       name: 'Mock Login',
       credentials: {},
-      authorize: async () => ({} as User),
-    })
+      authorize: async () => ({}) as User,
+    }),
   )
   authOptions.callbacks!.jwt = async ({ token }) => {
     const email = 'mock.user@example.com'

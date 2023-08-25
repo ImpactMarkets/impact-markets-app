@@ -2,15 +2,10 @@ import Link from 'next/link'
 import * as React from 'react'
 
 import { Container, SimpleGrid, Text } from '@mantine/core'
-import {
-  IconShovel,
-  IconTelescope,
-  IconTrendingUp,
-  TablerIcon,
-} from '@tabler/icons'
+import { IconShovel, IconTelescope, IconTrendingUp } from '@tabler/icons-react'
 
 interface FeatureProps extends React.ComponentPropsWithoutRef<'div'> {
-  icon: TablerIcon
+  icon: typeof IconShovel
   title: string
   children: React.ReactNode
 }
@@ -40,26 +35,24 @@ export const Pitches = () => (
       >
         <Feature icon={IconShovel} title="AI safety projects" key="projects">
           <p>
-            Are you an independent researcher or someone launching a new AI
-            safety venture? Your fundraising goal is &lt; $100,000 for now?
+            Are you doing independent research or launching a new AI safety
+            venture? Your fundraising goal is &lt; $100,000 for now?
           </p>
 
           <p className="my-3">
-            We score donors by their track record of finding{' '}
-            <span className="text-gray-700">
-              early-stage high-impact projects
-            </span>{' '}
-            such as yours. A good donation track record signal-boosts the
-            projects that they support. You’ll be discovered by more donors,
-            which snowballs into greater success.
+            Let the funders come to you! We score donors by their track record
+            of finding{' '}
+            <span className="text-gray-700">high-impact projects</span> such as
+            yours. A strong donation track record signal-boosts the projects
+            that they support, so yours will be discovered by more donors!
           </p>
 
           <p className="my-3 text-gray-700">
             <Link href="/project/new" className="link">
               Publish your project
             </Link>{' '}
-            to start fundraising. Onboard your existing donors and ask them to
-            register their donations and express their support.
+            to start fundraising. Ask your existing donors to register their
+            donations to express their support.
           </p>
         </Feature>
         <Feature
@@ -68,17 +61,17 @@ export const Pitches = () => (
           key="scouts"
         >
           <p>
-            Are you an experienced donor or grantmaker? Do you want to leverage
-            some of the{' '}
-            <span className="text-gray-700">$300,000 donation budget</span> of
-            our interested donors? Or even more once larger funders join?
+            You’re an experienced donor or grantmaker? You want to regrant some
+            of the{' '}
+            <span className="text-gray-700">$370,000 donation budget</span> of
+            our donors? Or more, once larger funders join?
           </p>
 
           <p className="my-3">
-            Scout out and signal-boost the best projects you can find! Your{' '}
-            <em>donor score</em> is based on your track record: The higher your
-            score, the greater your boost to the projects you support. You’ll
-            leverage your expertise for follow-on donations!
+            Scout out the best projects you can find! Your <em>donor score</em>{' '}
+            reflects your donation track record: The higher your score, the more
+            you signal-boost the projects you support. You’ll leverage your
+            expertise for follow-on donations!
           </p>
 
           <p className="my-3 text-gray-700">

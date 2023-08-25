@@ -48,6 +48,7 @@ export const Header = ({
                 height={38}
                 className="cursor-pointer"
                 unoptimized
+                priority
               />
             </span>
           </Link>

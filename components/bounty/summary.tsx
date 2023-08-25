@@ -1,12 +1,13 @@
 import Link from 'next/link'
 import * as React from 'react'
 
+import { Card } from '@mantine/core'
+
 import { Banner } from '@/components/banner'
 import { LikeButton } from '@/components/likeButton'
 import { classNames } from '@/lib/classnames'
 import { capitalize, num } from '@/lib/text'
-import { InferQueryOutput } from '@/lib/trpc'
-import { Card } from '@mantine/core'
+import { RouterOutput } from '@/lib/trpc'
 
 import { Author } from '../author'
 import { CommentButton } from '../commentButton'
@@ -16,7 +17,7 @@ import { Tags } from '../tags'
 import { TAGS } from './tags'
 
 export type SummaryProps = {
-  bounty: InferQueryOutput<'bounty.feed'>['bounties'][number]
+  bounty: RouterOutput['bounty']['feed']['bounties'][number]
   onLike?: () => void
   onUnlike?: () => void
 }
@@ -24,7 +25,7 @@ export type SummaryProps = {
 function Left({ bounty }: SummaryProps) {
   const contentDocument = React.useMemo(
     () => new DOMParser().parseFromString(bounty.contentHtml, 'text/html'),
-    [bounty.contentHtml]
+    [bounty.contentHtml],
   )
   //   TODO: decide on the order of the allowed tags
   //   and research on how to truncate html to a max amount of characters
@@ -106,7 +107,7 @@ export const Summary = ({ bounty }: SummaryProps) => (
     <div
       className={classNames(
         'flex items-stretch',
-        bounty.hidden ? 'opacity-50' : ''
+        bounty.hidden ? 'opacity-50' : '',
       )}
     >
       <Left bounty={bounty} />

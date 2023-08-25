@@ -6,29 +6,26 @@ import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import type { ProjectSummaryProps } from '@/components/project/summary'
 import { SummarySkeleton } from '@/components/summarySkeleton'
 import { ITEMS_PER_PAGE } from '@/lib/constants'
-import { InferQueryOutput, InferQueryPathAndInput, trpc } from '@/lib/trpc'
+import { RouterOutput, trpc } from '@/lib/trpc'
 
 const ProjectSummary = dynamic<ProjectSummaryProps>(
   () =>
     import('@/components/project/summary').then((mod) => mod.ProjectSummary),
-  { ssr: false }
+  { ssr: false },
 )
 
 export function ProjectFeed({
   user: _,
 }: {
-  user: InferQueryOutput<'user.profile'>
+  user: RouterOutput['user']['profile']
 }) {
   const router = useRouter()
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
-  const profileFeedQueryPathAndInput: InferQueryPathAndInput<'project.feed'> = [
-    'project.feed',
-    {
-      ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
-      authorId: String(router.query.userId),
-    },
-  ]
-  const profileFeedQuery = trpc.useQuery(profileFeedQueryPathAndInput)
+  const profileFeedQueryInput = {
+    ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
+    authorId: String(router.query.userId),
+  }
+  const profileFeedQuery = trpc.project.feed.useQuery(profileFeedQueryInput)
 
   if (profileFeedQuery.data) {
     return (

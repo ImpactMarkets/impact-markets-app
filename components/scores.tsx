@@ -1,14 +1,15 @@
 import * as React from 'react'
 
-import { num } from '@/lib/text'
-import { InferQueryOutput } from '@/lib/trpc'
-import { Tooltip } from '@mantine/core'
 import { Prisma } from '@prisma/client'
+
+import { Tooltip } from '@/lib/mantine'
+import { num } from '@/lib/text'
+import { RouterOutput } from '@/lib/trpc'
 
 type ScoresProps = {
   project:
-    | InferQueryOutput<'project.detail'>
-    | InferQueryOutput<'project.feed'>['projects'][number]
+    | RouterOutput['project']['detail']
+    | RouterOutput['project']['feed']['projects'][number]
   showProjectScore?: boolean
 }
 
@@ -17,6 +18,7 @@ export const Scores = ({ project, showProjectScore = false }: ScoresProps) => {
   return (
     <>
       <Tooltip
+        width={400}
         multiline
         label={
           <>
@@ -26,7 +28,7 @@ export const Scores = ({ project, showProjectScore = false }: ScoresProps) => {
           </>
         }
       >
-        <span className="inline-block cursor-help text-highlight bg-emerald-600 font-bold text-xs px-1 p-[1px] rounded">
+        <span className="inline-block cursor-help text-highlight bg-emerald-600 font-bold text-xs leading-none px-2 py-1 rounded">
           {project.supportScore ? (
             <>Support score: {num(project.supportScore.score, 0)}</>
           ) : (
@@ -36,10 +38,11 @@ export const Scores = ({ project, showProjectScore = false }: ScoresProps) => {
       </Tooltip>
       {showProjectScore && (
         <Tooltip
+          width={400}
           multiline
           label={
             <>
-              The project score is determined retrospectively by our evaluators.
+              The final score is determined retrospectively by our evaluators.
               The first cohort of projects has yet to reach a state where
               sufficiently many of them can be evaluated, so we’ve not performed
               any serious evaluations yet. Meanwhile please don’t take the
@@ -47,11 +50,11 @@ export const Scores = ({ project, showProjectScore = false }: ScoresProps) => {
             </>
           }
         >
-          <span className="inline-block cursor-help text-highlight bg-emerald-700 font-bold text-xs px-1 p-[1px] rounded">
+          <span className="inline-block cursor-help text-highlight bg-emerald-700 font-bold text-xs leading-none px-2 py-1 rounded">
             {project.credits > zero ? (
-              <>Project score: {num(project.credits, 0)}</>
+              <>Final score: {num(project.credits, 0)}</>
             ) : (
-              <>No project score yet</>
+              <>No final score yet</>
             )}
           </span>
         </Tooltip>

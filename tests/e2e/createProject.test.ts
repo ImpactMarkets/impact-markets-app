@@ -46,7 +46,7 @@ test.describe('Create Project', () => {
 
     // Verify project values.
     await expect(page.getByRole('heading', { level: 1 })).toContainText(
-      titleText
+      titleText,
     )
     await expect(page.locator('text=' + descriptionText)).toBeVisible({
       visible: true,

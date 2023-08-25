@@ -1,8 +1,9 @@
 import Link, { LinkProps } from 'next/link'
 import * as React from 'react'
 
-import { classNames } from '@/lib/classnames'
 import { Menu as HeadlessMenu, Transition } from '@headlessui/react'
+
+import { classNames } from '@/lib/classnames'
 
 export function Menu({ children }: { children: React.ReactNode }) {
   return (
@@ -34,7 +35,7 @@ export function MenuItems({
       <HeadlessMenu.Items
         className={classNames(
           'absolute right-0 z-10 mt-2 origin-top-right border divide-y rounded shadow-lg bg-primary divide-primary top-full focus:outline-none',
-          className
+          className,
         )}
       >
         {children}
@@ -69,7 +70,7 @@ function menuItemClasses({
   return classNames(
     active && 'bg-secondary',
     'block w-full text-left px-4 py-2 text-sm text-primary transition-colors cursor-pointer',
-    className
+    className,
   )
 }
 

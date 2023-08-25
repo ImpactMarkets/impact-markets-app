@@ -3,6 +3,15 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
+import { LoadingOverlay, Tabs } from '@mantine/core'
+import { CommentType } from '@prisma/client'
+import {
+  IconCreditCard,
+  IconCreditCardOff,
+  IconMoneybag,
+  IconWoman,
+} from '@tabler/icons-react'
+
 import { AuthorWithDate } from '@/components/authorWithDate'
 import { Avatar } from '@/components/avatar'
 import { Banner } from '@/components/banner'
@@ -23,21 +32,10 @@ import { Scores } from '@/components/scores'
 import { Tags } from '@/components/tags'
 import { classNames } from '@/lib/classnames'
 import { num } from '@/lib/text'
-import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
+import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
-import { LoadingOverlay, Tabs } from '@mantine/core'
-import { CommentType } from '@prisma/client'
-import {
-  IconCreditCard,
-  IconCreditCardOff,
-  IconMoneybag,
-  IconWoman,
-} from '@tabler/icons'
 
-// TODO:
-// fix the color of the heart in likes
-
-// TODO: Maybe this could be made into a generic component ?
+// TODO: Maybe this could be made into a generic component?
 const ProjectPageWrapper: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
 
@@ -54,60 +52,20 @@ function ProjectPage({ projectId }: { projectId: string }) {
   const router = useRouter()
   const { data: session } = useSession()
   const utils = trpc.useContext()
-  const projectQueryPathAndInput: InferQueryPathAndInput<'project.detail'> = [
-    'project.detail',
-    {
-      id: projectId,
-    },
-  ]
-  const projectQuery = trpc.useQuery(projectQueryPathAndInput)
+  const projectQueryInput = {
+    id: projectId,
+  }
+  const projectQuery = trpc.project.detail.useQuery(projectQueryInput)
   const project = projectQuery.data
 
-  const likeMutation = trpc.useMutation(['project.like'], {
-    onMutate: async () => {
-      await utils.cancelQuery(projectQueryPathAndInput)
-
-      const previousProject = utils.getQueryData(projectQueryPathAndInput)
-
-      if (previousProject) {
-        utils.setQueryData(projectQueryPathAndInput, {
-          ...previousProject,
-          likedBy: [
-            ...previousProject.likedBy,
-            { user: { id: session!.user.id, name: session!.user.name } },
-          ],
-        })
-      }
-
-      return { previousProject }
-    },
-    onError: (err, id, context: any) => {
-      if (context?.previousProject) {
-        utils.setQueryData(projectQueryPathAndInput, context.previousProject)
-      }
+  const likeMutation = trpc.project.like.useMutation({
+    onSettled: () => {
+      return utils.project.detail.invalidate({ id: projectId })
     },
   })
-  const unlikeMutation = trpc.useMutation(['project.unlike'], {
-    onMutate: async () => {
-      await utils.cancelQuery(projectQueryPathAndInput)
-
-      const previousProject = utils.getQueryData(projectQueryPathAndInput)
-
-      if (previousProject) {
-        utils.setQueryData(projectQueryPathAndInput, {
-          ...previousProject,
-          likedBy: previousProject.likedBy.filter(
-            (item) => item.user.id !== session!.user.id
-          ),
-        })
-      }
-
-      return { previousProject }
-    },
-    onError: (err, id, context: any) => {
-      if (context?.previousProject) {
-        utils.setQueryData(projectQueryPathAndInput, context.previousProject)
-      }
+  const unlikeMutation = trpc.project.unlike.useMutation({
+    onSettled: () => {
+      return utils.project.detail.invalidate({ id: projectId })
     },
   })
 
@@ -121,7 +79,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
 
     const CommentPanel = ({ category }: { category: CommentType }) => {
       const filteredComments = project.comments.filter(
-        (comment) => comment.category === category
+        (comment) => comment.category === category,
       )
 
       return (
@@ -216,7 +174,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
                     rel="noopener noreferrer"
                     className={classNames(
                       buttonClasses({ variant: 'highlight' }),
-                      'ml-[-1rem] mb-1 inline-block max-w-60 whitespace-nowrap overflow-hidden overflow-ellipsis'
+                      'ml-[-1rem] mb-1 inline-block max-w-60 whitespace-nowrap overflow-hidden overflow-ellipsis',
                     )}
                   >
                     <IconCreditCard className="inline" />

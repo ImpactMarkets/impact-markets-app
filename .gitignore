@@ -19,6 +19,7 @@
 .DS_Store
 *.pem
 /.pytest_cache
+*:Zone.Identifier
 
 # debug
 npm-debug.log*

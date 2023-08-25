@@ -16,7 +16,7 @@ export async function uploadImage(file: File) {
     {
       method: 'POST',
       body: formData,
-    }
+    },
   )
   const data = await response.json()
 

@@ -1,6 +1,4 @@
-import { superjson } from '@/lib/transformer'
-
-import { createRouter } from '../createRouter'
+import { router } from '../router'
 import { bountyRouter } from './bounty'
 import { certificateRouter } from './certificate'
 import { commentRouter } from './comment'
@@ -10,15 +8,15 @@ import { jobRouter } from './job'
 import { projectRouter } from './project'
 import { userRouter } from './user'
 
-export const appRouter = createRouter()
-  .transformer(superjson)
-  .merge('project.', projectRouter)
-  .merge('donation.', donationRouter)
-  .merge('bounty.', bountyRouter)
-  .merge('certificate.', certificateRouter)
-  .merge('comment.', commentRouter)
-  .merge('holding.', holdingRouter)
-  .merge('user.', userRouter)
-  .merge('job.', jobRouter)
+export const appRouter = router({
+  project: projectRouter,
+  donation: donationRouter,
+  bounty: bountyRouter,
+  certificate: certificateRouter,
+  comment: commentRouter,
+  holding: holdingRouter,
+  user: userRouter,
+  job: jobRouter,
+})
 
 export type AppRouter = typeof appRouter
