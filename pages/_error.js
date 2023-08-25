@@ -27,11 +27,10 @@ Error.getInitialProps = ({ req, res, err }) => {
     err = err ? err : statusCode.toString() // 'err' is null for 404
     rollbar.error(err, req, (rollbarError) => {
       if (rollbarError) {
-        console.error('Rollbar error reporting failed:')
-        console.error(rollbarError)
-        return
+        console.error(`Rollbar error reporting failed: ${rollbarError}`)
+      } else {
+        console.log('Reported error to Rollbar')
       }
-      console.log('Reported error to Rollbar')
     })
   }
   return { statusCode }
