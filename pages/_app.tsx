@@ -88,31 +88,12 @@ function MyApp({
           >
             {/* Hack because the default variable definitions don’t seem to work because they
               are namespaced within the class openSans.variable */}
-            <style jsx global>{`
-              body {
-                --font-barlow-condensed: ${barlowCondensed.style.fontFamily};
-                --font-open-sans: ${openSans.style.fontFamily};
-              }
-            `}</style>
-            <Toaster
-              toastOptions={{
-                duration: 5000,
-                className: 'text-xs',
-                style: {
-                  maxWidth: '100%',
-                },
-              }}
-            />
-            {Component.auth ? (
-              <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
-            ) : (
-              getLayout(<Component {...pageProps} />)
-            )}
+          {process.env.NODE_ENV !== 'development' && (
             <TawkMessengerReact
               propertyId="6477604974285f0ec46ec1c0"
               widgetId="1h1p508cl"
             />
-          </ThemeProvider>
+          )}
         </SessionProvider>
       </MantineProvider>
     </RollbarProvider>
