@@ -1,4 +1,3 @@
-import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -6,14 +5,15 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 
 import { Banner } from '@/components/banner'
-import type { CertificateSummaryProps } from '@/components/certificate/summary'
 import { Filters } from '@/components/filters'
 import { Layout } from '@/components/layout'
-import { Pagination, getQueryPaginationInput } from '@/components/pagination'
+import { getQueryPaginationInput, Pagination } from '@/components/pagination'
 import { TAGS } from '@/components/project/tags'
 import { SummarySkeleton } from '@/components/summarySkeleton'
 import { CertificateSortKey, ITEMS_PER_PAGE } from '@/lib/constants'
 import { trpc } from '@/lib/trpc'
+
+import type { CertificateSummaryProps } from '@/components/certificate/summary'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
 const CertificateSummary = dynamic<CertificateSummaryProps>(
