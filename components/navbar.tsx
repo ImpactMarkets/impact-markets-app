@@ -72,7 +72,7 @@ const NavbarLink = ({
         className={
           cx(classes.link, {
             [classes.linkActive]: link === router.pathname,
-          }) + ' flex text-sm items-center cursor-pointer'
+          }) + ' p-3 flex text-sm items-center cursor-pointer'
         }
       >
         <Icon className={classes.linkIcon} />
