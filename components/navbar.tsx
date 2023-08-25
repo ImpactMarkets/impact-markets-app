@@ -104,6 +104,7 @@ export const Navbar = ({ hidden }: { hidden: boolean }) => (
           height={76}
           className="cursor-pointer"
           unoptimized
+          priority
         />
       </Link>
     </MantineNavbar.Section>
