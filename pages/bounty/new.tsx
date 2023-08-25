@@ -1,4 +1,4 @@
-import cuid from '@paralleldrive/cuid2'
+import { createId } from '@paralleldrive/cuid2'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
@@ -12,7 +12,7 @@ import { Prisma } from '@prisma/client'
 
 const NewBountyPage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
-  const addBountyMutation = trpc.useMutation('bounty.add', {
+  const addBountyMutation = trpc.bounty.add.useMutation({
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
     },
@@ -31,7 +31,7 @@ const NewBountyPage: NextPageWithAuthAndLayout = () => {
           isNew
           isSubmitting={addBountyMutation.isLoading}
           defaultValues={{
-            id: cuid(),
+            id: createId(),
             title: '',
             content: '',
             size: new Prisma.Decimal('0'),
