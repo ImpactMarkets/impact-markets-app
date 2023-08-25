@@ -127,14 +127,11 @@ function ConfirmHideDialog({
 }) {
   const cancelRef = React.useRef<HTMLButtonElement>(null)
   const utils = trpc.useContext()
-  const hideProjectMutation = trpc.useMutation('project.hide', {
+  const hideProjectMutation = trpc.project.hide.useMutation({
     onSuccess: () => {
-      return utils.invalidateQueries([
-        'project.detail',
-        {
-          id: projectId,
-        },
-      ])
+      return utils.project.detail.invalidate({
+        id: projectId,
+      })
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
@@ -185,14 +182,11 @@ function ConfirmUnhideDialog({
 }) {
   const cancelRef = React.useRef<HTMLButtonElement>(null)
   const utils = trpc.useContext()
-  const unhideProjectMutation = trpc.useMutation('project.unhide', {
+  const unhideProjectMutation = trpc.project.unhide.useMutation({
     onSuccess: () => {
-      return utils.invalidateQueries([
-        'project.detail',
-        {
-          id: projectId,
-        },
-      ])
+      return utils.project.detail.invalidate({
+        id: projectId,
+      })
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)

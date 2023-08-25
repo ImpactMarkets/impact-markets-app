@@ -50,12 +50,9 @@ const Holding = ({
 }
 
 export const Ledger = ({ certificate, isActive }: LedgerProps) => {
-  const holdingsQuery = trpc.useQuery([
-    'holding.feed',
-    {
-      certificateId: certificate.id,
-    },
-  ])
+  const holdingsQuery = trpc.holding.feed.useQuery({
+    certificateId: certificate.id,
+  })
   const holdings = holdingsQuery.data || []
 
   const { data: session } = useSession()

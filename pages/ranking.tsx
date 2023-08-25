@@ -110,13 +110,10 @@ const Ranking = ({
   ignoreSize?: boolean
   includeAnonymous?: boolean
 }) => {
-  const rankingQuery = trpc.useQuery([
-    'user.topDonors',
-    {
-      pastDays,
-      includeAnonymous,
-    },
-  ])
+  const rankingQuery = trpc.user.topDonors.useQuery({
+    pastDays,
+    includeAnonymous,
+  })
 
   if (rankingQuery.data) {
     const zero = new Prisma.Decimal(0)

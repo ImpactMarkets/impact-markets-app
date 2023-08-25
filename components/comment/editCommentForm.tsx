@@ -24,14 +24,11 @@ export function EditCommentForm({
   onDone: () => void
 }) {
   const utils = trpc.useContext()
-  const editCommentMutation = trpc.useMutation('comment.edit', {
+  const editCommentMutation = trpc.comment.edit.useMutation({
     onSuccess: () => {
-      return utils.invalidateQueries([
-        (objectType + '.detail') as 'project.detail' | 'bounty.detail',
-        {
-          id: objectId,
-        },
-      ])
+      return utils[objectType]['detail'].invalidate({
+        id: objectId,
+      })
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)

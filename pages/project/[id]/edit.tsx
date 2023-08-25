@@ -12,11 +12,8 @@ import type { NextPageWithAuthAndLayout } from '@/lib/types'
 const EditProjectPage: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()
   const router = useRouter()
-  const projectQuery = trpc.useQuery([
-    'project.detail',
-    { id: String(router.query.id) },
-  ])
-  const editProjectMutation = trpc.useMutation('project.edit', {
+  const projectQuery = trpc.project.detail.useQuery({ id: String(router.query.id) })
+  const editProjectMutation = trpc.project.edit.useMutation({
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
     },

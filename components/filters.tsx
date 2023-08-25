@@ -16,7 +16,7 @@ export type FiltersProps = {
   orderByValues: Array<{ value: ProjectSortKey | BountySortKey; label: string }>
   defaultFilterTagValue: string
   defaultOrderByValue: string
-  searchEndpoint?: 'project.search' | 'bounty.search'
+  searchEndpoint?: 'project' | 'bounty'
   tags: IMTag[]
 }
 

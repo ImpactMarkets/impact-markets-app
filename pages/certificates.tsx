@@ -40,17 +40,14 @@ const Home: NextPageWithAuthAndLayout = () => {
   const utils = trpc.useContext()
   const [filterTags, setFilterTags] = React.useState('')
   const [orderBy, setOrderBy] = React.useState(
-    defaultOrder as CertificateSortKey
+    defaultOrder as CertificateSortKey,
   )
-  const feedQueryPathAndInput: InferQueryPathAndInput<'certificate.feed'> = [
-    'certificate.feed',
-    {
-      ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
-      filterTags,
-      orderBy,
-    },
-  ]
-  const feedQuery = trpc.useQuery(feedQueryPathAndInput)
+  const feedQueryInput = {
+    ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
+    filterTags,
+    orderBy,
+  }
+  const feedQuery = trpc.certificate.feed.useQuery(feedQueryInput)
   const likeMutation = trpc.useMutation(['certificate.like'], {
     onMutate: async (likedCertificateId) => {
       await utils.cancelQuery(feedQueryPathAndInput)

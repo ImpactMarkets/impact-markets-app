@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 
 import { Avatar } from '@/components/avatar'
 import { Button } from '@/components/button'
@@ -128,14 +128,11 @@ function EditProfileDialog({
   })
   const router = useRouter()
   const utils = trpc.useContext()
-  const editUserMutation = trpc.useMutation('user.edit', {
+  const editUserMutation = trpc.user.edit.useMutation({
     onSuccess: () => {
-      return utils.invalidateQueries([
-        'user.profile',
-        {
-          id: String(router.query.userId),
-        },
-      ])
+      return utils.user.profile.invalidate({
+        id: String(router.query.userId),
+      })
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
@@ -159,7 +156,7 @@ function EditProfileDialog({
       },
       {
         onSuccess: () => onClose(),
-      }
+      },
     )
   }
 
@@ -252,7 +249,7 @@ function UpdateAvatarDialog({
 }) {
   const fileInputRef = React.useRef<HTMLInputElement>(null)
   const [uploadedImage, setUploadedImage] = React.useState(user.image)
-  const updateUserAvatarMutation = trpc.useMutation('user.updateAvatar', {
+  const updateUserAvatarMutation = trpc.user.updateAvatar.useMutation({
     onSuccess: () => {
       window.location.reload()
     },

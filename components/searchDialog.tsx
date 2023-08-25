@@ -12,7 +12,7 @@ import { Dialog, Transition } from '@headlessui/react'
 type SearchDialogProps = {
   isOpen: boolean
   onClose: () => void
-  searchEndpoint: 'project.search' | 'bounty.search'
+  searchEndpoint: 'project' | 'bounty'
 }
 
 function SearchResult({
@@ -59,23 +59,26 @@ function SearchField({
   searchEndpoint,
 }: {
   onSelect: () => void
-  searchEndpoint: 'project.search' | 'bounty.search'
+  searchEndpoint: 'project' | 'bounty'
 }) {
   const [value, setValue] = React.useState('')
   const [debouncedValue] = useDebounce(value, 1000)
   const router = useRouter()
 
-  const feedQuery = trpc.useQuery(
-    [
-      searchEndpoint,
-      {
-        query: debouncedValue,
-      },
-    ],
-    {
-      enabled: debouncedValue.trim().length > 0,
-    }
-  )
+  // https://github.com/microsoft/TypeScript/issues/33591#issuecomment-786443978
+  // But that didn't work because react-query doesn't export ProcedureUseQuery
+  const enabled = debouncedValue.trim().length > 0
+  let feedQuery
+  if (searchEndpoint === 'project')
+    feedQuery = trpc.project.search.useQuery(
+      { query: debouncedValue },
+      { enabled },
+    )
+  else
+    feedQuery = trpc.bounty.search.useQuery(
+      { query: debouncedValue },
+      { enabled },
+    )
 
   const { moveHighlightedItem, selectHighlightedItem, useItem } = useItemList({
     onSelect: (item) => {

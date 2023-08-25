@@ -5,12 +5,12 @@ import * as React from 'react'
 
 import { Date } from '@/components/date'
 import { num } from '@/lib/text'
-import { InferQueryOutput } from '@/lib/trpc'
+import { RouterOutput } from '@/lib/trpc'
 import { Prisma } from '@prisma/client'
 
 interface DonationGroup {
   projectId: string
-  project: InferQueryOutput<'user.profile'>['donations'][0]['project']
+  project: RouterOutput['user']['profile']['donations'][0]['project']
   totalAmount: Prisma.Decimal
   earliestDate: Date
   latestDate: Date
@@ -20,11 +20,7 @@ interface GroupedDonations {
   [projectId: string]: DonationGroup
 }
 
-export function Donations({
-  user,
-}: {
-  user: InferQueryOutput<'user.profile'>
-}) {
+export function Donations({ user }: { user: RouterOutput['user']['profile'] }) {
   const groupedDonations = user.donations.reduce((acc, donation) => {
     // Skip donations that are not confirmed or have totalAmount of 0
     if (donation.state !== 'CONFIRMED') {

@@ -127,14 +127,9 @@ function ConfirmHideDialog({
 }) {
   const cancelRef = React.useRef<HTMLButtonElement>(null)
   const utils = trpc.useContext()
-  const hideProjectMutation = trpc.useMutation('bounty.hide', {
+  const hideProjectMutation = trpc.bounty.hide.useMutation({
     onSuccess: () => {
-      return utils.invalidateQueries([
-        'bounty.detail',
-        {
-          id: bountyId,
-        },
-      ])
+      return utils.bounty.detail.invalidate({ id: bountyId })
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
@@ -185,14 +180,9 @@ function ConfirmUnhideDialog({
 }) {
   const cancelRef = React.useRef<HTMLButtonElement>(null)
   const utils = trpc.useContext()
-  const unhideProjectMutation = trpc.useMutation('bounty.unhide', {
+  const unhideProjectMutation = trpc.bounty.unhide.useMutation({
     onSuccess: () => {
-      return utils.invalidateQueries([
-        'bounty.detail',
-        {
-          id: bountyId,
-        },
-      ])
+      return utils.bounty.detail.invalidate({ id: bountyId })
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)

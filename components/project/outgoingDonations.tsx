@@ -36,40 +36,37 @@ export function OutgoingDonations({
 
   let donations: RouterOutput['donation']['feed'] = []
   if (session) {
-    const donationsQuery = trpc.useQuery([
-      'donation.feed',
-      {
-        projectId: project.id,
-        userId: session!.user.id,
-      },
-    ])
+    const donationsQuery = trpc.donation.feed.useQuery({
+      projectId: project.id,
+      userId: session!.user.id,
+    })
     donations = donationsQuery.data ?? []
   }
 
-  const addDonationMutation = trpc.useMutation('donation.add', {
+  const addDonationMutation = trpc.donation.add.useMutation({
     onSuccess: () => {
-      utils.invalidateQueries(['donation.feed'])
-      utils.invalidateQueries(['project.detail'])
+      utils.donation.feed.invalidate()
+      utils.project.detail.invalidate()
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
     },
   })
 
-  const cancelDonationMutation = trpc.useMutation('donation.cancel', {
+  const cancelDonationMutation = trpc.donation.cancel.useMutation({
     onSuccess: () => {
-      utils.invalidateQueries(['donation.feed'])
-      utils.invalidateQueries(['project.detail'])
+      utils.donation.feed.invalidate()
+      utils.project.detail.invalidate()
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
     },
   })
 
-  const confirmDonationMutation = trpc.useMutation('donation.confirm', {
+  const confirmDonationMutation = trpc.donation.confirm.useMutation({
     onSuccess: () => {
-      utils.invalidateQueries(['donation.feed'])
-      utils.invalidateQueries(['project.detail'])
+      utils.donation.feed.invalidate()
+      utils.project.detail.invalidate()
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)

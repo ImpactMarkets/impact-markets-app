@@ -21,14 +21,11 @@ export function ProjectFeed({
 }) {
   const router = useRouter()
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
-  const profileFeedQueryPathAndInput: InferQueryPathAndInput<'project.feed'> = [
-    'project.feed',
-    {
-      ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
-      authorId: String(router.query.userId),
-    },
-  ]
-  const profileFeedQuery = trpc.useQuery(profileFeedQueryPathAndInput)
+  const profileFeedQueryInput = {
+    ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
+    authorId: String(router.query.userId),
+  }
+  const profileFeedQuery = trpc.project.feed.useQuery(profileFeedQueryInput)
 
   if (profileFeedQuery.data) {
     return (

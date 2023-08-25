@@ -35,9 +35,9 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
   const router = useRouter()
   const { data: session } = useSession()
   const utils = trpc.useContext()
-  const certificateQueryPathAndInput =
-    getCertificateQueryPathAndInput(certificateId)
-  const certificateQuery = trpc.useQuery(certificateQueryPathAndInput)
+  const certificateQuery = trpc.certificate.detail.useQuery({
+    id: certificateId,
+  })
   const certificate = certificateQuery.data
   const likeMutation = trpc.useMutation(['certificate.like'], {
     onMutate: async () => {

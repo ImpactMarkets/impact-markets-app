@@ -15,12 +15,9 @@ import { Tabs } from '@mantine/core'
 const ProfilePage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
   const { data: session } = useSession()
-  const profileQuery = trpc.useQuery([
-    'user.profile',
-    {
-      id: String(router.query.userId),
-    },
-  ])
+  const profileQuery = trpc.user.profile.useQuery({
+    id: String(router.query.userId),
+  })
 
   if (profileQuery.isError) {
     return <div>Error: {profileQuery.error.message}</div>

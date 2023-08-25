@@ -38,15 +38,12 @@ const Home: NextPageWithAuthAndLayout = () => {
   const utils = trpc.useContext()
   const [filterTags, setFilterTags] = React.useState('')
   const [orderBy, setOrderBy] = React.useState(defaultOrder as BountySortKey)
-  const feedQueryPathAndInput: InferQueryPathAndInput<'bounty.feed'> = [
-    'bounty.feed',
-    {
-      ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
-      filterTags,
-      orderBy,
-    },
-  ]
-  const feedQuery = trpc.useQuery(feedQueryPathAndInput)
+  const feedQueryInput = {
+    ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
+    filterTags,
+    orderBy,
+  }
+  const feedQuery = trpc.bounty.feed.useQuery(feedQueryInput)
   const likeMutation = trpc.useMutation(['bounty.like'], {
     onMutate: async (likedBountyId) => {
       await utils.cancelQuery(feedQueryPathAndInput)
@@ -137,7 +134,7 @@ const Home: NextPageWithAuthAndLayout = () => {
               orderByValues={orderByValues}
               defaultFilterTagValue={filterTags}
               defaultOrderByValue={orderBy}
-              searchEndpoint="bounty.search"
+              searchEndpoint="bounty"
             />
           </div>
         </div>

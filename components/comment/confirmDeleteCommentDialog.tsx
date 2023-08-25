@@ -27,14 +27,11 @@ export function ConfirmDeleteCommentDialog({
 }) {
   const cancelRef = React.useRef<HTMLButtonElement>(null)
   const utils = trpc.useContext()
-  const deleteCommentMutation = trpc.useMutation('comment.delete', {
+  const deleteCommentMutation = trpc.comment.delete.useMutation({
     onSuccess: () => {
-      return utils.invalidateQueries([
-        (objectType + '.detail') as 'project.detail' | 'bounty.detail',
-        {
-          id: objectId,
-        },
-      ])
+      return utils[objectType]['detail'].invalidate({
+        id: objectId,
+      })
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)

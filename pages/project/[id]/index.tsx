@@ -54,13 +54,10 @@ function ProjectPage({ projectId }: { projectId: string }) {
   const router = useRouter()
   const { data: session } = useSession()
   const utils = trpc.useContext()
-  const projectQueryPathAndInput: InferQueryPathAndInput<'project.detail'> = [
-    'project.detail',
-    {
-      id: projectId,
-    },
-  ]
-  const projectQuery = trpc.useQuery(projectQueryPathAndInput)
+  const projectQueryInput = {
+    id: projectId,
+  }
+  const projectQuery = trpc.project.detail.useQuery(projectQueryInput)
   const project = projectQuery.data
 
   const likeMutation = trpc.useMutation(['project.like'], {

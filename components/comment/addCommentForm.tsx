@@ -20,14 +20,11 @@ export function AddCommentForm({
 }) {
   const [markdownEditorKey, setMarkdownEditorKey] = React.useState(0)
   const utils = trpc.useContext()
-  const addCommentMutation = trpc.useMutation('comment.add', {
+  const addCommentMutation = trpc.comment.add.useMutation({
     onSuccess: () => {
-      return utils.invalidateQueries([
-        (objectType + '.detail') as 'project.detail' | 'bounty.detail',
-        {
-          id: objectId,
-        },
-      ])
+      return utils[objectType]['detail'].invalidate({
+        id: objectId,
+      })
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)

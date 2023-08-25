@@ -35,15 +35,11 @@ const Projects: NextPageWithAuthAndLayout = () => {
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
   const [filterTags, setFilterTags] = React.useState('')
   const [orderBy, setOrderBy] = React.useState(defaultOrder as ProjectSortKey)
-  const feedQueryPathAndInput: InferQueryPathAndInput<'project.feed'> = [
-    'project.feed',
-    {
-      ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
-      filterTags,
-      orderBy,
-    },
-  ]
-  const feedQuery = trpc.useQuery(feedQueryPathAndInput)
+  const feedQuery = trpc.project.feed.useQuery({
+    ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
+    filterTags,
+    orderBy,
+  })
 
   if (feedQuery.data) {
     return (
@@ -71,7 +67,7 @@ const Projects: NextPageWithAuthAndLayout = () => {
               orderByValues={orderByValues}
               defaultFilterTagValue={filterTags}
               defaultOrderByValue={orderBy}
-              searchEndpoint="project.search"
+              searchEndpoint="project"
             />
           </div>
         </div>

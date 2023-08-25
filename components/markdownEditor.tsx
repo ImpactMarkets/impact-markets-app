@@ -1,7 +1,7 @@
 import { matchSorter } from 'match-sorter'
 import * as React from 'react'
 import { useDetectClickOutside } from 'react-detect-click-outside'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 import TextareaAutosize, {
   TextareaAutosizeProps,
 } from 'react-textarea-autosize'
@@ -376,7 +376,7 @@ function Suggestion({
   const isEmojiType = state.type === 'emoji'
 
   const emojiListQuery = useQuery(
-    'emojiList',
+    ['emojiList'],
     async () => {
       const gemoji = (await import('gemoji')).gemoji
       return gemoji
@@ -387,7 +387,7 @@ function Suggestion({
     },
   )
 
-  const mentionListQuery = trpc.useQuery(['user.mentionList'], {
+  const mentionListQuery = trpc.user.mentionList.useQuery(undefined, {
     enabled: state.isOpen && isMentionType,
     staleTime: 5 * 60 * 1000,
   })

@@ -8,7 +8,7 @@ import { refreshSession } from '../utils'
 
 export function Preferences() {
   const { data: session } = useSession()
-  const preferencesMutation = trpc.useMutation(['user.preferences'], {
+  const preferencesMutation = trpc.user.preferences.useMutation({
     onSuccess: refreshSession,
   })
 

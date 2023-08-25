@@ -42,13 +42,7 @@ function BountyPage({ bountyId }: { bountyId: string }) {
   const router = useRouter()
   const { data: session } = useSession()
   const utils = trpc.useContext()
-  const bountyQueryPathAndInput: InferQueryPathAndInput<'bounty.detail'> = [
-    'bounty.detail',
-    {
-      id: bountyId,
-    },
-  ]
-  const bountyQuery = trpc.useQuery(bountyQueryPathAndInput)
+  const bountyQuery = trpc.bounty.detail.useQuery({ id: bountyId })
   const bounty = bountyQuery.data
 
   const likeMutation = trpc.useMutation(['bounty.like'], {
