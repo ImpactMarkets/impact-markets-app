@@ -32,10 +32,8 @@ const orderByValues: Array<{ value: BountySortKey; label: string }> = [
 const defaultOrder = 'size'
 
 const Home: NextPageWithAuthAndLayout = () => {
-  const { data: session } = useSession()
   const router = useRouter()
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
-  const utils = trpc.useContext()
   const [filterTags, setFilterTags] = React.useState('')
   const [orderBy, setOrderBy] = React.useState(defaultOrder as BountySortKey)
   const feedQueryInput = {
@@ -44,69 +42,6 @@ const Home: NextPageWithAuthAndLayout = () => {
     orderBy,
   }
   const feedQuery = trpc.bounty.feed.useQuery(feedQueryInput)
-  const likeMutation = trpc.useMutation(['bounty.like'], {
-    onMutate: async (likedBountyId) => {
-      await utils.cancelQuery(feedQueryPathAndInput)
-
-      const previousQuery = utils.getQueryData(feedQueryPathAndInput)
-
-      if (previousQuery) {
-        utils.setQueryData(feedQueryPathAndInput, {
-          ...previousQuery,
-          bounties: previousQuery.bounties.map((bounty) =>
-            bounty.id === likedBountyId
-              ? {
-                  ...bounty,
-                  likedBy: [
-                    ...bounty.likedBy,
-                    {
-                      user: { id: session!.user.id, name: session!.user.name },
-                    },
-                  ],
-                }
-              : bounty
-          ),
-        })
-      }
-
-      return { previousQuery }
-    },
-    onError: (err, id, context: any) => {
-      if (context?.previousQuery) {
-        utils.setQueryData(feedQueryPathAndInput, context.previousQuery)
-      }
-    },
-  })
-  const unlikeMutation = trpc.useMutation(['bounty.unlike'], {
-    onMutate: async (unlikedBountyId) => {
-      await utils.cancelQuery(feedQueryPathAndInput)
-
-      const previousQuery = utils.getQueryData(feedQueryPathAndInput)
-
-      if (previousQuery) {
-        utils.setQueryData(feedQueryPathAndInput, {
-          ...previousQuery,
-          bounties: previousQuery.bounties.map((bounty) =>
-            bounty.id === unlikedBountyId
-              ? {
-                  ...bounty,
-                  likedBy: bounty.likedBy.filter(
-                    (item) => item.user.id !== session!.user.id
-                  ),
-                }
-              : bounty
-          ),
-        })
-      }
-
-      return { previousQuery }
-    },
-    onError: (err, id, context: any) => {
-      if (context?.previousQuery) {
-        utils.setQueryData(feedQueryPathAndInput, context.previousQuery)
-      }
-    },
-  })
 
   if (feedQuery.data) {
     return (
@@ -157,15 +92,7 @@ const Home: NextPageWithAuthAndLayout = () => {
               {feedQuery.data.bounties.map((bounty) => (
                 <li key={bounty.id} className="w-full max-w-full">
                   {/* Classes for the tiled arrangement: w-full max-w-full xl:w-[49.5%] xl:max-w-[49.5%] 2xl:w-[32.6%] 2xl:max-w-[32.6%] */}
-                  <Summary
-                    bounty={bounty}
-                    onLike={() => {
-                      likeMutation.mutate(bounty.id)
-                    }}
-                    onUnlike={() => {
-                      unlikeMutation.mutate(bounty.id)
-                    }}
-                  />
+                  <Summary bounty={bounty} />
                 </li>
               ))}
             </ul>
