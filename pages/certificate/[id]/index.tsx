@@ -18,7 +18,7 @@ import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 import { LoadingOverlay } from '@mantine/core'
 
-// TODO: Maybe this could be made into a generic component ?
+// TODO: Maybe this could be made into a generic component?
 const CertificatePageWrapper: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
 
@@ -39,61 +39,14 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
     id: certificateId,
   })
   const certificate = certificateQuery.data
-  const likeMutation = trpc.useMutation(['certificate.like'], {
-    onMutate: async () => {
-      await utils.cancelQuery(certificateQueryPathAndInput)
-
-      const previousCertificate = utils.getQueryData(
-        certificateQueryPathAndInput
-      )
-
-      if (previousCertificate) {
-        utils.setQueryData(certificateQueryPathAndInput, {
-          ...previousCertificate,
-          likedBy: [
-            ...previousCertificate.likedBy,
-            { user: { id: session!.user.id, name: session!.user.name } },
-          ],
-        })
-      }
-
-      return { previousCertificate }
-    },
-    onError: (err, id, context: any) => {
-      if (context?.previousCertificate) {
-        utils.setQueryData(
-          certificateQueryPathAndInput,
-          context.previousCertificate
-        )
-      }
+  const likeMutation = trpc.certificate.like.useMutation({
+    onSettled: () => {
+      return utils.certificate.detail.invalidate({ id: certificateId })
     },
   })
-  const unlikeMutation = trpc.useMutation(['certificate.unlike'], {
-    onMutate: async () => {
-      await utils.cancelQuery(certificateQueryPathAndInput)
-
-      const previousCertificate = utils.getQueryData(
-        certificateQueryPathAndInput
-      )
-
-      if (previousCertificate) {
-        utils.setQueryData(certificateQueryPathAndInput, {
-          ...previousCertificate,
-          likedBy: previousCertificate.likedBy.filter(
-            (item) => item.user.id !== session!.user.id
-          ),
-        })
-      }
-
-      return { previousCertificate }
-    },
-    onError: (err, id, context: any) => {
-      if (context?.previousCertificate) {
-        utils.setQueryData(
-          certificateQueryPathAndInput,
-          context.previousCertificate
-        )
-      }
+  const unlikeMutation = trpc.certificate.unlike.useMutation({
+    onSettled: () => {
+      return utils.certificate.detail.invalidate({ id: certificateId })
     },
   })
 

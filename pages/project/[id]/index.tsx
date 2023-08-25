@@ -34,10 +34,7 @@ import {
   IconWoman,
 } from '@tabler/icons-react'
 
-// TODO:
-// fix the color of the heart in likes
-
-// TODO: Maybe this could be made into a generic component ?
+// TODO: Maybe this could be made into a generic component?
 const ProjectPageWrapper: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
 
@@ -60,51 +57,14 @@ function ProjectPage({ projectId }: { projectId: string }) {
   const projectQuery = trpc.project.detail.useQuery(projectQueryInput)
   const project = projectQuery.data
 
-  const likeMutation = trpc.useMutation(['project.like'], {
-    onMutate: async () => {
-      await utils.cancelQuery(projectQueryPathAndInput)
-
-      const previousProject = utils.getQueryData(projectQueryPathAndInput)
-
-      if (previousProject) {
-        utils.setQueryData(projectQueryPathAndInput, {
-          ...previousProject,
-          likedBy: [
-            ...previousProject.likedBy,
-            { user: { id: session!.user.id, name: session!.user.name } },
-          ],
-        })
-      }
-
-      return { previousProject }
-    },
-    onError: (err, id, context: any) => {
-      if (context?.previousProject) {
-        utils.setQueryData(projectQueryPathAndInput, context.previousProject)
-      }
+  const likeMutation = trpc.project.like.useMutation({
+    onSettled: () => {
+      return utils.project.detail.invalidate({ id: projectId })
     },
   })
-  const unlikeMutation = trpc.useMutation(['project.unlike'], {
-    onMutate: async () => {
-      await utils.cancelQuery(projectQueryPathAndInput)
-
-      const previousProject = utils.getQueryData(projectQueryPathAndInput)
-
-      if (previousProject) {
-        utils.setQueryData(projectQueryPathAndInput, {
-          ...previousProject,
-          likedBy: previousProject.likedBy.filter(
-            (item) => item.user.id !== session!.user.id
-          ),
-        })
-      }
-
-      return { previousProject }
-    },
-    onError: (err, id, context: any) => {
-      if (context?.previousProject) {
-        utils.setQueryData(projectQueryPathAndInput, context.previousProject)
-      }
+  const unlikeMutation = trpc.project.unlike.useMutation({
+    onSettled: () => {
+      return utils.project.detail.invalidate({ id: projectId })
     },
   })
 

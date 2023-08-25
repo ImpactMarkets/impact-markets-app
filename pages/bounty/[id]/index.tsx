@@ -25,7 +25,7 @@ import { LoadingOverlay, Tabs } from '@mantine/core'
 import { CommentType } from '@prisma/client'
 import { IconExternalLink } from '@tabler/icons-react'
 
-// TODO: Maybe this could be made into a generic component ?
+// TODO: Maybe this could be made into a generic component?
 const BountyPageWrapper: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
 
@@ -45,51 +45,14 @@ function BountyPage({ bountyId }: { bountyId: string }) {
   const bountyQuery = trpc.bounty.detail.useQuery({ id: bountyId })
   const bounty = bountyQuery.data
 
-  const likeMutation = trpc.useMutation(['bounty.like'], {
-    onMutate: async () => {
-      await utils.cancelQuery(bountyQueryPathAndInput)
-
-      const previousBounty = utils.getQueryData(bountyQueryPathAndInput)
-
-      if (previousBounty) {
-        utils.setQueryData(bountyQueryPathAndInput, {
-          ...previousBounty,
-          likedBy: [
-            ...previousBounty.likedBy,
-            { user: { id: session!.user.id, name: session!.user.name } },
-          ],
-        })
-      }
-
-      return { previousBounty }
-    },
-    onError: (err, id, context: any) => {
-      if (context?.previousBounty) {
-        utils.setQueryData(bountyQueryPathAndInput, context.previousBounty)
-      }
+  const likeMutation = trpc.bounty.like.useMutation({
+    onSettled: () => {
+      return utils.bounty.detail.invalidate({ id: bountyId })
     },
   })
-  const unlikeMutation = trpc.useMutation(['bounty.unlike'], {
-    onMutate: async () => {
-      await utils.cancelQuery(bountyQueryPathAndInput)
-
-      const previousBounty = utils.getQueryData(bountyQueryPathAndInput)
-
-      if (previousBounty) {
-        utils.setQueryData(bountyQueryPathAndInput, {
-          ...previousBounty,
-          likedBy: previousBounty.likedBy.filter(
-            (item) => item.user.id !== session!.user.id
-          ),
-        })
-      }
-
-      return { previousBounty }
-    },
-    onError: (err, id, context: any) => {
-      if (context?.previousBounty) {
-        utils.setQueryData(bountyQueryPathAndInput, context.previousBounty)
-      }
+  const unlikeMutation = trpc.bounty.unlike.useMutation({
+    onSettled: () => {
+      return utils.bounty.detail.invalidate({ id: bountyId })
     },
   })
 
