@@ -36,6 +36,23 @@ const openSans = Open_Sans({
   subsets: ['latin'],
 })
 
+function Auth({ children }: { children: React.ReactNode }) {
+  const { data: session, status } = useSession()
+  const isUser = !!session?.user
+  React.useEffect(() => {
+    if (status === 'loading') return // Do nothing while loading
+    if (!isUser) signIn() // If not authenticated, force log in
+  }, [isUser, status])
+
+  if (isUser) {
+    return <>{children}</>
+  }
+
+  // Session is being fetched, or no user.
+  // If no user, useEffect() will redirect.
+  return null
+}
+
 type AppPropsWithAuthAndLayout = AppProps & {
   Component: NextPageWithAuthAndLayout
 }
