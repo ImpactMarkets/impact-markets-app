@@ -202,7 +202,7 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
 }
 
 CertificatePageWrapper.getLayout = function getLayout(
-  page: React.ReactElement
+  page: React.ReactElement,
 ) {
   return <Layout>{page}</Layout>
 }

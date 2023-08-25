@@ -24,7 +24,7 @@ export type SummaryProps = {
 function Left({ bounty }: SummaryProps) {
   const contentDocument = React.useMemo(
     () => new DOMParser().parseFromString(bounty.contentHtml, 'text/html'),
-    [bounty.contentHtml]
+    [bounty.contentHtml],
   )
   //   TODO: decide on the order of the allowed tags
   //   and research on how to truncate html to a max amount of characters
@@ -106,7 +106,7 @@ export const Summary = ({ bounty }: SummaryProps) => (
     <div
       className={classNames(
         'flex items-stretch',
-        bounty.hidden ? 'opacity-50' : ''
+        bounty.hidden ? 'opacity-50' : '',
       )}
     >
       <Left bounty={bounty} />

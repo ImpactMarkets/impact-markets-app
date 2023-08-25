@@ -45,7 +45,7 @@ function SearchResult({
         href={result.link}
         className={classNames(
           'block py-3.5 pl-10 pr-3 transition-colors leading-tight',
-          highlighted && 'bg-blue-600 text-white'
+          highlighted && 'bg-blue-600 text-white',
         )}
       >
         {result.title}
@@ -117,7 +117,7 @@ function SearchField({
         <div
           className={classNames(
             'absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none transition-opacity',
-            feedQuery.isLoading ? 'opacity-100' : 'opacity-0'
+            feedQuery.isLoading ? 'opacity-100' : 'opacity-0',
           )}
         >
           <SpinnerIcon className="w-4 h-4 animate-spin" />
@@ -125,7 +125,7 @@ function SearchField({
         <div
           className={classNames(
             'absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none transition-opacity',
-            feedQuery.isLoading ? 'opacity-0' : 'opacity-100'
+            feedQuery.isLoading ? 'opacity-0' : 'opacity-100',
           )}
         >
           <SearchIcon className="w-4 h-4" aria-hidden="true" />

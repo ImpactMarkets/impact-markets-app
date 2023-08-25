@@ -30,7 +30,7 @@ export const TopProjects = () => {
               className={classNames(
                 'w-full max-w-full xl:w-[49.5%] xl:max-w-[49.5%] 2xl:w-[32.6%] 2xl:max-w-[32.6%]',
                 '[&:nth-child(2)]:hidden xl:[&:nth-child(2)]:block 2xl:[&:nth-child(2)]:block',
-                '[&:nth-child(3)]:hidden xl:[&:nth-child(3)]:hidden 2xl:[&:nth-child(3)]:block'
+                '[&:nth-child(3)]:hidden xl:[&:nth-child(3)]:hidden 2xl:[&:nth-child(3)]:block',
               )}
             >
               <ProjectSummary project={project} hideRight />

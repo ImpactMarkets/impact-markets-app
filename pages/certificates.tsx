@@ -19,9 +19,9 @@ import type { NextPageWithAuthAndLayout } from '@/lib/types'
 const CertificateSummary = dynamic<CertificateSummaryProps>(
   () =>
     import('@/components/certificate/summary').then(
-      (mod) => mod.CertificateSummary
+      (mod) => mod.CertificateSummary,
     ),
-  { ssr: false }
+  { ssr: false },
 )
 
 const orderByValues: Array<{ value: CertificateSortKey; label: string }> = [
@@ -129,7 +129,7 @@ const Home: NextPageWithAuthAndLayout = () => {
             onOrderByUpdate={(orderBy: string) =>
               // A bit unhappy with this – https://stackoverflow.com/a/69007934/678861
               (orderByValues.map((item) => item.value) as string[]).includes(
-                orderBy
+                orderBy,
               ) && setOrderBy(orderBy as CertificateSortKey)
             }
             orderByValues={orderByValues}

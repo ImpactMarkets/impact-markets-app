@@ -28,12 +28,12 @@ export const Tags = ({ queryData, tags: knownTags }: TagsProps) => {
               key={value}
               className={classNames(
                 'inline-block text-highlight font-bold text-xs px-1 p-[1px] rounded',
-                color
+                color,
               )}
             >
               {label}
             </span>
-          )
+          ),
       )}
     </>
   )

@@ -68,7 +68,7 @@ export const Ledger = ({ certificate, isActive }: LedgerProps) => {
     .filter((holding) => holding.type === 'RESERVATION')
     .reduce(
       (aggregator, holding) => holding.size.plus(aggregator),
-      new Prisma.Decimal(0)
+      new Prisma.Decimal(0),
     )
 
   return (
@@ -94,7 +94,7 @@ export const Ledger = ({ certificate, isActive }: LedgerProps) => {
                     <th
                       className={classNames(
                         'text-sm text-right',
-                        simplified && 'hidden'
+                        simplified && 'hidden',
                       )}
                     >
                       Shares
@@ -102,7 +102,7 @@ export const Ledger = ({ certificate, isActive }: LedgerProps) => {
                     <th
                       className={classNames(
                         'text-sm text-right',
-                        simplified && 'hidden'
+                        simplified && 'hidden',
                       )}
                     >
                       Valuation
@@ -146,7 +146,7 @@ export const Ledger = ({ certificate, isActive }: LedgerProps) => {
                     <th
                       className={classNames(
                         'text-sm text-right',
-                        simplified && 'hidden'
+                        simplified && 'hidden',
                       )}
                     >
                       Shares
@@ -164,7 +164,7 @@ export const Ledger = ({ certificate, isActive }: LedgerProps) => {
                         <td
                           className={classNames(
                             'text-sm text-right',
-                            simplified && 'hidden'
+                            simplified && 'hidden',
                           )}
                           key="size"
                         >

@@ -20,29 +20,29 @@ export function HoldingsChart({ holdings, issuers }: HoldingsChartProps) {
       fp.filter((holding: Holding) => holding.type === 'CONSUMPTION'),
       fp.reduce(
         (aggregator, holding) => holding.size.plus(aggregator),
-        new Prisma.Decimal(0)
-      )
+        new Prisma.Decimal(0),
+      ),
     )(holdings)
     .times(100)
   const valueReservedFromIssuers = fp.flow(
     fp.filter(
       (holding: Holding) =>
-        holding.type === 'OWNERSHIP' && issuersIds.includes(holding.user.id)
+        holding.type === 'OWNERSHIP' && issuersIds.includes(holding.user.id),
     ),
     fp.map('sellTransactions'),
     fp.flatten,
     fp.map('size'),
-    (sizes) => Prisma.Decimal.sum(...sizes, 0)
+    (sizes) => Prisma.Decimal.sum(...sizes, 0),
   )(holdings)
   const valueReservedFromInvestors = fp.flow(
     fp.filter(
       (holding: Holding) =>
-        holding.type === 'OWNERSHIP' && !issuersIds.includes(holding.user.id)
+        holding.type === 'OWNERSHIP' && !issuersIds.includes(holding.user.id),
     ),
     fp.map('sellTransactions'),
     fp.flatten,
     fp.map('size'),
-    (sizes) => Prisma.Decimal.sum(...sizes, 0)
+    (sizes) => Prisma.Decimal.sum(...sizes, 0),
   )(holdings)
   const valueReserved = valueReservedFromIssuers
     .plus(valueReservedFromInvestors)
@@ -51,20 +51,20 @@ export function HoldingsChart({ holdings, issuers }: HoldingsChartProps) {
     .flow(
       fp.filter(
         (holding: Holding) =>
-          holding.type === 'OWNERSHIP' && issuersIds.includes(holding.user.id)
+          holding.type === 'OWNERSHIP' && issuersIds.includes(holding.user.id),
       ),
       fp.map('size'),
-      (sizes) => Prisma.Decimal.sum(...sizes, -valueReservedFromIssuers)
+      (sizes) => Prisma.Decimal.sum(...sizes, -valueReservedFromIssuers),
     )(holdings)
     .times(100)
   const valueAvailableFromInvestors = fp
     .flow(
       fp.filter(
         (holding: Holding) =>
-          holding.type === 'OWNERSHIP' && !issuersIds.includes(holding.user.id)
+          holding.type === 'OWNERSHIP' && !issuersIds.includes(holding.user.id),
       ),
       fp.map('size'),
-      (sizes) => Prisma.Decimal.sum(...sizes, -valueReservedFromInvestors)
+      (sizes) => Prisma.Decimal.sum(...sizes, -valueReservedFromInvestors),
     )(holdings)
     .times(100)
 
@@ -77,7 +77,7 @@ export function HoldingsChart({ holdings, issuers }: HoldingsChartProps) {
         : '',
       tooltip: `${num(
         valueAvailableFromIssuers,
-        0
+        0,
       )}% available from the issuers`,
       value: valueAvailableFromIssuers.toNumber(),
       color: '#47d6ab',
@@ -90,7 +90,7 @@ export function HoldingsChart({ holdings, issuers }: HoldingsChartProps) {
         : '',
       tooltip: `${num(
         valueAvailableFromInvestors,
-        0
+        0,
       )}% available from investors`,
       value: valueAvailableFromInvestors.toNumber(),
       color: '#37c69b',
@@ -113,7 +113,7 @@ export function HoldingsChart({ holdings, issuers }: HoldingsChartProps) {
         : '',
       tooltip: `${num(
         valueConsumed,
-        0
+        0,
       )}% donated/consumed and permanently off the market`,
       value: valueConsumed.toNumber(),
       color: '#4fcdf7',

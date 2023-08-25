@@ -52,7 +52,7 @@ const NewProjectPage: NextPageWithAuthAndLayout = () => {
               },
               {
                 onSuccess: (data) => router.push(`/project/${data.id}`),
-              }
+              },
             )
           }}
         />

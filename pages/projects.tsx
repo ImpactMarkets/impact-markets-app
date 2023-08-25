@@ -17,7 +17,7 @@ import type { NextPageWithAuthAndLayout } from '@/lib/types'
 const ProjectSummary = dynamic<ProjectSummaryProps>(
   () =>
     import('@/components/project/summary').then((mod) => mod.ProjectSummary),
-  { ssr: false }
+  { ssr: false },
 )
 
 const orderByValues: Array<{ value: ProjectSortKey; label: string }> = [
@@ -65,7 +65,7 @@ const Projects: NextPageWithAuthAndLayout = () => {
               onOrderByUpdate={(orderBy: string) =>
                 // A bit unhappy with this – https://stackoverflow.com/a/69007934/678861
                 (orderByValues.map((item) => item.value) as string[]).includes(
-                  orderBy
+                  orderBy,
                 ) && setOrderBy(orderBy as ProjectSortKey)
               }
               orderByValues={orderByValues}

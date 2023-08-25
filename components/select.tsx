@@ -53,7 +53,7 @@ export const IMSelect = React.forwardRef<HTMLInputElement, IMTextFieldProps>(
         />
       </div>
     )
-  }
+  },
 )
 
 IMSelect.displayName = 'IMMultiSelect'

@@ -11,7 +11,7 @@ import { RouterOutput, trpc } from '@/lib/trpc'
 const ProjectSummary = dynamic<ProjectSummaryProps>(
   () =>
     import('@/components/project/summary').then((mod) => mod.ProjectSummary),
-  { ssr: false }
+  { ssr: false },
 )
 
 export function ProjectFeed({

@@ -72,7 +72,7 @@ type SuggestionActionType =
 
 function suggestionReducer(
   state: SuggestionState,
-  action: SuggestionActionType
+  action: SuggestionActionType,
 ) {
   switch (action.type) {
     case 'open':
@@ -153,7 +153,7 @@ export function MarkdownEditor({
       position: null,
       triggerIdx: null,
       query: '',
-    }
+    },
   )
 
   function closeSuggestion() {
@@ -182,12 +182,12 @@ export function MarkdownEditor({
                 type="button"
                 onClick={() => {
                   textareaMarkdownRef.current?.trigger(
-                    toolbarItem.commandTrigger
+                    toolbarItem.commandTrigger,
                   )
                 }}
                 className={classNames(
                   'rounded inline-flex items-center justify-center h-8 w-8 disabled:opacity-50 disabled:cursor-default focus:border focus-ring',
-                  !showPreview && 'link'
+                  !showPreview && 'link',
                 )}
                 disabled={showPreview}
                 title={toolbarItem.name}
@@ -208,13 +208,13 @@ export function MarkdownEditor({
               }}
               className={classNames(
                 showPreview ? 'bg-blue-500' : 'bg-gray-300 dark:bg-gray-700',
-                'relative inline-flex flex-shrink-0 items-center h-[18px] w-8 rounded-full transition-colors ease-in-out duration-200 focus-ring'
+                'relative inline-flex flex-shrink-0 items-center h-[18px] w-8 rounded-full transition-colors ease-in-out duration-200 focus-ring',
               )}
             >
               <span
                 className={classNames(
                   showPreview ? 'translate-x-4' : 'translate-x-0.5',
-                  'inline-block w-3.5 h-3.5 transform bg-white dark:bg-gray-100 rounded-full transition-transform ease-in-out duration-200'
+                  'inline-block w-3.5 h-3.5 transform bg-white dark:bg-gray-100 rounded-full transition-transform ease-in-out duration-200',
                 )}
               />
             </Switch>
@@ -250,7 +250,7 @@ export function MarkdownEditor({
                 } else {
                   const coords = getCaretCoordinates(
                     event.currentTarget,
-                    triggerIdx + 1
+                    triggerIdx + 1,
                   )
                   suggestionDispatch({
                     type: 'open',
@@ -281,7 +281,7 @@ export function MarkdownEditor({
                   }
 
                   const imageFiles = filesArray.filter((file) =>
-                    /image/i.test(file.type)
+                    /image/i.test(file.type),
                   )
 
                   if (imageFiles.length === 0) {
@@ -302,7 +302,7 @@ export function MarkdownEditor({
                   }
 
                   const imageFiles = filesArray.filter((file) =>
-                    /image/i.test(file.type)
+                    /image/i.test(file.type),
                   )
 
                   if (imageFiles.length === 0) {
@@ -324,7 +324,7 @@ export function MarkdownEditor({
             onSelect={(suggestionResult: SuggestionResult) => {
               const preSuggestion = value.slice(0, suggestionState.triggerIdx!)
               const postSuggestion = value.slice(
-                textareaMarkdownRef.current?.selectionStart
+                textareaMarkdownRef.current?.selectionStart,
               )
 
               let suggestionInsertion = ''
@@ -349,7 +349,7 @@ export function MarkdownEditor({
                 textareaMarkdownRef.current?.focus()
                 textareaMarkdownRef.current?.setSelectionRange(
                   caretPosition,
-                  caretPosition
+                  caretPosition,
                 )
               }, 0)
             }}
@@ -384,7 +384,7 @@ function Suggestion({
     {
       enabled: state.isOpen && isEmojiType,
       staleTime: Infinity,
-    }
+    },
   )
 
   const mentionListQuery = trpc.useQuery(['user.mentionList'], {
@@ -529,7 +529,7 @@ function SuggestionResult({
       aria-selected={highlighted ? 'true' : 'false'}
       className={classNames(
         'px-4 py-2 text-sm text-left transition-colors cursor-pointer ',
-        highlighted ? 'bg-blue-600 text-white' : 'text-primary'
+        highlighted ? 'bg-blue-600 text-white' : 'text-primary',
       )}
     >
       {suggestionResult.label}

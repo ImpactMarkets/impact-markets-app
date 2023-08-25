@@ -51,7 +51,7 @@ export function AddReplyForm({
       },
       {
         onSuccess: () => onDone(),
-      }
+      },
     )
   }
 

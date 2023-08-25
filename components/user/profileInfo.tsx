@@ -268,7 +268,7 @@ function UpdateAvatarDialog({
       onError: (error: any) => {
         toast.error(`Error uploading image: ${error.message}`)
       },
-    }
+    },
   )
 
   function handleClose() {

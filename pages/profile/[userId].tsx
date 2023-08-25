@@ -34,7 +34,7 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
           <Tabs.List>
             <Tabs.Tab value="bio">Bio</Tabs.Tab>
             {profileQuery.data.donations.some(
-              (donation) => donation.state === 'CONFIRMED'
+              (donation) => donation.state === 'CONFIRMED',
             ) ? (
               <Tabs.Tab value="donations">Donations</Tabs.Tab>
             ) : null}

@@ -24,7 +24,7 @@ export type CertificateSummaryProps = {
 function Left({ certificate }: CertificateSummaryProps) {
   const contentDocument = React.useMemo(
     () => new DOMParser().parseFromString(certificate.contentHtml, 'text/html'),
-    [certificate.contentHtml]
+    [certificate.contentHtml],
   )
   //   TODO: decide on the order of the allowed tags
   //   and research on how to truncate html to a max amount of characters
@@ -78,7 +78,7 @@ function Right({ certificate }: CertificateSummaryProps) {
             <div key={user.id}>
               <Author author={user} />
             </div>
-          ))
+          )),
         )(certificate.issuers)}
       </div>
     </div>
@@ -98,7 +98,7 @@ export const CertificateSummary = ({
     <div
       className={classNames(
         'flex items-stretch',
-        certificate.hidden ? 'opacity-50' : ''
+        certificate.hidden ? 'opacity-50' : '',
       )}
     >
       <Left certificate={certificate} />

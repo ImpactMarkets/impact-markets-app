@@ -52,7 +52,7 @@ export function AddCommentForm({
           reset({ content: '' })
           setMarkdownEditorKey((markdownEditorKey) => markdownEditorKey + 1)
         },
-      }
+      },
     )
   }
 

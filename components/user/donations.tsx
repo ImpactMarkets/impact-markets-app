@@ -46,7 +46,7 @@ export function Donations({
 
     // Add donation amount to totalAmount
     aggregate.totalAmount = acc[donation.project.id].totalAmount.add(
-      donation.amount
+      donation.amount,
     )
 
     // Replace date with date of earliest/latest donation
@@ -83,7 +83,7 @@ export function Donations({
         </td>
         <td className="px-4 py-2 text-right">${num(donation.totalAmount)}</td>
       </tr>
-    ))
+    )),
   )(groupedDonations)
 
   return (

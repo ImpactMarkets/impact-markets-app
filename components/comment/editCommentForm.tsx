@@ -53,7 +53,7 @@ export function EditCommentForm({
       },
       {
         onSuccess: () => onDone(),
-      }
+      },
     )
   }
 

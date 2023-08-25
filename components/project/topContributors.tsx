@@ -79,7 +79,7 @@ export function TopContributors({
                         )}
                       </td>
                     </tr>
-                  )
+                  ),
                 )}
               </tbody>
             </table>

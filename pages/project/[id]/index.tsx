@@ -121,7 +121,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
 
     const CommentPanel = ({ category }: { category: CommentType }) => {
       const filteredComments = project.comments.filter(
-        (comment) => comment.category === category
+        (comment) => comment.category === category,
       )
 
       return (
@@ -216,7 +216,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
                     rel="noopener noreferrer"
                     className={classNames(
                       buttonClasses({ variant: 'highlight' }),
-                      'ml-[-1rem] mb-1 inline-block max-w-60 whitespace-nowrap overflow-hidden overflow-ellipsis'
+                      'ml-[-1rem] mb-1 inline-block max-w-60 whitespace-nowrap overflow-hidden overflow-ellipsis',
                     )}
                   >
                     <IconCreditCard className="inline" />

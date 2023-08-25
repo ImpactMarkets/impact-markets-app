@@ -24,10 +24,10 @@ export function Filters(props: FiltersProps) {
   const tagsMultiSelect = React.useRef<HTMLInputElement>(null)
   const [isSearchDialogOpen, setIsSearchDialogOpen] = React.useState(false)
   const [filterTags, setFilterTags] = useState<string[] | undefined>(
-    props.defaultFilterTagValue.split(',')
+    props.defaultFilterTagValue.split(','),
   )
   const [orderBy, setOrderBy] = useState<string | undefined>(
-    props.defaultOrderByValue
+    props.defaultOrderByValue,
   )
 
   return (

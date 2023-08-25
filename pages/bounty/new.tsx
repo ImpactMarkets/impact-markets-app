@@ -55,7 +55,7 @@ const NewBountyPage: NextPageWithAuthAndLayout = () => {
               },
               {
                 onSuccess: (data) => router.push(`/bounty/${data.id}`),
-              }
+              },
             )
           }}
         />
