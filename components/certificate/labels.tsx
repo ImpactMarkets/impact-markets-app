@@ -1,9 +1,8 @@
+import { RouterOutput } from '@/lib/trpc'
 import * as React from 'react'
 
-import { InferQueryOutput } from '@/lib/trpc'
-
 type LabelsProps = {
-  queryData: InferQueryOutput<'certificate.detail'>
+  queryData: RouterOutput['certificate']['detail']
 }
 
 export const Labels = ({ queryData }: LabelsProps) => (

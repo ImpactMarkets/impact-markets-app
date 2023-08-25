@@ -3,7 +3,7 @@ import * as React from 'react'
 
 import { classNames } from '@/lib/classnames'
 import { num } from '@/lib/text'
-import { InferQueryOutput, trpc } from '@/lib/trpc'
+import { RouterOutput, trpc } from '@/lib/trpc'
 import { Tabs } from '@mantine/core'
 import { Prisma } from '@prisma/client'
 
@@ -14,7 +14,7 @@ const SHARE_COUNT = new Prisma.Decimal(1e5)
 
 type LedgerProps = {
   isActive: boolean
-  certificate: InferQueryOutput<'certificate.detail'>
+  certificate: RouterOutput['certificate']['detail']
 }
 
 const Holding = ({
@@ -23,7 +23,7 @@ const Holding = ({
   isActive, // eslint-disable-line @typescript-eslint/no-unused-vars
   simplified = false,
 }: {
-  holding: InferQueryOutput<'holding.feed'>[0]
+  holding: RouterOutput['holding']['feed'][0]
   userId?: string
   isActive: boolean
   simplified: boolean

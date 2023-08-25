@@ -3,7 +3,7 @@ import * as React from 'react'
 
 import { Banner } from '@/components/banner'
 import { markdownToPlainHtml } from '@/lib/editor'
-import { InferQueryOutput } from '@/lib/trpc'
+import { RouterOutput } from '@/lib/trpc'
 import { Card } from '@mantine/core'
 
 import { Author } from '../author'
@@ -14,7 +14,7 @@ import { Tags } from '../tags'
 import { TAGS } from './tags'
 
 export type ProjectSummaryProps = {
-  project: InferQueryOutput<'project.feed'>['projects'][number]
+  project: RouterOutput['project']['feed']['projects'][number]
   hideRight?: boolean
 }
 

@@ -1,22 +1,19 @@
 import * as React from 'react'
 
 import { classNames } from '@/lib/classnames'
-import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
+import { trpc } from '@/lib/trpc'
 
 import { ButtonLink } from '../buttonLink'
 import { ProjectSummary } from '../project/summary'
+import { ProjectSortKey } from '@/lib/constants'
 
 export const TopProjects = () => {
-  const feedQueryPathAndInput: InferQueryPathAndInput<'project.feed'> = [
-    'project.feed',
-    {
-      take: 3,
-      showHidden: false,
-      hideClosed: true,
-      orderBy: 'supportScore',
-    },
-  ]
-  const feedQuery = trpc.useQuery(feedQueryPathAndInput)
+  const feedQuery = trpc.project.feed.useQuery({
+    take: 3,
+    showHidden: false,
+    hideClosed: true,
+    orderBy: 'supportScore' as ProjectSortKey,
+  })
 
   if (feedQuery.data && feedQuery.data.projectCount >= 0) {
     return (

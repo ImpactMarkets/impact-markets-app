@@ -5,7 +5,6 @@ import { Banner } from '@/components/banner'
 import { LikeButton } from '@/components/likeButton'
 import { classNames } from '@/lib/classnames'
 import { capitalize, num } from '@/lib/text'
-import { InferQueryOutput } from '@/lib/trpc'
 import { Card } from '@mantine/core'
 
 import { Author } from '../author'
@@ -14,9 +13,10 @@ import { Date } from '../date'
 import { Heading2 } from '../heading2'
 import { Tags } from '../tags'
 import { TAGS } from './tags'
+import { RouterOutput } from '@/lib/trpc'
 
 export type SummaryProps = {
-  bounty: InferQueryOutput<'bounty.feed'>['bounties'][number]
+  bounty: RouterOutput['bounty']['feed']['bounties'][number]
   onLike?: () => void
   onUnlike?: () => void
 }

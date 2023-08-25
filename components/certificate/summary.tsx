@@ -5,7 +5,7 @@ import * as React from 'react'
 import { Banner } from '@/components/banner'
 import { HoldingsChart } from '@/components/certificate/holdingsChart'
 import { classNames } from '@/lib/classnames'
-import { InferQueryOutput } from '@/lib/trpc'
+import { RouterOutput } from '@/lib/trpc'
 import { Card } from '@mantine/core'
 
 import { Author } from '../author'
@@ -16,7 +16,7 @@ import { Tags } from '../tags'
 import { sortAuthorFirst } from '../utils'
 
 export type CertificateSummaryProps = {
-  certificate: InferQueryOutput<'certificate.feed'>['certificates'][number]
+  certificate: RouterOutput['certificate']['feed']['certificates'][number]
   onLike?: () => void
   onUnlike?: () => void
 }

@@ -14,7 +14,7 @@ import { Layout } from '@/components/layout'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import { SummarySkeleton } from '@/components/summarySkeleton'
 import { BountySortKey, ITEMS_PER_PAGE } from '@/lib/constants'
-import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
+import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
 const Summary = dynamic<SummaryProps>(

@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
 import { num } from '@/lib/text'
-import { InferQueryOutput, trpc } from '@/lib/trpc'
+import { RouterOutput, trpc } from '@/lib/trpc'
 import { Prisma } from '@prisma/client'
 
 import { Button } from '../button'
@@ -21,7 +21,7 @@ type AddDonationFormData = {
 export function OutgoingDonations({
   project,
 }: {
-  project: InferQueryOutput<'project.detail'>
+  project: RouterOutput['project']['detail']
 }) {
   const { data: session } = useSession()
   const utils = trpc.useContext()
@@ -34,7 +34,7 @@ export function OutgoingDonations({
     },
   })
 
-  let donations: InferQueryOutput<'donation.feed'> = []
+  let donations: RouterOutput['donation']['feed'] = []
   if (session) {
     const donationsQuery = trpc.useQuery([
       'donation.feed',

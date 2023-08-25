@@ -13,7 +13,7 @@ import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import { TAGS } from '@/components/project/tags'
 import { SummarySkeleton } from '@/components/summarySkeleton'
 import { CertificateSortKey, ITEMS_PER_PAGE } from '@/lib/constants'
-import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
+import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
 const CertificateSummary = dynamic<CertificateSummaryProps>(

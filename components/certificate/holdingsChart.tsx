@@ -1,15 +1,15 @@
 import * as fp from 'lodash/fp'
 
 import { num } from '@/lib/text'
-import { InferQueryOutput } from '@/lib/trpc'
+import { RouterOutput } from '@/lib/trpc'
 import { Progress } from '@mantine/core'
 import { Prisma } from '@prisma/client'
 
 interface HoldingsChartProps {
   holdings:
-    | InferQueryOutput<'holding.feed'>
-    | InferQueryOutput<'certificate.feed'>['certificates'][number]['holdings']
-  issuers: InferQueryOutput<'certificate.feed'>['certificates'][number]['issuers']
+    | RouterOutput['holding']['feed']
+    | RouterOutput['certificate']['feed']['certificates'][number]['holdings']
+  issuers: RouterOutput['certificate']['feed']['certificates'][number]['issuers']
 }
 
 export function HoldingsChart({ holdings, issuers }: HoldingsChartProps) {

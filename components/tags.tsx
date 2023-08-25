@@ -1,18 +1,18 @@
 import * as React from 'react'
 
 import { classNames } from '@/lib/classnames'
-import { InferQueryOutput } from '@/lib/trpc'
+import { RouterOutput } from '@/lib/trpc'
 
 import { IMTag } from './utils'
 
 type TagsProps = {
   queryData:
-    | InferQueryOutput<'certificate.detail'>
-    | InferQueryOutput<'certificate.feed'>['certificates'][number]
-    | InferQueryOutput<'project.detail'>
-    | InferQueryOutput<'project.feed'>['projects'][number]
-    | InferQueryOutput<'bounty.detail'>
-    | InferQueryOutput<'bounty.feed'>['bounties'][number]
+    | RouterOutput['certificate']['detail']
+    | RouterOutput['certificate']['feed']['certificates'][number]
+    | RouterOutput['project']['detail']
+    | RouterOutput['project']['feed']['projects'][number]
+    | RouterOutput['bounty']['detail']
+    | RouterOutput['bounty']['feed']['bounties'][number]
   tags: IMTag[]
 }
 

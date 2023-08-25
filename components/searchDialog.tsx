@@ -6,7 +6,7 @@ import { ItemOptions, useItemList } from 'use-item-list'
 
 import { SearchIcon, SpinnerIcon } from '@/components/icons'
 import { classNames } from '@/lib/classnames'
-import { InferQueryOutput, trpc } from '@/lib/trpc'
+import { RouterOutput, trpc } from '@/lib/trpc'
 import { Dialog, Transition } from '@headlessui/react'
 
 type SearchDialogProps = {
@@ -28,7 +28,9 @@ function SearchResult({
     // eslint-disable-next-line @typescript-eslint/ban-types
     useHighlighted: () => boolean | Boolean // Boolean due to dependency on use-item-list
   }
-  result: InferQueryOutput<'project.search' | 'bounty.search'>[number]
+  result:
+    | RouterOutput['project']['search'][number]
+    | RouterOutput['bounty']['search'][number]
 }) {
   const ref = React.useRef<HTMLLIElement>(null)
   const { id, highlight, select, useHighlighted } = useItem({

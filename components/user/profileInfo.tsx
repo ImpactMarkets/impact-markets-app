@@ -22,7 +22,7 @@ import { TextField } from '@/components/textField'
 import { LargeTextField } from '@/components/textarea'
 import { browserEnv } from '@/env/browser'
 import { uploadImage } from '@/lib/cloudinary'
-import { InferQueryOutput, trpc } from '@/lib/trpc'
+import { RouterOutput, trpc } from '@/lib/trpc'
 import { Tooltip } from '@mantine/core'
 import { Button as MantineButton } from '@mantine/core'
 import {
@@ -112,7 +112,7 @@ function EditProfileDialog({
   isOpen,
   onClose,
 }: {
-  user: InferQueryOutput<'user.profile'>
+  user: RouterOutput['user']['profile']
   isOpen: boolean
   onClose: () => void
 }) {
@@ -246,7 +246,7 @@ function UpdateAvatarDialog({
   isOpen,
   onClose,
 }: {
-  user: InferQueryOutput<'user.profile'>
+  user: RouterOutput['user']['profile']
   isOpen: boolean
   onClose: () => void
 }) {
@@ -382,7 +382,7 @@ function UpdateAvatarDialog({
 export function ProfileInfo({
   user,
 }: {
-  user: InferQueryOutput<'user.profile'>
+  user: RouterOutput['user']['profile']
 }) {
   const { data: session } = useSession()
 

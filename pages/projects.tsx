@@ -11,7 +11,7 @@ import type { ProjectSummaryProps } from '@/components/project/summary'
 import { TAGS } from '@/components/project/tags'
 import { SummarySkeleton } from '@/components/summarySkeleton'
 import { ITEMS_PER_PAGE, ProjectSortKey } from '@/lib/constants'
-import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
+import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
 const ProjectSummary = dynamic<ProjectSummaryProps>(

@@ -13,7 +13,7 @@ import {
   MenuItems,
   MenuItemsContent,
 } from '@/components/menu'
-import { InferQueryOutput } from '@/lib/trpc'
+import { RouterOutput } from '@/lib/trpc'
 
 import { AddReplyForm } from './addReplyForm'
 import { ConfirmDeleteCommentDialog } from './confirmDeleteCommentDialog'
@@ -27,10 +27,10 @@ export function Comment({
   objectId: string
   objectType: 'project' | 'bounty'
   comment:
-    | InferQueryOutput<'project.detail'>['comments'][number]
-    | InferQueryOutput<'project.detail'>['comments'][number]['children'][number]
-    | InferQueryOutput<'bounty.detail'>['comments'][number]
-    | InferQueryOutput<'bounty.detail'>['comments'][number]['children'][number]
+    | RouterOutput['project']['detail']['comments'][number]
+    | RouterOutput['project']['detail']['comments'][number]['children'][number]
+    | RouterOutput['bounty']['detail']['comments'][number]
+    | RouterOutput['bounty']['detail']['comments'][number]['children'][number]
 }) {
   const { data: session } = useSession()
   const [isEditing, setIsEditing] = React.useState(false)

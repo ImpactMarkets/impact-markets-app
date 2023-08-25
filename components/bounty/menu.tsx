@@ -20,10 +20,10 @@ import {
   MenuItems,
   MenuItemsContent,
 } from '@/components/menu'
-import { InferQueryOutput, trpc } from '@/lib/trpc'
+import { RouterOutput, trpc } from '@/lib/trpc'
 
 type MenuProps = {
-  queryData: InferQueryOutput<'bounty.detail'>
+  queryData: RouterOutput['bounty']['detail']
   isUserAdmin: boolean
   belongsToUser: boolean
 }

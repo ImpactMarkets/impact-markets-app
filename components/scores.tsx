@@ -1,14 +1,14 @@
 import * as React from 'react'
 
 import { num } from '@/lib/text'
-import { InferQueryOutput } from '@/lib/trpc'
+import { RouterOutput } from '@/lib/trpc'
 import { Tooltip } from '@mantine/core'
 import { Prisma } from '@prisma/client'
 
 type ScoresProps = {
   project:
-    | InferQueryOutput<'project.detail'>
-    | InferQueryOutput<'project.feed'>['projects'][number]
+    | RouterOutput['project']['detail']
+    | RouterOutput['project']['feed']['projects'][number]
   showProjectScore?: boolean
 }
 

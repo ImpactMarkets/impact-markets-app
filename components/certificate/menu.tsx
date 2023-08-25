@@ -20,12 +20,10 @@ import {
   MenuItems,
   MenuItemsContent,
 } from '@/components/menu'
-import { InferQueryOutput, trpc } from '@/lib/trpc'
-
-import { getCertificateQueryPathAndInput } from '../utils'
+import { RouterOutput, trpc } from '@/lib/trpc'
 
 type MenuProps = {
-  queryData: InferQueryOutput<'certificate.detail'>
+  queryData: RouterOutput['certificate']['detail']
   isUserAdmin: boolean
   belongsToUser: boolean
 }
