@@ -17,6 +17,7 @@ export const Scores = ({ project, showProjectScore = false }: ScoresProps) => {
   return (
     <>
       <Tooltip
+        width={400}
         multiline
         label={
           <>
@@ -26,7 +27,7 @@ export const Scores = ({ project, showProjectScore = false }: ScoresProps) => {
           </>
         }
       >
-        <span className="inline-block cursor-help text-highlight bg-emerald-600 font-bold text-xs px-1 p-[1px] rounded">
+        <span className="inline-block cursor-help text-highlight bg-emerald-600 font-bold text-xs leading-none px-2 py-1 rounded">
           {project.supportScore ? (
             <>Support score: {num(project.supportScore.score, 0)}</>
           ) : (
@@ -36,6 +37,7 @@ export const Scores = ({ project, showProjectScore = false }: ScoresProps) => {
       </Tooltip>
       {showProjectScore && (
         <Tooltip
+          width={400}
           multiline
           label={
             <>
@@ -47,7 +49,7 @@ export const Scores = ({ project, showProjectScore = false }: ScoresProps) => {
             </>
           }
         >
-          <span className="inline-block cursor-help text-highlight bg-emerald-700 font-bold text-xs px-1 p-[1px] rounded">
+          <span className="inline-block cursor-help text-highlight bg-emerald-700 font-bold text-xs leading-none px-2 py-1 rounded">
             {project.credits > zero ? (
               <>Final score: {num(project.credits, 0)}</>
             ) : (
