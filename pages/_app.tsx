@@ -107,13 +107,7 @@ function MyApp({
   )
 }
 
-function Auth({ children }: { children: React.ReactNode }) {
-  const { data: session, status } = useSession()
-  const isUser = !!session?.user
-  React.useEffect(() => {
-    if (status === 'loading') return // Do nothing while loading
-    if (!isUser) signIn() // If not authenticated, force log in
-  }, [isUser, status])
+export default trpc.withTRPC(MyApp)
 
   if (isUser) {
     return <>{children}</>

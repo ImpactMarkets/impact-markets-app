@@ -1,23 +1,48 @@
-import { superjson } from '@/lib/transformer'
 import type { AppRouter } from '@/server/routers/_app'
-import { createTRPCReact } from '@trpc/react-query'
-import type { inferProcedureInput, inferProcedureOutput } from '@trpc/server'
+import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
 
-export const trpc = createTRPCReact<AppRouter>()
+import { httpBatchLink, loggerLink } from '@trpc/client'
+import { createTRPCNext } from '@trpc/next'
+import { superjson } from './transformer'
 
-export const transformer = superjson
+function getBaseUrl() {
+  if (typeof window !== 'undefined')
+    // browser should use relative path
+    return ''
 
-export type TQuery = keyof AppRouter['_def']['queries']
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`
+  }
 
-export type InferQueryOutput<TRouteKey extends TQuery> = inferProcedureOutput<
-  AppRouter['_def']['queries'][TRouteKey]
->
+  return `http://localhost:${process.env.PORT ?? 3000}`
+}
 
-export type InferQueryInput<TRouteKey extends TQuery> = inferProcedureInput<
-  AppRouter['_def']['queries'][TRouteKey]
->
+export const trpc = createTRPCNext<AppRouter>({
+  config() {
+    return {
+      transformer: superjson,
+      links: [
+        loggerLink({
+          enabled: (opts) =>
+            process.env.NODE_ENV === 'development' ||
+            (opts.direction === 'down' && opts.result instanceof Error),
+        }),
+        httpBatchLink({
+          /**
+           * If you want to use SSR, you need to use the server's full URL
+           * @link https://trpc.io/docs/ssr
+           **/
+          url: `${getBaseUrl()}/api/trpc`,
+        }),
+      ],
+    }
+  },
+  /**
+   * @link https://trpc.io/docs/ssr
+   **/
+  ssr: true,
+})
 
-export type InferQueryPathAndInput<TRouteKey extends TQuery> = [
-  TRouteKey,
-  Exclude<InferQueryInput<TRouteKey>, void>
-]
+export type RouterInput = inferRouterInputs<AppRouter>
+
+export type RouterOutput = inferRouterOutputs<AppRouter>
