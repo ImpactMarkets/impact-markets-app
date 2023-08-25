@@ -47,10 +47,10 @@ export const serverEnv = {
   ...browserEnv,
   ...envsafe({
     DATABASE_URL: str(),
-    NEXT_APP_URL: {
+    NEXT_APP_URL: str({
       allowEmpty: true,
       devDefault: 'http://localhost:3000',
-    },
+    }),
     NEXTAUTH_SECRET: str({
       devDefault: 'foobar',
     }),
