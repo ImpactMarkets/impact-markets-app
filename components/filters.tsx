@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
 import { BountySortKey, ProjectSortKey } from '@/lib/constants'
-import { Button, Flex } from '@mantine/core'
 
 import { IconButton } from './iconButton'
 import { SearchIcon } from './icons'
@@ -9,6 +8,7 @@ import { IMMultiSelect } from './multiSelect'
 import { SearchDialog } from './searchDialog'
 import { IMSelect } from './select'
 import { IMTag } from './utils'
+import { Button } from '@mantine/core'
 
 export type FiltersProps = {
   onFilterTagsUpdate: (tags: string) => void
@@ -31,19 +31,8 @@ export function Filters(props: FiltersProps) {
   )
 
   return (
-    <Flex
-      gap={{ base: 'sm' }}
-      align="center"
-      style={{
-        flexWrap: 'wrap',
-      }}
-    >
-      <Flex
-        style={{
-          flexWrap: 'nowrap',
-          alignItems: 'center',
-        }}
-      >
+    <div className="flex flex-wrap gap-3 items-center">
+      <div className="flex flex-nowrap items-center">
         <IMMultiSelect
           ref={tagsMultiSelect}
           placeholder="Filter by tags"
@@ -85,7 +74,7 @@ export function Filters(props: FiltersProps) {
               'bg-none border-none text-secondary placeholder:text-secondary',
           }}
         />
-      </Flex>
+      </div>
       {props.searchEndpoint && (
         <IconButton
           variant="secondary"
@@ -122,6 +111,6 @@ export function Filters(props: FiltersProps) {
           }}
         />
       )}
-    </Flex>
+    </div>
   )
 }

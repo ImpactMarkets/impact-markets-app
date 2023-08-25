@@ -1,9 +1,10 @@
 import * as React from 'react'
 
-import { Select, SelectProps } from '@mantine/core'
+import { SelectProps } from '@mantine/core'
 
 import { InfoTooltip } from './infoTooltip'
 import { Label } from './label'
+import { Select } from '@/lib/mantine'
 
 export type SelectOwnProps = {
   label?: string | React.ReactElement

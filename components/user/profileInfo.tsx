@@ -23,7 +23,7 @@ import { LargeTextField } from '@/components/textarea'
 import { browserEnv } from '@/env/browser'
 import { uploadImage } from '@/lib/cloudinary'
 import { RouterOutput, trpc } from '@/lib/trpc'
-import { Tooltip } from '@mantine/core'
+import { Tooltip } from '@/lib/mantine'
 import { Button as MantineButton } from '@mantine/core'
 import {
   IconAlertCircle,

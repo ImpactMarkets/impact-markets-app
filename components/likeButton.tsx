@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { Button } from '@/components/button'
 import { HeartFilledIcon, HeartIcon } from '@/components/icons'
 import { classNames } from '@/lib/classnames'
-import { Tooltip } from '@mantine/core'
+import { Tooltip } from '@/lib/mantine'
 
 export const MAX_LIKED_BY_SHOWN = 50
 

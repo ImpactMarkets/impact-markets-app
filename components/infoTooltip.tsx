@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { Tooltip } from '@mantine/core'
+import { Tooltip } from '@/lib/mantine'
 import { IconHelpOctagon } from '@tabler/icons-react'
 
 type InfoTooltipProps = {

@@ -2,7 +2,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import { Navbar as MantineNavbar, createStyles, getStylesRef } from '@mantine/core'
+import {
+  Navbar as MantineNavbar,
+  createStyles,
+  getStylesRef,
+} from '@mantine/core'
 import {
   IconBolt,
   IconFile,
