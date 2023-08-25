@@ -35,16 +35,18 @@ export const Pitches = () => (
       >
         <Feature icon={IconShovel} title="AI safety projects" key="projects">
           <p>
-            Are you doing independent research or launching a new AI safety
-            venture? Your fundraising goal is &lt; $100,000 for now?
+            Are you doing{' '}
+            <span className="text-gray-700">independent research</span> or{' '}
+            launching a{' '}
+            <span className="text-gray-700">new AI safety venture</span>? Your
+            fundraising goal is &lt; $100,000 for now?
           </p>
 
           <p className="my-3">
             Let the funders come to you! We score donors by their track record
-            of finding{' '}
-            <span className="text-gray-700">high-impact projects</span> such as
-            yours. A strong donation track record signal-boosts the projects
-            that they support, so yours will be discovered by more donors!
+            of finding high-impact projects such as yours. A strong donation
+            track record signal-boosts the projects that they support, so yours
+            will be discovered by more donors!
           </p>
 
           <p className="my-3 text-gray-700">
