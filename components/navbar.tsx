@@ -14,6 +14,7 @@ import {
 } from '@tabler/icons-react'
 
 import { User } from './user'
+import React from 'react'
 
 const useStyles = createStyles((theme, _params) => {
   const icon = getStylesRef('icon')
@@ -61,7 +62,7 @@ const NavbarLink = ({
 }: {
   link: string
   label: string
-  icon: JSX.Element
+  icon: React.ElementType
 }) => {
   const { classes, cx } = useStyles()
   const router = useRouter()
