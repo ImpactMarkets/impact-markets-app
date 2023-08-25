@@ -34,6 +34,14 @@ enum TransactionState {
   REJECTED
 }
 
+enum CommentType {
+  COMMENT
+  Q_AND_A
+  REASONING
+  ENDORSEMENT
+  REPLY
+}
+
 enum DonationState {
   CONFIRMED
   REJECTED
@@ -313,15 +321,16 @@ model Donation {
 }
 
 model Comment {
-  id          Int      @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   content     String
   contentHtml String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   authorId    String
   projectId   String?
   parentId    Int?
   bountyId    String?
+  category    CommentType? @default(COMMENT)
 
   author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   project  Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)

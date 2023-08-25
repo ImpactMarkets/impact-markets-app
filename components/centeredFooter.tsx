@@ -2,7 +2,7 @@ import Link from 'next/link'
 import * as React from 'react'
 
 import { ActionIcon, Group, createStyles } from '@mantine/core'
-import { IconBrandYoutube } from '@tabler/icons'
+import { IconBrandYoutube } from '@tabler/icons-react'
 
 const useStyles = createStyles((theme) => ({
   footer: {

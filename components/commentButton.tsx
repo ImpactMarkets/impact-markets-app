@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Url } from 'url'
 
-import { Tooltip } from '@mantine/core'
+import { Tooltip } from '@/lib/mantine'
 
 import { ButtonLink, ButtonLinkProps } from './buttonLink'
 import { MessageIcon } from './icons'

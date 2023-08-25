@@ -11,7 +11,7 @@ export function isCharacterALetter(char: string) {
 
 export function num(
   number: Prisma.Decimal,
-  decimals: number | undefined = undefined
+  decimals: number | undefined = undefined,
 ) {
   return number.toNumber().toLocaleString(undefined, {
     minimumFractionDigits: decimals,

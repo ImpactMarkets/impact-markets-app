@@ -1,6 +1,8 @@
 import * as React from 'react'
 
-import { Select, SelectProps } from '@mantine/core'
+import { SelectProps } from '@mantine/core'
+
+import { Select } from '@/lib/mantine'
 
 import { InfoTooltip } from './infoTooltip'
 import { Label } from './label'
@@ -53,7 +55,7 @@ export const IMSelect = React.forwardRef<HTMLInputElement, IMTextFieldProps>(
         />
       </div>
     )
-  }
+  },
 )
 
 IMSelect.displayName = 'IMMultiSelect'

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import React from 'react'
 
 import { Box, Tooltip } from '@mantine/core'
-import { IconChevronRight } from '@tabler/icons'
+import { IconChevronRight } from '@tabler/icons-react'
 
 import { Avatar } from './avatar'
 import { Button } from './button'

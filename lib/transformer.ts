@@ -10,7 +10,7 @@ superjson.registerCustom<Prisma.Decimal, string>(
     serialize: (value) => value.toJSON(),
     deserialize: (value) => new Prisma.Decimal(value),
   },
-  'decimal.js'
+  'decimal.js',
 )
 
 export { superjson }

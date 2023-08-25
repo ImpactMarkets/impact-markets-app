@@ -1,15 +1,17 @@
 import slugify from 'slugify'
 import { z } from 'zod'
 
-import { CERTIFICATE_SORT_KEYS, CertificateSortKey } from '@/lib/constants'
-import { markdownToHtml } from '@/lib/editor'
 import { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
-import { createProtectedRouter } from '../createProtectedRouter'
+import { CERTIFICATE_SORT_KEYS, CertificateSortKey } from '@/lib/constants'
+import { markdownToHtml } from '@/lib/editor'
+
+import { protectedProcedure } from '../procedures'
+import { router } from '../router'
 
 const getOrderBy = (
-  orderByKey: CertificateSortKey | undefined
+  orderByKey: CertificateSortKey | undefined,
 ):
   | Prisma.Enumerable<Prisma.CertificateOrderByWithRelationAndSearchRelevanceInput>
   | undefined => {
@@ -17,13 +19,8 @@ const getOrderBy = (
     createdAt: { createdAt: Prisma.SortOrder.desc },
     actionStart: { actionStart: Prisma.SortOrder.desc },
     actionEnd: { actionEnd: Prisma.SortOrder.desc },
-    supporterCount: {
-      holdings: {
-        // Sadly not supported:
-        // where: {
-        //   size: { gt: 0 },
-        //   type: { in: ['OWNERSHIP', 'CONSUMPTION'] },
-        // },
+    likeCount: {
+      likedBy: {
         _count: Prisma.SortOrder.desc,
       },
     },
@@ -35,18 +32,20 @@ const getOrderBy = (
   return orderBy
 }
 
-export const certificateRouter = createProtectedRouter()
-  .query('feed', {
-    input: z
-      .object({
-        take: z.number().min(1).max(60).optional(),
-        skip: z.number().min(1).optional(),
-        authorId: z.string().optional(),
-        filterTags: z.string().optional(),
-        orderBy: z.enum(CERTIFICATE_SORT_KEYS).optional(),
-      })
-      .optional(),
-    async resolve({ input, ctx }) {
+export const certificateRouter = router({
+  feed: protectedProcedure
+    .input(
+      z
+        .object({
+          take: z.number().min(1).max(60).optional(),
+          skip: z.number().min(1).optional(),
+          authorId: z.string().optional(),
+          filterTags: z.string().optional(),
+          orderBy: z.enum(CERTIFICATE_SORT_KEYS).optional(),
+        })
+        .optional(),
+    )
+    .query(async ({ input, ctx }) => {
       const take = input?.take ?? 60
       const skip = input?.skip
       const baseQuery: Array<Prisma.CertificateWhereInput> | undefined =
@@ -129,13 +128,14 @@ export const certificateRouter = createProtectedRouter()
         certificates,
         certificateCount,
       }
-    },
-  })
-  .query('detail', {
-    input: z.object({
-      id: z.string().min(1),
     }),
-    async resolve({ ctx, input }) {
+  detail: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
       const { id } = input
       const certificate = await ctx.prisma.certificate.findUnique({
         // For the redirect from old to new certificate URLs
@@ -214,13 +214,14 @@ export const certificateRouter = createProtectedRouter()
       }
 
       return certificate
-    },
-  })
-  .query('search', {
-    input: z.object({
-      query: z.string().min(1),
     }),
-    async resolve({ input, ctx }) {
+  search: protectedProcedure
+    .input(
+      z.object({
+        query: z.string().min(1),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
       const query = slugify(input.query, ' & ')
       const certificates = await ctx.prisma.certificate.findMany({
         take: 10,
@@ -236,24 +237,25 @@ export const certificateRouter = createProtectedRouter()
       })
 
       return certificates
-    },
-  })
-  .mutation('edit', {
-    input: z.object({
-      id: z.string().min(1),
-      data: z.object({
-        title: z.string().min(1),
-        content: z.string().min(1),
-        counterfactual: z.string(),
-        location: z.string(),
-        rights: z.string(),
-        actionStart: z.date(),
-        actionEnd: z.date(),
-        issuerEmails: z.string(),
-        tags: z.string(),
-      }),
     }),
-    async resolve({ ctx, input }) {
+  edit: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().min(1),
+        data: z.object({
+          title: z.string().min(1),
+          content: z.string().min(1),
+          counterfactual: z.string(),
+          location: z.string(),
+          rights: z.string(),
+          actionStart: z.date(),
+          actionEnd: z.date(),
+          issuerEmails: z.string(),
+          tags: z.string(),
+        }),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
       const { id, data } = input
       const updatedCertificate = await ctx.prisma.certificate.update({
         where: { id },
@@ -294,11 +296,10 @@ export const certificateRouter = createProtectedRouter()
       ])
 
       return updatedCertificate
-    },
-  })
-  .mutation('like', {
-    input: z.string().min(1),
-    async resolve({ input: id, ctx }) {
+    }),
+  like: protectedProcedure
+    .input(z.string().min(1))
+    .mutation(async ({ input: id, ctx }) => {
       await ctx.prisma.likedCertificate.create({
         data: {
           certificate: {
@@ -315,11 +316,10 @@ export const certificateRouter = createProtectedRouter()
       })
 
       return id
-    },
-  })
-  .mutation('unlike', {
-    input: z.string().min(1),
-    async resolve({ input: id, ctx }) {
+    }),
+  unlike: protectedProcedure
+    .input(z.string().min(1))
+    .mutation(async ({ input: id, ctx }) => {
       await ctx.prisma.likedCertificate.delete({
         where: {
           certificateId_userId: {
@@ -330,11 +330,10 @@ export const certificateRouter = createProtectedRouter()
       })
 
       return id
-    },
-  })
-  .mutation('hide', {
-    input: z.string().min(1),
-    async resolve({ input: id, ctx }) {
+    }),
+  hide: protectedProcedure
+    .input(z.string().min(1))
+    .mutation(async ({ input: id, ctx }) => {
       const certificate = await ctx.prisma.certificate.update({
         where: { id },
         data: {
@@ -345,11 +344,10 @@ export const certificateRouter = createProtectedRouter()
         },
       })
       return certificate
-    },
-  })
-  .mutation('unhide', {
-    input: z.string().min(1),
-    async resolve({ input: id, ctx }) {
+    }),
+  unhide: protectedProcedure
+    .input(z.string().min(1))
+    .mutation(async ({ input: id, ctx }) => {
       const certificate = await ctx.prisma.certificate.update({
         where: { id },
         data: {
@@ -360,5 +358,5 @@ export const certificateRouter = createProtectedRouter()
         },
       })
       return certificate
-    },
-  })
+    }),
+})

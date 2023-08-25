@@ -1,16 +1,18 @@
 import { z } from 'zod'
 
-import { PrismaClient } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
-import { createProtectedRouter } from '../createProtectedRouter'
+import { protectedProcedure } from '../procedures'
+import { router } from '../router'
 
-export const userRouter = createProtectedRouter()
-  .query('profile', {
-    input: z.object({
-      id: z.string(),
-    }),
-    async resolve({ ctx, input }) {
+export const userRouter = router({
+  profile: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
       const { id } = input
       const isOwnProfile = ctx.session?.user.id === id
       const user = await ctx.prisma.user.findUnique({
@@ -26,6 +28,21 @@ export const userRouter = createProtectedRouter()
           bio: true,
           prefersAnonymity: true,
           prefersEventNotifications: true,
+          donations: {
+            select: {
+              id: true,
+              amount: true,
+              time: true,
+              state: true,
+              project: {
+                select: {
+                  id: true,
+                  title: true,
+                  hidden: true,
+                },
+              },
+            },
+          },
           email: ctx.session?.user.role === 'ADMIN',
         },
       })
@@ -44,18 +61,19 @@ export const userRouter = createProtectedRouter()
             ? user.name[0] + '. Anonymous'
             : user.name,
       }
-    },
-  })
-  .mutation('edit', {
-    input: z.object({
-      name: z.string().min(1),
-      title: z.string().optional(),
-      proofUrl: z.string().optional(),
-      paymentUrl: z.string().optional(),
-      contact: z.string().optional(),
-      bio: z.string().optional(),
     }),
-    async resolve({ ctx, input }) {
+  edit: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().min(1),
+        title: z.string().optional(),
+        proofUrl: z.string().optional(),
+        paymentUrl: z.string().optional(),
+        contact: z.string().optional(),
+        bio: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session!.user.id },
         data: {
@@ -69,13 +87,14 @@ export const userRouter = createProtectedRouter()
       })
 
       return user
-    },
-  })
-  .mutation('update-avatar', {
-    input: z.object({
-      image: z.string(),
     }),
-    async resolve({ ctx, input }) {
+  updateAvatar: protectedProcedure
+    .input(
+      z.object({
+        image: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session!.user.id },
         data: {
@@ -84,46 +103,46 @@ export const userRouter = createProtectedRouter()
       })
 
       return user
-    },
-  })
-  .mutation('preferences', {
-    input: z.object({
-      prefersDetailView: z.boolean().optional(),
-      prefersAnonymity: z.boolean().optional(),
-      prefersEventNotifications: z.boolean().optional(),
-      prefersProjectNotifications: z.boolean().optional(),
-      prefersBountyNotifications: z.boolean().optional(),
     }),
-    async resolve({ input, ctx }) {
+  preferences: protectedProcedure
+    .input(
+      z.object({
+        prefersDetailView: z.boolean().optional(),
+        prefersAnonymity: z.boolean().optional(),
+        prefersEventNotifications: z.boolean().optional(),
+        prefersProjectNotifications: z.boolean().optional(),
+        prefersBountyNotifications: z.boolean().optional(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session!.user.id },
         data: input,
       })
 
       return user
-    },
-  })
-  .query('mentionList', {
-    async resolve({ ctx }) {
-      const users = await ctx.prisma.user.findMany({
-        select: {
-          id: true,
-          name: true,
-        },
-        orderBy: {
-          name: 'asc',
-        },
-      })
-
-      return users
-    },
-  })
-  .query('topDonors', {
-    input: z.object({
-      pastDays: z.literal(365).optional(),
-      includeAnonymous: z.boolean().optional(),
     }),
-    async resolve({ ctx, input: { pastDays, includeAnonymous } }) {
+  mentionList: protectedProcedure.query(async ({ ctx }) => {
+    const users = await ctx.prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+      },
+      orderBy: {
+        name: 'asc',
+      },
+    })
+
+    return users
+  }),
+  topDonors: protectedProcedure
+    .input(
+      z.object({
+        pastDays: z.literal(365).optional(),
+        includeAnonymous: z.boolean().optional(),
+      }),
+    )
+    .query(async ({ ctx, input: { pastDays, includeAnonymous } }) => {
       const scoreField = pastDays ? 'score365' : 'score'
 
       // This first sends the normal query with the UserScore fields missing from SELECT, and then sends a second query to get the UserScore fields. Wtf?
@@ -149,5 +168,5 @@ export const userRouter = createProtectedRouter()
         },
         take: 100,
       })
-    },
-  })
+    }),
+})

@@ -3,6 +3,15 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
+import { LoadingOverlay, Tabs } from '@mantine/core'
+import { CommentType } from '@prisma/client'
+import {
+  IconCreditCard,
+  IconCreditCardOff,
+  IconMoneybag,
+  IconWoman,
+} from '@tabler/icons-react'
+
 import { AuthorWithDate } from '@/components/authorWithDate'
 import { Avatar } from '@/components/avatar'
 import { Banner } from '@/components/banner'
@@ -23,17 +32,10 @@ import { Scores } from '@/components/scores'
 import { Tags } from '@/components/tags'
 import { classNames } from '@/lib/classnames'
 import { num } from '@/lib/text'
-import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
+import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
-import { LoadingOverlay, Tabs } from '@mantine/core'
-import {
-  IconCreditCard,
-  IconCreditCardOff,
-  IconMoneybag,
-  IconWoman,
-} from '@tabler/icons'
 
-// TODO: Maybe this could be made into a generic component ?
+// TODO: Maybe this could be made into a generic component?
 const ProjectPageWrapper: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
 
@@ -50,60 +52,20 @@ function ProjectPage({ projectId }: { projectId: string }) {
   const router = useRouter()
   const { data: session } = useSession()
   const utils = trpc.useContext()
-  const projectQueryPathAndInput: InferQueryPathAndInput<'project.detail'> = [
-    'project.detail',
-    {
-      id: projectId,
-    },
-  ]
-  const projectQuery = trpc.useQuery(projectQueryPathAndInput)
+  const projectQueryInput = {
+    id: projectId,
+  }
+  const projectQuery = trpc.project.detail.useQuery(projectQueryInput)
   const project = projectQuery.data
 
-  const likeMutation = trpc.useMutation(['project.like'], {
-    onMutate: async () => {
-      await utils.cancelQuery(projectQueryPathAndInput)
-
-      const previousProject = utils.getQueryData(projectQueryPathAndInput)
-
-      if (previousProject) {
-        utils.setQueryData(projectQueryPathAndInput, {
-          ...previousProject,
-          likedBy: [
-            ...previousProject.likedBy,
-            { user: { id: session!.user.id, name: session!.user.name } },
-          ],
-        })
-      }
-
-      return { previousProject }
-    },
-    onError: (err, id, context: any) => {
-      if (context?.previousProject) {
-        utils.setQueryData(projectQueryPathAndInput, context.previousProject)
-      }
+  const likeMutation = trpc.project.like.useMutation({
+    onSettled: () => {
+      return utils.project.detail.invalidate({ id: projectId })
     },
   })
-  const unlikeMutation = trpc.useMutation(['project.unlike'], {
-    onMutate: async () => {
-      await utils.cancelQuery(projectQueryPathAndInput)
-
-      const previousProject = utils.getQueryData(projectQueryPathAndInput)
-
-      if (previousProject) {
-        utils.setQueryData(projectQueryPathAndInput, {
-          ...previousProject,
-          likedBy: previousProject.likedBy.filter(
-            (item) => item.user.id !== session!.user.id
-          ),
-        })
-      }
-
-      return { previousProject }
-    },
-    onError: (err, id, context: any) => {
-      if (context?.previousProject) {
-        utils.setQueryData(projectQueryPathAndInput, context.previousProject)
-      }
+  const unlikeMutation = trpc.project.unlike.useMutation({
+    onSettled: () => {
+      return utils.project.detail.invalidate({ id: projectId })
     },
   })
 
@@ -114,6 +76,67 @@ function ProjectPage({ projectId }: { projectId: string }) {
     }
     const isAdmin = session?.user.role === 'ADMIN'
     const projectBelongsToUser = project.author.id === session?.user.id
+
+    const CommentPanel = ({ category }: { category: CommentType }) => {
+      const filteredComments = project.comments.filter(
+        (comment) => comment.category === category,
+      )
+
+      return (
+        <div id="comments" className="pt-6 space-y-12">
+          {filteredComments.length > 0 ? (
+            <ul className="space-y-12">
+              {filteredComments.map((comment) => (
+                <li key={comment.id}>
+                  <Comment
+                    objectId={project.id}
+                    objectType="project"
+                    comment={comment}
+                  />
+
+                  <div id="replies" className="pt-12 pl-14 space-y-12">
+                    {comment.children.length > 0 && (
+                      <ul className="space-y-12">
+                        {comment.children.map((reply) => (
+                          <li key={reply.id}>
+                            <Comment
+                              objectId={project.id}
+                              objectType="project"
+                              comment={reply}
+                            />
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="pb-6 text-sm">No comments yet</p>
+          )}
+          {session && (
+            <div className="flex items-start gap-2 sm:gap-4">
+              <span className="hidden sm:inline-block">
+                <Avatar name={session!.user.name} src={session!.user.image} />
+              </span>
+              <span className="inline-block sm:hidden">
+                <Avatar
+                  name={session!.user.name}
+                  src={session!.user.image}
+                  size="sm"
+                />
+              </span>
+              <AddCommentForm
+                objectId={project.id}
+                objectType="project"
+                category={category}
+              />
+            </div>
+          )}
+        </div>
+      )
+    }
 
     return (
       <>
@@ -151,7 +174,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
                     rel="noopener noreferrer"
                     className={classNames(
                       buttonClasses({ variant: 'highlight' }),
-                      'ml-[-1rem] mb-1 inline-block max-w-60 whitespace-nowrap overflow-hidden overflow-ellipsis'
+                      'ml-[-1rem] mb-1 inline-block max-w-60 whitespace-nowrap overflow-hidden overflow-ellipsis',
                     )}
                   >
                     <IconCreditCard className="inline" />
@@ -239,68 +262,36 @@ function ProjectPage({ projectId }: { projectId: string }) {
             </div>
           </div>
 
-          <Tabs defaultValue="questions-and-answers">
+          <Tabs defaultValue={CommentType.COMMENT}>
             <Tabs.List>
-              <Tabs.Tab value="questions-and-answers">
+              <Tabs.Tab value={CommentType.COMMENT}>Comments</Tabs.Tab>
+              <Tabs.Tab value={CommentType.Q_AND_A}>
                 Questions and answers
               </Tabs.Tab>
+              <Tabs.Tab value={CommentType.REASONING}>Reasons</Tabs.Tab>
+              <Tabs.Tab value={CommentType.ENDORSEMENT}>Endorsements</Tabs.Tab>
             </Tabs.List>
 
-            <Tabs.Panel value="questions-and-answers" pt="xs">
-              <div id="comments" className="pt-6 space-y-12">
-                {project.comments.length > 0 ? (
-                  <ul className="space-y-12">
-                    {project.comments.map((comment) => (
-                      <li key={comment.id}>
-                        <Comment
-                          objectId={project.id}
-                          objectType="project"
-                          comment={comment}
-                        />
-
-                        <div id="replies" className="pt-12 pl-14 space-y-12">
-                          {comment.children.length > 0 && (
-                            <ul className="space-y-12">
-                              {comment.children.map((reply) => (
-                                <li key={reply.id}>
-                                  <Comment
-                                    objectId={project.id}
-                                    objectType="project"
-                                    comment={reply}
-                                  />
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="pb-6 text-sm">No comments yet</p>
-                )}
-                {session && (
-                  <div className="flex items-start gap-2 sm:gap-4">
-                    <span className="hidden sm:inline-block">
-                      <Avatar
-                        name={session!.user.name}
-                        src={session!.user.image}
-                      />
-                    </span>
-                    <span className="inline-block sm:hidden">
-                      <Avatar
-                        name={session!.user.name}
-                        src={session!.user.image}
-                        size="sm"
-                      />
-                    </span>
-                    <AddCommentForm
-                      objectId={project.id}
-                      objectType="project"
-                    />
-                  </div>
-                )}
-              </div>
+            <Tabs.Panel value={CommentType.COMMENT} className="p-6">
+              <p className="text-sm">General comments on the project.</p>
+              <CommentPanel category={CommentType.COMMENT} />
+            </Tabs.Panel>
+            <Tabs.Panel value={CommentType.Q_AND_A} className="p-6">
+              <p className="text-sm">Questions about the project.</p>
+              <CommentPanel category={CommentType.Q_AND_A} />
+            </Tabs.Panel>
+            <Tabs.Panel value={CommentType.REASONING} className="p-6">
+              <p className="text-sm">
+                Donors’ reasoning behind their donations.
+              </p>
+              <CommentPanel category={CommentType.REASONING} />
+            </Tabs.Panel>
+            <Tabs.Panel value={CommentType.ENDORSEMENT} className="p-6">
+              <p className="text-sm">
+                Endorsements of the project or links to such endorsements
+                elsewhere.
+              </p>
+              <CommentPanel category={CommentType.ENDORSEMENT} />
             </Tabs.Panel>
           </Tabs>
         </div>

@@ -47,12 +47,12 @@ export const createEmail = (
     id: string
     name: string
   },
-  events: Event[]
+  events: Event[],
 ) => {
   // CUIDs are virtually never duplicated between tables
   const eventsByProject = groupBy(
     sortBy(events, 'type'),
-    (event) => event.parameters.objectId
+    (event) => event.parameters.objectId,
   )
   const emailContents = (
     <Mjml>

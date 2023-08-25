@@ -1,13 +1,14 @@
 import * as React from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
+import { SimpleGrid } from '@mantine/core'
+
 import { Button } from '@/components/button'
 import { ButtonLink } from '@/components/buttonLink'
 import { MarkdownIcon } from '@/components/icons'
 import { MarkdownEditor } from '@/components/markdownEditor'
 import { TAGS } from '@/components/project/tags'
 import { TextField } from '@/components/textField'
-import { SimpleGrid } from '@mantine/core'
 
 import { IMMultiSelect } from '../multiSelect'
 
@@ -115,11 +116,7 @@ export function ProjectForm({
             </>
           }
           placeholder="Pick all that apply"
-          data={TAGS.map((tag) => ({
-            value: tag.value,
-            label: tag.label,
-            group: tag.group,
-          }))}
+          data={TAGS}
           searchable
           onChange={(value) =>
             Array.isArray(value) ? setValue('tags', value.join(',')) : null

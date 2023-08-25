@@ -1,11 +1,12 @@
 import { useSession } from 'next-auth/react'
 import * as React from 'react'
 
-import { classNames } from '@/lib/classnames'
-import { num } from '@/lib/text'
-import { InferQueryOutput, trpc } from '@/lib/trpc'
 import { Tabs } from '@mantine/core'
 import { Prisma } from '@prisma/client'
+
+import { classNames } from '@/lib/classnames'
+import { num } from '@/lib/text'
+import { RouterOutput, trpc } from '@/lib/trpc'
 
 import { Author } from '../author'
 import { HoldingsChart } from './holdingsChart'
@@ -14,7 +15,7 @@ const SHARE_COUNT = new Prisma.Decimal(1e5)
 
 type LedgerProps = {
   isActive: boolean
-  certificate: InferQueryOutput<'certificate.detail'>
+  certificate: RouterOutput['certificate']['detail']
 }
 
 const Holding = ({
@@ -23,7 +24,7 @@ const Holding = ({
   isActive, // eslint-disable-line @typescript-eslint/no-unused-vars
   simplified = false,
 }: {
-  holding: InferQueryOutput<'holding.feed'>[0]
+  holding: RouterOutput['holding']['feed'][0]
   userId?: string
   isActive: boolean
   simplified: boolean
@@ -50,12 +51,9 @@ const Holding = ({
 }
 
 export const Ledger = ({ certificate, isActive }: LedgerProps) => {
-  const holdingsQuery = trpc.useQuery([
-    'holding.feed',
-    {
-      certificateId: certificate.id,
-    },
-  ])
+  const holdingsQuery = trpc.holding.feed.useQuery({
+    certificateId: certificate.id,
+  })
   const holdings = holdingsQuery.data || []
 
   const { data: session } = useSession()
@@ -68,7 +66,7 @@ export const Ledger = ({ certificate, isActive }: LedgerProps) => {
     .filter((holding) => holding.type === 'RESERVATION')
     .reduce(
       (aggregator, holding) => holding.size.plus(aggregator),
-      new Prisma.Decimal(0)
+      new Prisma.Decimal(0),
     )
 
   return (
@@ -94,7 +92,7 @@ export const Ledger = ({ certificate, isActive }: LedgerProps) => {
                     <th
                       className={classNames(
                         'text-sm text-right',
-                        simplified && 'hidden'
+                        simplified && 'hidden',
                       )}
                     >
                       Shares
@@ -102,7 +100,7 @@ export const Ledger = ({ certificate, isActive }: LedgerProps) => {
                     <th
                       className={classNames(
                         'text-sm text-right',
-                        simplified && 'hidden'
+                        simplified && 'hidden',
                       )}
                     >
                       Valuation
@@ -146,7 +144,7 @@ export const Ledger = ({ certificate, isActive }: LedgerProps) => {
                     <th
                       className={classNames(
                         'text-sm text-right',
-                        simplified && 'hidden'
+                        simplified && 'hidden',
                       )}
                     >
                       Shares
@@ -164,7 +162,7 @@ export const Ledger = ({ certificate, isActive }: LedgerProps) => {
                         <td
                           className={classNames(
                             'text-sm text-right',
-                            simplified && 'hidden'
+                            simplified && 'hidden',
                           )}
                           key="size"
                         >

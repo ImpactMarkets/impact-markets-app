@@ -2,11 +2,12 @@ import * as fp from 'lodash/fp'
 import Link from 'next/link'
 import * as React from 'react'
 
+import { Card } from '@mantine/core'
+
 import { Banner } from '@/components/banner'
 import { HoldingsChart } from '@/components/certificate/holdingsChart'
 import { classNames } from '@/lib/classnames'
-import { InferQueryOutput } from '@/lib/trpc'
-import { Card } from '@mantine/core'
+import { RouterOutput } from '@/lib/trpc'
 
 import { Author } from '../author'
 import { Date } from '../date'
@@ -16,7 +17,7 @@ import { Tags } from '../tags'
 import { sortAuthorFirst } from '../utils'
 
 export type CertificateSummaryProps = {
-  certificate: InferQueryOutput<'certificate.feed'>['certificates'][number]
+  certificate: RouterOutput['certificate']['feed']['certificates'][number]
   onLike?: () => void
   onUnlike?: () => void
 }
@@ -24,7 +25,7 @@ export type CertificateSummaryProps = {
 function Left({ certificate }: CertificateSummaryProps) {
   const contentDocument = React.useMemo(
     () => new DOMParser().parseFromString(certificate.contentHtml, 'text/html'),
-    [certificate.contentHtml]
+    [certificate.contentHtml],
   )
   //   TODO: decide on the order of the allowed tags
   //   and research on how to truncate html to a max amount of characters
@@ -61,7 +62,7 @@ function Left({ certificate }: CertificateSummaryProps) {
             {certificate.title}
           </Heading2>
         </Link>
-        <Date date={certificate.createdAt} />
+        <Date date={certificate.createdAt} className="text-gray-500 text-sm" />
       </div>
     </div>
   )
@@ -78,7 +79,7 @@ function Right({ certificate }: CertificateSummaryProps) {
             <div key={user.id}>
               <Author author={user} />
             </div>
-          ))
+          )),
         )(certificate.issuers)}
       </div>
     </div>
@@ -98,7 +99,7 @@ export const CertificateSummary = ({
     <div
       className={classNames(
         'flex items-stretch',
-        certificate.hidden ? 'opacity-50' : ''
+        certificate.hidden ? 'opacity-50' : '',
       )}
     >
       <Left certificate={certificate} />

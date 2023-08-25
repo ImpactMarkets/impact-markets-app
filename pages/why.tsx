@@ -2,11 +2,12 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { Accordion } from '@mantine/core'
+
 import { Heading1 } from '@/components/heading1'
 import { Heading2 } from '@/components/heading2'
 import { Layout } from '@/components/layout'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
-import { Accordion } from '@mantine/core'
 
 const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
   return (
@@ -31,10 +32,9 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
         small, who doesn’t want to spend a lot of time on researching your
         donations: You’ll be able to follow sophisticated donors who have skin
         in the game. We’re building a crowdsourced charity evaluator for all the
-        small, speculative, potentially-spectacular projects across all cause
-        areas ranked by the donations they’ve received from expert donors. You
-        can tap into the wisdom of these donors and boost the impact of your
-        donations.
+        small, speculative, potentially-spectacular AI safety projects ranked by
+        the donations they’ve received from expert donors. You can tap into the
+        wisdom of these donors and boost the impact of your donations.
       </p>
       <p className="my-3">
         Maybe you’re an <strong>experienced donor or grantmaker</strong>, a{' '}

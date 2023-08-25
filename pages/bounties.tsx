@@ -1,4 +1,3 @@
-import { useSession } from 'next-auth/react'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -14,101 +13,34 @@ import { Layout } from '@/components/layout'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import { SummarySkeleton } from '@/components/summarySkeleton'
 import { BountySortKey, ITEMS_PER_PAGE } from '@/lib/constants'
-import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
+import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
 const Summary = dynamic<SummaryProps>(
   () => import('@/components/bounty/summary').then((mod) => mod.Summary),
-  { ssr: false }
+  { ssr: false },
 )
 
 const orderByValues: Array<{ value: BountySortKey; label: string }> = [
   { value: 'createdAt', label: 'Sort by creation date' },
   { value: 'deadline', label: 'Sort by deadline' },
   { value: 'size', label: 'Sort by bounty amount' },
+  { value: 'likeCount', label: 'Sort by interest' },
 ]
 
 const defaultOrder = 'size'
 
 const Home: NextPageWithAuthAndLayout = () => {
-  const { data: session } = useSession()
   const router = useRouter()
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
-  const utils = trpc.useContext()
   const [filterTags, setFilterTags] = React.useState('')
   const [orderBy, setOrderBy] = React.useState(defaultOrder as BountySortKey)
-  const feedQueryPathAndInput: InferQueryPathAndInput<'bounty.feed'> = [
-    'bounty.feed',
-    {
-      ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
-      filterTags,
-      orderBy,
-    },
-  ]
-  const feedQuery = trpc.useQuery(feedQueryPathAndInput)
-  const likeMutation = trpc.useMutation(['bounty.like'], {
-    onMutate: async (likedBountyId) => {
-      await utils.cancelQuery(feedQueryPathAndInput)
-
-      const previousQuery = utils.getQueryData(feedQueryPathAndInput)
-
-      if (previousQuery) {
-        utils.setQueryData(feedQueryPathAndInput, {
-          ...previousQuery,
-          bounties: previousQuery.bounties.map((bounty) =>
-            bounty.id === likedBountyId
-              ? {
-                  ...bounty,
-                  likedBy: [
-                    ...bounty.likedBy,
-                    {
-                      user: { id: session!.user.id, name: session!.user.name },
-                    },
-                  ],
-                }
-              : bounty
-          ),
-        })
-      }
-
-      return { previousQuery }
-    },
-    onError: (err, id, context: any) => {
-      if (context?.previousQuery) {
-        utils.setQueryData(feedQueryPathAndInput, context.previousQuery)
-      }
-    },
-  })
-  const unlikeMutation = trpc.useMutation(['bounty.unlike'], {
-    onMutate: async (unlikedBountyId) => {
-      await utils.cancelQuery(feedQueryPathAndInput)
-
-      const previousQuery = utils.getQueryData(feedQueryPathAndInput)
-
-      if (previousQuery) {
-        utils.setQueryData(feedQueryPathAndInput, {
-          ...previousQuery,
-          bounties: previousQuery.bounties.map((bounty) =>
-            bounty.id === unlikedBountyId
-              ? {
-                  ...bounty,
-                  likedBy: bounty.likedBy.filter(
-                    (item) => item.user.id !== session!.user.id
-                  ),
-                }
-              : bounty
-          ),
-        })
-      }
-
-      return { previousQuery }
-    },
-    onError: (err, id, context: any) => {
-      if (context?.previousQuery) {
-        utils.setQueryData(feedQueryPathAndInput, context.previousQuery)
-      }
-    },
-  })
+  const feedQueryInput = {
+    ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
+    filterTags,
+    orderBy,
+  }
+  const feedQuery = trpc.bounty.feed.useQuery(feedQueryInput)
 
   if (feedQuery.data) {
     return (
@@ -130,13 +62,13 @@ const Home: NextPageWithAuthAndLayout = () => {
               onOrderByUpdate={(orderBy: string) =>
                 // A bit unhappy with this – https://stackoverflow.com/a/69007934/678861
                 (orderByValues.map((item) => item.value) as string[]).includes(
-                  orderBy
+                  orderBy,
                 ) && setOrderBy(orderBy as BountySortKey)
               }
               orderByValues={orderByValues}
               defaultFilterTagValue={filterTags}
               defaultOrderByValue={orderBy}
-              searchEndpoint="bounty.search"
+              searchEndpoint="bounty"
             />
           </div>
         </div>
@@ -159,15 +91,7 @@ const Home: NextPageWithAuthAndLayout = () => {
               {feedQuery.data.bounties.map((bounty) => (
                 <li key={bounty.id} className="w-full max-w-full">
                   {/* Classes for the tiled arrangement: w-full max-w-full xl:w-[49.5%] xl:max-w-[49.5%] 2xl:w-[32.6%] 2xl:max-w-[32.6%] */}
-                  <Summary
-                    bounty={bounty}
-                    onLike={() => {
-                      likeMutation.mutate(bounty.id)
-                    }}
-                    onUnlike={() => {
-                      unlikeMutation.mutate(bounty.id)
-                    }}
-                  />
+                  <Summary bounty={bounty} />
                 </li>
               ))}
             </ul>

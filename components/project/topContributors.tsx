@@ -1,23 +1,21 @@
 import * as React from 'react'
 
-import { num } from '@/lib/text'
-import { InferQueryOutput, trpc } from '@/lib/trpc'
 import { Prisma } from '@prisma/client'
-import { IconTrophy } from '@tabler/icons'
+import { IconTrophy } from '@tabler/icons-react'
+
+import { num } from '@/lib/text'
+import { RouterOutput, trpc } from '@/lib/trpc'
 
 import { Author } from '../author'
 
 export function TopContributors({
   project,
 }: {
-  project: InferQueryOutput<'project.detail'>
+  project: RouterOutput['project']['detail']
 }) {
-  const rankingQuery = trpc.useQuery([
-    'project.topContributors',
-    {
-      id: project.id,
-    },
-  ])
+  const rankingQuery = trpc.project.topContributors.useQuery({
+    id: project.id,
+  })
   const ranking = rankingQuery.data ?? []
 
   const zero = new Prisma.Decimal(0)
@@ -79,7 +77,7 @@ export function TopContributors({
                         )}
                       </td>
                     </tr>
-                  )
+                  ),
                 )}
               </tbody>
             </table>

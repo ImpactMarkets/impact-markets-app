@@ -20,14 +20,14 @@ export function markdownToPlainHtml(markdown: string) {
 function replacePlaceholder(
   cursor: Cursor,
   placeholder: string,
-  replaceWith: string
+  replaceWith: string,
 ) {
   cursor.setValue(cursor.value.replace(placeholder, replaceWith))
 }
 
 export function uploadImageCommandHandler(
   textareaEl: HTMLTextAreaElement,
-  files: File[]
+  files: File[],
 ) {
   const cursor = new Cursor(textareaEl)
   const currentLineNumber = cursor.position.line
@@ -47,7 +47,7 @@ export function uploadImageCommandHandler(
           uploadedImage.dpi >= 144
             ? Math.round(uploadedImage.width / 2)
             : uploadedImage.width
-        }" alt="${uploadedImage.originalFilename}" src="${uploadedImage.url}">`
+        }" alt="${uploadedImage.originalFilename}" src="${uploadedImage.url}">`,
       )
     } catch (error: any) {
       console.log(error)

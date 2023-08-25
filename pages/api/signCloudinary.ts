@@ -31,7 +31,7 @@ const folder = 'beam'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data | Error>
+  res: NextApiResponse<Data | Error>,
 ) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST'])
@@ -51,7 +51,7 @@ export default async function handler(
       folder,
       image_metadata: true,
     },
-    apiSecret
+    apiSecret,
   )
 
   res.status(200).json({ timestamp, folder, signature, apiKey, cloudName })

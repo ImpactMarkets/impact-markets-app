@@ -1,22 +1,19 @@
 import * as React from 'react'
 
 import { classNames } from '@/lib/classnames'
-import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
+import { ProjectSortKey } from '@/lib/constants'
+import { trpc } from '@/lib/trpc'
 
 import { ButtonLink } from '../buttonLink'
 import { ProjectSummary } from '../project/summary'
 
 export const TopProjects = () => {
-  const feedQueryPathAndInput: InferQueryPathAndInput<'project.feed'> = [
-    'project.feed',
-    {
-      take: 3,
-      showHidden: false,
-      hideClosed: true,
-      orderBy: 'supportScore',
-    },
-  ]
-  const feedQuery = trpc.useQuery(feedQueryPathAndInput)
+  const feedQuery = trpc.project.feed.useQuery({
+    take: 3,
+    showHidden: false,
+    hideClosed: true,
+    orderBy: 'supportScore' as ProjectSortKey,
+  })
 
   if (feedQuery.data && feedQuery.data.projectCount >= 0) {
     return (
@@ -33,7 +30,7 @@ export const TopProjects = () => {
               className={classNames(
                 'w-full max-w-full xl:w-[49.5%] xl:max-w-[49.5%] 2xl:w-[32.6%] 2xl:max-w-[32.6%]',
                 '[&:nth-child(2)]:hidden xl:[&:nth-child(2)]:block 2xl:[&:nth-child(2)]:block',
-                '[&:nth-child(3)]:hidden xl:[&:nth-child(3)]:hidden 2xl:[&:nth-child(3)]:block'
+                '[&:nth-child(3)]:hidden xl:[&:nth-child(3)]:hidden 2xl:[&:nth-child(3)]:block',
               )}
             >
               <ProjectSummary project={project} hideRight />
