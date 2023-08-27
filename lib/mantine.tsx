@@ -25,3 +25,11 @@ export const MultiSelect = dynamic(
     ssr: false,
   },
 )
+
+export const Progress = dynamic(
+  () => import('@mantine/core').then((el) => el.Progress),
+  {
+    loading: () => <p>Loading...</p>,
+    ssr: false,
+  },
+)
