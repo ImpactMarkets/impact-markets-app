@@ -41,6 +41,7 @@
     "axios": "^1.4.0",
     "caniuse-lite": "^1.0.30001522",
     "cloudinary": "^1.40.0",
+    "console-stamp": "^3.1.2",
     "crypto-hash": "^2.0.1",
     "cssstyle": "^3.0.0",
     "csstype": "^3.1.2",
