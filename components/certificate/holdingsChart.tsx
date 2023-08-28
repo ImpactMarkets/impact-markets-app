@@ -1,8 +1,8 @@
 import * as fp from 'lodash/fp'
 
-import { Progress } from '@mantine/core'
 import { Prisma } from '@prisma/client'
 
+import { Progress } from '@/lib/mantine'
 import { num } from '@/lib/text'
 import { RouterOutput } from '@/lib/trpc'
 

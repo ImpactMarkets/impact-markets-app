@@ -15,7 +15,9 @@ const Feature = ({ icon: Icon, title, children }: FeatureProps) => (
     <div>
       <div className="h-22 p-3 -ml-3 mb-3 w-[calc(100%+2rem)] bg-gray-100">
         <Icon size={38} className="stroke-blue-500 stroke-[1.5]" />
-        <Text className="font-bold text-md whitespace-nowrap">{title}</Text>
+        <Text className="font-bold text-md whitespace-nowrap overflow-hidden overflow-ellipsis">
+          {title}
+        </Text>
       </div>
       <Text color="dimmed" size="sm" className="[hyphens:auto]">
         {children}

@@ -20,11 +20,11 @@ export function HeroText() {
           </Text>
         </Container>
 
-        <div className="mt-6">
-          <ButtonLink href="/why" variant="primary" className="mr-2">
+        <div className="inline-flex flex-wrap gap-1 justify-center mt-6">
+          <ButtonLink href="/why" variant="primary">
             Read the FAQs
           </ButtonLink>
-          <ButtonLink href="/projects" variant="primary" className="mr-2">
+          <ButtonLink href="/projects" variant="primary">
             Explore the projects
           </ButtonLink>
           <a
