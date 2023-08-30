@@ -1,6 +1,5 @@
 import * as React from 'react'
 
-import { Prisma } from '@prisma/client'
 import { IconTrophy } from '@tabler/icons-react'
 
 import { num } from '@/lib/text'

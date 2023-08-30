@@ -28,7 +28,9 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
     return (
       <>
         <Head>
-          <title>Edit {certificateQuery.data.title} – Impact Markets</title>
+          <title>
+            Edit {certificateQuery.data.title} – AI Safety Impact Markets
+          </title>
         </Head>
 
         {session!.user.role === 'ADMIN' || certificateBelongsToUser ? (

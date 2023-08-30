@@ -27,7 +27,7 @@ const EditBountyPage: NextPageWithAuthAndLayout = () => {
     return (
       <>
         <Head>
-          <title>Edit {bountyQuery.data.title} – Impact Markets</title>
+          <title>Edit {bountyQuery.data.title} – AI Safety Impact Markets</title>
         </Head>
 
         {session!.user.role === 'ADMIN' || bountyBelongsToUser ? (

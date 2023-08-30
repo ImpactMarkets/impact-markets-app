@@ -28,7 +28,9 @@ const EditProjectPage: NextPageWithAuthAndLayout = () => {
     return (
       <>
         <Head>
-          <title>Edit {projectQuery.data.title} – Impact Markets</title>
+          <title>
+            Edit {projectQuery.data.title} – AI Safety Impact Markets
+          </title>
         </Head>
 
         {session!.user.role === 'ADMIN' || projectBelongsToUser ? (
