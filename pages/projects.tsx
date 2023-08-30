@@ -45,7 +45,7 @@ const Projects: NextPageWithAuthAndLayout = () => {
     return (
       <div className="max-w-screen-lg mx-auto">
         <Head>
-          <title>Impact Markets</title>
+          <title>Projects – AI Safety Impact Markets</title>
         </Head>
 
         <div className="flex justify-between flex-row-reverse flex-wrap gap-2">
