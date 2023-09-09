@@ -1,82 +1,71 @@
-import dynamic from 'next/dynamic'
-import { useRouter } from 'next/router'
+import Link from 'next/link'
 import * as React from 'react'
 
-import { Pagination } from '@/components/pagination'
-import type { ProjectSummaryProps } from '@/components/project/summary'
-import { SummarySkeleton } from '@/components/summarySkeleton'
-import { ITEMS_PER_PAGE } from '@/lib/constants'
 import { InferQueryOutput } from '@/lib/trpc'
+import { Card } from '@mantine/core'
 
-// TODO
-// do the same for bounties but somehow combine these
-// refactor const projects and const bounties into one?
+interface LikedProject {
+  projectId: string
+  project: InferQueryOutput<'user.profile'>['likedProjects'][0]['project']
+}
 
-// TO ADD CERTIFICATES:
-//// first update user.ts profile query
-//// will need to add author and content to user.ts as well
+interface LikedBounty {
+  bountyId: string
+  bounty: InferQueryOutput<'user.profile'>['likedBounties'][0]['bounty']
+}
 
 export function Likes({ user }: { user: InferQueryOutput<'user.profile'> }) {
-  const ProjectSummary = dynamic<ProjectSummaryProps>(
-    () =>
-      import('@/components/project/summary').then((mod) => mod.ProjectSummary),
-    { ssr: false }
-  )
+  const likedProjects = user.likedProjects
+    .filter((likedProject: LikedProject) => !likedProject.project.hidden)
+    .map((likedProject: LikedProject) => (
+      <tr key={likedProject.project.id}>
+        <td className="px-4 py-2">
+          <Link href={`/project/${likedProject.project.id}`} className="link">
+            {likedProject.project.title}
+          </Link>
+        </td>
+        <td className="px-4 py-2">{likedProject.project.likedBy.length}</td>
+        <td className="px-4 py-2">
+          {likedProject.project.supportScore?.score.toString() || 'n/a'}
+        </td>
+      </tr>
+    ))
 
-  const router = useRouter()
-  const currentPageNumber = router.query.page ? Number(router.query.page) : 1
+  const likedBounties = user.likedBounties
+    .filter((likedBounty: LikedBounty) => !likedBounty.bounty.hidden)
+    .map((likedBounty: LikedBounty) => (
+      <tr key={likedBounty.bounty.id}>
+        <td className="px-4 py-2">
+          <Link href={`/bounty/${likedBounty.bounty.id}`} className="link">
+            {likedBounty.bounty.title}
+          </Link>
+        </td>
+      </tr>
+    ))
 
-  const projects = user.likedProjects.map((likedProject) => (
-    <li key={likedProject.projectId} className="py-3">
-      <ProjectSummary project={likedProject.project} />
-    </li>
-  ))
-
-  const combinedLikeCount =
-    user.likedProjects.length + user.likedBounties.length
-
-  if (user) {
-    return (
-      <>
-        <div className="flow-root mt-6">
-          {combinedLikeCount === 0 ? (
-            <div className="text-center text-secondary border rounded py-20 px-10">
-              This user hasn’t liked any projects or bounties yet.
-            </div>
-          ) : (
-            <>
-              <div>
-                <ul className="-my-3">{projects}</ul>
-              </div>
-              {/* TODO:
-              <div>
-                <ul className="-my-3">
-                  {bounties}
-                </ul>
-              </div> */}
-            </>
-          )}
-        </div>
-
-        <Pagination
-          itemCount={combinedLikeCount}
-          itemsPerPage={ITEMS_PER_PAGE}
-          currentPageNumber={currentPageNumber}
-        />
-      </>
-    )
-  }
-
-  // display when loading
   return (
-    <div className="flow-root mt-6">
-      <ul className="-my-3">
-        {[...Array(3)].map((_, idx) => (
-          <li key={idx} className="py-3">
-            <SummarySkeleton />
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      {likedProjects && likedProjects.length > 0 && (
+        <Card shadow="sm" p="lg" radius="md" m="lg" withBorder>
+          <h1>Projects</h1>
+          <table className="table-auto w-full">
+            <thead className="text-sm">
+              <tr>
+                <th className="font-normal p-4 text-left">Title</th>
+                <th className="font-normal p-4 text-left">Likes</th>
+                <th className="font-normal p-4 text-left">Support Score</th>
+              </tr>
+            </thead>
+            <tbody>{likedProjects}</tbody>
+          </table>
+        </Card>
+      )}
+      {likedBounties && likedBounties.length > 0 && (
+        <Card shadow="sm" p="lg" radius="md" m="lg" withBorder>
+          <h1>Bounties</h1>
+          {likedBounties}
+        </Card>
+      )}
+    </>
   )
 }
