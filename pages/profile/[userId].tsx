@@ -40,7 +40,10 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
               <Tabs.Tab value="donations">Donations</Tabs.Tab>
             ) : null}
             <Tabs.Tab value="projects">Projects</Tabs.Tab>
-            <Tabs.Tab value="likes">Likes</Tabs.Tab>
+            {profileQuery.data.likedProjects.length > 0 ||
+            profileQuery.data.likedBounties.length > 0 ? (
+              <Tabs.Tab value="likes">Likes</Tabs.Tab>
+            ) : null}
             {router.query.userId === session?.user.id ? (
               <Tabs.Tab value="preferences">Preferences</Tabs.Tab>
             ) : null}
