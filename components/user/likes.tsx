@@ -45,26 +45,36 @@ export function Likes({ user }: { user: InferQueryOutput<'user.profile'> }) {
 
   return (
     <>
-      {likedProjects && likedProjects.length > 0 && (
-        <Card shadow="sm" p="lg" radius="md" m="lg" withBorder>
-          <h1>Projects</h1>
-          <table className="table-auto w-full">
-            <thead className="text-sm">
-              <tr>
-                <th className="font-normal p-4 text-left">Title</th>
-                <th className="font-normal p-4 text-left">Likes</th>
-                <th className="font-normal p-4 text-left">Support Score</th>
-              </tr>
-            </thead>
-            <tbody>{likedProjects}</tbody>
-          </table>
-        </Card>
-      )}
-      {likedBounties && likedBounties.length > 0 && (
-        <Card shadow="sm" p="lg" radius="md" m="lg" withBorder>
-          <h1>Bounties</h1>
-          {likedBounties}
-        </Card>
+      {likedProjects.length > 0 || likedBounties.length > 0 ? (
+        <>
+          {likedProjects && likedProjects.length > 0 && (
+            <Card shadow="sm" p="lg" radius="md" m="lg" withBorder>
+              <h1>Projects</h1>
+              <table className="table-auto w-full">
+                <thead className="text-sm">
+                  <tr>
+                    <th className="font-normal p-4 text-left">Title</th>
+                    <th className="font-normal p-4 text-left">Likes</th>
+                    <th className="font-normal p-4 text-left">Support Score</th>
+                  </tr>
+                </thead>
+                <tbody>{likedProjects}</tbody>
+              </table>
+            </Card>
+          )}
+          {likedBounties && likedBounties.length > 0 && (
+            <Card shadow="sm" p="lg" radius="md" m="lg" withBorder>
+              <h1>Bounties</h1>
+              {likedBounties}
+            </Card>
+          )}
+        </>
+      ) : (
+        <div className="flow-root mt-6">
+          <div className="border rounded py-10 px-10">
+            {user.bio || 'This user has not liked any projects or bounties yet'}
+          </div>
+        </div>
       )}
     </>
   )
