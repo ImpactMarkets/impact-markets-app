@@ -141,7 +141,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
     return (
       <>
         <Head>
-          <title>{project.title} – Impact Markets</title>
+          <title>{project.title} – AI Safety Impact Markets</title>
         </Head>
 
         <div className="max-w-screen-lg mx-auto">

@@ -50,7 +50,7 @@ const Home: NextPageWithAuthAndLayout = () => {
     return (
       <>
         <Head>
-          <title>Impact Markets</title>
+          <title>Certificates – AI Safety Impact Markets</title>
         </Head>
 
         <div>

@@ -3,9 +3,7 @@ import { bool, envsafe, invalidEnvError, makeValidator, str } from 'envsafe'
 import { browserEnv } from './browser'
 
 if (typeof window !== 'undefined') {
-  throw new Error(
-    'This should only be included on the client (but the env vars wont be exposed)',
-  )
+  throw new Error('This should not be included on the client side')
 }
 
 const googleParser = makeValidator<string>((input) => {
