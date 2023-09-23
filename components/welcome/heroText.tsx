@@ -16,7 +16,8 @@ export function HeroText() {
 
         <Container className="max-w-[600px]">
           <Text size="lg" color="dimmed">
-            Find or promote the best early-stage AI safety projects
+            Yelp for charities: Find or promote the best early-stage AI safety
+            projects
           </Text>
         </Container>
 
