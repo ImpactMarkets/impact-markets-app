@@ -1,3 +1,4 @@
+import { Tooltip } from '@/lib/mantine'
 import { Container, Text, Title } from '@mantine/core'
 
 import { buttonClasses } from '../button'
@@ -14,9 +15,16 @@ export function HeroText() {
           </div>
         </Title>
 
-        <Container className="max-w-[600px]">
+        <Container>
           <Text size="lg" color="dimmed">
-            Yelp for charities: Find or promote the best early-stage AI safety
+            The{' '}
+            <Tooltip
+              className="hint"
+              label="Yelp … publishes crowd-sourced reviews about businesses. —Wikipedia"
+            >
+              <span>Yelp</span>
+            </Tooltip>{' '}
+            for charities: Find or promote the best early-stage AI safety
             projects
           </Text>
         </Container>
