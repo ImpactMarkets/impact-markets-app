@@ -141,7 +141,8 @@ function ProjectPage({ projectId }: { projectId: string }) {
     return (
       <>
         <Head>
-          <title>{project.title} – AI Safety Impact Markets</title>
+          {/* https://stackoverflow.com/questions/75875037 */}
+          <title>{`${project.title} – AI Safety Impact Markets`}</title>
         </Head>
 
         <div className="max-w-screen-lg mx-auto">

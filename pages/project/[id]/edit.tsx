@@ -28,8 +28,9 @@ const EditProjectPage: NextPageWithAuthAndLayout = () => {
     return (
       <>
         <Head>
+          {/* https://stackoverflow.com/questions/75875037 */}
           <title>
-            Edit {projectQuery.data.title} – AI Safety Impact Markets
+            {`Edit ${projectQuery.data.title} – AI Safety Impact Markets`}
           </title>
         </Head>
 

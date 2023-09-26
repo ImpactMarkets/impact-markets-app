@@ -402,7 +402,8 @@ export function ProfileInfo({
     return (
       <div key={childKey}>
         <Head>
-          <title>{user.name} – AI Safety Impact Markets</title>
+          {/* https://stackoverflow.com/questions/75875037 */}
+          <title>{`${user.name} – AI Safety Impact Markets`}</title>
         </Head>
 
         <div className="relative flex items-start gap-4 py-8 overflow-hidden">

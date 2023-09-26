@@ -43,6 +43,52 @@ export const userRouter = router({
               },
             },
           },
+          likedProjects: {
+            select: {
+              projectId: true,
+              project: {
+                select: {
+                  id: true,
+                  title: true,
+                  hidden: true,
+                  likedBy: {
+                    select: {
+                      user: {
+                        select: {
+                          id: true,
+                          name: true,
+                        },
+                      },
+                    },
+                  },
+                  supportScore: true,
+                  _count: {
+                    select: {
+                      comments: true,
+                    },
+                  },
+                },
+              },
+            },
+            orderBy: {
+              createdAt: 'desc',
+            },
+          },
+          likedBounties: {
+            select: {
+              bountyId: true,
+              bounty: {
+                select: {
+                  id: true,
+                  title: true,
+                  hidden: true,
+                },
+              },
+            },
+            orderBy: {
+              createdAt: 'desc',
+            },
+          },
           email: ctx.session?.user.role === 'ADMIN',
         },
       })
