@@ -2,6 +2,9 @@ import Link from 'next/link'
 import * as React from 'react'
 
 import { Card } from '@mantine/core'
+import { Prisma } from '@prisma/client'
+
+import { num } from '@/lib/text'
 import { RouterOutput } from '@/lib/trpc'
 
 interface LikedProject {
@@ -24,9 +27,10 @@ export function Likes({ user }: { user: RouterOutput['user']['profile'] }) {
             {likedProject.project.title}
           </Link>
         </td>
-        <td className="px-4 py-2">{likedProject.project.likedBy.length}</td>
-        <td className="px-4 py-2">
-          {likedProject.project.supportScore?.score.toString() || 'n/a'}
+          {num(
+            likedProject.project.supportScore?.score || new Prisma.Decimal(0),
+            0,
+          )}
         </td>
       </tr>
     ))
