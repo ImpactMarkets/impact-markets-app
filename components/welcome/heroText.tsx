@@ -1,5 +1,6 @@
-import { Tooltip } from '@/lib/mantine'
 import { Container, Text, Title } from '@mantine/core'
+
+import { Tooltip } from '@/lib/mantine'
 
 import { buttonClasses } from '../button'
 import { ButtonLink } from '../buttonLink'
