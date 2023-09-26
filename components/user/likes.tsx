@@ -27,6 +27,10 @@ export function Likes({ user }: { user: RouterOutput['user']['profile'] }) {
             {likedProject.project.title}
           </Link>
         </td>
+        <td className="px-4 py-2 text-right">
+          {likedProject.project.likedBy.length}
+        </td>
+        <td className="px-4 py-2 text-right">
           {num(
             likedProject.project.supportScore?.score || new Prisma.Decimal(0),
             0,
@@ -53,13 +57,15 @@ export function Likes({ user }: { user: RouterOutput['user']['profile'] }) {
         <>
           {likedProjects && likedProjects.length > 0 && (
             <Card shadow="sm" p="lg" radius="md" m="lg" withBorder>
-              <h1>Projects</h1>
+              <h2>Projects</h2>
               <table className="table-auto w-full">
                 <thead className="text-sm">
                   <tr>
                     <th className="font-normal p-4 text-left">Title</th>
-                    <th className="font-normal p-4 text-left">Likes</th>
-                    <th className="font-normal p-4 text-left">Support Score</th>
+                    <th className="font-normal p-4 text-right">Likes</th>
+                    <th className="font-normal p-4 text-right whitespace-nowrap">
+                      Support score
+                    </th>
                   </tr>
                 </thead>
                 <tbody>{likedProjects}</tbody>
@@ -68,6 +74,7 @@ export function Likes({ user }: { user: RouterOutput['user']['profile'] }) {
           )}
           {likedBounties && likedBounties.length > 0 && (
             <Card shadow="sm" p="lg" radius="md" m="lg" withBorder>
+              <h2>Bounties</h2>
               <table className="table-auto w-full">
                 <tbody>{likedBounties}</tbody>
               </table>
