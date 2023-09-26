@@ -52,9 +52,6 @@ export const userRouter = router({
                   title: true,
                   hidden: true,
                   likedBy: {
-                    orderBy: {
-                      createdAt: 'asc',
-                    },
                     select: {
                       user: {
                         select: {
@@ -73,6 +70,9 @@ export const userRouter = router({
                 },
               },
             },
+            orderBy: {
+              createdAt: 'desc',
+            },
           },
           likedBounties: {
             select: {
@@ -84,6 +84,9 @@ export const userRouter = router({
                   hidden: true,
                 },
               },
+            },
+            orderBy: {
+              createdAt: 'desc',
             },
           },
           email: ctx.session?.user.role === 'ADMIN',
