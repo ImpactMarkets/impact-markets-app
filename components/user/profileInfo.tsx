@@ -4,7 +4,15 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { useMutation } from 'react-query'
+
+import { Button as MantineButton } from '@mantine/core'
+import {
+  IconAlertCircle,
+  IconCreditCard,
+  IconMail,
+  IconShieldLock,
+} from '@tabler/icons-react'
+import { useMutation } from '@tanstack/react-query'
 
 import { Avatar } from '@/components/avatar'
 import { Button } from '@/components/button'
@@ -22,15 +30,8 @@ import { TextField } from '@/components/textField'
 import { LargeTextField } from '@/components/textarea'
 import { browserEnv } from '@/env/browser'
 import { uploadImage } from '@/lib/cloudinary'
-import { InferQueryOutput, trpc } from '@/lib/trpc'
-import { Tooltip } from '@mantine/core'
-import { Button as MantineButton } from '@mantine/core'
-import {
-  IconAlertCircle,
-  IconCreditCard,
-  IconMail,
-  IconShieldLock,
-} from '@tabler/icons'
+import { Tooltip } from '@/lib/mantine'
+import { RouterOutput, trpc } from '@/lib/trpc'
 
 function DotPattern() {
   return (
@@ -112,7 +113,7 @@ function EditProfileDialog({
   isOpen,
   onClose,
 }: {
-  user: InferQueryOutput<'user.profile'>
+  user: RouterOutput['user']['profile']
   isOpen: boolean
   onClose: () => void
 }) {
@@ -128,14 +129,11 @@ function EditProfileDialog({
   })
   const router = useRouter()
   const utils = trpc.useContext()
-  const editUserMutation = trpc.useMutation('user.edit', {
+  const editUserMutation = trpc.user.edit.useMutation({
     onSuccess: () => {
-      return utils.invalidateQueries([
-        'user.profile',
-        {
-          id: String(router.query.userId),
-        },
-      ])
+      return utils.user.profile.invalidate({
+        id: String(router.query.userId),
+      })
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
@@ -159,7 +157,7 @@ function EditProfileDialog({
       },
       {
         onSuccess: () => onClose(),
-      }
+      },
     )
   }
 
@@ -186,7 +184,7 @@ function EditProfileDialog({
                 <span>
                   This is your profile link:{' '}
                   <a
-                    href={window.location.href}
+                    href={router.asPath}
                     target="_blank"
                     rel="noreferrer"
                     className="link italic"
@@ -246,13 +244,13 @@ function UpdateAvatarDialog({
   isOpen,
   onClose,
 }: {
-  user: InferQueryOutput<'user.profile'>
+  user: RouterOutput['user']['profile']
   isOpen: boolean
   onClose: () => void
 }) {
   const fileInputRef = React.useRef<HTMLInputElement>(null)
   const [uploadedImage, setUploadedImage] = React.useState(user.image)
-  const updateUserAvatarMutation = trpc.useMutation('user.update-avatar', {
+  const updateUserAvatarMutation = trpc.user.updateAvatar.useMutation({
     onSuccess: () => {
       window.location.reload()
     },
@@ -268,7 +266,7 @@ function UpdateAvatarDialog({
       onError: (error: any) => {
         toast.error(`Error uploading image: ${error.message}`)
       },
-    }
+    },
   )
 
   function handleClose() {
@@ -382,7 +380,7 @@ function UpdateAvatarDialog({
 export function ProfileInfo({
   user,
 }: {
-  user: InferQueryOutput<'user.profile'>
+  user: RouterOutput['user']['profile']
 }) {
   const { data: session } = useSession()
 
@@ -404,7 +402,7 @@ export function ProfileInfo({
     return (
       <div key={childKey}>
         <Head>
-          <title>{user.name} – Impact Markets</title>
+          <title>{user.name} – AI Safety Impact Markets</title>
         </Head>
 
         <div className="relative flex items-start gap-4 py-8 overflow-hidden">

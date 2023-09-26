@@ -87,7 +87,7 @@ async function generateSVG(name: string) {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   if (req.method !== 'GET') {
     res.setHeader('Allow', ['GET'])
@@ -106,7 +106,7 @@ export default async function handler(
     res.setHeader('Content-Type', 'image/svg+xml')
     res.setHeader(
       'Cache-Control',
-      `public, immutable, no-transform, s-maxage=31536000, max-age=31536000`
+      `public, immutable, no-transform, s-maxage=31536000, max-age=31536000`,
     )
     res.statusCode = 200
     res.send(svg)

@@ -4,15 +4,16 @@ import * as React from 'react'
 import { useDebounce } from 'use-debounce'
 import { ItemOptions, useItemList } from 'use-item-list'
 
+import { Dialog, Transition } from '@headlessui/react'
+
 import { SearchIcon, SpinnerIcon } from '@/components/icons'
 import { classNames } from '@/lib/classnames'
-import { InferQueryOutput, trpc } from '@/lib/trpc'
-import { Dialog, Transition } from '@headlessui/react'
+import { RouterOutput, trpc } from '@/lib/trpc'
 
 type SearchDialogProps = {
   isOpen: boolean
   onClose: () => void
-  searchEndpoint: 'project.search' | 'bounty.search'
+  searchEndpoint: 'project' | 'bounty'
 }
 
 function SearchResult({
@@ -28,7 +29,9 @@ function SearchResult({
     // eslint-disable-next-line @typescript-eslint/ban-types
     useHighlighted: () => boolean | Boolean // Boolean due to dependency on use-item-list
   }
-  result: InferQueryOutput<'project.search' | 'bounty.search'>[number]
+  result:
+    | RouterOutput['project']['search'][number]
+    | RouterOutput['bounty']['search'][number]
 }) {
   const ref = React.useRef<HTMLLIElement>(null)
   const { id, highlight, select, useHighlighted } = useItem({
@@ -43,7 +46,7 @@ function SearchResult({
         href={result.link}
         className={classNames(
           'block py-3.5 pl-10 pr-3 transition-colors leading-tight',
-          highlighted && 'bg-blue-600 text-white'
+          highlighted && 'bg-blue-600 text-white',
         )}
       >
         {result.title}
@@ -57,23 +60,26 @@ function SearchField({
   searchEndpoint,
 }: {
   onSelect: () => void
-  searchEndpoint: 'project.search' | 'bounty.search'
+  searchEndpoint: 'project' | 'bounty'
 }) {
   const [value, setValue] = React.useState('')
   const [debouncedValue] = useDebounce(value, 1000)
   const router = useRouter()
 
-  const feedQuery = trpc.useQuery(
-    [
-      searchEndpoint,
-      {
-        query: debouncedValue,
-      },
-    ],
-    {
-      enabled: debouncedValue.trim().length > 0,
-    }
-  )
+  // https://github.com/microsoft/TypeScript/issues/33591#issuecomment-786443978
+  // But that didn't work because react-query doesn't export ProcedureUseQuery
+  const enabled = debouncedValue.trim().length > 0
+  let feedQuery
+  if (searchEndpoint === 'project')
+    feedQuery = trpc.project.search.useQuery(
+      { query: debouncedValue },
+      { enabled },
+    )
+  else
+    feedQuery = trpc.bounty.search.useQuery(
+      { query: debouncedValue },
+      { enabled },
+    )
 
   const { moveHighlightedItem, selectHighlightedItem, useItem } = useItemList({
     onSelect: (item) => {
@@ -115,7 +121,7 @@ function SearchField({
         <div
           className={classNames(
             'absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none transition-opacity',
-            feedQuery.isLoading ? 'opacity-100' : 'opacity-0'
+            feedQuery.isLoading ? 'opacity-100' : 'opacity-0',
           )}
         >
           <SpinnerIcon className="w-4 h-4 animate-spin" />
@@ -123,7 +129,7 @@ function SearchField({
         <div
           className={classNames(
             'absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none transition-opacity',
-            feedQuery.isLoading ? 'opacity-0' : 'opacity-100'
+            feedQuery.isLoading ? 'opacity-0' : 'opacity-100',
           )}
         >
           <SearchIcon className="w-4 h-4" aria-hidden="true" />

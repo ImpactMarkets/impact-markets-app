@@ -2,6 +2,8 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
+import { Tabs } from '@mantine/core'
+
 import { Layout } from '@/components/layout'
 import { Bio } from '@/components/user/bio'
 import { Donations } from '@/components/user/donations'
@@ -11,17 +13,13 @@ import { ProfileInfo } from '@/components/user/profileInfo'
 import { ProjectFeed } from '@/components/user/projectFeed'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
-import { Tabs } from '@mantine/core'
 
 const ProfilePage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
   const { data: session } = useSession()
-  const profileQuery = trpc.useQuery([
-    'user.profile',
-    {
-      id: String(router.query.userId),
-    },
-  ])
+  const profileQuery = trpc.user.profile.useQuery({
+    id: String(router.query.userId),
+  })
 
   if (profileQuery.isError) {
     return <div>Error: {profileQuery.error.message}</div>
@@ -35,7 +33,7 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
           <Tabs.List>
             <Tabs.Tab value="bio">Bio</Tabs.Tab>
             {profileQuery.data.donations.some(
-              (donation) => donation.state === 'CONFIRMED'
+              (donation) => donation.state === 'CONFIRMED',
             ) ? (
               <Tabs.Tab value="donations">Donations</Tabs.Tab>
             ) : null}

@@ -3,9 +3,10 @@ import * as React from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 
+import { AppShell } from '@mantine/core'
+
 import { Header } from '@/components/header'
 import { Navbar } from '@/components/navbar'
-import { AppShell } from '@mantine/core'
 
 type LayoutProps = {
   children: React.ReactNode

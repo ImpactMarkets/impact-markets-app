@@ -1,27 +1,31 @@
 import { Context } from 'server/context'
 import { z } from 'zod'
 
-import { markdownToHtml } from '@/lib/editor'
 import { EventStatus, EventType } from '@prisma/client'
 
-import { createProtectedRouter } from '../createProtectedRouter'
+import { markdownToHtml } from '@/lib/editor'
 
-export const commentRouter = createProtectedRouter()
-  .mutation('add', {
-    input: z.object({
-      objectId: z.string().min(1),
-      objectType: z.enum(['project', 'bounty']),
-      content: z.string().min(1),
-      parentId: z.optional(z.number().int()),
-      category: z.enum([
-        'COMMENT',
-        'Q_AND_A',
-        'REASONING',
-        'ENDORSEMENT',
-        'REPLY',
-      ]),
-    }),
-    async resolve({ ctx, input }) {
+import { protectedProcedure } from '../procedures'
+import { router } from '../router'
+
+export const commentRouter = router({
+  add: protectedProcedure
+    .input(
+      z.object({
+        objectId: z.string().min(1),
+        objectType: z.enum(['project', 'bounty']),
+        content: z.string().min(1),
+        parentId: z.optional(z.number().int()),
+        category: z.enum([
+          'COMMENT',
+          'Q_AND_A',
+          'REASONING',
+          'ENDORSEMENT',
+          'REPLY',
+        ]),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
       const comment = await ctx.prisma.comment.create({
         data: {
           content: input.content,
@@ -70,16 +74,17 @@ export const commentRouter = createProtectedRouter()
       emitNewCommentEvent(ctx, input.objectType, comment)
 
       return comment
-    },
-  })
-  .mutation('edit', {
-    input: z.object({
-      id: z.number(),
-      data: z.object({
-        content: z.string().min(1),
-      }),
     }),
-    async resolve({ ctx, input }) {
+  edit: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        data: z.object({
+          content: z.string().min(1),
+        }),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
       const { id, data } = input
       const updatedComment = await ctx.prisma.comment.update({
         where: { id },
@@ -89,15 +94,14 @@ export const commentRouter = createProtectedRouter()
         },
       })
       return updatedComment
-    },
-  })
-  .mutation('delete', {
-    input: z.number(),
-    async resolve({ input: id, ctx }) {
+    }),
+  delete: protectedProcedure
+    .input(z.number())
+    .mutation(async ({ input: id, ctx }) => {
       await ctx.prisma.comment.delete({ where: { id } })
       return id
-    },
-  })
+    }),
+})
 
 async function emitNewCommentEvent(
   ctx: Context,
@@ -123,7 +127,7 @@ async function emitNewCommentEvent(
       }
     } | null
     id: number
-  }
+  },
 ) {
   const commentee = objectType === 'project' ? project : bounty
   await ctx.prisma.event.create({

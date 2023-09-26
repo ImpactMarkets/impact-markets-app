@@ -2,8 +2,10 @@ import { signIn, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import React from 'react'
 
-import { Box, Tooltip } from '@mantine/core'
-import { IconChevronRight } from '@tabler/icons'
+import { Box } from '@mantine/core'
+import { IconChevronRight } from '@tabler/icons-react'
+
+import { Tooltip } from '@/lib/mantine'
 
 import { Avatar } from './avatar'
 import { Button } from './button'

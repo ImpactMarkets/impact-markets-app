@@ -3,14 +3,15 @@ import { map, reverse, sortBy } from 'lodash/fp'
 import Link from 'next/link'
 import * as React from 'react'
 
+import { Prisma } from '@prisma/client'
+
 import { Date } from '@/components/date'
 import { num } from '@/lib/text'
-import { InferQueryOutput } from '@/lib/trpc'
-import { Prisma } from '@prisma/client'
+import { RouterOutput } from '@/lib/trpc'
 
 interface DonationGroup {
   projectId: string
-  project: InferQueryOutput<'user.profile'>['donations'][0]['project']
+  project: RouterOutput['user']['profile']['donations'][0]['project']
   totalAmount: Prisma.Decimal
   earliestDate: Date
   latestDate: Date
@@ -20,11 +21,7 @@ interface GroupedDonations {
   [projectId: string]: DonationGroup
 }
 
-export function Donations({
-  user,
-}: {
-  user: InferQueryOutput<'user.profile'>
-}) {
+export function Donations({ user }: { user: RouterOutput['user']['profile'] }) {
   const groupedDonations = user.donations.reduce((acc, donation) => {
     // Skip donations that are not confirmed or have totalAmount of 0
     if (donation.state !== 'CONFIRMED') {
@@ -46,7 +43,7 @@ export function Donations({
 
     // Add donation amount to totalAmount
     aggregate.totalAmount = acc[donation.project.id].totalAmount.add(
-      donation.amount
+      donation.amount,
     )
 
     // Replace date with date of earliest/latest donation
@@ -83,7 +80,7 @@ export function Donations({
         </td>
         <td className="px-4 py-2 text-right">${num(donation.totalAmount)}</td>
       </tr>
-    ))
+    )),
   )(groupedDonations)
 
   return (

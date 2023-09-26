@@ -1,7 +1,8 @@
 import * as React from 'react'
 
-import { XIcon } from '@/components/icons'
 import { Dialog as HeadlessDialog, Transition } from '@headlessui/react'
+
+import { XIcon } from '@/components/icons'
 
 type DialogProps = {
   isOpen: boolean

@@ -3,6 +3,8 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
+import { LoadingOverlay } from '@mantine/core'
+
 import { AuthorWithDate } from '@/components/authorWithDate'
 import { Banner } from '@/components/banner'
 import { Labels } from '@/components/certificate/labels'
@@ -14,12 +16,10 @@ import { Layout } from '@/components/layout'
 import { LikeButton } from '@/components/likeButton'
 import { TAGS } from '@/components/project/tags'
 import { Tags } from '@/components/tags'
-import { getCertificateQueryPathAndInput } from '@/components/utils'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
-import { LoadingOverlay } from '@mantine/core'
 
-// TODO: Maybe this could be made into a generic component ?
+// TODO: Maybe this could be made into a generic component?
 const CertificatePageWrapper: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
 
@@ -36,65 +36,18 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
   const router = useRouter()
   const { data: session } = useSession()
   const utils = trpc.useContext()
-  const certificateQueryPathAndInput =
-    getCertificateQueryPathAndInput(certificateId)
-  const certificateQuery = trpc.useQuery(certificateQueryPathAndInput)
+  const certificateQuery = trpc.certificate.detail.useQuery({
+    id: certificateId,
+  })
   const certificate = certificateQuery.data
-  const likeMutation = trpc.useMutation(['certificate.like'], {
-    onMutate: async () => {
-      await utils.cancelQuery(certificateQueryPathAndInput)
-
-      const previousCertificate = utils.getQueryData(
-        certificateQueryPathAndInput
-      )
-
-      if (previousCertificate) {
-        utils.setQueryData(certificateQueryPathAndInput, {
-          ...previousCertificate,
-          likedBy: [
-            ...previousCertificate.likedBy,
-            { user: { id: session!.user.id, name: session!.user.name } },
-          ],
-        })
-      }
-
-      return { previousCertificate }
-    },
-    onError: (err, id, context: any) => {
-      if (context?.previousCertificate) {
-        utils.setQueryData(
-          certificateQueryPathAndInput,
-          context.previousCertificate
-        )
-      }
+  const likeMutation = trpc.certificate.like.useMutation({
+    onSettled: () => {
+      return utils.certificate.detail.invalidate({ id: certificateId })
     },
   })
-  const unlikeMutation = trpc.useMutation(['certificate.unlike'], {
-    onMutate: async () => {
-      await utils.cancelQuery(certificateQueryPathAndInput)
-
-      const previousCertificate = utils.getQueryData(
-        certificateQueryPathAndInput
-      )
-
-      if (previousCertificate) {
-        utils.setQueryData(certificateQueryPathAndInput, {
-          ...previousCertificate,
-          likedBy: previousCertificate.likedBy.filter(
-            (item) => item.user.id !== session!.user.id
-          ),
-        })
-      }
-
-      return { previousCertificate }
-    },
-    onError: (err, id, context: any) => {
-      if (context?.previousCertificate) {
-        utils.setQueryData(
-          certificateQueryPathAndInput,
-          context.previousCertificate
-        )
-      }
+  const unlikeMutation = trpc.certificate.unlike.useMutation({
+    onSettled: () => {
+      return utils.certificate.detail.invalidate({ id: certificateId })
     },
   })
 
@@ -110,7 +63,7 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
     return (
       <>
         <Head>
-          <title>{certificate.title} – Impact Markets</title>
+          <title>{certificate.title} – AI Safety Impact Markets</title>
         </Head>
 
         <div className="divide-y divide-primary max-w-screen-lg mx-auto">
@@ -203,7 +156,7 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
 }
 
 CertificatePageWrapper.getLayout = function getLayout(
-  page: React.ReactElement
+  page: React.ReactElement,
 ) {
   return <Layout>{page}</Layout>
 }

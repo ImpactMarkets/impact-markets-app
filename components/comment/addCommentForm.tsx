@@ -2,10 +2,11 @@ import * as React from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
+import { CommentType } from '@prisma/client'
+
 import { Button } from '@/components/button'
 import { MarkdownEditor } from '@/components/markdownEditor'
 import { trpc } from '@/lib/trpc'
-import { CommentType } from '@prisma/client'
 
 import { CommentFormData } from '../utils'
 
@@ -20,14 +21,11 @@ export function AddCommentForm({
 }) {
   const [markdownEditorKey, setMarkdownEditorKey] = React.useState(0)
   const utils = trpc.useContext()
-  const addCommentMutation = trpc.useMutation('comment.add', {
+  const addCommentMutation = trpc.comment.add.useMutation({
     onSuccess: () => {
-      return utils.invalidateQueries([
-        (objectType + '.detail') as 'project.detail' | 'bounty.detail',
-        {
-          id: objectId,
-        },
-      ])
+      return utils[objectType]['detail'].invalidate({
+        id: objectId,
+      })
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
@@ -52,7 +50,7 @@ export function AddCommentForm({
           reset({ content: '' })
           setMarkdownEditorKey((markdownEditorKey) => markdownEditorKey + 1)
         },
-      }
+      },
     )
   }
 

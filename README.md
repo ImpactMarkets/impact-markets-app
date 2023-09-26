@@ -1,7 +1,5 @@
 <img src="public/images/logo-light.svg" width="150" />
 
-This is a simple tool that allows members to issue certificates. Features include a simple **Markdown-based** editor with preview, **image drag and drop**, comments and likes, **search**, a clean responsive layout with **dark mode support**, and an admin role for hiding certificates.
-
 ## Setup
 
 ## Local dependencies

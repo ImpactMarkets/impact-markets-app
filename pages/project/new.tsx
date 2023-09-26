@@ -1,7 +1,8 @@
-import cuid from 'cuid'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
+
+import { createId } from '@paralleldrive/cuid2'
 
 import { Heading1 } from '@/components/heading1'
 import { Layout } from '@/components/layout'
@@ -11,7 +12,7 @@ import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
 const NewProjectPage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
-  const addProjectMutation = trpc.useMutation('project.add', {
+  const addProjectMutation = trpc.project.add.useMutation({
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
     },
@@ -30,7 +31,7 @@ const NewProjectPage: NextPageWithAuthAndLayout = () => {
           isNew
           isSubmitting={addProjectMutation.isLoading}
           defaultValues={{
-            id: cuid(),
+            id: createId(),
             title: '',
             content: '',
             paymentUrl: '',
@@ -52,7 +53,7 @@ const NewProjectPage: NextPageWithAuthAndLayout = () => {
               },
               {
                 onSuccess: (data) => router.push(`/project/${data.id}`),
-              }
+              },
             )
           }}
         />

@@ -1,8 +1,9 @@
 import * as React from 'react'
 
+import { Card } from '@mantine/core'
+
 import { buttonClasses } from '@/components/button'
 import { ButtonLink } from '@/components/buttonLink'
-import { Card } from '@mantine/core'
 
 export const CallToAction = () => (
   <Card

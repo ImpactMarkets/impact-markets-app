@@ -1,27 +1,21 @@
 import * as React from 'react'
 
+import { IconTrophy } from '@tabler/icons-react'
+
 import { num } from '@/lib/text'
-import { InferQueryOutput, trpc } from '@/lib/trpc'
-import { Prisma } from '@prisma/client'
-import { IconTrophy } from '@tabler/icons'
+import { RouterOutput, trpc } from '@/lib/trpc'
 
 import { Author } from '../author'
 
 export function TopContributors({
   project,
 }: {
-  project: InferQueryOutput<'project.detail'>
+  project: RouterOutput['project']['detail']
 }) {
-  const rankingQuery = trpc.useQuery([
-    'project.topContributors',
-    {
-      id: project.id,
-    },
-  ])
+  const rankingQuery = trpc.project.topContributors.useQuery({
+    id: project.id,
+  })
   const ranking = rankingQuery.data ?? []
-
-  const zero = new Prisma.Decimal(0)
-  const one = new Prisma.Decimal(1)
   return (
     <>
       {ranking.length === 0 ? (
@@ -36,7 +30,6 @@ export function TopContributors({
                 <tr>
                   <td className="pb-6 w-10"></td>
                   <td className="pb-6 w-64">Donor</td>
-                  <td className="pb-6 pl-6 text-right">Score</td>
                   <td className="pb-6 pl-6 text-right">Amount</td>
                   <td className="pb-6 pl-6 text-right">Contribution</td>
                   <td></td>
@@ -49,14 +42,6 @@ export function TopContributors({
                       <td className="w-10 text-sm pb-3">{index + 1}</td>
                       <td className="w-64">
                         <Author author={user} />
-                      </td>
-                      <td className="text-right pl-6">
-                        {user.userScore == null
-                          ? '0' // Should never happen
-                          : user.userScore?.score === zero ||
-                            user.userScore?.score >= one
-                          ? num(user.userScore.score, 0)
-                          : '< 1'}
                       </td>
                       <td className="text-right pl-6">
                         $
@@ -79,7 +64,7 @@ export function TopContributors({
                         )}
                       </td>
                     </tr>
-                  )
+                  ),
                 )}
               </tbody>
             </table>

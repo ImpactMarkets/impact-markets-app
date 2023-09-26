@@ -12,7 +12,7 @@ import type { NextPageWithAuthAndLayout } from '@/lib/types'
 const LandingPage: NextPageWithAuthAndLayout = () => (
   <div className="mx-auto max-w-screen-lg my-5 pt-6">
     <Head>
-      <title>Impact Markets</title>
+      <title>AI Safety Impact Markets</title>
     </Head>
     <HeroText />
     <div className="border"></div>

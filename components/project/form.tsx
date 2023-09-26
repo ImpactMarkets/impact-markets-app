@@ -1,13 +1,14 @@
 import * as React from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
+import { SimpleGrid } from '@mantine/core'
+
 import { Button } from '@/components/button'
 import { ButtonLink } from '@/components/buttonLink'
 import { MarkdownIcon } from '@/components/icons'
 import { MarkdownEditor } from '@/components/markdownEditor'
 import { TAGS } from '@/components/project/tags'
 import { TextField } from '@/components/textField'
-import { SimpleGrid } from '@mantine/core'
 
 import { IMMultiSelect } from '../multiSelect'
 

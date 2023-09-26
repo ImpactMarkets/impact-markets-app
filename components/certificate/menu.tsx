@@ -20,12 +20,10 @@ import {
   MenuItems,
   MenuItemsContent,
 } from '@/components/menu'
-import { InferQueryOutput, trpc } from '@/lib/trpc'
-
-import { getCertificateQueryPathAndInput } from '../utils'
+import { RouterOutput, trpc } from '@/lib/trpc'
 
 type MenuProps = {
-  queryData: InferQueryOutput<'certificate.detail'>
+  queryData: RouterOutput['certificate']['detail']
   isUserAdmin: boolean
   belongsToUser: boolean
 }
@@ -129,11 +127,9 @@ function ConfirmHideDialog({
 }) {
   const cancelRef = React.useRef<HTMLButtonElement>(null)
   const utils = trpc.useContext()
-  const hideCertificateMutation = trpc.useMutation('certificate.hide', {
+  const hideCertificateMutation = trpc.certificate.hide.useMutation({
     onSuccess: () => {
-      return utils.invalidateQueries(
-        getCertificateQueryPathAndInput(certificateId)
-      )
+      return utils.certificate.invalidate()
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
@@ -184,11 +180,9 @@ function ConfirmUnhideDialog({
 }) {
   const cancelRef = React.useRef<HTMLButtonElement>(null)
   const utils = trpc.useContext()
-  const unhideCertificateMutation = trpc.useMutation('certificate.unhide', {
+  const unhideCertificateMutation = trpc.certificate.unhide.useMutation({
     onSuccess: () => {
-      return utils.invalidateQueries(
-        getCertificateQueryPathAndInput(certificateId)
-      )
+      return utils.certificate.invalidate()
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)

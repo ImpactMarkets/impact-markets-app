@@ -1,6 +1,8 @@
 import * as React from 'react'
 
-import { MultiSelect, MultiSelectProps } from '@mantine/core'
+import { MultiSelectProps } from '@mantine/core'
+
+import { MultiSelect } from '@/lib/mantine'
 
 import { InfoTooltip } from './infoTooltip'
 import { Label } from './label'

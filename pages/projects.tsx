@@ -11,13 +11,13 @@ import type { ProjectSummaryProps } from '@/components/project/summary'
 import { TAGS } from '@/components/project/tags'
 import { SummarySkeleton } from '@/components/summarySkeleton'
 import { ITEMS_PER_PAGE, ProjectSortKey } from '@/lib/constants'
-import { InferQueryPathAndInput, trpc } from '@/lib/trpc'
+import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
 const ProjectSummary = dynamic<ProjectSummaryProps>(
   () =>
     import('@/components/project/summary').then((mod) => mod.ProjectSummary),
-  { ssr: false }
+  { ssr: false },
 )
 
 const orderByValues: Array<{ value: ProjectSortKey; label: string }> = [
@@ -35,21 +35,17 @@ const Projects: NextPageWithAuthAndLayout = () => {
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
   const [filterTags, setFilterTags] = React.useState('')
   const [orderBy, setOrderBy] = React.useState(defaultOrder as ProjectSortKey)
-  const feedQueryPathAndInput: InferQueryPathAndInput<'project.feed'> = [
-    'project.feed',
-    {
-      ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
-      filterTags,
-      orderBy,
-    },
-  ]
-  const feedQuery = trpc.useQuery(feedQueryPathAndInput)
+  const feedQuery = trpc.project.feed.useQuery({
+    ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
+    filterTags,
+    orderBy,
+  })
 
   if (feedQuery.data) {
     return (
       <div className="max-w-screen-lg mx-auto">
         <Head>
-          <title>Impact Markets</title>
+          <title>Projects – AI Safety Impact Markets</title>
         </Head>
 
         <div className="flex justify-between flex-row-reverse flex-wrap gap-2">
@@ -65,13 +61,13 @@ const Projects: NextPageWithAuthAndLayout = () => {
               onOrderByUpdate={(orderBy: string) =>
                 // A bit unhappy with this – https://stackoverflow.com/a/69007934/678861
                 (orderByValues.map((item) => item.value) as string[]).includes(
-                  orderBy
+                  orderBy,
                 ) && setOrderBy(orderBy as ProjectSortKey)
               }
               orderByValues={orderByValues}
               defaultFilterTagValue={filterTags}
               defaultOrderByValue={orderBy}
-              searchEndpoint="project.search"
+              searchEndpoint="project"
             />
           </div>
         </div>

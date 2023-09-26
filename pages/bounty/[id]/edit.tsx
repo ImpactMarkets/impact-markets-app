@@ -12,11 +12,10 @@ import type { NextPageWithAuthAndLayout } from '@/lib/types'
 const EditBountyPage: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()
   const router = useRouter()
-  const bountyQuery = trpc.useQuery([
-    'bounty.detail',
-    { id: String(router.query.id) },
-  ])
-  const editBountyMutation = trpc.useMutation('bounty.edit', {
+  const bountyQuery = trpc.bounty.detail.useQuery({
+    id: String(router.query.id),
+  })
+  const editBountyMutation = trpc.bounty.edit.useMutation({
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
     },
@@ -28,7 +27,9 @@ const EditBountyPage: NextPageWithAuthAndLayout = () => {
     return (
       <>
         <Head>
-          <title>Edit {bountyQuery.data.title} – Impact Markets</title>
+          <title>
+            Edit {bountyQuery.data.title} – AI Safety Impact Markets
+          </title>
         </Head>
 
         {session!.user.role === 'ADMIN' || bountyBelongsToUser ? (
@@ -70,7 +71,7 @@ const EditBountyPage: NextPageWithAuthAndLayout = () => {
                     {
                       onSuccess: () =>
                         router.push(`/bounty/${bountyQuery.data.id}`),
-                    }
+                    },
                   )
                 }}
               />

@@ -17,7 +17,7 @@ type TextFieldProps = TextFieldOwnProps &
 export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
   (
     { label, info, id, name, type = 'text', className, classNames, ...rest },
-    forwardedRef
+    forwardedRef,
   ) => {
     return (
       <div className={className}>
@@ -41,7 +41,7 @@ export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
         />
       </div>
     )
-  }
+  },
 )
 
 TextField.displayName = 'TextField'

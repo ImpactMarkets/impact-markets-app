@@ -1,96 +1,39 @@
-import { Container, Text, Title, createStyles } from '@mantine/core'
+import { Tooltip } from '@/lib/mantine'
+import { Container, Text, Title } from '@mantine/core'
 
 import { buttonClasses } from '../button'
 import { ButtonLink } from '../buttonLink'
 
-const useStyles = createStyles((theme) => ({
-  wrapper: {
-    position: 'relative',
-    paddingTop: 0,
-    paddingBottom: 80,
-
-    '@media (max-width: 755px)': {
-      paddingTop: 80,
-      paddingBottom: 60,
-    },
-  },
-
-  inner: {
-    position: 'relative',
-    zIndex: 1,
-  },
-
-  dots: {
-    position: 'absolute',
-    color:
-      theme.colorScheme === 'dark'
-        ? theme.colors.dark[5]
-        : theme.colors.gray[1],
-
-    '@media (max-width: 755px)': {
-      display: 'none',
-    },
-  },
-
-  dotsLeft: {
-    left: 0,
-    top: 0,
-  },
-
-  title: {
-    textAlign: 'center',
-    fontWeight: 800,
-    fontSize: 40,
-    letterSpacing: -1,
-    color: theme.colorScheme === 'dark' ? theme.white : theme.black,
-    marginBottom: theme.spacing.xs,
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-
-    '@media (max-width: 520px)': {
-      fontSize: 28,
-    },
-  },
-
-  highlight: {
-    color:
-      theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 4 : 6],
-  },
-
-  description: {
-    textAlign: 'center',
-
-    '@media (max-width: 520px)': {
-      fontSize: theme.fontSizes.md,
-    },
-  },
-}))
-
 export function HeroText() {
-  const { classes } = useStyles()
-
   return (
     <Container className="max-w-[1400px] pb-24 text-center">
-      <div className={classes.inner}>
-        <Title className={classes.title}>
+      <div>
+        <Title className="text-[40px] mb-2">
           The AI Safety
           <div>
-            <Text component="span" className={classes.highlight} inherit>
-              Charity Evaluator
-            </Text>
+            <span className="text-[#0e73cc]">Charity Evaluator</span>
           </div>
         </Title>
 
-        <Container className="max-w-[600px]">
+        <Container>
           <Text size="lg" color="dimmed">
-            Find or promote the best early-stage AI safety projects
+            The{' '}
+            <Tooltip
+              className="hint"
+              label="Yelp … publishes crowd-sourced reviews about businesses. —Wikipedia"
+            >
+              <span>Yelp</span>
+            </Tooltip>{' '}
+            for charities: Find or promote the best early-stage AI safety
+            projects
           </Text>
         </Container>
 
-        <div className="mt-6">
-          <ButtonLink href="/why" variant="primary" className="mr-2">
+        <div className="inline-flex flex-wrap gap-1 justify-center mt-6">
+          <ButtonLink href="/why" variant="primary">
             Read the FAQs
           </ButtonLink>
-          <ButtonLink href="/projects" variant="primary" className="mr-2">
+          <ButtonLink href="/projects" variant="primary">
             Explore the projects
           </ButtonLink>
           <a

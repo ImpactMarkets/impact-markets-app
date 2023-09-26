@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 
+import { Button } from '@mantine/core'
+
 import { BountySortKey, ProjectSortKey } from '@/lib/constants'
-import { Button, Flex } from '@mantine/core'
 
 import { IconButton } from './iconButton'
 import { SearchIcon } from './icons'
@@ -16,7 +17,7 @@ export type FiltersProps = {
   orderByValues: Array<{ value: ProjectSortKey | BountySortKey; label: string }>
   defaultFilterTagValue: string
   defaultOrderByValue: string
-  searchEndpoint?: 'project.search' | 'bounty.search'
+  searchEndpoint?: 'project' | 'bounty'
   tags: IMTag[]
 }
 
@@ -24,26 +25,15 @@ export function Filters(props: FiltersProps) {
   const tagsMultiSelect = React.useRef<HTMLInputElement>(null)
   const [isSearchDialogOpen, setIsSearchDialogOpen] = React.useState(false)
   const [filterTags, setFilterTags] = useState<string[] | undefined>(
-    props.defaultFilterTagValue.split(',')
+    props.defaultFilterTagValue.split(','),
   )
   const [orderBy, setOrderBy] = useState<string | undefined>(
-    props.defaultOrderByValue
+    props.defaultOrderByValue,
   )
 
   return (
-    <Flex
-      gap={{ base: 'sm' }}
-      align="center"
-      style={{
-        flexWrap: 'wrap',
-      }}
-    >
-      <Flex
-        style={{
-          flexWrap: 'nowrap',
-          alignItems: 'center',
-        }}
-      >
+    <div className="flex flex-wrap gap-3 items-center">
+      <div className="flex flex-nowrap items-center">
         <IMMultiSelect
           ref={tagsMultiSelect}
           placeholder="Filter by tags"
@@ -85,7 +75,7 @@ export function Filters(props: FiltersProps) {
               'bg-none border-none text-secondary placeholder:text-secondary',
           }}
         />
-      </Flex>
+      </div>
       {props.searchEndpoint && (
         <IconButton
           variant="secondary"
@@ -122,6 +112,6 @@ export function Filters(props: FiltersProps) {
           }}
         />
       )}
-    </Flex>
+    </div>
   )
 }

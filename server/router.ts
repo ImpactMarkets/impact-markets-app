@@ -1,11 +1,28 @@
-import * as trpc from '@trpc/server'
+import consoleStamp from 'console-stamp'
+import superjson from 'superjson'
+
+import { initTRPC } from '@trpc/server'
 
 import { Context } from './context'
 
-const trpcRouter = () => trpc.router<Context>()
+// Add detail to logging outputs
+consoleStamp(console, {
+  format: ':date(yyyy-mm-dd HH:MM:ss.l) :label',
+})
 
-export const router = trpcRouter()
+const t = initTRPC.context<Context>().create({
+  transformer: superjson,
+  errorFormatter(opts) {
+    return opts.shape
+  },
+})
 
-const init = router.middleware<Context>
+export const router = t.router
 
-export type MiddlewareFunction = Parameters<typeof init>[0]
+export const publicProcedure = t.procedure
+
+export const middleware = t.middleware
+
+export type MiddlewareFunction = Parameters<typeof middleware>[0]
+
+export const mergeRouters = t.mergeRouters
