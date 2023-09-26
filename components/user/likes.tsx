@@ -68,8 +68,9 @@ export function Likes({ user }: { user: RouterOutput['user']['profile'] }) {
           )}
           {likedBounties && likedBounties.length > 0 && (
             <Card shadow="sm" p="lg" radius="md" m="lg" withBorder>
-              <h1>Bounties</h1>
-              {likedBounties}
+              <table className="table-auto w-full">
+                <tbody>{likedBounties}</tbody>
+              </table>
             </Card>
           )}
         </>
