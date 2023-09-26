@@ -127,12 +127,15 @@ function BountyPage({ bountyId }: { bountyId: string }) {
     return (
       <>
         <Head>
+          {/* https://stackoverflow.com/questions/75875037 */}
           <title>
-            {bounty.status === 'CLOSED' ? '[Closed] ' : null}
-            {bounty.status !== 'CLOSED' && bounty.size
-              ? '$' + num(bounty.size) + ': '
-              : ''}
-            {bounty.title} – Impact Markets
+            {`${bounty.status === 'CLOSED' ? '[Closed] ' : null}
+            ${
+              bounty.status !== 'CLOSED' && bounty.size
+                ? '$' + num(bounty.size) + ': '
+                : ''
+            }
+            ${bounty.title} – Impact Markets`}
           </title>
         </Head>
         <div className="max-w-screen-lg mx-auto">

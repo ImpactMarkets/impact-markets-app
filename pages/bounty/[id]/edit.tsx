@@ -27,8 +27,9 @@ const EditBountyPage: NextPageWithAuthAndLayout = () => {
     return (
       <>
         <Head>
+          {/* https://stackoverflow.com/questions/75875037 */}
           <title>
-            Edit {bountyQuery.data.title} – AI Safety Impact Markets
+            {`Edit ${bountyQuery.data.title} – AI Safety Impact Markets`}
           </title>
         </Head>
 

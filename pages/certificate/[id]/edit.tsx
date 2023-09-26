@@ -28,8 +28,9 @@ const EditCertificatePage: NextPageWithAuthAndLayout = () => {
     return (
       <>
         <Head>
+          {/* https://stackoverflow.com/questions/75875037 */}
           <title>
-            Edit {certificateQuery.data.title} – AI Safety Impact Markets
+            {`Edit ${certificateQuery.data.title} – AI Safety Impact Markets`}
           </title>
         </Head>
 
