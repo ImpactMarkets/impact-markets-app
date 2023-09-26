@@ -1,20 +1,20 @@
 import Link from 'next/link'
 import * as React from 'react'
 
-import { InferQueryOutput } from '@/lib/trpc'
 import { Card } from '@mantine/core'
+import { RouterOutput } from '@/lib/trpc'
 
 interface LikedProject {
   projectId: string
-  project: InferQueryOutput<'user.profile'>['likedProjects'][0]['project']
+  project: RouterOutput['user']['profile']['likedProjects'][0]['project']
 }
 
 interface LikedBounty {
   bountyId: string
-  bounty: InferQueryOutput<'user.profile'>['likedBounties'][0]['bounty']
+  bounty: RouterOutput['user']['profile']['likedBounties'][0]['bounty']
 }
 
-export function Likes({ user }: { user: InferQueryOutput<'user.profile'> }) {
+export function Likes({ user }: { user: RouterOutput['user']['profile'] }) {
   const likedProjects = user.likedProjects
     .filter((likedProject: LikedProject) => !likedProject.project.hidden)
     .map((likedProject: LikedProject) => (
