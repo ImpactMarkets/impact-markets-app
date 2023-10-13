@@ -120,5 +120,11 @@ export const Pitches = () => (
         </Feature>
       </SimpleGrid>
     </Container>
+    <iframe
+      className="w-full max-w-[800px] aspect-video mx-auto"
+      src="https://www.youtube.com/embed/MInKrUV9TVY?si=w9W6tW5b_P4d465x"
+      title="YouTube video player"
+      allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    ></iframe>
   </div>
 )
