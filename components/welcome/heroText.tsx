@@ -1,5 +1,3 @@
-import { Container, Text, Title } from '@mantine/core'
-
 import { Tooltip } from '@/lib/mantine'
 
 import { buttonClasses } from '../button'
@@ -7,17 +5,17 @@ import { ButtonLink } from '../buttonLink'
 
 export function HeroText() {
   return (
-    <Container className="max-w-[1400px] mb-12 text-center">
+    <div className="max-w-[1400px] mb-12 text-center">
       <div>
-        <Title className="text-5xl font-display font-medium">
+        <h1 className="text-5xl font-display font-medium">
           The AI Safety
           <div>
             <span className="text-[#0e73cc]">Charity Evaluator</span>
           </div>
-        </Title>
+        </h1>
 
-        <Container>
-          <Text className="my-6 mx-auto text-lg text-center prose">
+        <div className="my-8 mx-auto text-lg text-center prose">
+          <p>
             The{' '}
             <Tooltip
               className="hint"
@@ -25,9 +23,15 @@ export function HeroText() {
             >
               <span>Yelp</span>
             </Tooltip>{' '}
-            for charities: Find or promote the best AI safety projects
-          </Text>
-        </Container>
+            for charities: Find or{' '}
+            <span className="text-[#0e73cc]">promote</span> the best AI safety
+            projects,
+            <br />
+            <span className="text-[#0e73cc]">
+              regrant $600,000 from almost 50 donors
+            </span>
+          </p>
+        </div>
 
         <div className="inline-flex flex-wrap gap-1 justify-center">
           <ButtonLink href="/why" variant="primary">
@@ -46,6 +50,6 @@ export function HeroText() {
           </a>
         </div>
       </div>
-    </Container>
+    </div>
   )
 }
