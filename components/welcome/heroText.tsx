@@ -25,8 +25,7 @@ export function HeroText() {
             >
               <span>Yelp</span>
             </Tooltip>{' '}
-            for charities: Find or promote the best early-stage AI safety
-            projects
+            for charities: Find or promote the best AI safety projects
           </Text>
         </Container>
 
