@@ -19,9 +19,7 @@ const Feature = ({ icon: Icon, title, children }: FeatureProps) => (
           {title}
         </Text>
       </div>
-      <Text color="dimmed" size="sm" className="[hyphens:auto]">
-        {children}
-      </Text>
+      <Text className="[hyphens:auto] text-sm">{children}</Text>
     </div>
   </div>
 )
@@ -39,9 +37,8 @@ export const Pitches = () => (
       >
         <Feature icon={IconShovel} title="AI safety projects" key="projects">
           <p>
-            You’re working on{' '}
-            <span className="text-gray-700">independent research</span> or a{' '}
-            <span className="text-gray-700">new AI safety venture</span>? Your
+            You’re working on independent research or a{' '}
+            <span className="font-semibold">new AI safety venture</span>? Your
             funding goal is &lt; $100,000 for now?
           </p>
 
@@ -52,7 +49,11 @@ export const Pitches = () => (
             will be discovered by more donors!
           </p>
 
-          <p className="my-3 text-gray-700">
+          <p className="my-3">
+            <IconShovel
+              size="38"
+              className="float-left mr-1 stroke-blue-500 stroke-[1.5]"
+            />
             <Link href="/project/new" className="link">
               Publish your project
             </Link>{' '}
@@ -66,10 +67,8 @@ export const Pitches = () => (
           key="scouts"
         >
           <p>
-            You’re a seasoned{' '}
-            <span className="text-gray-700">donor or grantmaker</span>? You want
-            to{' '}
-            <span className="text-gray-700">regrant some of the $600,000</span>{' '}
+            You’re a seasoned donor or grantmaker? You want to{' '}
+            <span className="font-semibold">regrant some of the $600,000</span>{' '}
             of our donors and funders?
           </p>
 
@@ -80,7 +79,11 @@ export const Pitches = () => (
             expertise for follow-on donations!
           </p>
 
-          <p className="my-3 text-gray-700">
+          <p className="my-3">
+            <IconTelescope
+              size="38"
+              className="float-left mr-1 stroke-blue-500 stroke-[1.5]"
+            />
             Get your top projects to{' '}
             <Link href="/project/new" className="link">
               join the platform
@@ -94,9 +97,11 @@ export const Pitches = () => (
           key="Donors & funders"
         >
           <p>
-            You want to support funding-constrained{' '}
-            <span className="text-gray-700">AI safety projects</span> but don’t
-            know which?
+            You want to support{' '}
+            <span className="font-semibold">
+              funding-constrained AI safety projects
+            </span>{' '}
+            but don’t know which?
           </p>
           <p className="my-3">
             Project scouts find speculative, potentially spectacular projects!
@@ -105,15 +110,19 @@ export const Pitches = () => (
             of your donations or grants.
           </p>
 
-          <p className="my-3 text-gray-700">
-            The scouts are just getting started. Meanwhile{' '}
+          <p className="my-3">
+            <IconTrendingUp
+              size="38"
+              className="float-left mr-1 stroke-blue-500 stroke-[1.5]"
+            />
+            The scouts are just getting started.{' '}
             <a
               href="https://airtable.com/shr1eRlbcr43os6SX"
               className="link"
               target="_blank"
               rel="noreferrer"
             >
-              please register your interest in this 1-minute survey
+              Please register your interest in this 1-minute survey
             </a>{' '}
             to give them an incentive!
           </p>
