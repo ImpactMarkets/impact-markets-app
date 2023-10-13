@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import * as React from 'react'
 
-import { Container, SimpleGrid, Text } from '@mantine/core'
+import { SimpleGrid, Text } from '@mantine/core'
 import { IconShovel, IconTelescope, IconTrendingUp } from '@tabler/icons-react'
 
 interface FeatureProps extends React.ComponentPropsWithoutRef<'div'> {
