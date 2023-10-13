@@ -3,7 +3,7 @@ import * as React from 'react'
 
 export const Comparisons = () => (
   <>
-    <div className="flex justify-center my-12 text-3xl font-bold">
+    <div className="flex justify-center my-12 text-3xl font-display">
       AI Safety Impact Markets is a …
     </div>
     <div className="max-w-screen-lg m-auto items-center flex mb-20 flex-col sm:flex-row">
@@ -18,10 +18,10 @@ export const Comparisons = () => (
         />
       </div>
       <div className="basis-full">
-        <div className="text-xl font-bold mb-4">
+        <div className="text-3xl font-display mb-4">
           Crowdsourced charity evaluator
         </div>
-        <div className="[hyphens:auto]">
+        <div className="[hyphens:auto] prose">
           Charity evaluators have sophisticated and trusted processes, but they
           can’t scale down to projects so small and numerous that the evaluation
           costs more than what they can absorb in funding. Charity evaluators
@@ -44,10 +44,10 @@ export const Comparisons = () => (
         />
       </div>
       <div className="basis-full">
-        <div className="text-xl font-bold mb-4">
+        <div className="text-3xl font-display mb-4">
           Currency of existential security
         </div>
-        <div className="[hyphens:auto]">
+        <div className="[hyphens:auto] prose">
           Carbon credits (or “offsets”) are an asset like money, but just like
           money they are also a way to keep score. Our donor score can be seen
           as a kind of “impact credit,” a generalized carbon credit. Once our
@@ -71,10 +71,10 @@ export const Comparisons = () => (
         />
       </div>
       <div className="basis-full">
-        <div className="text-xl font-bold mb-4">
+        <div className="text-3xl font-display mb-4">
           Network of grantmakers/regrantors
         </div>
-        <div className="[hyphens:auto]">
+        <div className="[hyphens:auto] prose">
           Your donations inform the giving of individuals and foundations – a
           multiplier on the money that you can give yourself. One day, laws
           permitting, we want to make it possible for you to even get paid in

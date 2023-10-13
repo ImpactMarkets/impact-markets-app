@@ -15,7 +15,7 @@ const Feature = ({ icon: Icon, title, children }: FeatureProps) => (
     <div>
       <div className="h-22 p-3 -ml-3 mb-3 w-[calc(100%+2rem)] bg-gray-100">
         <Icon size={38} className="stroke-blue-500 stroke-[1.5]" />
-        <Text className="font-bold text-md whitespace-nowrap overflow-hidden overflow-ellipsis">
+        <Text className="font-display text-xl whitespace-nowrap overflow-hidden overflow-ellipsis">
           {title}
         </Text>
       </div>
@@ -28,7 +28,7 @@ const Feature = ({ icon: Icon, title, children }: FeatureProps) => (
 
 export const Pitches = () => (
   <div className="max-w-[900px] mx-auto my-5 py-6">
-    <div className="flex justify-center text-3xl font-bold">
+    <div className="flex justify-center text-3xl font-display">
       AI Safety Impact Markets is a platform for …
     </div>
     <Container mt={30} mb={30} size="lg">

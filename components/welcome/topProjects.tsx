@@ -42,7 +42,7 @@ export const TopProjects = () => {
 
   return (
     <div className="my-12">
-      <div className="flex justify-center my-12 text-3xl font-bold">
+      <div className="flex justify-center my-12 text-3xl font-display">
         The current top&nbsp;
         <span className="hidden xl:inline 2xl:inline">projects are</span>
         <span className="inline xl:hidden 2xl:hidden">project is</span>&nbsp;…

@@ -7,9 +7,9 @@ import { ButtonLink } from '../buttonLink'
 
 export function HeroText() {
   return (
-    <Container className="max-w-[1400px] pb-24 text-center">
+    <Container className="max-w-[1400px] mb-12 text-center">
       <div>
-        <Title className="text-[40px] mb-2">
+        <Title className="text-5xl font-display font-medium">
           The AI Safety
           <div>
             <span className="text-[#0e73cc]">Charity Evaluator</span>
@@ -17,7 +17,7 @@ export function HeroText() {
         </Title>
 
         <Container>
-          <Text size="lg" color="dimmed">
+          <Text className="my-6 mx-auto text-lg text-center prose">
             The{' '}
             <Tooltip
               className="hint"
@@ -29,7 +29,7 @@ export function HeroText() {
           </Text>
         </Container>
 
-        <div className="inline-flex flex-wrap gap-1 justify-center mt-6">
+        <div className="inline-flex flex-wrap gap-1 justify-center">
           <ButtonLink href="/why" variant="primary">
             Read the FAQs
           </ButtonLink>

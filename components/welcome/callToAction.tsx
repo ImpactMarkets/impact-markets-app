@@ -14,8 +14,8 @@ export const CallToAction = () => (
     className="m-auto border-2 rounded-2xl text-center p-16 mt-32 mb-12"
   >
     <div>
-      <div className="text-4xl font-extrabold mb-4">Join the community!</div>
-      <div className="text-lg">
+      <div className="text-5xl font-display mb-4">Join the community!</div>
+      <div className="text-lg prose">
         Play regrantor, raise money, discover funding opportunities
       </div>
       <div className="mt-6">
