@@ -29,108 +29,107 @@ export const Pitches = () => (
     <div className="flex justify-center text-3xl font-display">
       AI Safety Impact Markets is a platform for …
     </div>
-    <Container mt={30} mb={30} size="lg">
-      <SimpleGrid
-        cols={3}
-        breakpoints={[{ maxWidth: 'sm', cols: 1 }]}
-        spacing={40}
+    <SimpleGrid
+      className="my-6"
+      cols={3}
+      breakpoints={[{ maxWidth: 'sm', cols: 1 }]}
+      spacing={40}
+    >
+      <Feature icon={IconShovel} title="AI safety projects" key="projects">
+        <p>
+          You’re working on independent research or a{' '}
+          <span className="font-semibold">new AI safety venture</span>? Your
+          funding goal is &lt; $100,000 for now?
+        </p>
+
+        <p className="my-3">
+          Let the funders come to you! We score donors by their track record of
+          finding high-impact projects such as yours. A strong donation track
+          record signal-boosts the projects that they support, so yours will be
+          discovered by more donors!
+        </p>
+
+        <p className="my-3">
+          <IconShovel
+            size="38"
+            className="float-left mr-1 stroke-blue-500 stroke-[1.5]"
+          />
+          <Link href="/project/new" className="link">
+            Publish your project
+          </Link>{' '}
+          to start fundraising. Ask your existing donors to register their
+          donations to express their support.
+        </p>
+      </Feature>
+      <Feature
+        icon={IconTelescope}
+        title="Project scouts & regrantors"
+        key="scouts"
       >
-        <Feature icon={IconShovel} title="AI safety projects" key="projects">
-          <p>
-            You’re working on independent research or a{' '}
-            <span className="font-semibold">new AI safety venture</span>? Your
-            funding goal is &lt; $100,000 for now?
-          </p>
+        <p>
+          You’re a seasoned donor or grantmaker? You want to{' '}
+          <span className="font-semibold">regrant some of the $600,000</span> of
+          our donors and funders?
+        </p>
 
-          <p className="my-3">
-            Let the funders come to you! We score donors by their track record
-            of finding high-impact projects such as yours. A strong donation
-            track record signal-boosts the projects that they support, so yours
-            will be discovered by more donors!
-          </p>
+        <p className="my-3">
+          Scout out the best projects you can find! Your <em>donor score</em>{' '}
+          reflects your donation track record: The higher your score, the more
+          you signal-boost the projects you support. You’ll leverage your
+          expertise for follow-on donations!
+        </p>
 
-          <p className="my-3">
-            <IconShovel
-              size="38"
-              className="float-left mr-1 stroke-blue-500 stroke-[1.5]"
-            />
-            <Link href="/project/new" className="link">
-              Publish your project
-            </Link>{' '}
-            to start fundraising. Ask your existing donors to register their
-            donations to express their support.
-          </p>
-        </Feature>
-        <Feature
-          icon={IconTelescope}
-          title="Project scouts & regrantors"
-          key="scouts"
-        >
-          <p>
-            You’re a seasoned donor or grantmaker? You want to{' '}
-            <span className="font-semibold">regrant some of the $600,000</span>{' '}
-            of our donors and funders?
-          </p>
+        <p className="my-3">
+          <IconTelescope
+            size="38"
+            className="float-left mr-1 stroke-blue-500 stroke-[1.5]"
+          />
+          Get your top projects to{' '}
+          <Link href="/project/new" className="link">
+            join the platform
+          </Link>{' '}
+          and register your past and present donations.
+        </p>
+      </Feature>
+      <Feature
+        icon={IconTrendingUp}
+        title="Donors & funders"
+        key="Donors & funders"
+      >
+        <p>
+          You want to support{' '}
+          <span className="font-semibold">
+            funding-constrained AI safety projects
+          </span>{' '}
+          but don’t know which?
+        </p>
+        <p className="my-3">
+          Project scouts find speculative, potentially spectacular projects! We
+          make their diverse, specialized knowledge accessible to you. Follow
+          our top scouts, tap into their wisdom, and boost the impact of your
+          donations or grants.
+        </p>
 
-          <p className="my-3">
-            Scout out the best projects you can find! Your <em>donor score</em>{' '}
-            reflects your donation track record: The higher your score, the more
-            you signal-boost the projects you support. You’ll leverage your
-            expertise for follow-on donations!
-          </p>
-
-          <p className="my-3">
-            <IconTelescope
-              size="38"
-              className="float-left mr-1 stroke-blue-500 stroke-[1.5]"
-            />
-            Get your top projects to{' '}
-            <Link href="/project/new" className="link">
-              join the platform
-            </Link>{' '}
-            and register your past and present donations.
-          </p>
-        </Feature>
-        <Feature
-          icon={IconTrendingUp}
-          title="Donors & funders"
-          key="Donors & funders"
-        >
-          <p>
-            You want to support{' '}
-            <span className="font-semibold">
-              funding-constrained AI safety projects
-            </span>{' '}
-            but don’t know which?
-          </p>
-          <p className="my-3">
-            Project scouts find speculative, potentially spectacular projects!
-            We make their diverse, specialized knowledge accessible to you.
-            Follow our top scouts, tap into their wisdom, and boost the impact
-            of your donations or grants.
-          </p>
-
-          <p className="my-3">
-            <IconTrendingUp
-              size="38"
-              className="float-left mr-1 stroke-blue-500 stroke-[1.5]"
-            />
-            The scouts are just getting started.{' '}
-            <a
-              href="https://airtable.com/shr1eRlbcr43os6SX"
-              className="link"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Please register your interest in this 1-minute survey
-            </a>{' '}
-            to give them an incentive!
-          </p>
-        </Feature>
-      </SimpleGrid>
-    </Container>
+        <p className="my-3">
+          <IconTrendingUp
+            size="38"
+            className="float-left mr-1 stroke-blue-500 stroke-[1.5]"
+          />
+          The scouts are just getting started.{' '}
+          <a
+            href="https://airtable.com/shr1eRlbcr43os6SX"
+            className="link"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Please register your interest in this 1-minute survey
+          </a>{' '}
+          to give them an incentive!
+        </p>
+      </Feature>
+    </SimpleGrid>
     <iframe
-      className="w-full max-w-[800px] aspect-video mx-auto"
+      className="w-full max-w-[800px] aspect-video my-12 mx-auto"
       src="https://www.youtube.com/embed/MInKrUV9TVY?si=w9W6tW5b_P4d465x"
       title="YouTube video player"
       allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
