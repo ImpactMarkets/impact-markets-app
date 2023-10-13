@@ -16,9 +16,9 @@ const LandingPage: NextPageWithAuthAndLayout = () => (
     </Head>
     <HeroText />
     <div className="border"></div>
-    <Pitches />
-    <div className="border"></div>
     <TopProjects />
+    <div className="border"></div>
+    <Pitches />
     <div className="border"></div>
     <Comparisons />
     <CallToAction />
