@@ -7,8 +7,13 @@ import { Loader } from '@mantine/core'
 export const Select = dynamic(
   () => import('@mantine/core').then((el) => el.Select),
   {
+    /* Tailwind classes missing on prod/staging */
     loading: () => (
-      <Loader className="inline !w-[1em] fill-[currentColor]" variant="bars" />
+      <Loader
+        className="inline"
+        style={{ width: '1em', fill: 'currentColor' }}
+        variant="bars"
+      />
     ),
     ssr: false,
   },
@@ -18,7 +23,11 @@ export const Tooltip = dynamic(
   () => import('@mantine/core').then((el) => el.Tooltip),
   {
     loading: () => (
-      <Loader className="inline !w-[1em] fill-[currentColor]" variant="bars" />
+      <Loader
+        className="inline"
+        style={{ width: '1em', fill: 'currentColor' }}
+        variant="bars"
+      />
     ),
     ssr: false,
   },
@@ -28,7 +37,11 @@ export const MultiSelect = dynamic(
   () => import('@mantine/core').then((el) => el.MultiSelect),
   {
     loading: () => (
-      <Loader className="inline !w-[1em] fill-[currentColor]" variant="bars" />
+      <Loader
+        className="inline"
+        style={{ width: '1em', fill: 'currentColor' }}
+        variant="bars"
+      />
     ),
     ssr: false,
   },
@@ -38,7 +51,11 @@ export const Progress = dynamic(
   () => import('@mantine/core').then((el) => el.Progress),
   {
     loading: () => (
-      <Loader className="inline !w-[1em] fill-[currentColor]" variant="bars" />
+      <Loader
+        className="inline"
+        style={{ width: '1em', fill: 'currentColor' }}
+        variant="bars"
+      />
     ),
     ssr: false,
   },
