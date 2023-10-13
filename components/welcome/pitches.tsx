@@ -28,7 +28,9 @@ const Feature = ({ icon: Icon, title, children }: FeatureProps) => (
 
 export const Pitches = () => (
   <div className="max-w-[900px] mx-auto my-5 py-6">
-    <div className="flex justify-center text-3xl font-bold">A market for …</div>
+    <div className="flex justify-center text-3xl font-bold">
+      AI Safety Impact Markets is a platform for …
+    </div>
     <Container mt={30} mb={30} size="lg">
       <SimpleGrid
         cols={3}
@@ -37,11 +39,10 @@ export const Pitches = () => (
       >
         <Feature icon={IconShovel} title="AI safety projects" key="projects">
           <p>
-            Are you doing{' '}
-            <span className="text-gray-700">independent research</span> or{' '}
-            launching a{' '}
+            You’re working on{' '}
+            <span className="text-gray-700">independent research</span> or a{' '}
             <span className="text-gray-700">new AI safety venture</span>? Your
-            fundraising goal is &lt; $100,000 for now?
+            funding goal is &lt; $100,000 for now?
           </p>
 
           <p className="my-3">
@@ -65,10 +66,11 @@ export const Pitches = () => (
           key="scouts"
         >
           <p>
-            You’re an experienced donor or grantmaker? You want to regrant some
-            of the{' '}
-            <span className="text-gray-700">$370,000 donation budget</span> of
-            our donors? Or more, once larger funders join?
+            You’re a seasoned{' '}
+            <span className="text-gray-700">donor or grantmaker</span>? You want
+            to{' '}
+            <span className="text-gray-700">regrant some of the $600,000</span>{' '}
+            of our donors and funders?
           </p>
 
           <p className="my-3">
@@ -92,9 +94,9 @@ export const Pitches = () => (
           key="Donors & funders"
         >
           <p>
-            Do you want to donate to funding-constrained{' '}
-            <span className="text-gray-700">AI safety projects</span> and grow
-            the ecosystem but don’t know where to start?
+            You want to support funding-constrained{' '}
+            <span className="text-gray-700">AI safety projects</span> but don’t
+            know which?
           </p>
           <p className="my-3">
             Project scouts find speculative, potentially spectacular projects!
@@ -118,5 +120,11 @@ export const Pitches = () => (
         </Feature>
       </SimpleGrid>
     </Container>
+    <iframe
+      className="w-full max-w-[800px] aspect-video mx-auto"
+      src="https://www.youtube.com/embed/MInKrUV9TVY?si=w9W6tW5b_P4d465x"
+      title="YouTube video player"
+      allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    ></iframe>
   </div>
 )
