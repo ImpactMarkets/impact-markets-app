@@ -64,17 +64,19 @@ export const createEmail = (
               src="https://app.impactmarkets.io/static/images/logo-light.png"
             ></MjmlImage>
             <MjmlText>
-              <p>Hello {recipient.name},</p>
               <p>
-                Here is your summary of the recent activity on your projects and
-                bounties.
+                Here is your summary of new projects, new bounties, and recent
+                activity on your own projects and bounties.
               </p>
             </MjmlText>
             <MjmlDivider border-color="#EE0000"></MjmlDivider>
             {Object.values(eventsByProject).map(renderSection)}
             <MjmlText>
               <p>
-                You can change your notification preferences on your{' '}
+                You are getting this email because you’re subscribed to
+                notifications of new projects, new bounties, or activity on your
+                own projects. You can change your notification preferences on
+                your{' '}
                 <a
                   href={`https://app.impactmarkets.io/profile/${recipient.id}`}
                 >
@@ -137,7 +139,7 @@ export async function sendEmail(recipientAddress: string, emailHtml: string) {
     await transporter.sendMail({
       from: process.env.EMAIL_FROM,
       to: recipientAddress,
-      subject: 'Recent activity on your projects and bounties',
+      subject: 'Digest of new projects and recent activity',
       text: htmlToText.convert(emailHtml, { wordwrap: 130 }),
       html: emailHtml,
     })

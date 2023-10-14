@@ -505,7 +505,7 @@ async function emitNewProjectEvents(
           objectId: id,
           objectType: 'project',
           objectTitle: title,
-          text: `**${author.name}**: “${summary}”`,
+          text: `**${author.name} has created a new project:** “${summary}”`,
         },
         status: EventStatus.PENDING,
         recipient: {
