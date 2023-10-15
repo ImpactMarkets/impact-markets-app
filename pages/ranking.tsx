@@ -9,6 +9,7 @@ import { IconTrophy } from '@tabler/icons-react'
 import { Author } from '@/components/author'
 import { Heading1 } from '@/components/heading1'
 import { Layout } from '@/components/layout'
+import { PageLoader } from '@/components/utils'
 import { Tooltip } from '@/lib/mantine'
 import { num } from '@/lib/text'
 import { trpc } from '@/lib/trpc'
@@ -176,42 +177,7 @@ const Ranking = ({
     return <div>Error: {rankingQuery.error.message}</div>
   }
 
-  return (
-    <div className="animate-pulse">
-      <div className="flex items-center justify-center gap-4 mt-6">
-        <table>
-          <thead>
-            <tr>
-              <td>
-                <div className="pb-6 w-10 h-4 bg-gray-200 rounded dark:bg-gray-700" />
-              </td>
-              <td>
-                <div className="pb-6 w-64 h-4 bg-gray-200 rounded dark:bg-gray-700" />
-              </td>
-              <td>
-                <div className="pb-6 w-24 h-4 bg-gray-200 rounded dark:bg-gray-700" />
-              </td>
-            </tr>
-          </thead>
-          <tbody>
-            {[...Array(10)].map((_, idx) => (
-              <tr key={idx}>
-                <td>
-                  <div className="w-8 h-8 bg-gray-200 rounded dark:bg-gray-700" />
-                </td>
-                <td>
-                  <div className="w-60 h-12 bg-gray-200 rounded dark:bg-gray-700" />
-                </td>
-                <td>
-                  <div className="w-24 h-8 bg-gray-200 rounded dark:bg-gray-700" />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  )
+  return <PageLoader />
 }
 
 RankingPage.getLayout = function getLayout(page: React.ReactElement) {

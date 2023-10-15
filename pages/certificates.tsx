@@ -10,7 +10,7 @@ import { Filters } from '@/components/filters'
 import { Layout } from '@/components/layout'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import { TAGS } from '@/components/project/tags'
-import { SummarySkeleton } from '@/components/summarySkeleton'
+import { PageLoader } from '@/components/utils'
 import { CertificateSortKey, ITEMS_PER_PAGE } from '@/lib/constants'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
@@ -109,17 +109,7 @@ const Home: NextPageWithAuthAndLayout = () => {
     return <div>Error: {feedQuery.error.message}</div>
   }
 
-  return (
-    <div className="flow-root">
-      <ul className="my-10 divide-y divide-transparent">
-        {[...Array(3)].map((_, idx) => (
-          <li key={idx} className="py-10">
-            <SummarySkeleton />
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
+  return <PageLoader />
 }
 
 Home.getLayout = function getLayout(page: React.ReactElement) {

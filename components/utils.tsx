@@ -1,5 +1,7 @@
 import { sortBy } from 'lodash/fp'
 
+import { Loader } from '@mantine/core'
+
 import { Author } from '@/lib/types'
 
 export function refreshSession() {
@@ -21,3 +23,13 @@ export type IMTag = {
   color: string
   group: string
 }
+
+export const PageLoader = () => (
+  <div className="w-full h-full flex justify-center items-center">
+    <Loader
+      className="w-16 m-12 fill-slate-300"
+      style={{ width: '' }}
+      variant="bars"
+    />
+  </div>
+)
