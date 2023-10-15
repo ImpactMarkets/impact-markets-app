@@ -10,7 +10,7 @@ export function HeroText() {
         <h1 className="text-5xl font-display font-medium">
           The AI Safety
           <div>
-            <span className="text-[#0e73cc]">Charity Evaluator</span>
+            <span className="text-highlight">Charity Evaluator</span>
           </div>
         </h1>
 
@@ -24,11 +24,11 @@ export function HeroText() {
               <span>Yelp</span>
             </Tooltip>{' '}
             for charities: Find or{' '}
-            <span className="text-[#0e73cc]">promote</span> the best AI safety
-            projects,
+            <span className="text-highlight">promote</span> the best AI safety
+            projects.
             <br />
-            <span className="text-[#0e73cc]">
-              regrant $600,000 from almost 50 donors
+            <span className="text-highlight">
+              Regrant $600,000 from almost 50 donors.
             </span>
           </p>
         </div>

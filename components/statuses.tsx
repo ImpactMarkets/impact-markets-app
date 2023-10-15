@@ -7,7 +7,7 @@ interface StatusProps {
 export const Statuses: React.FC<StatusProps> = ({ color }) => {
   return (
     <div
-      className="border text-highlight border-secondary bg-primary font-bold text-xs px-1 rounded"
+      className="border text-primary border-secondary bg-primary font-bold text-xs px-1 rounded"
       style={{
         backgroundColor: color,
       }}
