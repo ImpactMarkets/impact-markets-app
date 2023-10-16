@@ -5,11 +5,12 @@ module.exports = {
     'postcss-preset-mantine': {},
     'postcss-simple-vars': {
       variables: {
-        'mantine-breakpoint-xs': '36em',
-        'mantine-breakpoint-sm': '48em',
-        'mantine-breakpoint-md': '62em',
-        'mantine-breakpoint-lg': '75em',
-        'mantine-breakpoint-xl': '88em',
+        // Taken from Tailwind
+        'mantine-breakpoint-xs': '36em', // 576px
+        'mantine-breakpoint-sm': '40em', // 640px
+        'mantine-breakpoint-md': '48em', // 768px
+        'mantine-breakpoint-lg': '64em', // 1024px
+        'mantine-breakpoint-xl': '80em', // 1280px
       },
     },
   },
