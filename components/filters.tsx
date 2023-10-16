@@ -22,7 +22,6 @@ export type FiltersProps = {
 }
 
 export function Filters(props: FiltersProps) {
-  const tagsMultiSelect = React.useRef<HTMLInputElement>(null)
   const [isSearchDialogOpen, setIsSearchDialogOpen] = React.useState(false)
   const [filterTags, setFilterTags] = useState<string[] | undefined>(
     props.defaultFilterTagValue ? props.defaultFilterTagValue.split(',') : [],
@@ -35,8 +34,7 @@ export function Filters(props: FiltersProps) {
     <div className="flex flex-wrap gap-3 items-center">
       <div className="flex flex-nowrap gap-3 items-center text-sm">
         <IMMultiSelect
-          ref={tagsMultiSelect}
-          placeholder={filterTags?.length ? '' : 'Filter by tags'}
+          placeholder={filterTags?.length ? ' ' : 'Filter by tags'}
           data={props.tags}
           onChange={(value) => {
             if (Array.isArray(value)) {
@@ -48,6 +46,8 @@ export function Filters(props: FiltersProps) {
           classNames={{
             inputField:
               'placeholder:text-secondary focus:ring-0 cursor-pointer',
+            pillsList: 'flex-nowrap',
+            root: 'w-48',
           }}
           hidePickedOptions
         />
@@ -68,6 +68,7 @@ export function Filters(props: FiltersProps) {
           value={orderBy}
           classNames={{
             input: 'border-none focus:ring-0 placeholder:text-secondary',
+            root: 'w-48',
           }}
         />
       </div>
