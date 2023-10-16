@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { DonationState, Prisma, Project, User } from '@prisma/client'
 import { EventStatus, EventType } from '@prisma/client'
 
+import { serverEnv } from '@/env/server'
 import { num } from '@/lib/text'
 
 import { protectedProcedure } from '../procedures'
@@ -109,21 +110,24 @@ async function emitNewDonationEvent(
     amount: Prisma.Decimal
   },
 ) {
-  await ctx.prisma.event.create({
-    data: {
-      type: EventType.DONATION,
-      parameters: {
-        objectId: project.id,
-        objectType: 'project',
-        objectTitle: project.title,
-        text: `**${user.name}** registered a donation of **$${num(amount)}**`,
-      },
-      status: EventStatus.PENDING,
-      recipient: {
-        connect: {
-          id: project.authorId,
+  const subscriberIds = [project.authorId, serverEnv.IMPACT_MARKETS_USER]
+  for (const subscriberId of subscriberIds) {
+    await ctx.prisma.event.create({
+      data: {
+        type: EventType.DONATION,
+        parameters: {
+          objectId: project.id,
+          objectType: 'project',
+          objectTitle: project.title,
+          text: `**${user.name}** registered a donation of **$${num(amount)}**`,
+        },
+        status: EventStatus.PENDING,
+        recipient: {
+          connect: {
+            id: subscriberId,
+          },
         },
       },
-    },
-  })
+    })
+  }
 }

@@ -3,6 +3,7 @@ import { z } from 'zod'
 
 import { EventStatus, EventType } from '@prisma/client'
 
+import { serverEnv } from '@/env/server'
 import { markdownToHtml } from '@/lib/editor'
 
 import { protectedProcedure } from '../procedures'
@@ -51,6 +52,12 @@ export const commentRouter = router({
         },
         select: {
           id: true,
+          author: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
           project: {
             select: {
               id: true,
@@ -107,9 +114,14 @@ async function emitNewCommentEvent(
   ctx: Context,
   objectType: 'project' | 'bounty',
   {
+    author,
     project,
     bounty,
   }: {
+    author: {
+      id: string
+      name: string
+    }
     project: {
       id: string
       title: string
@@ -130,21 +142,25 @@ async function emitNewCommentEvent(
   },
 ) {
   const commentee = objectType === 'project' ? project : bounty
-  await ctx.prisma.event.create({
-    data: {
-      type: EventType.COMMENT,
-      parameters: {
-        objectId: commentee!.id,
-        objectType: objectType,
-        objectTitle: commentee!.title,
-        text: `**${commentee!.author.name}** added a comment`,
-      },
-      status: EventStatus.PENDING,
-      recipient: {
-        connect: {
-          id: commentee!.author.id,
+  const subscribers = [commentee!.author, { id: serverEnv.IMPACT_MARKETS_USER }]
+  for (const subscriber of subscribers) {
+    if (!subscriber) continue
+    await ctx.prisma.event.create({
+      data: {
+        type: EventType.COMMENT,
+        parameters: {
+          objectId: commentee!.id,
+          objectType: objectType,
+          objectTitle: commentee!.title,
+          text: `**${author.name}** added a comment`,
+        },
+        status: EventStatus.PENDING,
+        recipient: {
+          connect: {
+            id: subscriber.id,
+          },
         },
       },
-    },
-  })
+    })
+  }
 }

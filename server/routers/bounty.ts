@@ -415,6 +415,7 @@ async function emitNewBountyEvents(
   const subscribers = await ctx.prisma.user.findMany({
     where: {
       prefersBountyNotifications: true,
+      email: { contains: '@' },
     },
     select: {
       id: true,
@@ -438,7 +439,7 @@ async function emitNewBountyEvents(
           objectId: id,
           objectType: 'bounty',
           objectTitle: title,
-          text: `**${author.name}**: “${summary}”`,
+          text: `**New bounty by ${author.name}:** “${summary}”`,
         },
         status: EventStatus.PENDING,
         recipient: {
