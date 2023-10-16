@@ -100,7 +100,7 @@ const renderSection = (events: Event[]) => {
   const objectTitle = events[0].parameters.objectTitle
   return (
     <>
-      <MjmlText>
+      <MjmlText key={objectId}>
         <h2>
           Project “
           <a href={`https://app.impactmarkets.io/${objectType}/${objectId}`}>
