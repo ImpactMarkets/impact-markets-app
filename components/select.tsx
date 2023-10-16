@@ -17,7 +17,7 @@ type IMTextFieldProps = SelectOwnProps &
   React.ComponentPropsWithoutRef<'input'>
 
 export const IMSelect = React.forwardRef<HTMLInputElement, IMTextFieldProps>(
-  ({ label, info, id, name, className, classNames, ...rest }, forwardedRef) => {
+  ({ label, info, id, name, className, ...rest }, forwardedRef) => {
     return (
       <div className={className}>
         {label && (
@@ -32,26 +32,6 @@ export const IMSelect = React.forwardRef<HTMLInputElement, IMTextFieldProps>(
           id={id || name}
           name={name}
           aria-label={label as string}
-          classNames={{
-            input:
-              'block w-full py-1 rounded shadow-sm bg-secondary border-secondary focus-ring im-Select',
-            ...classNames,
-          }}
-          sx={{
-            'div > input::placeholder': {
-              fontSize: 12,
-            },
-            'div > input': {
-              padding: 17,
-              fontSize: 14,
-              lineHeight: '0.2rem',
-              height: 16,
-              minWidth: 0,
-            },
-            'div > input:focus': {
-              boxShadow: 'none',
-            },
-          }}
         />
       </div>
     )

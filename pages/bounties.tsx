@@ -6,7 +6,7 @@ import * as React from 'react'
 
 import { Banner } from '@/components/banner'
 import type { SummaryProps } from '@/components/bounty/summary'
-import { TAGS } from '@/components/bounty/tags'
+import { TAGS_GROUPED } from '@/components/bounty/tags'
 import { ButtonLink } from '@/components/buttonLink'
 import { Filters } from '@/components/filters'
 import { Layout } from '@/components/layout'
@@ -49,7 +49,7 @@ const Home: NextPageWithAuthAndLayout = () => {
           <title>Bounties – AI Safety Impact Markets</title>
         </Head>
 
-        <div className="flex justify-between flex-row-reverse flex-wrap">
+        <div className="flex justify-between flex-row-reverse flex-wrap gap-3 mt-3">
           <div className="flex items-center justify-end gap-x-3">
             <ButtonLink href="/bounty/new" variant="highlight">
               <span className="block shrink-0">New bounty</span>
@@ -57,7 +57,7 @@ const Home: NextPageWithAuthAndLayout = () => {
           </div>
           <div>
             <Filters
-              tags={TAGS}
+              tags={TAGS_GROUPED}
               onFilterTagsUpdate={(tags) => setFilterTags(tags)}
               onOrderByUpdate={(orderBy: string) =>
                 // A bit unhappy with this – https://stackoverflow.com/a/69007934/678861

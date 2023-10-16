@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import * as React from 'react'
 
 import { Card } from '@mantine/core'
@@ -7,11 +8,12 @@ import { ButtonLink } from '@/components/buttonLink'
 
 export const CallToAction = () => (
   <Card
-    shadow="lg"
-    p="lg"
-    radius="md"
-    withBorder
-    className="m-auto border-2 rounded-2xl text-center p-16 mt-32 mb-12"
+    className={clsx(
+      'shadow-lg',
+      'border-slate-200 border-solid border-2 rounded-2xl',
+      'text-center',
+      'p-16 mt-32 mb-12',
+    )}
   >
     <div>
       <div className="text-5xl font-display mb-4">Join the community!</div>

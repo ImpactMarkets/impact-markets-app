@@ -5,11 +5,11 @@ import { Barlow_Condensed, Open_Sans } from 'next/font/google'
 import * as React from 'react'
 
 import { MantineProvider } from '@mantine/core'
+import '@mantine/core/styles.css'
 import { Provider as RollbarProvider } from '@rollbar/react'
 import TawkMessengerReact from '@tawk.to/tawk-messenger-react'
 
 import { browserEnv } from '@/env/browser'
-import { emotionCache } from '@/lib/emotionCache'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
@@ -74,12 +74,7 @@ function MyApp({
 
   return (
     <RollbarProvider config={rollbarConfig}>
-      <MantineProvider
-        emotionCache={emotionCache}
-        withCSSVariables
-        withGlobalStyles
-        withNormalizeCSS
-      >
+      <MantineProvider>
         <SessionProvider session={session} refetchOnWindowFocus>
           {/* Hack because the default variable definitions don’t seem to work because they
               are namespaced within the class openSans.variable */}

@@ -25,7 +25,7 @@ export function Filters(props: FiltersProps) {
   const tagsMultiSelect = React.useRef<HTMLInputElement>(null)
   const [isSearchDialogOpen, setIsSearchDialogOpen] = React.useState(false)
   const [filterTags, setFilterTags] = useState<string[] | undefined>(
-    props.defaultFilterTagValue.split(','),
+    props.defaultFilterTagValue ? props.defaultFilterTagValue.split(',') : [],
   )
   const [orderBy, setOrderBy] = useState<string | undefined>(
     props.defaultOrderByValue,
@@ -33,15 +33,11 @@ export function Filters(props: FiltersProps) {
 
   return (
     <div className="flex flex-wrap gap-3 items-center">
-      <div className="flex flex-nowrap items-center">
+      <div className="flex flex-nowrap gap-3 items-center text-sm">
         <IMMultiSelect
           ref={tagsMultiSelect}
-          placeholder="Filter by tags"
-          data={props.tags.map((tag) => ({
-            value: tag.value,
-            label: tag.label,
-            group: tag.group,
-          }))}
+          placeholder={filterTags?.length ? '' : 'Filter by tags'}
+          data={props.tags}
           onChange={(value) => {
             if (Array.isArray(value)) {
               setFilterTags(value)
@@ -50,10 +46,10 @@ export function Filters(props: FiltersProps) {
           }}
           value={filterTags}
           classNames={{
-            input: 'bg-none border-none',
-            searchInput:
-              'border-none placeholder:text-secondary placeholder:!text-sm',
+            inputField:
+              'placeholder:text-secondary focus:ring-0 cursor-pointer',
           }}
+          hidePickedOptions
         />
         <IMSelect
           placeholder="Sort by:"
@@ -71,8 +67,7 @@ export function Filters(props: FiltersProps) {
           }}
           value={orderBy}
           classNames={{
-            input:
-              'bg-none border-none text-secondary placeholder:text-secondary',
+            input: 'border-none focus:ring-0 placeholder:text-secondary',
           }}
         />
       </div>

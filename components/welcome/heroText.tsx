@@ -17,11 +17,8 @@ export function HeroText() {
         <div className="my-8 mx-auto text-lg text-center prose">
           <p>
             The{' '}
-            <Tooltip
-              className="hint"
-              label="Yelp … publishes crowd-sourced reviews about businesses. —Wikipedia"
-            >
-              <span>Yelp</span>
+            <Tooltip label="Yelp … publishes crowd-sourced reviews about businesses. —Wikipedia">
+              <span className="hint">Yelp</span>
             </Tooltip>{' '}
             for charities: Find or{' '}
             <span className="text-highlight">promote</span> the best AI safety

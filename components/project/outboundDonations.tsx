@@ -19,7 +19,7 @@ type AddDonationFormData = {
   userId: string
 }
 
-export function OutgoingDonations({
+export function OutboundDonations({
   project,
 }: {
   project: RouterOutput['project']['detail']
@@ -114,7 +114,7 @@ export function OutgoingDonations({
                 <TextField
                   {...register('amount', { required: true })}
                   rightSection="USD"
-                  classNames={{ rightSection: 'w-14' }}
+                  classNames={{ section: 'w-14' }}
                   type="number"
                   step="0.01"
                   min="10"

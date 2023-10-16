@@ -1,8 +1,9 @@
 import * as fp from 'lodash/fp'
 
+import { Progress } from '@mantine/core'
 import { Prisma } from '@prisma/client'
 
-import { Progress } from '@/lib/mantine'
+import { Tooltip } from '@/lib/mantine'
 import { num } from '@/lib/text'
 import { RouterOutput } from '@/lib/trpc'
 
@@ -122,9 +123,16 @@ export function HoldingsChart({ holdings, issuers }: HoldingsChartProps) {
   ]
 
   return (
-    <Progress
-      sections={sections}
+    <Progress.Root
       classNames={{ label: 'text-sm', root: 'w-full h-8 rounded' }}
-    />
+    >
+      {sections.map(({ label, tooltip, value, color }) => (
+        <Tooltip label={tooltip} key={label}>
+          <Progress.Section value={value} color={color}>
+            <Progress.Label>{label}</Progress.Label>
+          </Progress.Section>
+        </Tooltip>
+      ))}
+    </Progress.Root>
   )
 }

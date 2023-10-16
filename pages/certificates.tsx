@@ -9,7 +9,7 @@ import type { CertificateSummaryProps } from '@/components/certificate/summary'
 import { Filters } from '@/components/filters'
 import { Layout } from '@/components/layout'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
-import { TAGS } from '@/components/project/tags'
+import { TAGS_GROUPED } from '@/components/project/tags'
 import { PageLoader } from '@/components/utils'
 import { CertificateSortKey, ITEMS_PER_PAGE } from '@/lib/constants'
 import { trpc } from '@/lib/trpc'
@@ -53,9 +53,9 @@ const Home: NextPageWithAuthAndLayout = () => {
           <title>Certificates – AI Safety Impact Markets</title>
         </Head>
 
-        <div>
+        <div className="mt-3">
           <Filters
-            tags={TAGS}
+            tags={TAGS_GROUPED}
             onFilterTagsUpdate={(tags) => setFilterTags(tags)}
             onOrderByUpdate={(orderBy: string) =>
               // A bit unhappy with this – https://stackoverflow.com/a/69007934/678861

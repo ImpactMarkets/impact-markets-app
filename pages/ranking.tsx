@@ -31,7 +31,7 @@ const RankingPage: NextPageWithAuthAndLayout = () => {
         subject to change. It takes into account the{' '}
         <Tooltip
           multiline
-          width={400}
+          w={400}
           label={
             <span>
               This is a bit unfortunate, but it is necessary as a proxy for the
@@ -47,7 +47,7 @@ const RankingPage: NextPageWithAuthAndLayout = () => {
         ,{' '}
         <Tooltip
           multiline
-          width={400}
+          w={400}
           label={
             <span>
               This is in terms of the order of the donations. It rewards donors
@@ -60,7 +60,7 @@ const RankingPage: NextPageWithAuthAndLayout = () => {
         , and{' '}
         <Tooltip
           multiline
-          width={400}
+          w={400}
           label={
             <span>
               We do retroactive evaluations. It’s much easier to check whether

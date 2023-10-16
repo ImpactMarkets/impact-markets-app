@@ -7,11 +7,7 @@ import Document, {
 } from 'next/document'
 import Rollbar from 'rollbar'
 
-import { ServerStyles, createStylesServer } from '@mantine/next'
-
-import { emotionCache } from '@/lib/emotionCache'
-
-const stylesServer = createStylesServer(emotionCache)
+import { ColorSchemeScript } from '@mantine/core'
 
 class MyDocument extends Document {
   // The guide sees this code in _error.tsx, but that somehow doesn’t get executed at least for some
@@ -56,14 +52,6 @@ class MyDocument extends Document {
     return {
       ...initialProps,
       err: { statusCode, name: err?.name }, // Used in _error.tsx
-      styles: [
-        <ServerStyles
-          html={initialProps.html}
-          server={stylesServer}
-          key="styles"
-        />,
-        initialProps.styles,
-      ],
     }
   }
 
@@ -71,6 +59,7 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+          <ColorSchemeScript />
           <link rel="icon" href="/favicon.ico" sizes="any" />
           <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
           <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

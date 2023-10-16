@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import * as React from 'react'
 
-import { SimpleGrid, Text } from '@mantine/core'
 import { IconShovel, IconTelescope, IconTrendingUp } from '@tabler/icons-react'
 
 interface FeatureProps extends React.ComponentPropsWithoutRef<'div'> {
@@ -11,16 +10,14 @@ interface FeatureProps extends React.ComponentPropsWithoutRef<'div'> {
 }
 
 const Feature = ({ icon: Icon, title, children }: FeatureProps) => (
-  <div className="pt-6">
-    <div>
-      <div className="h-22 p-3 -ml-3 mb-3 w-[calc(100%+2rem)] bg-gray-100">
-        <Icon size={38} className="stroke-blue-500 stroke-[1.5]" />
-        <Text className="font-display text-xl whitespace-nowrap overflow-hidden overflow-ellipsis">
-          {title}
-        </Text>
+  <div>
+    <div className="h-22 p-3 mb-3 w-full bg-gray-100">
+      <Icon size={38} className="stroke-blue-500 stroke-[1.5]" />
+      <div className="font-display text-xl whitespace-nowrap overflow-hidden overflow-ellipsis">
+        {title}
       </div>
-      <Text className="[hyphens:auto] text-sm">{children}</Text>
     </div>
+    <div className="[hyphens:auto] text-sm">{children}</div>
   </div>
 )
 
@@ -29,17 +26,12 @@ export const Pitches = () => (
     <div className="flex justify-center text-3xl font-display">
       AI Safety Impact Markets is a platform for …
     </div>
-    <SimpleGrid
-      className="my-6"
-      cols={3}
-      breakpoints={[{ maxWidth: 'sm', cols: 1 }]}
-      spacing={40}
-    >
+    <div className="flex gap-6 flex-col sm:flex-row my-6">
       <Feature icon={IconShovel} title="AI safety projects" key="projects">
         <p>
           You’re working on independent research or a{' '}
           <span className="font-semibold">new AI safety venture</span>? Your
-          funding goal is &lt; $100,000 for now?
+          funding goal is &lt;&nbsp;$100,000 for now?
         </p>
 
         <p className="my-3">
@@ -127,7 +119,7 @@ export const Pitches = () => (
           to give them an incentive!
         </p>
       </Feature>
-    </SimpleGrid>
+    </div>
     <iframe
       className="w-full max-w-[800px] aspect-video my-12 mx-auto"
       src="https://www.youtube.com/embed/MInKrUV9TVY?si=w9W6tW5b_P4d465x"

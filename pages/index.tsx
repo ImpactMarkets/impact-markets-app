@@ -30,6 +30,7 @@ const LandingPage: NextPageWithAuthAndLayout = () => (
         scrolling="no"
       ></iframe>
     </div>
+    <div className="border"></div>
     <CenteredFooter />
   </div>
 )

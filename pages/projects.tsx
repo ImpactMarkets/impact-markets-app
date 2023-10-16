@@ -8,7 +8,7 @@ import { Filters } from '@/components/filters'
 import { Layout } from '@/components/layout'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import type { ProjectSummaryProps } from '@/components/project/summary'
-import { TAGS } from '@/components/project/tags'
+import { TAGS_GROUPED } from '@/components/project/tags'
 import { PageLoader } from '@/components/utils'
 import { ITEMS_PER_PAGE, ProjectSortKey } from '@/lib/constants'
 import { trpc } from '@/lib/trpc'
@@ -48,7 +48,7 @@ const Projects: NextPageWithAuthAndLayout = () => {
           <title>Projects – AI Safety Impact Markets</title>
         </Head>
 
-        <div className="flex justify-between flex-row-reverse flex-wrap gap-2">
+        <div className="flex justify-between flex-row-reverse flex-wrap gap-2 mt-3">
           <div>
             <ButtonLink href="/project/new" variant="highlight">
               <span className="block shrink-0">New project</span>
@@ -56,7 +56,7 @@ const Projects: NextPageWithAuthAndLayout = () => {
           </div>
           <div>
             <Filters
-              tags={TAGS}
+              tags={TAGS_GROUPED}
               onFilterTagsUpdate={(tags) => setFilterTags(tags)}
               onOrderByUpdate={(orderBy: string) =>
                 // A bit unhappy with this – https://stackoverflow.com/a/69007934/678861

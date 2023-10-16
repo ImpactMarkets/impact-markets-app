@@ -22,6 +22,7 @@ export const Tags = ({ queryData, tags: knownTags }: TagsProps) => {
   return (
     <>
       {knownTags.map(
+        // @ts-expect-error: Properties value, label, and color do exist?
         ({ value, label, color }) =>
           tags.includes(value) && (
             <span

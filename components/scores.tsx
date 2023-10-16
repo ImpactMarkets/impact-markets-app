@@ -19,7 +19,7 @@ export const Scores = ({ project, showProjectScore = false }: ScoresProps) => {
     <>
       <span className="inline-block cursor-help text-primary bg-emerald-600 font-bold text-xs leading-none px-2 py-1 rounded">
         <Tooltip
-          width={400}
+          w={400}
           multiline
           label={
             <>
@@ -39,7 +39,7 @@ export const Scores = ({ project, showProjectScore = false }: ScoresProps) => {
       {showProjectScore && (
         <span className="inline-block cursor-help text-primary bg-emerald-700 font-bold text-xs leading-none px-2 py-1 rounded">
           <Tooltip
-            width={400}
+            w={400}
             multiline
             label={
               <>

@@ -1,9 +1,10 @@
 import { useRouter } from 'next/router'
 import * as React from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 
 import { AppShell } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
 
 import { Header } from '@/components/header'
 import { Navbar } from '@/components/navbar'
@@ -13,8 +14,8 @@ type LayoutProps = {
 }
 
 export function Layout({ children }: LayoutProps) {
-  const [opened, setOpened] = useState<boolean>(false)
   const router = useRouter()
+  const [opened, { toggle, close }] = useDisclosure()
 
   useEffect(() => {
     if (router?.asPath.indexOf('?') > -1) {
@@ -24,25 +25,24 @@ export function Layout({ children }: LayoutProps) {
     }
   })
 
-  const closeMenu = useCallback(() => {
-    if (opened) {
-      setOpened(false)
-    }
-  }, [opened, setOpened])
-
   // Hook to close the menu when a link is clicked
   useEffect(() => {
-    router.events.on('routeChangeStart', closeMenu)
-    return () => router.events.off('routeChangeStart', closeMenu)
+    router.events.on('routeChangeStart', close)
+    return () => router.events.off('routeChangeStart', close)
   })
 
   return (
     <AppShell
-      navbar={<Navbar hidden={!opened} />}
-      header={<Header opened={opened} setOpened={setOpened} showMenu />}
-      classNames={{ body: 'overflow-x-auto' }}
+      classNames={{ main: 'overflow-x-auto pt-[50px] md:pt-0 md:pl-[250px]' }}
+      padding="md"
     >
-      {children}
+      <Header
+        className="md:hidden h-[50px] max-h-[50px]"
+        opened={opened}
+        toggle={toggle}
+      />
+      <Navbar className="md:flex md:mt-0 mt-[50px] w-[250px]" opened={opened} />
+      <AppShell.Main>{children}</AppShell.Main>
     </AppShell>
   )
 }

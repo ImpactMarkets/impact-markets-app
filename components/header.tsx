@@ -1,42 +1,28 @@
+import clsx from 'clsx'
 import Image from 'next/image'
 import Link from 'next/link'
 import * as React from 'react'
 
-import { Burger, Header as MantineHeader, MediaQuery } from '@mantine/core'
+import { AppShell, Burger } from '@mantine/core'
 
 interface HeaderProps {
   opened?: boolean
-  showMenu?: boolean
-  setOpened?: (f: (opened: boolean) => boolean) => void
+  className?: string
+  toggle: () => void
 }
 
 export const Header = ({
   opened = false,
-  showMenu = false,
-  setOpened,
+  className = '',
+  toggle,
 }: HeaderProps) => {
   // base/md thresholds are different between Mantine and Tailwind, so we make do with a bit of
   // space at the top at some screen sizes
   return (
-    <MantineHeader
-      classNames={{
-        root: 'md:hidden h-[50px] max-h-[50px] z-[5]',
-      }}
-      withBorder={false}
-      height={{ base: 50, sm: 0 }}
-    >
+    <AppShell.Header className={clsx('z-[5]', className)} withBorder={false}>
       <div className="flex justify-between items-center h-full px-5">
         <div className="flex-1">
-          {showMenu && (
-            <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
-              <Burger
-                opened={opened}
-                onClick={() => setOpened!((o) => !o)}
-                size="sm"
-                mr="xl"
-              />
-            </MediaQuery>
-          )}
+          <Burger opened={opened} onClick={toggle} size="sm" mr="xl" />
         </div>
         <div>
           <Link href="/">
@@ -55,6 +41,6 @@ export const Header = ({
         </div>
         <div className="flex-1"></div>
       </div>
-    </MantineHeader>
+    </AppShell.Header>
   )
 }

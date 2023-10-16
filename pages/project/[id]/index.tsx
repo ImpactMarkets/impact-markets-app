@@ -25,7 +25,7 @@ import { Layout } from '@/components/layout'
 import { LikeButton } from '@/components/likeButton'
 import { IncomingDonations } from '@/components/project/incomingDonations'
 import { Menu } from '@/components/project/menu'
-import { OutgoingDonations } from '@/components/project/outgoingDonations'
+import { OutboundDonations } from '@/components/project/outboundDonations'
 import { TAGS } from '@/components/project/tags'
 import { TopContributors } from '@/components/project/topContributors'
 import { Scores } from '@/components/scores'
@@ -216,7 +216,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
                     </Tabs.Tab>
                   )}
                   {session && (
-                    <Tabs.Tab value="outgoingDonations">
+                    <Tabs.Tab value="outboundDonations">
                       Register a donation
                     </Tabs.Tab>
                   )}
@@ -231,8 +231,8 @@ function ProjectPage({ projectId }: { projectId: string }) {
                   <TopContributors project={project} />
                 </Tabs.Panel>
                 {session && (
-                  <Tabs.Panel value="outgoingDonations" pt="xs">
-                    <OutgoingDonations project={project} />
+                  <Tabs.Panel value="outboundDonations" pt="xs">
+                    <OutboundDonations project={project} />
                   </Tabs.Panel>
                 )}
                 {(isAdmin || projectBelongsToUser) && (
