@@ -28,7 +28,7 @@ export const CallToAction = () => (
           Read the blog
         </ButtonLink>
         <a
-          href="https://airtable.com/shr1eRlbcr43os6SX"
+          href="https://bit.ly/donor-interests"
           className={buttonClasses({ variant: 'highlight' })}
           target="_blank"
           rel="noreferrer"
