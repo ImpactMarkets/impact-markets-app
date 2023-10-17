@@ -10,8 +10,6 @@ html {
 @layer base {
   body {
     @apply text-base;
-    @apply text-primary;
-    @apply bg-primary;
     @apply antialiased;
   }
 
@@ -73,5 +71,6 @@ html {
   .hint {
     @apply underline;
     @apply decoration-dotted;
+    @apply cursor-help;
   }
 }

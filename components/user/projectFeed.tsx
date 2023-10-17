@@ -4,9 +4,10 @@ import * as React from 'react'
 
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import type { ProjectSummaryProps } from '@/components/project/summary'
-import { SummarySkeleton } from '@/components/summarySkeleton'
 import { ITEMS_PER_PAGE } from '@/lib/constants'
 import { RouterOutput, trpc } from '@/lib/trpc'
+
+import { PageLoader } from '../utils'
 
 const ProjectSummary = dynamic<ProjectSummaryProps>(
   () =>
@@ -59,15 +60,5 @@ export function ProjectFeed({
     return <div className="mt-6">Error: {profileFeedQuery.error.message}</div>
   }
 
-  return (
-    <div className="flow-root mt-6">
-      <ul className="-my-3">
-        {[...Array(3)].map((_, idx) => (
-          <li key={idx} className="py-3">
-            <SummarySkeleton />
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
+  return <PageLoader />
 }

@@ -8,8 +8,8 @@ import { Filters } from '@/components/filters'
 import { Layout } from '@/components/layout'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import type { ProjectSummaryProps } from '@/components/project/summary'
-import { TAGS } from '@/components/project/tags'
-import { SummarySkeleton } from '@/components/summarySkeleton'
+import { TAGS_GROUPED } from '@/components/project/tags'
+import { PageLoader } from '@/components/utils'
 import { ITEMS_PER_PAGE, ProjectSortKey } from '@/lib/constants'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
@@ -48,7 +48,7 @@ const Projects: NextPageWithAuthAndLayout = () => {
           <title>Projects – AI Safety Impact Markets</title>
         </Head>
 
-        <div className="flex justify-between flex-row-reverse flex-wrap gap-2">
+        <div className="flex justify-between flex-row-reverse flex-wrap gap-2 mt-3">
           <div>
             <ButtonLink href="/project/new" variant="highlight">
               <span className="block shrink-0">New project</span>
@@ -56,7 +56,7 @@ const Projects: NextPageWithAuthAndLayout = () => {
           </div>
           <div>
             <Filters
-              tags={TAGS}
+              tags={TAGS_GROUPED}
               onFilterTagsUpdate={(tags) => setFilterTags(tags)}
               onOrderByUpdate={(orderBy: string) =>
                 // A bit unhappy with this – https://stackoverflow.com/a/69007934/678861
@@ -102,17 +102,7 @@ const Projects: NextPageWithAuthAndLayout = () => {
     return <div>Error: {feedQuery.error.message}</div>
   }
 
-  return (
-    <div className="flow-root max-w-screen-lg mx-auto">
-      <ul className="my-10 divide-y divide-transparent">
-        {[...Array(3)].map((_, idx) => (
-          <li key={idx} className="py-10">
-            <SummarySkeleton />
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
+  return <PageLoader />
 }
 
 Projects.getLayout = function getLayout(page: React.ReactElement) {

@@ -64,17 +64,19 @@ export const createEmail = (
               src="https://app.impactmarkets.io/static/images/logo-light.png"
             ></MjmlImage>
             <MjmlText>
-              <p>Hello {recipient.name},</p>
               <p>
-                Here is your summary of the recent activity on your projects and
-                bounties.
+                Here is your summary of new projects, new bounties, and recent
+                activity on your own projects and bounties.
               </p>
             </MjmlText>
             <MjmlDivider border-color="#EE0000"></MjmlDivider>
             {Object.values(eventsByProject).map(renderSection)}
             <MjmlText>
               <p>
-                You can change your notification preferences on your{' '}
+                You are getting this email because you’re subscribed to
+                notifications of new projects, new bounties, or activity on your
+                own projects. You can change your notification preferences on
+                your{' '}
                 <a
                   href={`https://app.impactmarkets.io/profile/${recipient.id}`}
                 >
@@ -98,9 +100,9 @@ const renderSection = (events: Event[]) => {
   const objectTitle = events[0].parameters.objectTitle
   return (
     <>
-      <MjmlText>
+      <MjmlText key={objectId}>
         <h2>
-          Project “
+          “
           <a href={`https://app.impactmarkets.io/${objectType}/${objectId}`}>
             {objectTitle}
           </a>
@@ -131,13 +133,14 @@ export async function sendEmail(recipientAddress: string, emailHtml: string) {
   if (
     (process.env.NODE_ENV === 'production' && process.env.EMAIL_ANYONE) ||
     recipientAddress.endsWith('@impactmarkets.io') ||
-    recipientAddress === 'telofy@gmail.com'
+    recipientAddress === 'telofy@gmail.com' ||
+    recipientAddress === 'impactmarkets.io@gmail.com'
   ) {
     console.log(`Sending email to ${recipientAddress}`)
     await transporter.sendMail({
       from: process.env.EMAIL_FROM,
       to: recipientAddress,
-      subject: 'Recent activity on your projects and bounties',
+      subject: 'Digest of new projects and recent activity',
       text: htmlToText.convert(emailHtml, { wordwrap: 130 }),
       html: emailHtml,
     })

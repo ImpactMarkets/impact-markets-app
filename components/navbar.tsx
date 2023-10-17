@@ -1,13 +1,10 @@
+import clsx from 'clsx'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
 
-import {
-  Navbar as MantineNavbar,
-  createStyles,
-  getStylesRef,
-} from '@mantine/core'
+import { AppShell } from '@mantine/core'
 import {
   IconBolt,
   IconFile,
@@ -20,82 +17,55 @@ import {
 
 import { User } from './user'
 
-const useStyles = createStyles((theme, _params) => {
-  const icon = getStylesRef('icon')
-  return {
-    link: {
-      ...theme.fn.focusStyles(),
-      display: 'flex',
-      alignItems: 'center',
-      textDecoration: 'none',
-      fontSize: theme.fontSizes.sm,
-      color: theme.colors.gray[7],
-      padding: `${theme.spacing.xs}px ${theme.spacing.sm}px`,
-      borderRadius: theme.radius.sm,
-      fontWeight: 500,
-
-      '&:hover': {
-        backgroundColor: theme.colors.gray[0],
-        color: theme.black,
-      },
-    },
-
-    linkIcon: {
-      ref: icon,
-      color: theme.colors.gray[6],
-      marginRight: theme.spacing.sm,
-    },
-
-    linkActive: {
-      '&, &:hover': {
-        backgroundColor: theme.fn.variant({
-          variant: 'light',
-          color: theme.primaryColor,
-        }).background,
-        color: theme.fn.variant({ variant: 'light', color: theme.primaryColor })
-          .color,
-      },
-    },
-  }
-})
-
 const NavbarLink = ({
   link,
+  prefixes,
   label,
   icon: Icon,
 }: {
   link: string
+  prefixes: string[]
   label: string
   icon: React.ElementType
 }) => {
-  const { classes, cx } = useStyles()
   const router = useRouter()
 
   return (
     <Link href={link} key={label}>
       <div
-        className={
-          cx(classes.link, {
-            [classes.linkActive]: link === router.pathname,
-          }) + ' p-3 flex text-sm items-center cursor-pointer'
-        }
+        className={clsx(
+          'flex',
+          'items-center',
+          'p-3',
+          'text-sm no-underline',
+          'cursor-pointer',
+          'text-slate-600 fill-slate-600',
+          router.pathname === link ||
+            prefixes.some((value) => router.pathname.startsWith(value))
+            ? 'text-blue-500 fill-blue-500 bg-blue-50'
+            : 'hover:bg-slate-100 hover:fill-gray-900 hover:text-gray-900',
+        )}
       >
-        <Icon className={classes.linkIcon} />
+        <Icon className="mr-3" />
         <span>{label}</span>
       </div>
     </Link>
   )
 }
 
-export const Navbar = ({ hidden }: { hidden: boolean }) => (
-  <MantineNavbar
-    classNames={{ root: 'w-[250px] z-[5]' }}
-    width={{ sm: 250 }}
+export const Navbar = ({
+  opened,
+  className,
+}: {
+  opened: boolean
+  className?: string
+}) => (
+  <AppShell.Navbar
+    className={clsx('z-[5]', className, opened ? 'flex' : 'hidden')}
     withBorder={false}
-    hidden={hidden}
-    hiddenBreakpoint="sm"
+    hidden={!opened}
   >
-    <MantineNavbar.Section className="hidden md:block m-4">
+    <div className="hidden md:block m-4">
       <Link href="/">
         <Image
           src="/images/logo-light.svg"
@@ -107,18 +77,48 @@ export const Navbar = ({ hidden }: { hidden: boolean }) => (
           priority
         />
       </Link>
-    </MantineNavbar.Section>
-    <MantineNavbar.Section grow className="mx-4 my-3">
-      <NavbarLink link="/" label="Home" icon={IconHome} />
-      <NavbarLink link="/projects" label="Projects" icon={IconRocket} />
-      <NavbarLink link="/bounties" label="Bounties" icon={IconPigMoney} />
-    </MantineNavbar.Section>
-    <MantineNavbar.Section className="m-4">
-      <NavbarLink link="/ranking" label="Top donors" icon={IconTrophy} />
-      <NavbarLink link="/why" label="Questions & answers" icon={IconBolt} />
-      <NavbarLink link="/rules" label="Rules & terms" icon={IconFile} />
-      <NavbarLink link="/support" label="Help & support" icon={IconLifebuoy} />
-    </MantineNavbar.Section>
+    </div>
+    <div className="mx-4 my-3 flex-grow">
+      <NavbarLink link="/" prefixes={[]} label="Home" icon={IconHome} />
+      <NavbarLink
+        link="/projects"
+        prefixes={['/projects', '/project/']}
+        label="Projects"
+        icon={IconRocket}
+      />
+      <NavbarLink
+        link="/bounties"
+        prefixes={['/bounties', '/bounty/']}
+        label="Bounties"
+        icon={IconPigMoney}
+      />
+    </div>
+    <div className="m-4">
+      <NavbarLink
+        link="/ranking"
+        prefixes={['/ranking']}
+        label="Top donors"
+        icon={IconTrophy}
+      />
+      <NavbarLink
+        link="/why"
+        prefixes={['/why']}
+        label="Questions & answers"
+        icon={IconBolt}
+      />
+      <NavbarLink
+        link="/rules"
+        prefixes={['/rules']}
+        label="Rules & terms"
+        icon={IconFile}
+      />
+      <NavbarLink
+        link="/support"
+        prefixes={['/support']}
+        label="Help & support"
+        icon={IconLifebuoy}
+      />
+    </div>
     <Image
       src="https://www.facebook.com/tr?id=144902331947551&ev=PageView&noscript=1"
       alt=""
@@ -126,8 +126,8 @@ export const Navbar = ({ hidden }: { hidden: boolean }) => (
       width={1}
       unoptimized
     />
-    <MantineNavbar.Section>
+    <div>
       <User />
-    </MantineNavbar.Section>
-  </MantineNavbar>
+    </div>
+  </AppShell.Navbar>
 )

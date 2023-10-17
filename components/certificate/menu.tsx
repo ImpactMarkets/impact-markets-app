@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import * as React from 'react'
 import toast from 'react-hot-toast'
 
@@ -12,7 +11,7 @@ import {
   DialogTitle,
 } from '@/components/dialog'
 import { IconButton } from '@/components/iconButton'
-import { DotsIcon, EditIcon, EyeClosedIcon, EyeIcon } from '@/components/icons'
+import { DotsIcon, EyeClosedIcon, EyeIcon } from '@/components/icons'
 import {
   Menu as BaseMenu,
   MenuButton,
@@ -29,8 +28,6 @@ type MenuProps = {
 }
 
 export const Menu = ({ queryData, isUserAdmin, belongsToUser }: MenuProps) => {
-  const router = useRouter()
-
   const [isConfirmHideDialogOpen, setIsConfirmHideDialogOpen] =
     React.useState(false)
   const [isConfirmUnhideDialogOpen, setIsConfirmUnhideDialogOpen] =
@@ -42,10 +39,6 @@ export const Menu = ({ queryData, isUserAdmin, belongsToUser }: MenuProps) => {
 
   function handleUnhide() {
     setIsConfirmUnhideDialogOpen(true)
-  }
-
-  function handleEdit() {
-    router.push(`${router.asPath}/edit`)
   }
 
   if (!(belongsToUser || isUserAdmin)) {
@@ -68,9 +61,6 @@ export const Menu = ({ queryData, isUserAdmin, belongsToUser }: MenuProps) => {
                 ) : (
                   <MenuItemButton onClick={handleHide}>Hide</MenuItemButton>
                 ))}
-              {(isUserAdmin || belongsToUser) && (
-                <MenuItemButton onClick={handleEdit}>Edit</MenuItemButton>
-              )}
             </MenuItemsContent>
           </MenuItems>
         </BaseMenu>
@@ -90,11 +80,6 @@ export const Menu = ({ queryData, isUserAdmin, belongsToUser }: MenuProps) => {
               <EyeClosedIcon className="w-4 h-4" />
             </IconButton>
           ))}
-        {(isUserAdmin || belongsToUser) && (
-          <IconButton variant="secondary" title="Edit" onClick={handleEdit}>
-            <EditIcon className="w-4 h-4" />
-          </IconButton>
-        )}
       </div>
 
       <ConfirmHideDialog

@@ -6,6 +6,7 @@ import toast from 'react-hot-toast'
 import { Form } from '@/components/bounty/form'
 import { Heading1 } from '@/components/heading1'
 import { Layout } from '@/components/layout'
+import { PageLoader } from '@/components/utils'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
@@ -89,26 +90,7 @@ const EditBountyPage: NextPageWithAuthAndLayout = () => {
     return <div>Error: {bountyQuery.error.message}</div>
   }
 
-  return (
-    <div className="animate-pulse">
-      <div className="w-3/4 bg-gray-200 rounded h-9 dark:bg-gray-700" />
-      <div className="mt-7">
-        <div>
-          <div className="w-10 h-5 bg-gray-200 rounded dark:bg-gray-700" />
-          <div className="border rounded h-[42px] border-secondary mt-2" />
-        </div>
-        <div className="mt-6">
-          <div className="w-10 h-5 bg-gray-200 rounded dark:bg-gray-700" />
-          <div className="mt-2 border rounded h-9 border-secondary" />
-          <div className="mt-2 border rounded h-[378px] border-secondary" />
-        </div>
-      </div>
-      <div className="flex gap-4 mt-9">
-        <div className="w-[92px] bg-gray-200 rounded-full h-button dark:bg-gray-700" />
-        <div className="w-20 border rounded-full h-button border-secondary" />
-      </div>
-    </div>
-  )
+  return <PageLoader />
 }
 
 EditBountyPage.auth = true

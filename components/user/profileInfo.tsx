@@ -33,6 +33,8 @@ import { uploadImage } from '@/lib/cloudinary'
 import { Tooltip } from '@/lib/mantine'
 import { RouterOutput, trpc } from '@/lib/trpc'
 
+import { PageLoader } from '../utils'
+
 function DotPattern() {
   return (
     <svg
@@ -510,14 +512,5 @@ export function ProfileInfo({
     )
   }
 
-  return (
-    <div className="relative flex items-center gap-8 py-8 overflow-hidden animate-pulse">
-      <div className="w-32 h-32 bg-gray-200 rounded-full dark:bg-gray-700" />
-      <div className="flex-1">
-        <div className="h-8 bg-gray-200 rounded w-60 dark:bg-gray-700" />
-        <div className="w-40 h-5 mt-2 bg-gray-200 rounded dark:bg-gray-700" />
-      </div>
-      <DotPattern />
-    </div>
-  )
+  return <PageLoader />
 }

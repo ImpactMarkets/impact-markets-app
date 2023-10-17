@@ -27,7 +27,7 @@ export function buttonClasses({
     variant === 'primary' && 'text-primary bg-primary hover:opacity-90',
     variant === 'secondary' &&
       'border text-secondary border-secondary bg-secondary hover:opacity-90',
-    variant === 'highlight' && 'text-highlight bg-highlight hover:opacity-90',
+    variant === 'highlight' && 'text-primary bg-highlight hover:opacity-90',
     (disabled || isLoading) &&
       'opacity-50 !cursor-not-allowed bg-gray-300 hover:bg-gray-300',
     className,

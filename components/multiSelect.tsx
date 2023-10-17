@@ -19,7 +19,7 @@ type IMTextFieldProps = MultiSelectOwnProps &
 export const IMMultiSelect = React.forwardRef<
   HTMLInputElement,
   IMTextFieldProps
->(({ label, info, id, name, className, sx, ...rest }, forwardedRef) => {
+>(({ label, info, id, name, className, ...rest }, forwardedRef) => {
   return (
     <div className={className}>
       {label && (
@@ -30,36 +30,11 @@ export const IMMultiSelect = React.forwardRef<
       )}
       <MultiSelect
         {...rest}
+        variant="unstyled"
         ref={forwardedRef}
         id={id || name}
         name={name}
         aria-label={label as string}
-        styles={{
-          defaultValueLabel: {
-            overflow: 'visible',
-          },
-          defaultValue: {
-            justifyContent: 'center',
-            padding: '0 4px 0 11px',
-            backgroundColor: 'rgba(231, 245, 255, 1)',
-          },
-        }}
-        sx={{
-          'div > input::placeholder': {
-            fontSize: 16,
-          },
-          'div > input': {
-            padding: 0,
-            fontSize: 14,
-            lineHeight: '0.2rem',
-            height: 16,
-            minWidth: 0,
-          },
-          'div > input:focus': {
-            boxShadow: 'none',
-          },
-          ...sx,
-        }}
       />
     </div>
   )

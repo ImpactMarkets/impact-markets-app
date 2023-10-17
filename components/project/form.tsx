@@ -1,13 +1,11 @@
 import * as React from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
-import { SimpleGrid } from '@mantine/core'
-
 import { Button } from '@/components/button'
 import { ButtonLink } from '@/components/buttonLink'
 import { MarkdownIcon } from '@/components/icons'
 import { MarkdownEditor } from '@/components/markdownEditor'
-import { TAGS } from '@/components/project/tags'
+import { TAGS_GROUPED } from '@/components/project/tags'
 import { TextField } from '@/components/textField'
 
 import { IMMultiSelect } from '../multiSelect'
@@ -106,6 +104,14 @@ export function ProjectForm({
         className="my-6"
       />
       <div className="mt-6">
+        <TextField
+          {...register('paymentUrl')}
+          label="Payment URL"
+          description="A link to a page where people can donate to the project. (Optional)"
+          placeholder="https://ko-fi.com/velvetillumnation"
+        />
+      </div>
+      <div className="mt-6">
         <IMMultiSelect
           {...register('tags')}
           label="Tags"
@@ -116,7 +122,7 @@ export function ProjectForm({
             </>
           }
           placeholder="Pick all that apply"
-          data={TAGS}
+          data={TAGS_GROUPED}
           searchable
           onChange={(value) =>
             Array.isArray(value) ? setValue('tags', value.join(',')) : null
@@ -124,24 +130,6 @@ export function ProjectForm({
           defaultValue={getValues().tags ? getValues().tags.split(',') : []}
         />
       </div>
-      <SimpleGrid
-        cols={2}
-        breakpoints={[{ maxWidth: 'md', cols: 1 }]}
-        className="mt-6"
-      >
-        <TextField
-          {...register('paymentUrl')}
-          label="Payment URL"
-          description="A link to a page where people can donate to the project. (Optional)"
-          placeholder="https://ko-fi.com/velvetillumnation"
-        />
-        <TextField
-          {...register('actionEnd', { valueAsDate: true })}
-          label="Review date"
-          description="When (approx.) will your outputs be ready for a review? (Optional)"
-          type="date"
-        />
-      </SimpleGrid>
       <div className="mt-6">
         <Controller
           name="content"

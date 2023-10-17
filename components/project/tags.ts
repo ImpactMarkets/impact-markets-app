@@ -1,3 +1,5 @@
+import { flow, groupBy, map } from 'lodash/fp'
+
 import { colors } from '../colors'
 import { IMTag } from '../utils'
 
@@ -372,3 +374,18 @@ export const TAGS: IMTag[] = [
     group: 'Cause area',
   },
 ]
+
+export const TAGS_GROUPED = flow(
+  groupBy('group'),
+  Object.entries, // map/each are not working here for some reason
+  map(([key, value]) => ({
+    group: key,
+    items: value.map(
+      // Remove extraneous fields because the group/items detection is recursive
+      ({ value, label }: { value: string; label: string }) => ({
+        value,
+        label,
+      }),
+    ),
+  })),
+)(TAGS)

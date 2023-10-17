@@ -53,7 +53,7 @@ module.exports = {
       textColor: {
         primary: colors.white,
         secondary: colors.gray[900],
-        highlight: colors.white,
+        highlight: '#0e73cc',
       },
       transitionTimingFunction: {
         spring: 'cubic-bezier(.25,1.6,.5,.8)',

@@ -22,12 +22,13 @@ export const Tags = ({ queryData, tags: knownTags }: TagsProps) => {
   return (
     <>
       {knownTags.map(
+        // @ts-expect-error: Properties value, label, and color do exist?
         ({ value, label, color }) =>
           tags.includes(value) && (
             <span
               key={value}
               className={classNames(
-                'inline-block text-highlight font-bold text-xs leading-none px-2 py-1 rounded',
+                'inline-block text-primary font-bold text-xs leading-none px-2 py-1 rounded',
                 color,
               )}
             >

@@ -9,8 +9,8 @@ import type { CertificateSummaryProps } from '@/components/certificate/summary'
 import { Filters } from '@/components/filters'
 import { Layout } from '@/components/layout'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
-import { TAGS } from '@/components/project/tags'
-import { SummarySkeleton } from '@/components/summarySkeleton'
+import { TAGS_GROUPED } from '@/components/project/tags'
+import { PageLoader } from '@/components/utils'
 import { CertificateSortKey, ITEMS_PER_PAGE } from '@/lib/constants'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
@@ -53,9 +53,9 @@ const Home: NextPageWithAuthAndLayout = () => {
           <title>Certificates – AI Safety Impact Markets</title>
         </Head>
 
-        <div>
+        <div className="mt-3">
           <Filters
-            tags={TAGS}
+            tags={TAGS_GROUPED}
             onFilterTagsUpdate={(tags) => setFilterTags(tags)}
             onOrderByUpdate={(orderBy: string) =>
               // A bit unhappy with this – https://stackoverflow.com/a/69007934/678861
@@ -109,17 +109,7 @@ const Home: NextPageWithAuthAndLayout = () => {
     return <div>Error: {feedQuery.error.message}</div>
   }
 
-  return (
-    <div className="flow-root">
-      <ul className="my-10 divide-y divide-transparent">
-        {[...Array(3)].map((_, idx) => (
-          <li key={idx} className="py-10">
-            <SummarySkeleton />
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
+  return <PageLoader />
 }
 
 Home.getLayout = function getLayout(page: React.ReactElement) {

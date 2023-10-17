@@ -25,11 +25,12 @@ import { Layout } from '@/components/layout'
 import { LikeButton } from '@/components/likeButton'
 import { IncomingDonations } from '@/components/project/incomingDonations'
 import { Menu } from '@/components/project/menu'
-import { OutgoingDonations } from '@/components/project/outgoingDonations'
+import { OutboundDonations } from '@/components/project/outboundDonations'
 import { TAGS } from '@/components/project/tags'
 import { TopContributors } from '@/components/project/topContributors'
 import { Scores } from '@/components/scores'
 import { Tags } from '@/components/tags'
+import { PageLoader } from '@/components/utils'
 import { classNames } from '@/lib/classnames'
 import { num } from '@/lib/text'
 import { trpc } from '@/lib/trpc'
@@ -215,7 +216,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
                     </Tabs.Tab>
                   )}
                   {session && (
-                    <Tabs.Tab value="outgoingDonations">
+                    <Tabs.Tab value="outboundDonations">
                       Register a donation
                     </Tabs.Tab>
                   )}
@@ -230,8 +231,8 @@ function ProjectPage({ projectId }: { projectId: string }) {
                   <TopContributors project={project} />
                 </Tabs.Panel>
                 {session && (
-                  <Tabs.Panel value="outgoingDonations" pt="xs">
-                    <OutgoingDonations project={project} />
+                  <Tabs.Panel value="outboundDonations" pt="xs">
+                    <OutboundDonations project={project} />
                   </Tabs.Panel>
                 )}
                 {(isAdmin || projectBelongsToUser) && (
@@ -304,38 +305,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
     return <div>Error: {projectQuery.error.message}</div>
   }
 
-  return (
-    <div className="animate-pulse">
-      <div className="w-3/4 bg-gray-200 rounded h-9 dark:bg-gray-700" />
-      <div className="flex items-center gap-4 mt-6">
-        <div className="w-12 h-12 bg-gray-200 rounded-full dark:bg-gray-700" />
-        <div className="flex-1">
-          <div className="w-24 h-4 bg-gray-200 rounded dark:bg-gray-700" />
-          <div className="w-32 h-3 mt-2 bg-gray-200 rounded dark:bg-gray-700" />
-        </div>
-      </div>
-      <div className="space-y-3 mt-7">
-        {[...Array(3)].map((_, idx) => (
-          <React.Fragment key={idx}>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="h-5 col-span-2 bg-gray-200 rounded dark:bg-gray-700" />
-              <div className="h-5 col-span-1 bg-gray-200 rounded dark:bg-gray-700" />
-            </div>
-            <div className="w-1/2 h-5 bg-gray-200 rounded dark:bg-gray-700" />
-            <div className="grid grid-cols-3 gap-4">
-              <div className="h-5 col-span-1 bg-gray-200 rounded dark:bg-gray-700" />
-              <div className="h-5 col-span-2 bg-gray-200 rounded dark:bg-gray-700" />
-            </div>
-            <div className="w-3/5 h-5 bg-gray-200 rounded dark:bg-gray-700" />
-          </React.Fragment>
-        ))}
-      </div>
-      <div className="flex gap-4 mt-6">
-        <div className="w-16 border rounded-full h-button border-secondary" />
-        <div className="w-16 border rounded-full h-button border-secondary" />
-      </div>
-    </div>
-  )
+  return <PageLoader />
 }
 
 ProjectPageWrapper.getLayout = function getLayout(page: React.ReactElement) {

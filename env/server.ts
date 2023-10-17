@@ -70,5 +70,6 @@ export const serverEnv = {
       allowEmpty: false,
       devDefault: 'foobar',
     }),
+    IMPACT_MARKETS_USER: rollbarParser({ allowEmpty: false, devDefault: '' }),
   }),
 }

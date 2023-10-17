@@ -1,13 +1,12 @@
 import * as React from 'react'
 
-import { Loader } from '@mantine/core'
-
 import { classNames } from '@/lib/classnames'
 import { ProjectSortKey } from '@/lib/constants'
 import { trpc } from '@/lib/trpc'
 
 import { ButtonLink } from '../buttonLink'
 import { ProjectSummary } from '../project/summary'
+import { PageLoader } from '../utils'
 
 export const TopProjects = () => {
   const feedQuery = trpc.project.feed.useQuery({
@@ -17,9 +16,7 @@ export const TopProjects = () => {
     orderBy: 'supportScore' as ProjectSortKey,
   })
 
-  let projects = (
-    <Loader className="mx-auto my-6 w-3 fill-slate-500" variant="bars" />
-  )
+  let projects = <PageLoader />
 
   if (feedQuery.data && feedQuery.data.projectCount >= 0) {
     projects = (

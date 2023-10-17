@@ -2,10 +2,9 @@ import * as React from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { SimpleGrid } from '@mantine/core'
 import { Prisma } from '@prisma/client'
 
-import { TAGS } from '@/components/bounty/tags'
+import { TAGS_GROUPED } from '@/components/bounty/tags'
 import { Button } from '@/components/button'
 import { ButtonLink } from '@/components/buttonLink'
 import { MarkdownIcon } from '@/components/icons'
@@ -77,11 +76,11 @@ export const Form = ({
         autoFocus
         required
       />
-      <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
+      <div className="grid md:grid-cols-2 gap-3">
         <TextField
           {...register('sourceUrl')}
           label="Source URL"
-          description="Where can your clients find more information on your bounty? (Optional)"
+          description="Where can one read more about your bounty? (Optional)"
           placeholder="https://bit.ly/my-dating-doc"
         />
         <IMSelect
@@ -102,15 +101,15 @@ export const Form = ({
             )
           }
         />
-      </SimpleGrid>
+      </div>
       <div className="mt-6">
-        <SimpleGrid cols={2} breakpoints={[{ maxWidth: 'md', cols: 1 }]}>
+        <div className="grid md:grid-cols-2 gap-3">
           <TextField
             {...register('size', {})}
             label="Bounty amount"
             description="What is your maximum bounty payment? (Optional)"
             rightSection="USD"
-            classNames={{ rightSection: 'w-14' }}
+            classNames={{ section: 'w-14' }}
             type="number"
             step="0.01"
             max={1e30}
@@ -121,7 +120,7 @@ export const Form = ({
             description="Will your bounty expire? (Optional)"
             type="date"
           />
-        </SimpleGrid>
+        </div>
       </div>
       <div className="mt-6">
         <IMMultiSelect
@@ -134,16 +133,15 @@ export const Form = ({
             </>
           }
           placeholder="Pick all that apply"
-          data={TAGS.map((tag) => ({
-            value: tag.value,
-            label: tag.label,
-            group: tag.group,
-          }))}
-          searchable
+          data={TAGS_GROUPED}
           onChange={(value) =>
             Array.isArray(value) ? setValue('tags', value.join(',')) : null
           }
           defaultValue={getValues().tags ? getValues().tags.split(',') : []}
+          classNames={{
+            inputField: 'cursor-pointer',
+          }}
+          searchable
         />
       </div>
       <div className="mt-6">
