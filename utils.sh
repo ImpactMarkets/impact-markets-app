@@ -5,6 +5,9 @@ set -x
 
 source .env
 
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
 makemigrations () {
     dir=prisma/migrations/$(date +%Y%m%d%H%M%S)_$1
     mkdir $dir
