@@ -6,8 +6,6 @@
 
 - Node.js
 
-  Node versions > 16 can currently cause this [segmentation fault](https://github.com/prisma/prisma/issues/10649).
-
   The Node version required is specified in `package.json` and `.nvmrc`.
 
   To use the correct version, install `nvm`, then run those commands:
@@ -16,6 +14,8 @@
   nvm install
   nvm use
   ```
+
+  Node versions > 16 used to cause this [segmentation fault](https://github.com/prisma/prisma/issues/10649). It doesn't happen to me (Dawn) anymore even with Node 20. Lmk if you still get it.
 
 - docker-compose
 
