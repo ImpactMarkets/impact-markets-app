@@ -35,7 +35,7 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Start the test database
-        run: docker-compose up -d
+        run: docker compose up --detach --wait --wait-timeout 30
       - name: Check on Docker
         run: docker ps
       - name: Check docker-compose logs
