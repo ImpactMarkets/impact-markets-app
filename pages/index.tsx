@@ -5,6 +5,7 @@ import { Layout } from '@/components/layout'
 import { CallToAction } from '@/components/welcome/callToAction'
 import { Comparisons } from '@/components/welcome/comparisons'
 import { HeroText } from '@/components/welcome/heroText'
+import { Partners } from '@/components/welcome/partners'
 import { Pitches } from '@/components/welcome/pitches'
 import { TopProjects } from '@/components/welcome/topProjects'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
@@ -22,6 +23,7 @@ const LandingPage: NextPageWithAuthAndLayout = () => (
     <div className="border"></div>
     <Comparisons />
     <CallToAction />
+    <Partners />
     <div className="m-auto align-center flex justify-center">
       <iframe
         className="max-w-[300px]"
