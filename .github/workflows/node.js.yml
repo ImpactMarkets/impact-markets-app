@@ -35,7 +35,7 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Start the test database
-        run: docker-compose up -d
+        run: docker compose up --detach --wait --wait-timeout 30
       - name: Create the database schema
         run: npx dotenv -e .env.test -- npx prisma migrate deploy
       - name: Run Playwright tests
