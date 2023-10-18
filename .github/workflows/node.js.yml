@@ -36,12 +36,16 @@ jobs:
         run: npx playwright install --with-deps
       - name: Start the test database
         run: docker-compose up -d
-      - name: Test access to the main DB
-        run: psql postgresql://im-app:empty@127.0.0.1:54321/im-app -c "select 1;"
-      - name: Test access to the test DB
-        run: psql postgresql://im-app:empty@127.0.0.1:54322/im-app -c "select 1;"
       - name: Check on Docker
         run: docker ps
+      - name: Check docker-compose logs
+        run: docker-compose logs
+      - name: Check docker logs
+        run: docker logs impact-markets-app_db-test_1
+      - name: Test access to the test DB
+        run: psql postgresql://im-app:empty@127.0.0.1:54322/im-app -c "select 1;"
+      - name: Test access to the main DB
+        run: psql postgresql://im-app:empty@127.0.0.1:54321/im-app -c "select 1;"
       - name: Create the database schema
         run: npx dotenv -e .env.test -- npx prisma migrate deploy
       - name: Run Playwright tests
