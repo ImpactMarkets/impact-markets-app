@@ -29,7 +29,7 @@ export const Pitches = () => (
     <div className="flex justify-center text-3xl font-display">
       AI Safety Impact Markets is a platform for …
     </div>
-    <div className="flex gap-6 flex-col sm:flex-row my-6">
+    <div className="flex gap-6 flex-col sm:flex-row my-12">
       <Feature icon={IconShovel} title="AI safety projects" key="projects">
         <p>
           You’re working on independent research or a{' '}
