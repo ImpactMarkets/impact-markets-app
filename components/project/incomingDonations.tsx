@@ -59,7 +59,7 @@ export function IncomingDonations({
               <td className="text-left">
                 <Author author={donation.user} />
               </td>
-              <td className="text-right">
+              <td className="text-right whitespace-nowrap">
                 {donation.time.toISOString().slice(0, 10)}
               </td>
               <td className="text-right">${num(donation.amount)}</td>
