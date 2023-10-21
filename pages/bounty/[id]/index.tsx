@@ -2,6 +2,7 @@ import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as React from 'react'
+import { SuperSEO } from 'react-super-seo'
 
 import { LoadingOverlay, Tabs } from '@mantine/core'
 import { CommentType } from '@prisma/client'
@@ -139,6 +140,30 @@ function BountyPage({ bountyId }: { bountyId: string }) {
             ${bounty.title} – Impact Markets`}
           </title>
         </Head>
+
+        <SuperSEO
+          title={`${bounty.title} – AI Safety Impact Markets`}
+          description={bounty.contentHtml}
+          lang="en"
+          openGraph={{
+            ogImage: {
+              ogImage: 'https://app.impactmarkets.io/images/logo-light.svg',
+              ogImageAlt: 'AI Safety Impact Markets logo',
+              ogImageWidth: 550,
+              ogImageHeight: 232,
+              ogImageType: 'image/jpeg',
+            },
+          }}
+          twitter={{
+            twitterSummaryCard: {
+              summaryCardImage:
+                'https://app.impactmarkets.io/images/logo-light.svg',
+              summaryCardImageAlt: 'AI Safety Impact Markets logo',
+              // summaryCardSiteUsername: "twitterUsername",
+            },
+          }}
+        />
+
         <div className="max-w-screen-lg mx-auto">
           <div className="pb-12">
             {bounty.hidden && (
