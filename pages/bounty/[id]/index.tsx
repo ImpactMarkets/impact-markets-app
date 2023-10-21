@@ -131,7 +131,7 @@ function BountyPage({ bountyId }: { bountyId: string }) {
         <Head>
           {/* https://stackoverflow.com/questions/75875037 */}
           <title>
-            {`${bounty.status === 'CLOSED' ? '[Closed] ' : null}
+            {`${bounty.status === 'CLOSED' ? '[Closed] ' : ''}
             ${
               bounty.status !== 'CLOSED' && bounty.size
                 ? '$' + num(bounty.size) + ': '
