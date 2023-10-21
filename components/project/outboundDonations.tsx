@@ -1,10 +1,13 @@
+import { sortBy } from 'lodash'
 import { useSession } from 'next-auth/react'
 import * as React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { z } from 'zod'
 
 import { Prisma } from '@prisma/client'
 
+import { Select } from '@/lib/mantine'
 import { num } from '@/lib/text'
 import { RouterOutput, trpc } from '@/lib/trpc'
 
@@ -17,6 +20,7 @@ type AddDonationFormData = {
   amount: Prisma.Decimal
   projectId: string
   userId: string
+  recommender: string
 }
 
 export function OutboundDonations({
@@ -26,12 +30,13 @@ export function OutboundDonations({
 }) {
   const { data: session } = useSession()
   const utils = trpc.useContext()
-  const { register, handleSubmit } = useForm<AddDonationFormData>({
+  const { register, handleSubmit, setValue } = useForm<AddDonationFormData>({
     mode: 'onSubmit',
     defaultValues: {
       time: new Date().toISOString().slice(0, 10),
       projectId: project.id,
       userId: session!.user.id,
+      recommender: '',
     },
   })
 
@@ -80,8 +85,31 @@ export function OutboundDonations({
       userId: data.userId,
       amount: new Prisma.Decimal(data.amount),
       time: new Date(data.time),
+      recommender: data.recommender,
     })
   }
+
+  const rankingQuery = trpc.user.topDonors.useQuery({})
+  type OptionsType = [
+    { value: string; label: string },
+    ...{ value: string; label: string }[],
+  ]
+  // https://stackoverflow.com/a/77332075/678861
+  const topDonors = sortBy(rankingQuery.data ?? [], 'name').map(
+    ({ id, name }) => ({ value: id, label: name }),
+  ) as OptionsType
+  const recommenderOptions: OptionsType = [
+    { value: '', label: 'Not specified' },
+    { value: 'TOP_PROJECTS', label: 'Our top project ranking' },
+    { value: 'OWN_RESEARCH', label: 'Your own research' },
+    ...topDonors,
+    { value: 'OTHER', label: 'Other' },
+  ]
+  const recommenderMap = Object.fromEntries(
+    recommenderOptions.map(({ value, label }) => [value, label]),
+  )
+  // https://stackoverflow.com/a/77332075/678861
+  const recommenderValues = Object.keys(recommenderMap) as [string, ...string[]]
 
   return (
     <div className="flex flex-col items-center">
@@ -96,9 +124,25 @@ export function OutboundDonations({
         <table>
           <thead>
             <tr>
-              <th className="text-right w-32 pr-3">Date</th>
-              <th className="text-right w-32 pr-3">Amount</th>
-              <th className="text-right"></th>
+              <th className="text-center w-32 pr-3">
+                Date
+                <div className="text-xs text-slate-500 font-normal">
+                  Of your transfer
+                </div>
+              </th>
+              <th className="text-center w-32 pr-3">
+                Amount
+                <div className="text-xs text-slate-500 font-normal">
+                  In USD at the time
+                </div>
+              </th>
+              <th className="text-center w-42 pr-3">
+                Recommender
+                <div className="text-xs text-slate-500 font-normal">
+                  Who influenced your decision?
+                </div>
+              </th>
+              <th className="text-center"></th>
             </tr>
           </thead>
           <tbody>
@@ -120,6 +164,21 @@ export function OutboundDonations({
                   min="10"
                   max={1e30}
                   required
+                />
+              </td>
+              <td className="py-4">
+                <Select
+                  {...register('recommender')}
+                  defaultValue=""
+                  placeholder="Not specified"
+                  data={recommenderOptions}
+                  onChange={(value) =>
+                    setValue(
+                      'recommender',
+                      z.enum(recommenderValues).parse(value),
+                    )
+                  }
+                  searchable
                 />
               </td>
               <td className="py-4 pl-2">
@@ -149,6 +208,9 @@ export function OutboundDonations({
                   {donation.time.toISOString().slice(0, 10)}
                 </td>
                 <td className="text-right pr-3">${num(donation.amount)}</td>
+                <td className="text-right pr-3">
+                  {recommenderMap[donation.recommender] || '–'}
+                </td>
                 <td className="text-left pl-2">
                   {donation.user.id === session!.user.id &&
                     (donation.state === 'CONFIRMED' ? (
