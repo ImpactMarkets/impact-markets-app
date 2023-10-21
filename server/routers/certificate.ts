@@ -5,7 +5,6 @@ import { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
 import { CERTIFICATE_SORT_KEYS, CertificateSortKey } from '@/lib/constants'
-import { markdownToHtml } from '@/lib/editor'
 
 import { protectedProcedure } from '../procedures'
 import { router } from '../router'
@@ -237,65 +236,6 @@ export const certificateRouter = router({
       })
 
       return certificates
-    }),
-  edit: protectedProcedure
-    .input(
-      z.object({
-        id: z.string().min(1),
-        data: z.object({
-          title: z.string().min(1),
-          content: z.string().min(1),
-          counterfactual: z.string(),
-          location: z.string(),
-          rights: z.string(),
-          actionStart: z.date(),
-          actionEnd: z.date(),
-          issuerEmails: z.string(),
-          tags: z.string(),
-        }),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      const { id, data } = input
-      const updatedCertificate = await ctx.prisma.certificate.update({
-        where: { id },
-        data: {
-          title: data.title,
-          content: data.content,
-          contentHtml: markdownToHtml(data.content),
-          counterfactual: data.counterfactual,
-          location: data.location,
-          rights: 'RETROACTIVE_FUNDING',
-          actionStart: data.actionStart,
-          actionEnd: data.actionEnd,
-          tags: data.tags,
-        },
-        include: {
-          author: true,
-        },
-      })
-
-      const issuerEmails = input.data.issuerEmails
-        .split(',')
-        .concat([updatedCertificate.author.email || ''])
-      // Delete all existing certificateIssuer associations for this certificate, and create
-      // new ones based on the input
-      const issuers = await ctx.prisma.user.findMany({
-        where: { email: { in: issuerEmails } },
-      })
-      ctx.prisma.$transaction([
-        ctx.prisma.certificateIssuer.deleteMany({
-          where: { certificateId: updatedCertificate.id },
-        }),
-        ctx.prisma.certificateIssuer.createMany({
-          data: issuers.map((issuer) => {
-            return { certificateId: updatedCertificate.id, userId: issuer.id }
-          }),
-          skipDuplicates: true,
-        }),
-      ])
-
-      return updatedCertificate
     }),
   like: protectedProcedure
     .input(z.string().min(1))

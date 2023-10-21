@@ -29,21 +29,6 @@ export const permissionMiddleware = middleware(
       return ctx.session?.user.role === 'ADMIN'
     }
 
-    const certificateBelongsToUser = async () => {
-      const { id } = <
-        {
-          id: string
-        }
-      >rawInput
-      const certificate = await ctx.prisma.certificate.findUnique({
-        where: { id },
-        select: {
-          authorId: true,
-        },
-      })
-      return certificate?.authorId === ctx.session!.user.id
-    }
-
     const projectBelongsToUser = async () => {
       const { id } = <
         {
@@ -135,11 +120,6 @@ export const permissionMiddleware = middleware(
       'certificate.feed': allow,
       'certificate.detail': allow,
       'certificate.search': allow,
-      'certificate.edit': async () =>
-        and(
-          await isAuthenticated(),
-          or(await isAdmin(), await certificateBelongsToUser()),
-        ),
       'certificate.like': isAuthenticated,
       'certificate.unlike': isAuthenticated,
       'certificate.hide': isAdmin,
