@@ -186,33 +186,36 @@ export const userRouter = router({
       z.object({
         pastDays: z.literal(365).optional(),
         includeAnonymous: z.boolean().optional(),
+        take: z.number().optional(),
       }),
     )
-    .query(async ({ ctx, input: { pastDays, includeAnonymous } }) => {
-      const scoreField = pastDays ? 'score365' : 'score'
+    .query(
+      async ({ ctx, input: { pastDays, includeAnonymous, take = 100 } }) => {
+        const scoreField = pastDays ? 'score365' : 'score'
 
-      // This first sends the normal query with the UserScore fields missing from SELECT, and then sends a second query to get the UserScore fields. Wtf?
-      // SELECT "public"."User"."id", "public"."User"."name", "public"."User"."image" FROM "public"."User" LEFT JOIN "public"."UserScore" AS "orderby_1_UserScore" ON ("public"."User"."id" = "orderby_1_UserScore"."userId") WHERE ("public"."User"."prefersAnonymity" = $1 AND ("public"."User"."id") IN (SELECT "t0"."id" FROM "public"."User" AS "t0" INNER JOIN "public"."UserScore" AS "j0" ON ("j0"."userId") = ("t0"."id") WHERE ("j0"."score365" > $2 AND "t0"."id" IS NOT NULL))) ORDER BY "orderby_1_UserScore"."score365" DESC LIMIT $3 OFFSET $4
-      // SELECT "public"."UserScore"."userId", "public"."UserScore"."score", "public"."UserScore"."score365" FROM "public"."UserScore" WHERE "public"."UserScore"."userId" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) OFFSET $13
-      return await ctx.prisma.user.findMany({
-        select: {
-          id: true,
-          name: true,
-          image: true,
-          userScore: true,
-        },
-        where: {
-          prefersAnonymity: includeAnonymous ? undefined : false,
-          userScore: {
-            [scoreField]: { gt: 0 },
+        // This first sends the normal query with the UserScore fields missing from SELECT, and then sends a second query to get the UserScore fields. Wtf?
+        // SELECT "public"."User"."id", "public"."User"."name", "public"."User"."image" FROM "public"."User" LEFT JOIN "public"."UserScore" AS "orderby_1_UserScore" ON ("public"."User"."id" = "orderby_1_UserScore"."userId") WHERE ("public"."User"."prefersAnonymity" = $1 AND ("public"."User"."id") IN (SELECT "t0"."id" FROM "public"."User" AS "t0" INNER JOIN "public"."UserScore" AS "j0" ON ("j0"."userId") = ("t0"."id") WHERE ("j0"."score365" > $2 AND "t0"."id" IS NOT NULL))) ORDER BY "orderby_1_UserScore"."score365" DESC LIMIT $3 OFFSET $4
+        // SELECT "public"."UserScore"."userId", "public"."UserScore"."score", "public"."UserScore"."score365" FROM "public"."UserScore" WHERE "public"."UserScore"."userId" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) OFFSET $13
+        return await ctx.prisma.user.findMany({
+          select: {
+            id: true,
+            name: true,
+            image: true,
+            userScore: true,
           },
-        },
-        orderBy: {
-          userScore: {
-            [scoreField]: 'desc',
+          where: {
+            prefersAnonymity: includeAnonymous ? undefined : false,
+            userScore: {
+              [scoreField]: { gt: 0 },
+            },
           },
-        },
-        take: 100,
-      })
-    }),
+          orderBy: {
+            userScore: {
+              [scoreField]: 'desc',
+            },
+          },
+          take,
+        })
+      },
+    ),
 })
