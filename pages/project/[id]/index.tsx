@@ -2,6 +2,7 @@ import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as React from 'react'
+import { SuperSEO } from 'react-super-seo'
 
 import { LoadingOverlay, Tabs } from '@mantine/core'
 import { CommentType } from '@prisma/client'
@@ -80,7 +81,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
 
     const CommentPanel = ({ category }: { category: CommentType }) => {
       const filteredComments = project.comments.filter(
-        (comment) => comment.category === category,
+        (comment) => comment.category === category
       )
 
       return (
@@ -146,6 +147,29 @@ function ProjectPage({ projectId }: { projectId: string }) {
           <title>{`${project.title} – AI Safety Impact Markets`}</title>
         </Head>
 
+        <SuperSEO
+          title={`${project.title} – AI Safety Impact Markets`}
+          description={project.contentHtml}
+          lang="en"
+          openGraph={{
+            ogImage: {
+              ogImage: 'https://app.impactmarkets.io/images/logo-light.svg',
+              ogImageAlt: 'AI Safety Impact Markets logo',
+              ogImageWidth: 550,
+              ogImageHeight: 232,
+              ogImageType: 'image/jpeg',
+            },
+          }}
+          twitter={{
+            twitterSummaryCard: {
+              summaryCardImage:
+                'https://app.impactmarkets.io/images/logo-light.svg',
+              summaryCardImageAlt: 'AI Safety Impact Markets logo',
+              // summaryCardSiteUsername: "twitterUsername",
+            },
+          }}
+        />
+
         <div className="max-w-screen-lg mx-auto">
           <div className="pb-12">
             {project.hidden && (
@@ -176,7 +200,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
                     rel="noopener noreferrer"
                     className={classNames(
                       buttonClasses({ variant: 'highlight' }),
-                      'ml-[-1rem] mb-1 inline-block max-w-60 whitespace-nowrap overflow-hidden overflow-ellipsis',
+                      'ml-[-1rem] mb-1 inline-block max-w-60 whitespace-nowrap overflow-hidden overflow-ellipsis'
                     )}
                   >
                     <IconCreditCard className="inline" />
