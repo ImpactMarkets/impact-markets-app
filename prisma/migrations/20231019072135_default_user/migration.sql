@@ -21,4 +21,4 @@ VALUES
         '',
         true,
         true
-    );
+    ) ON CONFLICT DO NOTHING;

@@ -12,12 +12,15 @@ interface FeatureProps extends React.ComponentPropsWithoutRef<'div'> {
 const Feature = ({ icon: Icon, title, children }: FeatureProps) => (
   <div>
     <div className="h-22 p-3 mb-3 w-full bg-gray-100">
-      <Icon size={38} className="stroke-blue-500 stroke-[1.5]" />
-      <div className="font-display text-xl whitespace-nowrap overflow-hidden overflow-ellipsis">
+      <Icon
+        size={20}
+        className="inline stroke-blue-500 stroke-[2] mr-3 align-text-bottom"
+      />
+      <span className="font-display text-xl whitespace-nowrap overflow-hidden overflow-ellipsis">
         {title}
-      </div>
+      </span>
     </div>
-    <div className="[hyphens:auto] text-sm">{children}</div>
+    <div className="[hyphens:auto] text-sm prose">{children}</div>
   </div>
 )
 
@@ -26,7 +29,7 @@ export const Pitches = () => (
     <div className="flex justify-center text-3xl font-display">
       AI Safety Impact Markets is a platform for …
     </div>
-    <div className="flex gap-6 flex-col sm:flex-row my-6">
+    <div className="flex gap-6 flex-col sm:flex-row my-12">
       <Feature icon={IconShovel} title="AI safety projects" key="projects">
         <p>
           You’re working on independent research or a{' '}
@@ -53,11 +56,7 @@ export const Pitches = () => (
           donations to express their support.
         </p>
       </Feature>
-      <Feature
-        icon={IconTelescope}
-        title="Project scouts & regrantors"
-        key="scouts"
-      >
+      <Feature icon={IconTelescope} title="Scouts & regrantors" key="scouts">
         <p>
           You’re a seasoned donor or grantmaker? You want to{' '}
           <span className="font-semibold">regrant some of the $600,000</span> of
