@@ -2,6 +2,7 @@ import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as React from 'react'
+import { SuperSEO } from 'react-super-seo'
 
 import { LoadingOverlay, Tabs } from '@mantine/core'
 import { CommentType } from '@prisma/client'
@@ -32,6 +33,7 @@ import { Scores } from '@/components/scores'
 import { Tags } from '@/components/tags'
 import { PageLoader } from '@/components/utils'
 import { classNames } from '@/lib/classnames'
+import { markdownToPlainHtml } from '@/lib/editor'
 import { num } from '@/lib/text'
 import { RouterOutput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
@@ -154,6 +156,34 @@ function ProjectPage({ projectId }: { projectId: string }) {
           {/* https://stackoverflow.com/questions/75875037 */}
           <title>{`${project.title} – AI Safety Impact Markets`}</title>
         </Head>
+
+        <SuperSEO
+          title={`${project.title} – AI Safety Impact Markets`}
+          description={markdownToPlainHtml(project.content)}
+          lang="en"
+          openGraph={{
+            ogType: 'website',
+            ogTitle: `${project.title} – AI Safety Impact Markets`,
+            ogUrl: `https://app.impactmarkets.io/project/${project.id}`,
+            ogImage: {
+              ogImage: 'https://app.impactmarkets.io/images/logo-light-og.png',
+              ogImageSecureUrl:
+                'https://app.impactmarkets.io/images/logo-light-og.png',
+              ogImageAlt: `${project.title} – AI Safety Impact Markets`,
+              ogImageWidth: 1200,
+              ogImageHeight: 630,
+              ogImageType: 'image/png',
+            },
+          }}
+          twitter={{
+            twitterSummaryCard: {
+              summaryCardImage:
+                'https://app.impactmarkets.io/images/logo-light-og.png',
+              summaryCardImageAlt: `${project.title} – AI Safety Impact Markets`,
+              // summaryCardSiteUsername: "twitterUsername",
+            },
+          }}
+        />
 
         <div className="max-w-screen-lg mx-auto">
           <div className="pb-12">
