@@ -6,10 +6,10 @@ import React from 'react'
 
 import { AppShell } from '@mantine/core'
 import {
-  IconBolt,
-  IconFile,
+  IconBooks,
   IconHome,
   IconLifebuoy,
+  IconMessageCircleQuestion,
   IconPigMoney,
   IconRocket,
   IconTrophy,
@@ -104,13 +104,13 @@ export const Navbar = ({
         link="/why"
         prefixes={['/why']}
         label="Questions & answers"
-        icon={IconBolt}
+        icon={IconMessageCircleQuestion}
       />
       <NavbarLink
         link="/rules"
         prefixes={['/rules']}
         label="Rules & terms"
-        icon={IconFile}
+        icon={IconBooks}
       />
       <NavbarLink
         link="/support"

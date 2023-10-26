@@ -34,7 +34,7 @@ import { Tags } from '@/components/tags'
 import { PageLoader } from '@/components/utils'
 import { classNames } from '@/lib/classnames'
 import { num } from '@/lib/text'
-import { trpc } from '@/lib/trpc'
+import { RouterOutput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
 // TODO: Maybe this could be made into a generic component?
@@ -48,6 +48,76 @@ const ProjectPageWrapper: NextPageWithAuthAndLayout = () => {
   } else {
     return <ProjectPage projectId={router.query.id} />
   }
+}
+
+const CommentPanel = ({
+  comments,
+  category,
+  objectId,
+}: {
+  comments: RouterOutput['project']['detail']['comments']
+  category: CommentType
+  objectId: string
+}) => {
+  const { data: session } = useSession()
+  const filteredComments = comments.filter(
+    (comment) => comment.category === category,
+  )
+
+  return (
+    <div id="comments" className="pt-6 space-y-12">
+      {filteredComments.length > 0 ? (
+        <ul className="space-y-12">
+          {filteredComments.map((comment) => (
+            <li key={comment.id}>
+              <Comment
+                objectId={objectId}
+                objectType="project"
+                comment={comment}
+              />
+
+              <div id="replies" className="pt-12 pl-14 space-y-12">
+                {comment.children.length > 0 && (
+                  <ul className="space-y-12">
+                    {comment.children.map((reply) => (
+                      <li key={reply.id}>
+                        <Comment
+                          objectId={objectId}
+                          objectType="project"
+                          comment={reply}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="pb-6 text-sm">No comments yet</p>
+      )}
+      {session && (
+        <div className="flex items-start gap-2 sm:gap-4">
+          <span className="hidden sm:inline-block">
+            <Avatar name={session.user.name} src={session.user.image} />
+          </span>
+          <span className="inline-block sm:hidden">
+            <Avatar
+              name={session.user.name}
+              src={session.user.image}
+              size="sm"
+            />
+          </span>
+          <AddCommentForm
+            objectId={objectId}
+            objectType="project"
+            category={category}
+          />
+        </div>
+      )}
+    </div>
+  )
 }
 
 function ProjectPage({ projectId }: { projectId: string }) {
@@ -78,67 +148,6 @@ function ProjectPage({ projectId }: { projectId: string }) {
     }
     const isAdmin = session?.user.role === 'ADMIN'
     const projectBelongsToUser = project.author.id === session?.user.id
-
-    const CommentPanel = ({ category }: { category: CommentType }) => {
-      const filteredComments = project.comments.filter(
-        (comment) => comment.category === category,
-      )
-
-      return (
-        <div id="comments" className="pt-6 space-y-12">
-          {filteredComments.length > 0 ? (
-            <ul className="space-y-12">
-              {filteredComments.map((comment) => (
-                <li key={comment.id}>
-                  <Comment
-                    objectId={project.id}
-                    objectType="project"
-                    comment={comment}
-                  />
-
-                  <div id="replies" className="pt-12 pl-14 space-y-12">
-                    {comment.children.length > 0 && (
-                      <ul className="space-y-12">
-                        {comment.children.map((reply) => (
-                          <li key={reply.id}>
-                            <Comment
-                              objectId={project.id}
-                              objectType="project"
-                              comment={reply}
-                            />
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="pb-6 text-sm">No comments yet</p>
-          )}
-          {session && (
-            <div className="flex items-start gap-2 sm:gap-4">
-              <span className="hidden sm:inline-block">
-                <Avatar name={session!.user.name} src={session!.user.image} />
-              </span>
-              <span className="inline-block sm:hidden">
-                <Avatar
-                  name={session!.user.name}
-                  src={session!.user.image}
-                  size="sm"
-                />
-              </span>
-              <AddCommentForm
-                objectId={project.id}
-                objectType="project"
-                category={category}
-              />
-            </div>
-          )}
-        </div>
-      )
-    }
 
     return (
       <>
@@ -300,24 +309,40 @@ function ProjectPage({ projectId }: { projectId: string }) {
 
             <Tabs.Panel value={CommentType.COMMENT} className="p-6">
               <p className="text-sm">General comments on the project.</p>
-              <CommentPanel category={CommentType.COMMENT} />
+              <CommentPanel
+                comments={project.comments}
+                category={CommentType.COMMENT}
+                objectId={project.id}
+              />
             </Tabs.Panel>
             <Tabs.Panel value={CommentType.Q_AND_A} className="p-6">
               <p className="text-sm">Questions about the project.</p>
-              <CommentPanel category={CommentType.Q_AND_A} />
+              <CommentPanel
+                comments={project.comments}
+                category={CommentType.Q_AND_A}
+                objectId={project.id}
+              />
             </Tabs.Panel>
             <Tabs.Panel value={CommentType.REASONING} className="p-6">
               <p className="text-sm">
                 Donors’ reasoning behind their donations.
               </p>
-              <CommentPanel category={CommentType.REASONING} />
+              <CommentPanel
+                comments={project.comments}
+                category={CommentType.REASONING}
+                objectId={project.id}
+              />
             </Tabs.Panel>
             <Tabs.Panel value={CommentType.ENDORSEMENT} className="p-6">
               <p className="text-sm">
                 Endorsements of the project or links to such endorsements
                 elsewhere.
               </p>
-              <CommentPanel category={CommentType.ENDORSEMENT} />
+              <CommentPanel
+                comments={project.comments}
+                category={CommentType.ENDORSEMENT}
+                objectId={project.id}
+              />
             </Tabs.Panel>
           </Tabs>
         </div>

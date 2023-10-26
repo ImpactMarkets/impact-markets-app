@@ -6,7 +6,7 @@ export const Comparisons = () => (
     <div className="flex justify-center my-12 text-3xl font-display">
       AI Safety Impact Markets is a …
     </div>
-    <div className="max-w-screen-lg m-auto items-center flex mb-20 flex-col sm:flex-row">
+    <div className="max-w-screen-lg m-auto items-center flex my-10 flex-col sm:flex-row">
       <div className="basis-full m-6">
         <Image
           src="/images/collaborating.png"
@@ -32,7 +32,7 @@ export const Comparisons = () => (
         </div>
       </div>
     </div>
-    <div className="max-w-screen-lg m-auto flex items-center mb-20 mt-12 flex-col sm:flex-row-reverse">
+    <div className="max-w-screen-lg m-auto flex items-center my-10 flex-col sm:flex-row-reverse">
       <div className="basis-full m-6">
         <Image
           src="/images/sustaining.png"
@@ -59,7 +59,7 @@ export const Comparisons = () => (
         </div>
       </div>
     </div>
-    <div className="max-w-screen-lg m-auto items-center flex mb-20 mt-12 flex-col sm:flex-row">
+    <div className="max-w-screen-lg m-auto items-center flex my-10 flex-col sm:flex-row">
       <div className="basis-full m-6 flex-col sm:flex-row">
         <Image
           src="/images/saving.png"

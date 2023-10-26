@@ -42,6 +42,7 @@ export const donationRouter = router({
           amount: true,
           user: true,
           projectId: true,
+          recommender: true,
         },
       })
     }),
@@ -52,29 +53,37 @@ export const donationRouter = router({
         userId: z.string().min(1),
         amount: z.instanceof(Prisma.Decimal),
         time: z.instanceof(Date),
+        recommender: z.string().optional(),
       }),
     )
-    .mutation(async ({ ctx, input: { projectId, userId, amount, time } }) => {
-      const donation = await ctx.prisma.donation.create({
-        data: {
-          projectId,
-          userId,
-          amount,
-          time,
-        },
-        select: {
-          id: true,
-          project: true,
-          amount: true,
-          user: true,
-        },
-      })
+    .mutation(
+      async ({
+        ctx,
+        input: { projectId, userId, amount, time, recommender },
+      }) => {
+        const donation = await ctx.prisma.donation.create({
+          data: {
+            projectId,
+            userId,
+            amount,
+            time,
+            recommender,
+          },
+          select: {
+            id: true,
+            project: true,
+            amount: true,
+            user: true,
+            recommender: true,
+          },
+        })
 
-      // We don't wait for the event to emit before continuing.
-      emitNewDonationEvent(ctx, donation)
+        // We don't wait for the event to emit before continuing.
+        emitNewDonationEvent(ctx, donation)
 
-      return donation
-    }),
+        return donation
+      },
+    ),
   confirm: protectedProcedure
     .input(z.number())
     .mutation(async ({ input: id, ctx }) => {
