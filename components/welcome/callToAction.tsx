@@ -12,15 +12,17 @@ export const CallToAction = () => (
       'shadow-lg',
       'border-slate-200 border-solid border-2 rounded-2xl',
       'text-center',
-      'p-16 mt-32 mb-12',
+      'p-16 my-16',
     )}
   >
     <div>
-      <div className="text-5xl font-display mb-4">Join the community!</div>
-      <div className="text-lg prose">
+      <div className="w-full text-5xl font-display mb-4">
+        Join the community!
+      </div>
+      <div className="w-full text-lg text-center mb-10">
         Play regrantor, raise money, discover funding opportunities
       </div>
-      <div className="mt-6">
+      <div>
         <ButtonLink className="mr-2" href="https://discord.gg/7zMNNDSxWv">
           Join the Discord
         </ButtonLink>
@@ -36,6 +38,14 @@ export const CallToAction = () => (
           Register your interest
         </a>
       </div>
+    </div>
+    <div className="m-auto align-center flex justify-center">
+      <iframe
+        className="max-w-[300px]"
+        height="150"
+        src="https://impactmarkets.substack.com/embed"
+        scrolling="no"
+      ></iframe>
     </div>
   </Card>
 )

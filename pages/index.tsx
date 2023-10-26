@@ -22,16 +22,8 @@ const LandingPage: NextPageWithAuthAndLayout = () => (
     <Pitches />
     <div className="border"></div>
     <Comparisons />
-    <CallToAction />
     <Partners />
-    <div className="m-auto align-center flex justify-center">
-      <iframe
-        className="max-w-[300px]"
-        height="320"
-        src="https://impactmarkets.substack.com/embed"
-        scrolling="no"
-      ></iframe>
-    </div>
+    <CallToAction />
     <div className="border"></div>
     <CenteredFooter />
   </div>
