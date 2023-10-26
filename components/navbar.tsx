@@ -69,13 +69,16 @@ export const Navbar = ({
       <Link href="/">
         <Image
           src="/images/logo-light.svg"
-          alt="Impact Markets logo"
-          width={180}
-          height={76}
+          alt="Logo of GiveWiki (formerly Impact Markets)"
+          width={622}
+          height={232}
           className="cursor-pointer"
           unoptimized
           priority
         />
+        <div className="text-xs text-right text-slate-400">
+          … formerly Impact Markets
+        </div>
       </Link>
     </div>
     <div className="mx-4 my-3 flex-grow">
