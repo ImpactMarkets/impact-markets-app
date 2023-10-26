@@ -76,6 +76,7 @@ module.exports = {
       typography: {
         DEFAULT: {
           css: {
+            color: colors.gray[900],
             img: {
               marginTop: '1.5em',
               marginBottom: '1.5em',

@@ -1,7 +1,7 @@
 // Load completely on the client to avoid SSR error
 // https://github.com/mantinedev/mantine/issues/2880#issuecomment-1617136855
 import dynamic from 'next/dynamic'
-import { RefAttributes } from 'react'
+import React, { RefAttributes } from 'react'
 
 import {
   Loader,
@@ -22,20 +22,23 @@ export const Tooltip = ({ children, ...rest }: TooltipProps) => {
   return <MantineTooltip {...rest}>{children}</MantineTooltip>
 }
 
-export const Select = ({
-  placeholder,
-  ...rest
-}: SelectProps & RefAttributes<HTMLInputElement>) => {
-  const MantineSelect = dynamic(
-    () => import('@mantine/core').then((el) => el.Select),
-    {
-      loading: () => <>{placeholder}</>,
-      ssr: false,
-    },
-  )
+export const Select = React.forwardRef<HTMLInputElement, SelectProps>(
+  ({ placeholder, ...rest }, forwardedRef) => {
+    const MantineSelect = dynamic(
+      () => import('@mantine/core').then((el) => el.Select),
+      {
+        loading: () => <>{placeholder}</>,
+        ssr: false,
+      },
+    )
 
-  return <MantineSelect placeholder={placeholder} {...rest} />
-}
+    return (
+      <MantineSelect placeholder={placeholder} ref={forwardedRef} {...rest} />
+    )
+  },
+)
+
+Select.displayName = 'Select'
 
 export const MultiSelect = ({
   placeholder,
