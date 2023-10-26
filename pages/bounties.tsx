@@ -46,7 +46,7 @@ const Home: NextPageWithAuthAndLayout = () => {
     return (
       <div className="max-w-screen-lg mx-auto">
         <Head>
-          <title>Bounties – AI Safety Impact Markets</title>
+          <title>Bounties – AI Safety GiveWiki</title>
         </Head>
 
         <div className="flex justify-between flex-row-reverse flex-wrap gap-3 mt-3">

@@ -137,18 +137,18 @@ function BountyPage({ bountyId }: { bountyId: string }) {
                 ? '$' + num(bounty.size) + ': '
                 : ''
             }
-            ${bounty.title} – Impact Markets`}
+            ${bounty.title} – GiveWiki`}
           </title>
         </Head>
 
         <SuperSEO
-          title={`${bounty.title} – AI Safety Impact Markets`}
+          title={`${bounty.title} – AI Safety GiveWiki`}
           description={bounty.contentHtml}
           lang="en"
           openGraph={{
             ogImage: {
-              ogImage: 'https://app.impactmarkets.io/images/logo-light.svg',
-              ogImageAlt: 'AI Safety Impact Markets logo',
+              ogImage: 'https://ai.givewiki.org/images/logo-light.svg',
+              ogImageAlt: 'AI Safety GiveWiki logo',
               ogImageWidth: 550,
               ogImageHeight: 232,
               ogImageType: 'image/jpeg',
@@ -156,9 +156,8 @@ function BountyPage({ bountyId }: { bountyId: string }) {
           }}
           twitter={{
             twitterSummaryCard: {
-              summaryCardImage:
-                'https://app.impactmarkets.io/images/logo-light.svg',
-              summaryCardImageAlt: 'AI Safety Impact Markets logo',
+              summaryCardImage: 'https://ai.givewiki.org/images/logo-light.svg',
+              summaryCardImageAlt: 'AI Safety GiveWiki logo',
               // summaryCardSiteUsername: "twitterUsername",
             },
           }}

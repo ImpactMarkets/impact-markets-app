@@ -191,7 +191,7 @@ function EditProfileDialog({
                     rel="noreferrer"
                     className="link italic"
                   >
-                    My impactmarkets.io profile
+                    My GiveWiki profile
                   </a>
                   . Please put it on a personal page that is clearly yours and
                   paste a link to that page below. Putting a link to your
@@ -213,7 +213,7 @@ function EditProfileDialog({
               {...register('contact')}
               label="Contact"
               description="Any email address or social media profile where people can reach you. This information is public."
-              placeholder="hi@impactmarkets.io"
+              placeholder="hi@givewiki.org"
             />
             <LargeTextField
               {...register('bio')}
@@ -405,7 +405,7 @@ export function ProfileInfo({
       <div key={childKey}>
         <Head>
           {/* https://stackoverflow.com/questions/75875037 */}
-          <title>{`${user.name} – AI Safety Impact Markets`}</title>
+          <title>{`${user.name} – AI Safety GiveWiki`}</title>
         </Head>
 
         <div className="relative flex items-start gap-4 py-8 overflow-hidden">

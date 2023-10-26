@@ -36,7 +36,7 @@ export function User() {
             <Tooltip
               label={
                 <p>
-                  The first disbursement of Impact Marks is planned for 2024.
+                  The first disbursement of Wiki Credits is planned for 2024.
                   <br />
                   They’ll have various functions on the platform.
                 </p>
@@ -45,7 +45,7 @@ export function User() {
             >
               <div className="grow">
                 <p className="text-sm">{session.user.name}</p>
-                <p className="text-xs text-gray-500">0 Impact Marks</p>
+                <p className="text-xs text-gray-500">0 Wiki Credits</p>
               </div>
             </Tooltip>
 

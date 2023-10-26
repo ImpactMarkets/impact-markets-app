@@ -107,8 +107,8 @@ const RulesAndTerms: NextPageWithAuthAndLayout = () => {
         Exchange, PBC, doing business as GoodX (“<strong>GoodX</strong>,” “
         <strong>we</strong>,” “<strong>us</strong>,” or “<strong>our</strong>”),
         concerning your access to and use of the{' '}
-        <a href="https://impactmarkets.io/">https://impactmarkets.io</a> website
-        as well as any other media form, media channel, mobile website or mobile
+        <a href="https://givewiki.org/">https://givewiki.org</a> website as well
+        as any other media form, media channel, mobile website or mobile
         application related, linked, or otherwise connected thereto
         (collectively, the “Site”). We are registered in California, United
         States and have our registered office at 510 El Cerrito Plz, Unit 311,
@@ -997,7 +997,7 @@ const RulesAndTerms: NextPageWithAuthAndLayout = () => {
         <strong>United States</strong>
       </p>
       <p>
-        <strong>hi@impactmarkets.io</strong>
+        <strong>hi@givewiki.org</strong>
       </p>
       <p className="py-3">
         These terms of use were created using Termly’s{' '}

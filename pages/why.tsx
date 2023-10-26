@@ -106,7 +106,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
             <p className="my-3">This is our solution:</p>
             <ol className="list-decimal list-outside m-2 ml-10">
               <li>
-                We promote impactmarkets.io as the one platform where grant
+                We promote givewiki.org as the one platform where grant
                 applicants can publish their project proposals. No particular
                 format: There’s a Q &amp; A system though for funders/donors to
                 ask further questions as needed. Questions and answers are
@@ -722,7 +722,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
             <p className="my-3">
               If that sounds interesting to you, please get in touch, e.g.,
               through the support button to the lower right or via
-              hi@impactmarkets.io.
+              hi@givewiki.org.
             </p>
           </Accordion.Panel>
         </Accordion.Item>
@@ -737,8 +737,8 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
               into your own custom donor ranking. Please get in touch if that
               sounds interesting to you, e.g., through the support button to the
               lower right or via{' '}
-              <Link className="link" href="mailto:hi@impactmarkets.io">
-                hi@impactmarkets.io
+              <Link className="link" href="mailto:hi@givewiki.org">
+                hi@givewiki.org
               </Link>
               .
             </p>
@@ -784,8 +784,8 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
               If you want a task done without having to find and hire a
               particular person to do it, you can create a bounty: a promise of
               a specified reward to anyone who can prove they’ve performed the
-              task you want completed. Impact Markets’ bounty board functions as
-              a directory of tasks, the completion of which is valued by members
+              task you want completed. GiveWiki’s bounty board functions as a
+              directory of tasks, the completion of which is valued by members
               of the EA, rationalist, and adjacent communities.
             </p>
           </Accordion.Panel>

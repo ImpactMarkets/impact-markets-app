@@ -61,7 +61,7 @@ export const createEmail = (
           <MjmlColumn>
             <MjmlImage
               width="200px"
-              src="https://app.impactmarkets.io/static/images/logo-light.png"
+              src="https://ai.givewiki.org/static/images/logo-light.png"
             ></MjmlImage>
             <MjmlText>
               <p>
@@ -77,10 +77,8 @@ export const createEmail = (
                 notifications of new projects, new bounties, or activity on your
                 own projects. You can change your notification preferences on
                 your{' '}
-                <a
-                  href={`https://app.impactmarkets.io/profile/${recipient.id}`}
-                >
-                  Impact Markets profile
+                <a href={`https://ai.givewiki.org/profile/${recipient.id}`}>
+                  GiveWiki profile
                 </a>
                 .
               </p>
@@ -103,7 +101,7 @@ const renderSection = (events: Event[]) => {
       <MjmlText key={objectId}>
         <h2>
           “
-          <a href={`https://app.impactmarkets.io/${objectType}/${objectId}`}>
+          <a href={`https://ai.givewiki.org/${objectType}/${objectId}`}>
             {objectTitle}
           </a>
           ”
@@ -133,6 +131,7 @@ export async function sendEmail(recipientAddress: string, emailHtml: string) {
   if (
     (process.env.NODE_ENV === 'production' && process.env.EMAIL_ANYONE) ||
     recipientAddress.endsWith('@impactmarkets.io') ||
+    recipientAddress.endsWith('@givewiki.org') ||
     recipientAddress === 'telofy@gmail.com' ||
     recipientAddress === 'impactmarkets.io@gmail.com'
   ) {

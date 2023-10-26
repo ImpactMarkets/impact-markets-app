@@ -27,7 +27,7 @@ const Feature = ({ icon: Icon, title, children }: FeatureProps) => (
 export const Pitches = () => (
   <div className="max-w-[900px] mx-auto my-5 py-6">
     <div className="flex justify-center text-3xl font-display">
-      AI Safety Impact Markets is a platform for …
+      AI Safety GiveWiki is a platform for …
     </div>
     <div className="flex gap-6 flex-col sm:flex-row my-12">
       <Feature icon={IconShovel} title="AI safety projects" key="projects">
