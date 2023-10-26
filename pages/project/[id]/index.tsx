@@ -33,6 +33,7 @@ import { Scores } from '@/components/scores'
 import { Tags } from '@/components/tags'
 import { PageLoader } from '@/components/utils'
 import { classNames } from '@/lib/classnames'
+import { markdownToPlainHtml } from '@/lib/editor'
 import { num } from '@/lib/text'
 import { RouterOutput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
@@ -158,22 +159,27 @@ function ProjectPage({ projectId }: { projectId: string }) {
 
         <SuperSEO
           title={`${project.title} – AI Safety Impact Markets`}
-          description={project.contentHtml}
+          description={markdownToPlainHtml(project.content)}
           lang="en"
           openGraph={{
+            ogType: 'website',
+            ogTitle: `${project.title} – AI Safety Impact Markets`,
+            ogUrl: `https://app.impactmarkets.io/project/${project.id}`,
             ogImage: {
-              ogImage: 'https://app.impactmarkets.io/images/logo-light.svg',
-              ogImageAlt: 'AI Safety Impact Markets logo',
-              ogImageWidth: 550,
-              ogImageHeight: 232,
-              ogImageType: 'image/jpeg',
+              ogImage: 'https://app.impactmarkets.io/images/logo-light-og.png',
+              ogImageSecureUrl:
+                'https://app.impactmarkets.io/images/logo-light-og.png',
+              ogImageAlt: `${project.title} – AI Safety Impact Markets`,
+              ogImageWidth: 1200,
+              ogImageHeight: 630,
+              ogImageType: 'image/png',
             },
           }}
           twitter={{
             twitterSummaryCard: {
               summaryCardImage:
-                'https://app.impactmarkets.io/images/logo-light.svg',
-              summaryCardImageAlt: 'AI Safety Impact Markets logo',
+                'https://app.impactmarkets.io/images/logo-light-og.png',
+              summaryCardImageAlt: `${project.title} – AI Safety Impact Markets`,
               // summaryCardSiteUsername: "twitterUsername",
             },
           }}
