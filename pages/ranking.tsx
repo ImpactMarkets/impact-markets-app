@@ -21,7 +21,7 @@ const RankingPage: NextPageWithAuthAndLayout = () => {
   return (
     <div className="max-w-screen-lg mx-auto">
       <Head>
-        <title>Impact Markets – Ranking</title>
+        <title>GiveWiki – Ranking</title>
       </Head>
 
       <Heading1>Top Donor Ranking</Heading1>

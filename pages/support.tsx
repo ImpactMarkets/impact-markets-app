@@ -20,8 +20,8 @@ const HelpAndSupportPage: NextPageWithAuthAndLayout = () => {
       </p>
       <p className="mt-6">
         Please use the support button, email us at{' '}
-        <Link className="link" href="hi@impactmarkets.io">
-          hi@impactmarkets.io
+        <Link className="link" href="hi@givewiki.org">
+          hi@givewiki.org
         </Link>
         , or join our{' '}
         <a

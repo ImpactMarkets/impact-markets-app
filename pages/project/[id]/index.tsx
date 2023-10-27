@@ -154,22 +154,22 @@ function ProjectPage({ projectId }: { projectId: string }) {
       <>
         <Head>
           {/* https://stackoverflow.com/questions/75875037 */}
-          <title>{`${project.title} – AI Safety Impact Markets`}</title>
+          <title>{`${project.title} – AI Safety GiveWiki`}</title>
         </Head>
 
         <SuperSEO
-          title={`${project.title} – AI Safety Impact Markets`}
+          title={`${project.title} – AI Safety GiveWiki`}
           description={markdownToPlainHtml(project.content)}
           lang="en"
           openGraph={{
             ogType: 'website',
-            ogTitle: `${project.title} – AI Safety Impact Markets`,
-            ogUrl: `https://app.impactmarkets.io/project/${project.id}`,
+            ogTitle: `${project.title} – AI Safety GiveWiki`,
+            ogUrl: `https://ai.givewiki.org/project/${project.id}`,
             ogImage: {
-              ogImage: 'https://app.impactmarkets.io/images/logo-light-og.png',
+              ogImage: 'https://ai.givewiki.org/images/logo-light-og.png',
               ogImageSecureUrl:
-                'https://app.impactmarkets.io/images/logo-light-og.png',
-              ogImageAlt: `${project.title} – AI Safety Impact Markets`,
+                'https://ai.givewiki.org/images/logo-light-og.png',
+              ogImageAlt: `${project.title} – AI Safety GiveWiki`,
               ogImageWidth: 1200,
               ogImageHeight: 630,
               ogImageType: 'image/png',
@@ -178,8 +178,8 @@ function ProjectPage({ projectId }: { projectId: string }) {
           twitter={{
             twitterSummaryCard: {
               summaryCardImage:
-                'https://app.impactmarkets.io/images/logo-light-og.png',
-              summaryCardImageAlt: `${project.title} – AI Safety Impact Markets`,
+                'https://ai.givewiki.org/images/logo-light-og.png',
+              summaryCardImageAlt: `${project.title} – AI Safety GiveWiki`,
               // summaryCardSiteUsername: "twitterUsername",
             },
           }}

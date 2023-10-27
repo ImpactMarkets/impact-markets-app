@@ -108,7 +108,7 @@ export function ProjectForm({
           {...register('paymentUrl')}
           label="Payment URL"
           description="A link to a page where people can donate to the project. (Optional)"
-          placeholder="https://ko-fi.com/velvetillumnation"
+          placeholder="https://giveth.io/donate/glo-dollar"
         />
       </div>
       <div className="mt-6">
