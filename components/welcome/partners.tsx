@@ -5,7 +5,7 @@ import { Tooltip } from '@/lib/mantine'
 
 const partners = [
   {
-    tooltip: 'Member of the Glo Consortium',
+    tooltip: 'Membership of the Glo Consortium pending',
     logo: '/images/partners/glo-consortium.svg',
     aspect: 0.55,
   },
