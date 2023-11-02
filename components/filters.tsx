@@ -6,9 +6,9 @@ import { BountySortKey, ProjectSortKey } from '@/lib/constants'
 
 import { IconButton } from './iconButton'
 import { SearchIcon } from './icons'
-import { IMMultiSelect } from './multiSelect'
+import { MultiSelect } from './multiSelect'
 import { SearchDialog } from './searchDialog'
-import { IMSelect } from './select'
+import { Select } from './select'
 import { IMTag } from './utils'
 
 export type FiltersProps = {
@@ -33,16 +33,7 @@ export function Filters(props: FiltersProps) {
   return (
     <div className="flex flex-wrap gap-3 items-center">
       <div className="flex flex-nowrap gap-3 items-center text-sm">
-        <IMMultiSelect
-          placeholder={filterTags?.length ? ' ' : 'Filter by tags'}
-          data={props.tags}
-          onChange={(value) => {
-            if (Array.isArray(value)) {
-              setFilterTags(value)
-              props.onFilterTagsUpdate(value.join(','))
-            }
-          }}
-          value={filterTags}
+        <MultiSelect
           classNames={{
             inputField:
               'placeholder:text-secondary focus:ring-0 cursor-pointer',
@@ -51,7 +42,7 @@ export function Filters(props: FiltersProps) {
           }}
           hidePickedOptions
         />
-        <IMSelect
+        <Select
           placeholder="Sort by:"
           data={props.orderByValues}
           onChange={(value) => {

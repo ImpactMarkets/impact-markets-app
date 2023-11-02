@@ -12,8 +12,8 @@ import { MarkdownEditor } from '@/components/markdownEditor'
 import { TextField } from '@/components/textField'
 import { capitalize } from '@/lib/text'
 
-import { IMMultiSelect } from '../multiSelect'
-import { IMSelect } from '../select'
+import { MultiSelect } from '../multiSelect'
+import { Select } from '../select'
 
 type FormData = {
   id: string
@@ -83,7 +83,7 @@ export const Form = ({
           description="Where can one read more about your bounty? (Optional)"
           placeholder="https://bit.ly/my-dating-doc"
         />
-        <IMSelect
+        <Select
           {...register('status')}
           label="Status"
           description="Has anyone claimed or completed your bounty?"
@@ -123,7 +123,7 @@ export const Form = ({
         </div>
       </div>
       <div className="mt-6">
-        <IMMultiSelect
+        <MultiSelect
           {...register('tags')}
           label="Tags"
           description={
