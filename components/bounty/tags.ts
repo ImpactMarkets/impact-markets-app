@@ -115,4 +115,5 @@ export const TAGS_GROUPED = flow(
       }),
     ),
   })),
+  notEmpty,
 )(TAGS)

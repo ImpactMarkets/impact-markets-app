@@ -34,3 +34,9 @@ export const PageLoader = () => (
     <Loader color="currentColor" className="w-14 h-12 m-16" type="bars" />
   </div>
 )
+
+// https://stackoverflow.com/a/77332075/678861
+export const notEmpty = <T,>(list: T[]) => {
+  if (list.length == 0) throw new TypeError('List must not be empty')
+  return list as [T, ...T[]]
+}
