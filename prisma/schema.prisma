@@ -167,7 +167,6 @@ model Project {
 
   author        User           @relation(fields: [authorId], references: [id], onDelete: Restrict)
   donations     Donation[]
-  certificates  Certificate[]
   likedBy       LikedProject[]
   comments      Comment[]
   contributions Contribution[]
@@ -189,7 +188,6 @@ model Certificate {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   authorId       String
-  projectId      String?
 
   // TODO: Move these to CertificateVersion to enable versioning
   location    String   @default("")
@@ -202,7 +200,6 @@ model Certificate {
   holdings Holding[]
   issuers  CertificateIssuer[]
   likedBy  LikedCertificate[]
-  project  Project?            @relation(fields: [projectId], references: [id], onDelete: Restrict)
 
   @@index([authorId])
 }
