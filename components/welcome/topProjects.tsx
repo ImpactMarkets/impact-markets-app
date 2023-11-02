@@ -12,7 +12,7 @@ export const TopProjects = () => {
   const feedQuery = trpc.project.feed.useQuery({
     take: 3,
     showHidden: false,
-    hideClosed: true,
+    showClosed: false,
     orderBy: 'supportScore' as ProjectSortKey,
   })
 

@@ -1,118 +1,119 @@
 import { flow, groupBy, map } from 'lodash/fp'
 
 import { colors } from '../colors'
-import { IMTag } from '../utils'
+import { Tag, notEmpty } from '../utils'
 
-export const TAGS: IMTag[] = [
+export const TAGS: Tag[] = [
   {
     value: 'dating-doc',
     label: 'Personal dating doc',
     color: colors.bounty,
-    group: 'Type of bounty',
+    category: 'Type of bounty',
   },
   {
     value: 'errand',
     label: 'Personal errand',
     color: colors.bounty,
-    group: 'Type of bounty',
+    category: 'Type of bounty',
   },
   {
     value: 'service',
     label: 'Personal service',
     color: colors.bounty,
-    group: 'Type of bounty',
+    category: 'Type of bounty',
   },
   {
     value: 'contribution',
     label: 'Altruistic contribution',
     color: colors.prize,
-    group: 'Type of prize',
+    category: 'Type of prize',
   },
   {
     value: 'other-bounty',
     label: 'Other type of bounty',
     color: colors.other,
-    group: 'Other',
+    category: 'Other',
   },
   {
     value: 'other-prize',
     label: 'Other field of prize',
     color: colors.other,
-    group: 'Other',
+    category: 'Other',
   },
   {
     value: 'effective-altruism',
     label: 'Effective Altruism',
     color: colors.community,
-    group: 'Community',
+    category: 'Community',
   },
   {
     value: 'less-wrong',
     label: 'LessWrong',
     color: colors.community,
-    group: 'Community',
+    category: 'Community',
   },
   {
     value: 'tpot',
     label: 'TPOT',
     color: colors.community,
-    group: 'Community',
+    category: 'Community',
   },
   {
     value: 'vibecamp',
     label: 'Vibecamp',
     color: colors.community,
-    group: 'Community',
+    category: 'Community',
   },
   {
     value: 'africa',
     label: 'Africa',
     color: colors.location,
-    group: 'Location',
+    category: 'Location',
   },
   {
     value: 'asia',
     label: 'Asia',
     color: colors.location,
-    group: 'Location',
+    category: 'Location',
   },
   {
     value: 'europe',
     label: 'Europe',
     color: colors.location,
-    group: 'Location',
+    category: 'Location',
   },
   {
     value: 'north-america',
     label: 'North America',
     color: colors.location,
-    group: 'Location',
+    category: 'Location',
   },
   {
     value: 'oceania',
     label: 'Oceania',
     color: colors.location,
-    group: 'Location',
+    category: 'Location',
   },
   {
     value: 'south-america',
     label: 'South America',
     color: colors.location,
-    group: 'Location',
+    category: 'Location',
   },
 ]
 
 export const TAGS_GROUPED = flow(
-  groupBy('group'),
+  groupBy('category'),
   Object.entries, // map/each are not working here for some reason
   map(([key, value]) => ({
     group: key,
     items: value.map(
       // Remove extraneous fields because the group/items detection is recursive
-      ({ value, label }: { value: string; label: string }) => ({
+      ({ value, label }: Tag) => ({
         value,
         label,
       }),
     ),
   })),
+  notEmpty,
 )(TAGS)

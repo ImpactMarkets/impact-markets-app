@@ -47,10 +47,10 @@ export const projectRouter = router({
           take: z.number().min(1).max(60).optional(),
           skip: z.number().min(1).optional(),
           authorId: z.string().optional(),
-          filterTags: z.string().optional(),
+          filterTags: z.array(z.string()).optional(),
           orderBy: z.enum(PROJECT_SORT_KEYS).optional(),
           showHidden: z.boolean().optional(),
-          hideClosed: z.boolean().optional(),
+          showClosed: z.boolean().optional(),
         })
         .optional(),
     )
@@ -65,14 +65,14 @@ export const projectRouter = router({
       const where = {
         OR: baseQuery,
         AND: input?.filterTags
-          ? input.filterTags.split(',').map((tag) => ({
+          ? input.filterTags.map((tag) => ({
               tags: {
                 contains: tag.toLowerCase(),
               },
             }))
           : undefined,
         authorId: input?.authorId,
-        paymentUrl: input?.hideClosed ? { contains: '/' } : undefined,
+        paymentUrl: input?.showClosed ? undefined : { contains: '/' },
       }
 
       const projects = await ctx.prisma.project.findMany({
@@ -286,6 +286,13 @@ export const projectRouter = router({
           id: true,
           title: true,
         },
+        orderBy: {
+          _relevance: {
+            fields: ['title'],
+            search: query,
+            sort: 'desc',
+          },
+        },
       })
 
       return projects.map(({ id, ...rest }) => ({
@@ -433,10 +440,10 @@ export const projectRouter = router({
     .input(
       z.object({
         id: z.string().min(1),
-        includeAnonymous: z.boolean().optional(),
       }),
     )
-    .query(async ({ ctx, input: { id, includeAnonymous } }) => {
+    .query(async ({ ctx, input: { id } }) => {
+      const isAdmin = ctx.session?.user.role === 'ADMIN'
       return await ctx.prisma.contribution.findMany({
         select: {
           user: {
@@ -445,19 +452,22 @@ export const projectRouter = router({
               name: true,
               image: true,
               userScore: true,
+              prefersAnonymity: true,
             },
           },
           totalAmount: true,
-          relativeContribution: true,
+          contribution: true,
         },
         where: {
           projectId: id,
-          user: {
-            prefersAnonymity: includeAnonymous ? undefined : false,
-          },
+          user: isAdmin
+            ? undefined
+            : {
+                prefersAnonymity: false,
+              },
         },
         orderBy: {
-          relativeContribution: 'desc',
+          contribution: 'desc',
         },
         take: 10,
       })

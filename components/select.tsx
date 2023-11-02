@@ -1,8 +1,8 @@
 import * as React from 'react'
 
-import { SelectProps } from '@mantine/core'
+import { SelectProps as MantineSelectProps } from '@mantine/core'
 
-import { Select } from '@/lib/mantine'
+import { Select as MantineSelect } from '@/lib/mantine'
 
 import { InfoTooltip } from './infoTooltip'
 import { Label } from './label'
@@ -12,11 +12,11 @@ export type SelectOwnProps = {
   info?: string | React.ReactElement
 }
 
-type IMTextFieldProps = SelectOwnProps &
-  SelectProps &
+type TextFieldProps = SelectOwnProps &
+  MantineSelectProps &
   React.ComponentPropsWithoutRef<'input'>
 
-export const IMSelect = React.forwardRef<HTMLInputElement, IMTextFieldProps>(
+export const Select = React.forwardRef<HTMLInputElement, TextFieldProps>(
   ({ label, info, id, name, className, ...rest }, forwardedRef) => {
     return (
       <div className={className}>
@@ -26,7 +26,7 @@ export const IMSelect = React.forwardRef<HTMLInputElement, IMTextFieldProps>(
             {info && <InfoTooltip text={info} />}
           </Label>
         )}
-        <Select
+        <MantineSelect
           {...rest}
           ref={forwardedRef}
           id={id || name}
@@ -38,4 +38,4 @@ export const IMSelect = React.forwardRef<HTMLInputElement, IMTextFieldProps>(
   },
 )
 
-IMSelect.displayName = 'IMSelect'
+Select.displayName = 'Select'

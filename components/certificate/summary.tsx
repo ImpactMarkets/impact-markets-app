@@ -22,69 +22,39 @@ export type CertificateSummaryProps = {
   onUnlike?: () => void
 }
 
-function Left({ certificate }: CertificateSummaryProps) {
-  const contentDocument = React.useMemo(
-    () => new DOMParser().parseFromString(certificate.contentHtml, 'text/html'),
-    [certificate.contentHtml],
-  )
-  //   TODO: decide on the order of the allowed tags
-  //   and research on how to truncate html to a max amount of characters
-  const summary = React.useMemo(() => {
-    const allowedTags = ['p', 'ul', 'ol', 'h3', 'pre', 'img']
-
-    for (const tag of allowedTags) {
-      const element = contentDocument.body.querySelector(tag)
-      if (element) {
-        return element.outerHTML
-      }
-    }
-
-    return "<p>Summary couldn't be generated</p>"
-  }, [contentDocument])
-
-  let cert_summary = summary
-  cert_summary = cert_summary.replace('<p>', '')
-  cert_summary = cert_summary.replace('</p>', '')
-  if (cert_summary.length > 300) {
-    cert_summary = cert_summary.substring(0, 300) + '...'
-  }
-
-  return (
-    <div className="grow relative flex flex-col justify-between max-w-[calc(100%-140px-1rem)]">
-      {certificate.tags && (
-        <div className="flex flex-wrap gap-1 mb-6">
-          <Tags queryData={certificate} tags={TAGS} />
-        </div>
-      )}
-      <div className={classNames(certificate.hidden ? 'opacity-50' : '')}>
-        <Link href={`/certificate/${certificate.id}`}>
-          <Heading2 className="cursor-pointer w-[95%] whitespace-nowrap text-ellipsis overflow-hidden">
-            {certificate.title}
-          </Heading2>
-        </Link>
-        <Date date={certificate.createdAt} className="text-gray-500 text-sm" />
+export const Left = ({ certificate }: CertificateSummaryProps) => (
+  <div className="grow relative flex flex-col justify-between max-w-[calc(100%-140px-1rem)]">
+    {certificate.tags && (
+      <div className="flex flex-wrap gap-1 mb-6">
+        <Tags queryData={certificate} tags={TAGS} />
       </div>
+    )}
+    <div className={classNames(certificate.hidden ? 'opacity-50' : '')}>
+      <Link href={`/certificate/${certificate.id}`}>
+        <Heading2 className="cursor-pointer w-[95%] whitespace-nowrap text-ellipsis overflow-hidden">
+          {certificate.title}
+        </Heading2>
+      </Link>
+      <Date date={certificate.createdAt} className="text-gray-500 text-sm" />
     </div>
-  )
-}
+  </div>
+)
 
-function Right({ certificate }: CertificateSummaryProps) {
-  return (
-    <div className="flex flex-col justify-between ml-4 max-w-[140px] min-w-[140px] w-[140px]">
-      <div>
-        {fp.flow(
-          fp.map('user'),
-          sortAuthorFirst(certificate.author),
-          fp.map((user) => (
-            <div key={user.id}>
-              <Author author={user} />
-            </div>
-          )),
-        )(certificate.issuers)}
-      </div>
+export const Right = ({ certificate }: CertificateSummaryProps) => (
+  <div className="flex flex-col justify-between ml-4 max-w-[140px] min-w-[140px] w-[140px]">
+    <div>
+      {fp.flow(
+        fp.map('user'),
+        sortAuthorFirst(certificate.author),
+        fp.map((user) => (
+          <div key={user.id}>
+            <Author author={user} />
+          </div>
+        )),
+      )(certificate.issuers)}
     </div>
-  )
-}
+  </div>
+)
 
 export const CertificateSummary = ({
   certificate,

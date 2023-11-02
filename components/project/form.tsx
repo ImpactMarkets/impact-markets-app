@@ -8,7 +8,7 @@ import { MarkdownEditor } from '@/components/markdownEditor'
 import { TAGS_GROUPED } from '@/components/project/tags'
 import { TextField } from '@/components/textField'
 
-import { IMMultiSelect } from '../multiSelect'
+import { MultiSelect } from '../multiSelect'
 
 const DESCRIPTION_PROMPTS = (
   <>
@@ -112,7 +112,7 @@ export function ProjectForm({
         />
       </div>
       <div className="mt-6">
-        <IMMultiSelect
+        <MultiSelect
           {...register('tags')}
           label="Tags"
           description={

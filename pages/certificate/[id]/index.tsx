@@ -72,7 +72,7 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
           <div className="pb-12">
             {certificate.hidden && (
               <Banner className="mb-6">
-                This project was hidden by the curators.
+                This certificate was hidden by the curators.
               </Banner>
             )}
 

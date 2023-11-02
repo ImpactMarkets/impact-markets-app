@@ -1,7 +1,9 @@
 import * as React from 'react'
 
+import { Prisma } from '@prisma/client'
 import { IconTrophy } from '@tabler/icons-react'
 
+import { Tooltip } from '@/lib/mantine'
 import { num } from '@/lib/text'
 import { RouterOutput, trpc } from '@/lib/trpc'
 
@@ -16,6 +18,7 @@ export function TopContributors({
     id: project.id,
   })
   const ranking = rankingQuery.data ?? []
+  const zero = new Prisma.Decimal(0)
   return (
     <>
       {ranking.length === 0 ? (
@@ -36,36 +39,47 @@ export function TopContributors({
                 </tr>
               </thead>
               <tbody>
-                {ranking.map(
-                  ({ user, totalAmount, relativeContribution }, index) => (
-                    <tr key={user.id}>
-                      <td className="w-10 text-sm pb-3">{index + 1}</td>
-                      <td className="w-64">
-                        <Author author={user} />
-                      </td>
-                      <td className="text-right pl-6">
-                        $
-                        {totalAmount == null
-                          ? '0' // Should never happen
-                          : num(totalAmount, 0)}
-                      </td>
-                      <td className="text-right pl-6">
-                        {relativeContribution == null
-                          ? '0' // Should never happen
-                          : num(relativeContribution.times(100), 0)}
-                        %
-                      </td>
-                      <td className="w-10 text-right">
-                        {index < 3 && (
-                          <IconTrophy
-                            className="inline"
-                            color={['#D4AF37', '#C0C0C0', '#CD7F32'][index]}
-                          />
-                        )}
-                      </td>
-                    </tr>
-                  ),
-                )}
+                {ranking.map(({ user, totalAmount, contribution }, index) => (
+                  <tr
+                    key={user.id}
+                    className={user.prefersAnonymity ? 'opacity-50' : ''}
+                  >
+                    <td className="w-10 text-sm pb-3">{index + 1}</td>
+                    <td className="w-64">
+                      <Tooltip
+                        label={
+                          <>
+                            Donor score: {num(user.userScore?.score ?? zero, 0)}
+                          </>
+                        }
+                      >
+                        <span>
+                          <Author author={user} />
+                        </span>
+                      </Tooltip>
+                    </td>
+                    <td className="text-right pl-6">
+                      $
+                      {totalAmount == null
+                        ? '0' // Should never happen
+                        : num(totalAmount, 0)}
+                    </td>
+                    <td className="text-right pl-6">
+                      {contribution == null
+                        ? '0' // Should never happen
+                        : num(contribution.times(100), 0)}
+                      %
+                    </td>
+                    <td className="w-10 text-right">
+                      {index < 3 && (
+                        <IconTrophy
+                          className="inline"
+                          color={['#D4AF37', '#C0C0C0', '#CD7F32'][index]}
+                        />
+                      )}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
