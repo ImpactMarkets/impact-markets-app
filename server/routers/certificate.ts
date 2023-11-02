@@ -71,7 +71,6 @@ export const certificateRouter = router({
         select: {
           id: true,
           title: true,
-          contentHtml: true,
           createdAt: true,
           hidden: true,
           tags: true,
