@@ -9,7 +9,7 @@ import { SearchIcon } from './icons'
 import { MultiSelect } from './multiSelect'
 import { SearchDialog } from './searchDialog'
 import { Select } from './select'
-import { IMTag } from './utils'
+import { TagGroup, notEmpty } from './utils'
 
 export type FiltersProps = {
   onFilterTagsUpdate: (tags: string) => void

@@ -17,17 +17,17 @@ type SortAuthorFirst = (array: Author[]) => Author[]
 export const sortAuthorFirst: (author: Author) => SortAuthorFirst = (author) =>
   sortBy((user) => [user.id !== author.id, user.name])
 
-export type IMTag =
-  | {
-      value: string
-      label: string
-      color?: string
-      group?: string
-    }
-  | {
-      group: string
-      items: [{ value: string; label: string; color?: string }]
-    }
+export type Tag = {
+  value: string
+  label: string
+  color?: string
+  category?: string
+}
+
+export type TagGroup = {
+  group: string
+  items: [Tag, ...Tag[]]
+}
 
 export const PageLoader = () => (
   <div className="w-full h-full flex justify-center items-center text-slate-300">

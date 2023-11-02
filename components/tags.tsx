@@ -3,7 +3,7 @@ import * as React from 'react'
 import { classNames } from '@/lib/classnames'
 import { RouterOutput } from '@/lib/trpc'
 
-import { IMTag } from './utils'
+import { Tag } from './utils'
 
 type TagsProps = {
   queryData:
@@ -13,7 +13,7 @@ type TagsProps = {
     | RouterOutput['project']['feed']['projects'][number]
     | RouterOutput['bounty']['detail']
     | RouterOutput['bounty']['feed']['bounties'][number]
-  tags: IMTag[]
+  tags: Tag[]
 }
 
 export const Tags = ({ queryData, tags: knownTags }: TagsProps) => {
@@ -22,7 +22,6 @@ export const Tags = ({ queryData, tags: knownTags }: TagsProps) => {
   return (
     <>
       {knownTags.map(
-        // @ts-expect-error: Properties value, label, and color do exist?
         ({ value, label, color }) =>
           tags.includes(value) && (
             <span
