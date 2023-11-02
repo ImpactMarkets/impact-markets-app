@@ -373,10 +373,10 @@ model Event {
 }
 
 view Contribution {
-  projectId            String
-  userId               String
-  totalAmount          Decimal
-  relativeContribution Decimal
+  projectId    String
+  userId       String
+  totalAmount  Decimal
+  contribution Decimal
 
   user    User    @relation(fields: [userId], references: [id])
   project Project @relation(fields: [projectId], references: [id])
