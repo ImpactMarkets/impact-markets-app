@@ -127,7 +127,7 @@ const DonationRegistrationForm = ({
   )
 }
 
-export const OutboundDonations = ({
+export const RegisterDonations = ({
   project,
 }: {
   project: RouterOutput['project']['detail']
