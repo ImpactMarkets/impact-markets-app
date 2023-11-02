@@ -27,6 +27,19 @@ export function IncomingDonations({
   const cancelDonationMutation = trpc.donation.cancel.useMutation({
     onSuccess: () => {
       utils.donation.feed.invalidate()
+      utils.project.feed.invalidate()
+      utils.project.detail.invalidate()
+    },
+    onError: (error) => {
+      toast.error(<pre>{error.message}</pre>)
+    },
+  })
+
+  const confirmDonationMutation = trpc.donation.confirm.useMutation({
+    onSuccess: () => {
+      utils.donation.feed.invalidate()
+      utils.project.feed.invalidate()
+      utils.project.detail.invalidate()
     },
     onError: (error) => {
       toast.error(<pre>{error.message}</pre>)
