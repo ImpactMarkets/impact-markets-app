@@ -14,7 +14,7 @@ export function Preferences() {
   })
 
   return (
-    <div className="flow-root mt-6">
+    <div className="flow-root gap-3 mt-6">
       <Switch
         label="Send me daily email notifications for activity on my projects"
         classNames={{ input: 'rounded-full !bg-auto !bg-left' }}

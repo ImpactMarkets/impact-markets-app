@@ -33,7 +33,7 @@ export function Layout({ children }: LayoutProps) {
 
   return (
     <AppShell
-      classNames={{ main: 'overflow-x-auto pt-[50px] md:pt-0 md:pl-[250px]' }}
+      classNames={{ main: 'overflow-x-auto pt-[50px] md:pt-6 md:pl-[250px]' }}
       padding="md"
     >
       <Header
