@@ -3,7 +3,6 @@ import * as React from 'react'
 
 import { Card } from '@mantine/core'
 
-import { Banner } from '@/components/banner'
 import { markdownToPlainHtml } from '@/lib/editor'
 import { RouterOutput } from '@/lib/trpc'
 
@@ -68,11 +67,6 @@ export const ProjectSummary = ({
     withBorder
     className={project.hidden ? 'opacity-50' : ''}
   >
-    {project.hidden && (
-      <Banner className="mb-6 p-4">
-        This project was hidden by the curators.
-      </Banner>
-    )}
     <div className="flex items-stretch">
       <Left project={project} />
       {!hideRight && <Right project={project} />}
