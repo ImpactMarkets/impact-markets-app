@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { useSession } from 'next-auth/react'
 import * as React from 'react'
 import toast from 'react-hot-toast'
@@ -67,7 +68,12 @@ export function IncomingDonations({
         </thead>
         <tbody>
           {donations?.map((donation) => (
-            <tr key={donation.id}>
+            <tr
+              key={donation.id}
+              className={clsx(
+                donation.state === 'REJECTED' && 'line-through opacity-50',
+              )}
+            >
               {/* FIXME: The row should be 34 px high but it’s ~ 42 px */}
               <td className="text-left">
                 <Author author={donation.user} />
@@ -88,7 +94,15 @@ export function IncomingDonations({
                     Veto
                   </ButtonLink>
                 ) : donation.state === 'REJECTED' ? (
-                  'Deleted or vetoed'
+                  <ButtonLink
+                    href="#"
+                    type="button"
+                    className="!h-5"
+                    variant="secondary"
+                    onClick={() => confirmDonationMutation.mutate(donation.id)}
+                  >
+                    Restore
+                  </ButtonLink>
                 ) : (
                   ''
                 )}
