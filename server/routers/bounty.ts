@@ -36,8 +36,9 @@ export const bountyRouter = router({
           take: z.number().min(1).max(60).optional(),
           skip: z.number().min(1).optional(),
           authorId: z.string().optional(),
-          filterTags: z.string().optional(),
+          filterTags: z.array(z.string()).optional(),
           orderBy: z.enum(BOUNTY_SORT_KEYS).optional(),
+          showClosed: z.boolean().optional(),
         })
         .optional(),
     )
@@ -51,7 +52,7 @@ export const bountyRouter = router({
       const where = {
         OR: baseQuery,
         AND: input?.filterTags
-          ? input.filterTags.split(',').map((tag) => ({
+          ? input.filterTags.map((tag) => ({
               tags: {
                 contains: tag.toLowerCase(),
               },

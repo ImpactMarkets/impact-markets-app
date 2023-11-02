@@ -1,26 +1,24 @@
-import dynamic from 'next/dynamic'
+import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as React from 'react'
+import { useForm } from 'react-hook-form'
 
 import { ButtonLink } from '@/components/buttonLink'
-import { Filters } from '@/components/filters'
+import { FilterInputs, Filters, OrderByOption } from '@/components/filters'
 import { Layout } from '@/components/layout'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
-import type { ProjectSummaryProps } from '@/components/project/summary'
+import { ProjectSummary } from '@/components/project/summary'
 import { TAGS_GROUPED } from '@/components/project/tags'
 import { PageLoader } from '@/components/utils'
 import { ITEMS_PER_PAGE, ProjectSortKey } from '@/lib/constants'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
-const ProjectSummary = dynamic<ProjectSummaryProps>(
-  () =>
-    import('@/components/project/summary').then((mod) => mod.ProjectSummary),
-  { ssr: false },
-)
-
-const orderByValues: Array<{ value: ProjectSortKey; label: string }> = [
+const orderings: [
+  OrderByOption<ProjectSortKey>,
+  ...OrderByOption<ProjectSortKey>[],
+] = [
   { value: 'supportScore', label: 'Sort by support score' },
   { value: 'likeCount', label: 'Sort by likes' },
   { value: 'createdAt', label: 'Sort by creation date' },
@@ -28,17 +26,23 @@ const orderByValues: Array<{ value: ProjectSortKey; label: string }> = [
   { value: 'actionEnd', label: 'Sort by review date' },
 ]
 
-const defaultOrder = 'supportScore'
-
 const Projects: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
-  const [filterTags, setFilterTags] = React.useState('')
-  const [orderBy, setOrderBy] = React.useState(defaultOrder as ProjectSortKey)
+  const { data: session } = useSession()
+  const isAdmin = session?.user.role === 'ADMIN'
+
+  const form = useForm<FilterInputs<ProjectSortKey>>({
+    defaultValues: { orderBy: 'supportScore', filterTags: [], showAll: false },
+  })
+  const { watch } = form
+
   const feedQuery = trpc.project.feed.useQuery({
     ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
-    filterTags,
-    orderBy,
+    filterTags: watch('filterTags'),
+    orderBy: watch('orderBy'),
+    showClosed: watch('showAll'),
+    showHidden: watch('showAll') && isAdmin,
   })
 
   if (feedQuery.data) {
@@ -57,17 +61,9 @@ const Projects: NextPageWithAuthAndLayout = () => {
           <div>
             <Filters
               tags={TAGS_GROUPED}
-              onFilterTagsUpdate={(tags) => setFilterTags(tags)}
-              onOrderByUpdate={(orderBy: string) =>
-                // A bit unhappy with this – https://stackoverflow.com/a/69007934/678861
-                (orderByValues.map((item) => item.value) as string[]).includes(
-                  orderBy,
-                ) && setOrderBy(orderBy as ProjectSortKey)
-              }
-              orderByValues={orderByValues}
-              defaultFilterTagValue={filterTags}
-              defaultOrderByValue={orderBy}
+              orderings={orderings}
               searchEndpoint="project"
+              form={form}
             />
           </div>
         </div>

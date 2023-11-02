@@ -1,48 +1,22 @@
-import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
 import { Banner } from '@/components/banner'
-import type { CertificateSummaryProps } from '@/components/certificate/summary'
-import { Filters } from '@/components/filters'
+import { CertificateSummary } from '@/components/certificate/summary'
 import { Layout } from '@/components/layout'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
-import { TAGS_GROUPED } from '@/components/project/tags'
 import { PageLoader } from '@/components/utils'
-import { CertificateSortKey, ITEMS_PER_PAGE } from '@/lib/constants'
+import { ITEMS_PER_PAGE } from '@/lib/constants'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
-
-const CertificateSummary = dynamic<CertificateSummaryProps>(
-  () =>
-    import('@/components/certificate/summary').then(
-      (mod) => mod.CertificateSummary,
-    ),
-  { ssr: false },
-)
-
-const orderByValues: Array<{ value: CertificateSortKey; label: string }> = [
-  { value: 'createdAt', label: 'Sort by creation date' },
-  { value: 'actionStart', label: 'Sort by start of work' },
-  { value: 'actionEnd', label: 'Sort by end of work' },
-  { value: 'likeCount', label: 'Sort by likes' },
-]
-
-const defaultOrder = 'likeCount'
 
 const Home: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
-  const [filterTags, setFilterTags] = React.useState('')
-  const [orderBy, setOrderBy] = React.useState(
-    defaultOrder as CertificateSortKey,
-  )
   const feedQueryInput = {
     ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
-    filterTags,
-    orderBy,
   }
   const feedQuery = trpc.certificate.feed.useQuery(feedQueryInput)
 
@@ -53,23 +27,7 @@ const Home: NextPageWithAuthAndLayout = () => {
           <title>Certificates – AI Safety GiveWiki</title>
         </Head>
 
-        <div className="mt-3">
-          <Filters
-            tags={TAGS_GROUPED}
-            onFilterTagsUpdate={(tags) => setFilterTags(tags)}
-            onOrderByUpdate={(orderBy: string) =>
-              // A bit unhappy with this – https://stackoverflow.com/a/69007934/678861
-              (orderByValues.map((item) => item.value) as string[]).includes(
-                orderBy,
-              ) && setOrderBy(orderBy as CertificateSortKey)
-            }
-            orderByValues={orderByValues}
-            defaultFilterTagValue={filterTags}
-            defaultOrderByValue={orderBy}
-          />
-        </div>
-
-        <Banner className="my-6 text-sm p-4">
+        <Banner className="mb-6 text-sm p-4">
           This is an archive. Please see the{' '}
           <Link href="/projects" className="link">
             projects

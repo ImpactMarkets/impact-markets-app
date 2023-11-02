@@ -47,10 +47,10 @@ export const projectRouter = router({
           take: z.number().min(1).max(60).optional(),
           skip: z.number().min(1).optional(),
           authorId: z.string().optional(),
-          filterTags: z.string().optional(),
+          filterTags: z.array(z.string()).optional(),
           orderBy: z.enum(PROJECT_SORT_KEYS).optional(),
           showHidden: z.boolean().optional(),
-          hideClosed: z.boolean().optional(),
+          showClosed: z.boolean().optional(),
         })
         .optional(),
     )
@@ -65,14 +65,14 @@ export const projectRouter = router({
       const where = {
         OR: baseQuery,
         AND: input?.filterTags
-          ? input.filterTags.split(',').map((tag) => ({
+          ? input.filterTags.map((tag) => ({
               tags: {
                 contains: tag.toLowerCase(),
               },
             }))
           : undefined,
         authorId: input?.authorId,
-        paymentUrl: input?.hideClosed ? { contains: '/' } : undefined,
+        paymentUrl: input?.showClosed ? undefined : { contains: '/' },
       }
 
       const projects = await ctx.prisma.project.findMany({
@@ -285,6 +285,13 @@ export const projectRouter = router({
         select: {
           id: true,
           title: true,
+        },
+        orderBy: {
+          _relevance: {
+            fields: ['title'],
+            search: query,
+            sort: 'desc',
+          },
         },
       })
 

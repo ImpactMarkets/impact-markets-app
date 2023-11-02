@@ -1,14 +1,14 @@
-import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import * as React from 'react'
+import { useForm } from 'react-hook-form'
 
 import { Banner } from '@/components/banner'
-import type { SummaryProps } from '@/components/bounty/summary'
+import { Summary } from '@/components/bounty/summary'
 import { TAGS_GROUPED } from '@/components/bounty/tags'
 import { ButtonLink } from '@/components/buttonLink'
-import { Filters } from '@/components/filters'
+import { FilterInputs, Filters, OrderByOption } from '@/components/filters'
 import { Layout } from '@/components/layout'
 import { Pagination, getQueryPaginationInput } from '@/components/pagination'
 import { PageLoader } from '@/components/utils'
@@ -16,31 +16,31 @@ import { BountySortKey, ITEMS_PER_PAGE } from '@/lib/constants'
 import { trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
 
-const Summary = dynamic<SummaryProps>(
-  () => import('@/components/bounty/summary').then((mod) => mod.Summary),
-  { ssr: false },
-)
-
-const orderByValues: Array<{ value: BountySortKey; label: string }> = [
+const orderings: [
+  OrderByOption<BountySortKey>,
+  ...OrderByOption<BountySortKey>[],
+] = [
   { value: 'createdAt', label: 'Sort by creation date' },
   { value: 'deadline', label: 'Sort by deadline' },
   { value: 'size', label: 'Sort by bounty amount' },
   { value: 'likeCount', label: 'Sort by interest' },
 ]
 
-const defaultOrder = 'size'
-
 const Home: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
   const currentPageNumber = router.query.page ? Number(router.query.page) : 1
-  const [filterTags, setFilterTags] = React.useState('')
-  const [orderBy, setOrderBy] = React.useState(defaultOrder as BountySortKey)
-  const feedQueryInput = {
+
+  const form = useForm<FilterInputs<BountySortKey>>({
+    defaultValues: { orderBy: 'size', filterTags: [], showAll: false },
+  })
+  const { watch } = form
+
+  const feedQuery = trpc.bounty.feed.useQuery({
     ...getQueryPaginationInput(ITEMS_PER_PAGE, currentPageNumber),
-    filterTags,
-    orderBy,
-  }
-  const feedQuery = trpc.bounty.feed.useQuery(feedQueryInput)
+    filterTags: watch('filterTags'),
+    orderBy: watch('orderBy'),
+    showClosed: watch('showAll'),
+  })
 
   if (feedQuery.data) {
     return (
@@ -58,17 +58,9 @@ const Home: NextPageWithAuthAndLayout = () => {
           <div>
             <Filters
               tags={TAGS_GROUPED}
-              onFilterTagsUpdate={(tags) => setFilterTags(tags)}
-              onOrderByUpdate={(orderBy: string) =>
-                // A bit unhappy with this – https://stackoverflow.com/a/69007934/678861
-                (orderByValues.map((item) => item.value) as string[]).includes(
-                  orderBy,
-                ) && setOrderBy(orderBy as BountySortKey)
-              }
-              orderByValues={orderByValues}
-              defaultFilterTagValue={filterTags}
-              defaultOrderByValue={orderBy}
+              orderings={orderings}
               searchEndpoint="bounty"
+              form={form}
             />
           </div>
         </div>
