@@ -20,12 +20,12 @@ const Feature = ({ icon: Icon, title, children }: FeatureProps) => (
         {title}
       </span>
     </div>
-    <div className="[hyphens:auto] text-sm prose">{children}</div>
+    <div className="[hyphens:auto] prose">{children}</div>
   </div>
 )
 
 export const Pitches = () => (
-  <div className="max-w-[900px] mx-auto my-5 py-6">
+  <div className="w-full mx-auto my-5 py-6">
     <div className="flex justify-center text-3xl font-display">
       AI Safety GiveWiki is a platform for …
     </div>
