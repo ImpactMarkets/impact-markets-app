@@ -43,16 +43,13 @@ export const Scores = ({ project, showProjectScore = false }: ScoresProps) => {
             multiline
             label={
               <>
-                The final score is determined retrospectively by our evaluators.
-                The first cohort of projects has yet to reach a state where
-                sufficiently many of them can be evaluated, so we’ve not
-                performed any serious evaluations yet. Meanwhile please don’t
-                take the initial values too seriously.
+                The evaluator credits are assigned retrospectively by our
+                evaluators.
               </>
             }
           >
             {project.credits > zero ? (
-              <span>Final score: {num(project.credits, 0)}</span>
+              <span>Evaluator credits: {num(project.credits, 0)}</span>
             ) : (
               <span>No final score yet</span>
             )}
