@@ -5,6 +5,8 @@ import { z } from 'zod'
 
 import { Button, Switch } from '@mantine/core'
 
+import { Tooltip } from '@/lib/mantine'
+
 import { IconButton } from './iconButton'
 import { SearchIcon } from './icons'
 import { MultiSelect } from './multiSelect'
@@ -79,7 +81,11 @@ export function Filters<TOrdering extends string>({
         />
         <Switch
           {...register('showAll')}
-          label={watch('showAll') ? 'Showing all' : 'Show all'}
+          label=<Tooltip label="Including projects that are not currently accepting donations">
+            <span className="hint">
+              {watch('showAll') ? 'Showing all' : 'Show all'}
+            </span>
+          </Tooltip>
           classNames={{ input: 'rounded-full !bg-auto !bg-left' }}
           checked={watch('showAll')}
           onChange={(event) => {
