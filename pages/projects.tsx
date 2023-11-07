@@ -20,10 +20,9 @@ const orderings: [
   ...OrderByOption<ProjectSortKey>[],
 ] = [
   { value: 'supportScore', label: 'Sort by support score' },
+  { value: 'credits', label: 'Sort by credits' },
   { value: 'likeCount', label: 'Sort by likes' },
   { value: 'createdAt', label: 'Sort by creation date' },
-  { value: 'actionStart', label: 'Sort by start of work' },
-  { value: 'actionEnd', label: 'Sort by review date' },
 ]
 
 const Projects: NextPageWithAuthAndLayout = () => {

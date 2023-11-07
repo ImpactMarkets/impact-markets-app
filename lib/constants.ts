@@ -4,8 +4,7 @@ export const PROJECT_SORT_KEYS = [
   'supportScore',
   'likeCount',
   'createdAt',
-  'actionStart',
-  'actionEnd',
+  'credits',
   '',
 ] as const
 export type ProjectSortKey = (typeof PROJECT_SORT_KEYS)[number]

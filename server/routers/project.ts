@@ -16,11 +16,9 @@ const getOrderBy = (
   orderByKey: ProjectSortKey | undefined,
 ): Prisma.ProjectOrderByWithRelationAndSearchRelevanceInput => {
   const { desc } = Prisma.SortOrder
-  const { last } = Prisma.NullsOrder
   const orderOptions = {
     createdAt: { createdAt: desc },
-    actionStart: { actionStart: { sort: desc, nulls: last } },
-    actionEnd: { actionEnd: { sort: desc, nulls: last } },
+    credits: { credits: desc },
     supportScore: {
       supportScore: {
         score: desc,
