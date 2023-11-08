@@ -52,11 +52,14 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
     },
   })
 
-  if (certificate) {
-    if (!isNaN(Number(certificateId))) {
+  React.useEffect(() => {
+    if (certificate && !isNaN(Number(certificateId))) {
       // Redirect from old to new certificate URLs
       router.push('/certificate/' + certificate.id)
     }
+  })
+
+  if (certificate && isNaN(Number(certificateId))) {
     const isUserAdmin = session?.user.role === 'ADMIN'
     const certificateBelongsToUser = certificate.author.id === session?.user.id
     const isActive = certificate.actionEnd > new Date()
