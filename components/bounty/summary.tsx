@@ -23,31 +23,6 @@ export type SummaryProps = {
 }
 
 function Left({ bounty }: SummaryProps) {
-  const contentDocument = React.useMemo(
-    () => new DOMParser().parseFromString(bounty.contentHtml, 'text/html'),
-    [bounty.contentHtml],
-  )
-  //   TODO: decide on the order of the allowed tags
-  //   and research on how to truncate html to a max amount of characters
-  let summary = React.useMemo(() => {
-    const allowedTags = ['p', 'ul', 'ol', 'h3', 'pre', 'img']
-
-    for (const tag of allowedTags) {
-      const element = contentDocument.body.querySelector(tag)
-      if (element) {
-        return element.outerHTML
-      }
-    }
-
-    return "<p>Summary couldn't be generated</p>"
-  }, [contentDocument])
-
-  summary = summary.replace('<p>', '')
-  summary = summary.replace('</p>', '')
-  if (summary.length > 300) {
-    summary = summary.substring(0, 300) + '...'
-  }
-
   return (
     <div className="grow relative flex flex-col justify-between max-w-[calc(100%-140px-1rem)]">
       {bounty.tags && (
