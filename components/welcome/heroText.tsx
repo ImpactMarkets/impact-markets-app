@@ -31,19 +31,16 @@ export function HeroText() {
         </div>
 
         <div className="inline-flex flex-wrap gap-1 justify-center">
-          <ButtonLink href="/why" variant="primary">
-            Read the FAQs
-          </ButtonLink>
-          <ButtonLink href="/projects" variant="primary">
+          <ButtonLink href="/projects" variant="highlight">
             Explore the projects
           </ButtonLink>
           <a
             href="https://airtable.com/shr1eRlbcr43os6SX"
-            className={buttonClasses({ variant: 'highlight' })}
+            className={buttonClasses({ variant: 'primary' })}
             target="_blank"
             rel="noreferrer"
           >
-            Register your interest
+            Proclaim your interest
           </a>
         </div>
       </div>

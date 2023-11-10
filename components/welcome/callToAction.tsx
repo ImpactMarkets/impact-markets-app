@@ -35,7 +35,7 @@ export const CallToAction = () => (
           target="_blank"
           rel="noreferrer"
         >
-          Register your interest
+          Proclaim your interest
         </a>
       </div>
     </div>
