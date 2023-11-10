@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router'
 import * as React from 'react'
 import { useEffect } from 'react'
-import { toast } from 'react-hot-toast'
 
 import { AppShell } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
@@ -16,14 +15,6 @@ type LayoutProps = {
 export function Layout({ children }: LayoutProps) {
   const router = useRouter()
   const [opened, { toggle, close }] = useDisclosure()
-
-  useEffect(() => {
-    if (router?.asPath.indexOf('?') > -1) {
-      toast.success(<span>Success! Thank you!</span>, {
-        id: 'generic-confirmation',
-      })
-    }
-  })
 
   // Hook to close the menu when a link is clicked
   useEffect(() => {
