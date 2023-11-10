@@ -106,16 +106,19 @@ export const Pitches = () => (
             size="38"
             className="float-left mr-1 stroke-blue-500 stroke-[1.5]"
           />
-          The scouts are just getting started.{' '}
+          <Link href="/projects" className="link">
+            Check out our top projects
+          </Link>
+          ! And please help us out and{' '}
           <a
             href="https://airtable.com/shr1eRlbcr43os6SX"
             className="link"
             target="_blank"
             rel="noreferrer"
           >
-            Please register your interest in this 1-minute survey
-          </a>{' '}
-          to give them an incentive!
+            register your interest in this 1-minute survey
+          </a>
+          .
         </p>
       </Feature>
     </div>
