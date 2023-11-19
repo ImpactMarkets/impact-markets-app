@@ -11,7 +11,7 @@ interface FeatureProps extends React.ComponentPropsWithoutRef<'div'> {
 
 const Feature = ({ icon: Icon, title, children }: FeatureProps) => (
   <div>
-    <div className="h-22 p-3 mb-3 w-full bg-gray-100">
+    <div className="h-22 p-3 mb-3 w-full bg-gray-100 whitespace-nowrap">
       <Icon
         size={20}
         className="inline stroke-blue-500 stroke-[2] mr-3 align-text-bottom"
