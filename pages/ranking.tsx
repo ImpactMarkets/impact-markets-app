@@ -150,9 +150,9 @@ const Ranking = ({
                         {user.userScore == null
                           ? '0' // Should never happen
                           : user.userScore?.score === zero ||
-                            user.userScore?.score >= one
-                          ? num(user.userScore.score, 0)
-                          : '< 1'}
+                              user.userScore?.score >= one
+                            ? num(user.userScore.score, 0)
+                            : '< 1'}
                       </td>
                       <td className="w-10 text-right">
                         {index < 3 && (

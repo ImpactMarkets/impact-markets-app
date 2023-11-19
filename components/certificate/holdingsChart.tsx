@@ -75,8 +75,8 @@ export function HoldingsChart({ holdings, issuers }: HoldingsChartProps) {
       label: valueAvailableFromIssuers.gte(30)
         ? `${num(valueAvailableFromIssuers, 0)}% available`
         : valueAvailableFromIssuers.gte(10)
-        ? `${num(valueAvailableFromIssuers, 0)}%`
-        : '',
+          ? `${num(valueAvailableFromIssuers, 0)}%`
+          : '',
       tooltip: `${num(
         valueAvailableFromIssuers,
         0,
@@ -88,8 +88,8 @@ export function HoldingsChart({ holdings, issuers }: HoldingsChartProps) {
       label: valueAvailableFromInvestors.gte(30)
         ? `${num(valueAvailableFromInvestors, 0)}% circulating`
         : valueAvailableFromInvestors.gte(10)
-        ? `${num(valueAvailableFromInvestors, 0)}%`
-        : '',
+          ? `${num(valueAvailableFromInvestors, 0)}%`
+          : '',
       tooltip: `${num(
         valueAvailableFromInvestors,
         0,
@@ -101,8 +101,8 @@ export function HoldingsChart({ holdings, issuers }: HoldingsChartProps) {
       label: valueReserved.gte(30)
         ? `${num(valueReserved, 0)}% reserved`
         : valueReserved.gte(10)
-        ? `${num(valueReserved, 0)}%`
-        : '',
+          ? `${num(valueReserved, 0)}%`
+          : '',
       tooltip: `${num(valueReserved, 0)}% reserved by buyers`,
       value: valueReserved.toNumber(),
       color: '#AAAAAA',
@@ -111,8 +111,8 @@ export function HoldingsChart({ holdings, issuers }: HoldingsChartProps) {
       label: valueConsumed.gte(30)
         ? `${num(valueConsumed, 0)}% donated`
         : valueConsumed.gte(10)
-        ? `${num(valueConsumed, 0)}%`
-        : '',
+          ? `${num(valueConsumed, 0)}%`
+          : '',
       tooltip: `${num(
         valueConsumed,
         0,
