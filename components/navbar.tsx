@@ -122,13 +122,6 @@ export const Navbar = ({
         icon={IconLifebuoy}
       />
     </div>
-    <Image
-      src="https://www.facebook.com/tr?id=144902331947551&ev=PageView&noscript=1"
-      alt=""
-      height={1}
-      width={1}
-      unoptimized
-    />
     <div>
       <User />
     </div>
