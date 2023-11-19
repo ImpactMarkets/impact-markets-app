@@ -64,10 +64,11 @@ export function AddReplyForm({
             value={field.value}
             onChange={field.onChange}
             onTriggerSubmit={handleSubmit(onSubmit)}
-            required
             placeholder="Reply"
+            name="content"
             minRows={4}
             autoFocus
+            required
           />
         )}
       />
