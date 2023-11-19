@@ -20,7 +20,7 @@ const HelpAndSupportPage: NextPageWithAuthAndLayout = () => {
       </p>
       <p className="mt-6">
         Please use the support button, email us at{' '}
-        <Link className="link" href="hi@givewiki.org">
+        <Link className="link" href="mailto:hi@givewiki.org">
           hi@givewiki.org
         </Link>
         , or join our{' '}
