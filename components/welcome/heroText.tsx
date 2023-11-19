@@ -25,7 +25,7 @@ export function HeroText() {
             projects.
             <br />
             <span className="text-highlight">
-              Regrant $600,000 from almost 50 donors.
+              Regrant $700,000 from almost 50 donors.
             </span>
           </p>
         </div>
