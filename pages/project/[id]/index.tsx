@@ -245,7 +245,11 @@ function ProjectPage({ projectId }: { projectId: string }) {
             <div className="my-6">
               <Tabs
                 defaultValue={
-                  projectBelongsToUser ? 'incomingDonations' : 'topContributors'
+                  projectBelongsToUser
+                    ? 'incomingDonations'
+                    : project.donationCount > 0
+                    ? 'topContributors'
+                    : 'registerDonations'
                 }
               >
                 <Tabs.List>
