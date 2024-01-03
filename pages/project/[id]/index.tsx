@@ -248,8 +248,8 @@ function ProjectPage({ projectId }: { projectId: string }) {
                   projectBelongsToUser
                     ? 'incomingDonations'
                     : project.donationCount > 0
-                    ? 'topContributors'
-                    : 'registerDonations'
+                      ? 'topContributors'
+                      : 'registerDonations'
                 }
               >
                 <Tabs.List>
