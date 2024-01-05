@@ -131,6 +131,24 @@ function ProjectPage({ projectId }: { projectId: string }) {
   const projectQuery = trpc.project.detail.useQuery(projectQueryInput)
   const project = projectQuery.data
 
+  // Set active tab based on URL query
+  const activeTab = router.query.tab || 'defaultTabValue' // top tabs
+  const activeCommentsTab = router.query.comments || 'defaultCommentsValue' // comments tabs
+
+  // QUESTION: should value be set to a more specific type?
+  const handleTabChange = (type: 'tab' | 'comments', value: string | null) => {
+    // Update URL with new tab value
+    const { id, ...restQuery } = router.query
+    router.push(
+      {
+        pathname: `/project/${projectId}`,
+        query: { ...restQuery, [type]: value },
+      },
+      undefined,
+      { shallow: true },
+    )
+  }
+
   const likeMutation = trpc.project.like.useMutation({
     onSettled: () => {
       return utils.project.detail.invalidate({ id: projectId })
@@ -251,6 +269,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
                       ? 'topContributors'
                       : 'registerDonations'
                 }
+                onChange={(value) => handleTabChange('tab', value)}
               >
                 <Tabs.List>
                   {project.donationCount && (
@@ -307,7 +326,10 @@ function ProjectPage({ projectId }: { projectId: string }) {
             </div>
           </div>
 
-          <Tabs defaultValue={CommentType.COMMENT}>
+          <Tabs
+            defaultValue={CommentType.COMMENT}
+            onChange={(value) => handleTabChange('comments', value)}
+          >
             <Tabs.List>
               <Tabs.Tab value={CommentType.COMMENT}>Comments</Tabs.Tab>
               <Tabs.Tab value={CommentType.Q_AND_A}>
