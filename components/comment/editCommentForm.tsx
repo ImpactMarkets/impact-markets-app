@@ -65,10 +65,11 @@ export function EditCommentForm({
             value={field.value}
             onChange={field.onChange}
             onTriggerSubmit={handleSubmit(onSubmit)}
-            required
             placeholder="Comment"
+            name="content"
             minRows={4}
             autoFocus
+            required
           />
         )}
       />

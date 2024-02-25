@@ -11,7 +11,7 @@ interface FeatureProps extends React.ComponentPropsWithoutRef<'div'> {
 
 const Feature = ({ icon: Icon, title, children }: FeatureProps) => (
   <div>
-    <div className="h-22 p-3 mb-3 w-full bg-gray-100">
+    <div className="h-22 p-3 mb-3 w-full bg-gray-100 whitespace-nowrap">
       <Icon
         size={20}
         className="inline stroke-blue-500 stroke-[2] mr-3 align-text-bottom"
@@ -59,8 +59,10 @@ export const Pitches = () => (
       <Feature icon={IconTelescope} title="Scouts & regrantors" key="scouts">
         <p>
           You’re a seasoned donor or grantmaker? You want to{' '}
-          <span className="font-semibold">regrant some of the $600,000</span> of
-          our donors and funders?
+          <span className="font-semibold">
+            regrant some of the annual $700,000
+          </span>{' '}
+          of our donors and funders?
         </p>
 
         <p className="my-3">
@@ -124,7 +126,7 @@ export const Pitches = () => (
     </div>
     <iframe
       className="w-full max-w-[800px] aspect-video my-12 mx-auto"
-      src="https://www.youtube.com/embed/MInKrUV9TVY?si=w9W6tW5b_P4d465x"
+      src="https://www.youtube.com/embed/2RzCv9m4fV8?si=9g4xj6sV4UqMvXSs"
       title="YouTube video player"
       allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
     ></iframe>

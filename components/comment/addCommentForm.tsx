@@ -67,6 +67,7 @@ export function AddCommentForm({
             onChange={field.onChange}
             onTriggerSubmit={handleSubmit(onSubmit)}
             placeholder="Type your comment here."
+            name="content"
             minRows={4}
             data-testid={`comment-form-${category}`}
             required

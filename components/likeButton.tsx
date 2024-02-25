@@ -117,7 +117,7 @@ export function LikeButton({
     </Button>
   )
   if (disabled) {
-    button = button = (
+    button = (
       <div className="inline-flex items-center justify-center font-semibold px-3 h-8 text-xs sm:px-4 sm:text-sm sm:h-button space-x-1.5">
         {content}
       </div>
