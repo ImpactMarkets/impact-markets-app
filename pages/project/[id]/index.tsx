@@ -131,6 +131,55 @@ function ProjectPage({ projectId }: { projectId: string }) {
   const projectQuery = trpc.project.detail.useQuery(projectQueryInput)
   const project = projectQuery.data
 
+  // calculate projectBelongsToUser at the component level
+  let projectBelongsToUser = false
+  // if we have information about the project and if the user is logged in,
+  // compare the IDs of the project creator and the current user
+  // if these are the same, projectBelongsToUser becomes "true"
+  if (project && session) {
+    projectBelongsToUser = project.author.id === session.user.id
+  }
+
+  const [activeTab, setActiveTab] = React.useState<string | null>(null)
+  const [activeCommentsTab, setActiveCommentsTab] = React.useState<
+    string | null
+  >(null)
+
+  // QUESTION: should value be set to a more specific type?
+  const handleTabChange = (type: 'tab' | 'comments', value: string | null) => {
+    // Update URL with new tab value
+    const { id, ...restQuery } = router.query
+    router.push(
+      {
+        pathname: `/project/${projectId}`,
+        query: { ...restQuery, [type]: value },
+      },
+      undefined,
+      { shallow: true },
+    )
+  }
+
+  // initialize tab state from URL
+  React.useEffect(() => {
+    if (router.isReady && project) {
+      const defaultTab = projectBelongsToUser
+        ? 'incomingDonations'
+        : project.donationCount > 0
+          ? 'topContributors'
+          : 'registerDonations'
+      setActiveTab((router.query.tab as string) || defaultTab)
+      setActiveCommentsTab(
+        (router.query.comments as string) || CommentType.COMMENT,
+      )
+    }
+  }, [
+    router.isReady,
+    router.query.tab,
+    router.query.comments,
+    project,
+    projectBelongsToUser,
+  ])
+
   const likeMutation = trpc.project.like.useMutation({
     onSettled: () => {
       return utils.project.detail.invalidate({ id: projectId })
@@ -148,7 +197,6 @@ function ProjectPage({ projectId }: { projectId: string }) {
       router.push('/project/' + project.id)
     }
     const isAdmin = session?.user.role === 'ADMIN'
-    const projectBelongsToUser = project.author.id === session?.user.id
 
     return (
       <>
@@ -244,9 +292,8 @@ function ProjectPage({ projectId }: { projectId: string }) {
             </div>
             <div className="my-6">
               <Tabs
-                defaultValue={
-                  projectBelongsToUser ? 'incomingDonations' : 'topContributors'
-                }
+                value={activeTab}
+                onChange={(value) => handleTabChange('tab', value)}
               >
                 <Tabs.List>
                   {project.donationCount && (
@@ -303,7 +350,10 @@ function ProjectPage({ projectId }: { projectId: string }) {
             </div>
           </div>
 
-          <Tabs defaultValue={CommentType.COMMENT}>
+          <Tabs
+            value={activeCommentsTab}
+            onChange={(value) => handleTabChange('comments', value)}
+          >
             <Tabs.List>
               <Tabs.Tab value={CommentType.COMMENT}>Comments</Tabs.Tab>
               <Tabs.Tab value={CommentType.Q_AND_A}>

@@ -17,6 +17,24 @@ import type { NextPageWithAuthAndLayout } from '@/lib/types'
 const ProfilePage: NextPageWithAuthAndLayout = () => {
   const router = useRouter()
   const { data: session } = useSession()
+
+  React.useEffect(() => {
+    // Check if the activeTab parameter is set in the URL
+    const { activeTab } = router.query
+
+    // If not set, redirect to the default tab (e.g., 'bio')
+    if (!activeTab) {
+      router.replace(
+        {
+          pathname: router.pathname,
+          query: { ...router.query, activeTab: 'bio' },
+        },
+        undefined,
+        { shallow: true },
+      )
+    }
+  }, [router])
+
   const profileQuery = trpc.user.profile.useQuery({
     id: String(router.query.userId),
   })
@@ -29,7 +47,22 @@ const ProfilePage: NextPageWithAuthAndLayout = () => {
     return (
       <div className="max-w-screen-lg mx-auto">
         <ProfileInfo user={profileQuery.data} />
-        <Tabs defaultValue="bio">
+        <Tabs
+          // Defaults to 'bio' tab
+          value={(router.query.activeTab as string) || 'bio'}
+          onChange={(value) => {
+            // Keep the current path and other query parameters intact
+            const currentPath = router.pathname
+            const currentQuery = { ...router.query, activeTab: value }
+
+            // Update the URL without navigating away from the current page
+            router.push(
+              { pathname: currentPath, query: currentQuery },
+              undefined,
+              { shallow: true },
+            )
+          }}
+        >
           <Tabs.List>
             <Tabs.Tab value="bio">Bio</Tabs.Tab>
             {profileQuery.data.donations.some(
