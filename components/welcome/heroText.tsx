@@ -1,6 +1,5 @@
 import { Tooltip } from '@/lib/mantine'
 
-import { buttonClasses } from '../button'
 import { ButtonLink } from '../buttonLink'
 
 export function HeroText() {
@@ -16,17 +15,10 @@ export function HeroText() {
 
         <div className="my-8 mx-auto text-lg text-center prose">
           <p>
-            The{' '}
-            <Tooltip label="Yelp … publishes crowd-sourced reviews about businesses. —Wikipedia">
-              <span className="hint">Yelp</span>
+            <Tooltip label="AngelList allows newbie angel investors to follow seasoned angel investors">
+              <span className="hint">AngelList</span>
             </Tooltip>{' '}
-            for charities: Find or{' '}
-            <span className="text-highlight">promote</span> the best AI safety
-            projects.
-            <br />
-            <span className="text-highlight">
-              Regrant $700,000 from almost 50 donors.
-            </span>
+            for philanthropy: Follow expert grantmakers with your donations.
           </p>
         </div>
 
@@ -34,14 +26,12 @@ export function HeroText() {
           <ButtonLink href="/projects" variant="highlight">
             Explore the projects
           </ButtonLink>
-          <a
-            href="https://airtable.com/shr1eRlbcr43os6SX"
-            className={buttonClasses({ variant: 'primary' })}
-            target="_blank"
-            rel="noreferrer"
+          <ButtonLink
+            className="mr-2"
+            href="https://impactmarkets.substack.com/"
           >
-            Proclaim your interest
-          </a>
+            Read the blog
+          </ButtonLink>
         </div>
       </div>
     </div>
