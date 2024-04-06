@@ -28,7 +28,8 @@ const RankingPage: NextPageWithAuthAndLayout = () => {
 
       <p className="py-6 text-sm">
         The algorithm behind this ranking is still under active development and
-        subject to change. It takes into account the{' '}
+        subject to change. For every donation that someone has made, it takes
+        into account the{' '}
         <Tooltip
           multiline
           w={400}
@@ -43,8 +44,8 @@ const RankingPage: NextPageWithAuthAndLayout = () => {
           }
         >
           <span className="hint">size of the donation</span>
-        </Tooltip>
-        ,{' '}
+        </Tooltip>{' '}
+        and{' '}
         <Tooltip
           multiline
           w={400}
@@ -56,22 +57,6 @@ const RankingPage: NextPageWithAuthAndLayout = () => {
           }
         >
           <span className="hint">how early it was made</span>
-        </Tooltip>
-        , and{' '}
-        <Tooltip
-          multiline
-          w={400}
-          label={
-            <span>
-              We do retroactive evaluations. It’s much easier to check whether
-              something happened (and is of decent quality) than whether
-              something will happen. That means that donors can only receive
-              positive scores for a project once the project has actually
-              produced something.
-            </span>
-          }
-        >
-          <span className="hint">how well the project panned out</span>
         </Tooltip>
         . It highlights donors with great foresight even if they are not rich.
       </p>
@@ -125,7 +110,7 @@ const Ranking = ({
       <>
         {rankingQuery.data.length === 0 ? (
           <div className="text-center text-secondary border rounded my-10 py-20 px-10">
-            There have been either no donations or no evaluations yet.
+            There have been no donations yet.
           </div>
         ) : (
           <div className="flow-root">
