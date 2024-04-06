@@ -68,7 +68,7 @@ function CertificatePage({ certificateId }: { certificateId: string }) {
       <>
         <Head>
           {/* https://stackoverflow.com/questions/75875037 */}
-          <title>{`${certificate.title} – AI Safety GiveWiki`}</title>
+          <title>{`${certificate.title} – GiveWiki`}</title>
         </Head>
 
         <div className="divide-y divide-primary max-w-screen-lg mx-auto">

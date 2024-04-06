@@ -202,22 +202,21 @@ function ProjectPage({ projectId }: { projectId: string }) {
       <>
         <Head>
           {/* https://stackoverflow.com/questions/75875037 */}
-          <title>{`${project.title} – AI Safety GiveWiki`}</title>
+          <title>{`${project.title} – GiveWiki`}</title>
         </Head>
 
         <SuperSEO
-          title={`${project.title} – AI Safety GiveWiki`}
+          title={`${project.title} – GiveWiki`}
           description={markdownToPlainHtml(project.content)}
           lang="en"
           openGraph={{
             ogType: 'website',
-            ogTitle: `${project.title} – AI Safety GiveWiki`,
-            ogUrl: `https://ai.givewiki.org/project/${project.id}`,
+            ogTitle: `${project.title} – GiveWiki`,
+            ogUrl: `https://givewiki.org/project/${project.id}`,
             ogImage: {
-              ogImage: 'https://ai.givewiki.org/images/logo-light-og.png',
-              ogImageSecureUrl:
-                'https://ai.givewiki.org/images/logo-light-og.png',
-              ogImageAlt: `${project.title} – AI Safety GiveWiki`,
+              ogImage: 'https://givewiki.org/images/logo-light-og.png',
+              ogImageSecureUrl: 'https://givewiki.org/images/logo-light-og.png',
+              ogImageAlt: `${project.title} – GiveWiki`,
               ogImageWidth: 1200,
               ogImageHeight: 630,
               ogImageType: 'image/png',
@@ -225,9 +224,8 @@ function ProjectPage({ projectId }: { projectId: string }) {
           }}
           twitter={{
             twitterSummaryCard: {
-              summaryCardImage:
-                'https://ai.givewiki.org/images/logo-light-og.png',
-              summaryCardImageAlt: `${project.title} – AI Safety GiveWiki`,
+              summaryCardImage: 'https://givewiki.org/images/logo-light-og.png',
+              summaryCardImageAlt: `${project.title} – GiveWiki`,
               // summaryCardSiteUsername: "twitterUsername",
             },
           }}
@@ -287,7 +285,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
               </div>
             </div>
             <div className="flex flex-wrap gap-1 my-6">
-              <Scores project={project} showProjectScore />
+              <Scores project={project} />
               <Tags queryData={project} tags={TAGS} />
             </div>
             <div className="my-6">

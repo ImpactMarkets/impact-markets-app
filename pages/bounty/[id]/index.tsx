@@ -142,13 +142,13 @@ function BountyPage({ bountyId }: { bountyId: string }) {
         </Head>
 
         <SuperSEO
-          title={`${bounty.title} – AI Safety GiveWiki`}
+          title={`${bounty.title} – GiveWiki`}
           description={bounty.contentHtml}
           lang="en"
           openGraph={{
             ogImage: {
-              ogImage: 'https://ai.givewiki.org/images/logo-light.svg',
-              ogImageAlt: 'AI Safety GiveWiki logo',
+              ogImage: 'https://givewiki.org/images/logo-light.svg',
+              ogImageAlt: 'GiveWiki logo',
               ogImageWidth: 550,
               ogImageHeight: 232,
               ogImageType: 'image/jpeg',
@@ -156,8 +156,8 @@ function BountyPage({ bountyId }: { bountyId: string }) {
           }}
           twitter={{
             twitterSummaryCard: {
-              summaryCardImage: 'https://ai.givewiki.org/images/logo-light.svg',
-              summaryCardImageAlt: 'AI Safety GiveWiki logo',
+              summaryCardImage: 'https://givewiki.org/images/logo-light.svg',
+              summaryCardImageAlt: 'GiveWiki logo',
               // summaryCardSiteUsername: "twitterUsername",
             },
           }}

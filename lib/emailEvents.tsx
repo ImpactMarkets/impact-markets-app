@@ -61,7 +61,7 @@ export const createEmail = (
           <MjmlColumn>
             <MjmlImage
               width="200px"
-              src="https://ai.givewiki.org/static/images/logo-light.png"
+              src="https://givewiki.org/static/images/logo-light.png"
             ></MjmlImage>
             <MjmlText>
               <p>
@@ -77,7 +77,7 @@ export const createEmail = (
                 notifications of new projects, new bounties, or activity on your
                 own projects. You can change your notification preferences on
                 your{' '}
-                <a href={`https://ai.givewiki.org/profile/${recipient.id}`}>
+                <a href={`https://givewiki.org/profile/${recipient.id}`}>
                   GiveWiki profile
                 </a>
                 .
@@ -101,7 +101,7 @@ const renderSection = (events: Event[]) => {
       <MjmlText key={objectId}>
         <h2>
           “
-          <a href={`https://ai.givewiki.org/${objectType}/${objectId}`}>
+          <a href={`https://givewiki.org/${objectType}/${objectId}`}>
             {objectTitle}
           </a>
           ”

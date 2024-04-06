@@ -32,8 +32,8 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
         small, who doesn’t want to spend a lot of time on researching your
         donations: You’ll be able to follow sophisticated donors who have skin
         in the game. We’re building a crowdsourced charity evaluator for all the
-        small, speculative, potentially-spectacular AI safety projects ranked by
-        the donations they’ve received from expert donors. You can tap into the
+        small, speculative, potentially-spectacular projects ranked by the
+        donations they’ve received from expert donors. You can tap into the
         wisdom of these donors and boost the impact of your donations.
       </p>
       <p className="my-3">
@@ -115,12 +115,13 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
               </li>
               <li>
                 When a donor supports a project, they can record that. When a
-                project claims to have succeeded, some experts evaluate it.
-                Eventually early donors to successful projects (“top donors”)
-                will stand out as having unusual foresight, especially if they
-                can repeat this feat several times. Donors who don’t have the
-                time to do as much research can follow the top donors to inform
-                their own donations.
+                project claims to have succeeded, some experts evaluate it. (But
+                we’ve suspended evaluations for the moment.) Eventually early
+                donors to successful projects (“top donors”) will stand out as
+                having unusual foresight, especially if they can repeat this
+                feat several times. Donors who don’t have the time to do as much
+                research can follow the top donors to inform their own
+                donations.
               </li>
               <li>
                 Larger funders can (1) also follow the implicit recommendations
@@ -248,7 +249,7 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
               Eventually many projects will complete and then get evaluated. The
               result is the <strong>project score</strong>, which expresses the
               evaluators aggregate opinion on the relative impact of the
-              project.
+              project. (Note that we’ve suspended evaluations for the moment.)
             </p>
             <p className="my-3">
               Multiply <em>contribution</em> and <em>project score</em> per
@@ -274,13 +275,10 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
           </Accordion.Control>
           <Accordion.Panel>
             <p className="my-3">
-              Each project has a review date estimating when the project will be
-              ready for evaluation. The project creator can edit this date in
-              case things take longer than planned.
-            </p>
-            <p className="my-3">
-              We want to get a number of evaluators on board to consider the
-              project artifacts and pass judgment on them.
+              Last time, we ran our evaluations in October and early November to
+              get them done in time for the giving season. We contacted the
+              project creators to get the latest on the projects. Our evaluators
+              took it from there.
             </p>
             <p className="my-3">
               The focus here will not be to make great contributions to
@@ -292,12 +290,20 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
               can average out.
             </p>
             <p className="my-3">
-              The guideline for the calibration of the scores will be something
+              The guideline for the calibration of the scores are something
               along the lines: Suppose this book/paper/etc. didn’t exist, and I
               wanted to make it happen. How much would I have to pay? Or
               conversely for harmful projects: If there were a fairy who let’s
               me undo this book/paper/etc., how much would I pay to have it
               undone?
+            </p>
+            <p className="my-3">
+              Evaluators don’t need to break their judgments down to money like
+              that, though. They receive a fixed number of credits to distribute
+              and are held to assign them in proportion to how strongly they
+              endorse the project (not strategically). They abstain in cases of
+              conflicts of interest. (Their assignment is not counted into the
+              final average, i.e. it is not counted as a zero.)
             </p>
           </Accordion.Panel>
         </Accordion.Item>

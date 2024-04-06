@@ -29,7 +29,7 @@ const EditBountyPage: NextPageWithAuthAndLayout = () => {
       <>
         <Head>
           {/* https://stackoverflow.com/questions/75875037 */}
-          <title>{`Edit ${bountyQuery.data.title} – AI Safety GiveWiki`}</title>
+          <title>{`Edit ${bountyQuery.data.title} – GiveWiki`}</title>
         </Head>
 
         {session!.user.role === 'ADMIN' || bountyBelongsToUser ? (

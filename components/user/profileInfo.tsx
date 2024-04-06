@@ -405,7 +405,7 @@ export function ProfileInfo({
       <div key={childKey}>
         <Head>
           {/* https://stackoverflow.com/questions/75875037 */}
-          <title>{`${user.name} – AI Safety GiveWiki`}</title>
+          <title>{`${user.name} – GiveWiki`}</title>
         </Head>
 
         <div className="relative flex items-start gap-4 py-8 overflow-hidden">
