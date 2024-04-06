@@ -4,7 +4,7 @@ import * as React from 'react'
 export const Comparisons = () => (
   <>
     <div className="flex justify-center my-12 text-3xl font-display">
-      AI Safety GiveWiki is a …
+      GiveWiki is a …
     </div>
     <div className="max-w-screen-lg m-auto items-center flex my-10 flex-col sm:flex-row">
       <div className="basis-full m-6">
@@ -53,9 +53,9 @@ export const Comparisons = () => (
           as a kind of “impact credit,” a generalized carbon credit. Once our
           scoring algorithm has matured we want to introduce such a playmoney
           “impact credit,” the Wiki Credit, so that top donors can double as
-          evaluators. As AI safety enters the mainstream, it’ll become more and
-          more important to provide a scalable method to render donation
-          recommendations.
+          evaluators. As (say) AI safety enters the mainstream, it’ll become
+          more and more important to provide a scalable method to render
+          donation recommendations.
         </div>
       </div>
     </div>

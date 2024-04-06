@@ -27,13 +27,13 @@ const Feature = ({ icon: Icon, title, children }: FeatureProps) => (
 export const Pitches = () => (
   <div className="w-full mx-auto my-5 py-6">
     <div className="flex justify-center text-3xl font-display">
-      AI Safety GiveWiki is a platform for …
+      GiveWiki is a platform for …
     </div>
     <div className="flex gap-6 flex-col sm:flex-row my-12">
-      <Feature icon={IconShovel} title="AI safety projects" key="projects">
+      <Feature icon={IconShovel} title="Altruistic projects" key="projects">
         <p>
           You’re working on independent research or a{' '}
-          <span className="font-semibold">new AI safety venture</span>? Your
+          <span className="font-semibold">new charity venture</span>? Your
           funding goal is &lt;&nbsp;$100,000 for now?
         </p>
 
@@ -92,7 +92,7 @@ export const Pitches = () => (
         <p>
           You want to support{' '}
           <span className="font-semibold">
-            funding-constrained AI safety projects
+            funding-constrained charity projects
           </span>{' '}
           but don’t know which?
         </p>

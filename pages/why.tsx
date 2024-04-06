@@ -32,8 +32,8 @@ const WhyImpactMarkets: NextPageWithAuthAndLayout = () => {
         small, who doesn’t want to spend a lot of time on researching your
         donations: You’ll be able to follow sophisticated donors who have skin
         in the game. We’re building a crowdsourced charity evaluator for all the
-        small, speculative, potentially-spectacular AI safety projects ranked by
-        the donations they’ve received from expert donors. You can tap into the
+        small, speculative, potentially-spectacular projects ranked by the
+        donations they’ve received from expert donors. You can tap into the
         wisdom of these donors and boost the impact of your donations.
       </p>
       <p className="my-3">

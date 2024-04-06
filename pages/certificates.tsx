@@ -24,7 +24,7 @@ const Home: NextPageWithAuthAndLayout = () => {
     return (
       <>
         <Head>
-          <title>Certificates – AI Safety GiveWiki</title>
+          <title>Certificates – GiveWiki</title>
         </Head>
 
         <Banner className="mb-6 text-sm p-4">

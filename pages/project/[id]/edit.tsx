@@ -30,9 +30,7 @@ const EditProjectPage: NextPageWithAuthAndLayout = () => {
       <>
         <Head>
           {/* https://stackoverflow.com/questions/75875037 */}
-          <title>
-            {`Edit ${projectQuery.data.title} – AI Safety GiveWiki`}
-          </title>
+          <title>{`Edit ${projectQuery.data.title} – GiveWiki`}</title>
         </Head>
 
         {session!.user.role === 'ADMIN' || projectBelongsToUser ? (

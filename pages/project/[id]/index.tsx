@@ -202,22 +202,22 @@ function ProjectPage({ projectId }: { projectId: string }) {
       <>
         <Head>
           {/* https://stackoverflow.com/questions/75875037 */}
-          <title>{`${project.title} – AI Safety GiveWiki`}</title>
+          <title>{`${project.title} – GiveWiki`}</title>
         </Head>
 
         <SuperSEO
-          title={`${project.title} – AI Safety GiveWiki`}
+          title={`${project.title} – GiveWiki`}
           description={markdownToPlainHtml(project.content)}
           lang="en"
           openGraph={{
             ogType: 'website',
-            ogTitle: `${project.title} – AI Safety GiveWiki`,
+            ogTitle: `${project.title} – GiveWiki`,
             ogUrl: `https://ai.givewiki.org/project/${project.id}`,
             ogImage: {
               ogImage: 'https://ai.givewiki.org/images/logo-light-og.png',
               ogImageSecureUrl:
                 'https://ai.givewiki.org/images/logo-light-og.png',
-              ogImageAlt: `${project.title} – AI Safety GiveWiki`,
+              ogImageAlt: `${project.title} – GiveWiki`,
               ogImageWidth: 1200,
               ogImageHeight: 630,
               ogImageType: 'image/png',
@@ -227,7 +227,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
             twitterSummaryCard: {
               summaryCardImage:
                 'https://ai.givewiki.org/images/logo-light-og.png',
-              summaryCardImageAlt: `${project.title} – AI Safety GiveWiki`,
+              summaryCardImageAlt: `${project.title} – GiveWiki`,
               // summaryCardSiteUsername: "twitterUsername",
             },
           }}

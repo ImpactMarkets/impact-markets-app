@@ -7,7 +7,7 @@ export function HeroText() {
     <div className="max-w-[1400px] mb-12 text-center">
       <div>
         <h1 className="text-5xl font-display font-medium">
-          The AI Safety
+          Your Crowdsourced{' '}
           <div>
             <span className="text-highlight">Charity Evaluator</span>
           </div>
@@ -15,6 +15,7 @@ export function HeroText() {
 
         <div className="my-8 mx-auto text-lg text-center prose">
           <p>
+            The{' '}
             <Tooltip label="AngelList allows newbie angel investors to follow seasoned angel investors">
               <span className="hint">AngelList</span>
             </Tooltip>{' '}
