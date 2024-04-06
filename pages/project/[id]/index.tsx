@@ -212,11 +212,10 @@ function ProjectPage({ projectId }: { projectId: string }) {
           openGraph={{
             ogType: 'website',
             ogTitle: `${project.title} – GiveWiki`,
-            ogUrl: `https://ai.givewiki.org/project/${project.id}`,
+            ogUrl: `https://givewiki.org/project/${project.id}`,
             ogImage: {
-              ogImage: 'https://ai.givewiki.org/images/logo-light-og.png',
-              ogImageSecureUrl:
-                'https://ai.givewiki.org/images/logo-light-og.png',
+              ogImage: 'https://givewiki.org/images/logo-light-og.png',
+              ogImageSecureUrl: 'https://givewiki.org/images/logo-light-og.png',
               ogImageAlt: `${project.title} – GiveWiki`,
               ogImageWidth: 1200,
               ogImageHeight: 630,
@@ -225,8 +224,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
           }}
           twitter={{
             twitterSummaryCard: {
-              summaryCardImage:
-                'https://ai.givewiki.org/images/logo-light-og.png',
+              summaryCardImage: 'https://givewiki.org/images/logo-light-og.png',
               summaryCardImageAlt: `${project.title} – GiveWiki`,
               // summaryCardSiteUsername: "twitterUsername",
             },

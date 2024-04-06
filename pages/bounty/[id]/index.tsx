@@ -147,7 +147,7 @@ function BountyPage({ bountyId }: { bountyId: string }) {
           lang="en"
           openGraph={{
             ogImage: {
-              ogImage: 'https://ai.givewiki.org/images/logo-light.svg',
+              ogImage: 'https://givewiki.org/images/logo-light.svg',
               ogImageAlt: 'GiveWiki logo',
               ogImageWidth: 550,
               ogImageHeight: 232,
@@ -156,7 +156,7 @@ function BountyPage({ bountyId }: { bountyId: string }) {
           }}
           twitter={{
             twitterSummaryCard: {
-              summaryCardImage: 'https://ai.givewiki.org/images/logo-light.svg',
+              summaryCardImage: 'https://givewiki.org/images/logo-light.svg',
               summaryCardImageAlt: 'GiveWiki logo',
               // summaryCardSiteUsername: "twitterUsername",
             },
