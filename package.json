@@ -39,7 +39,6 @@
     "@types/html-to-text": "^9.0.2",
     "@types/nodemailer": "^6.4.11",
     "axios": "^1.5.1",
-    "caniuse-lite": "^1.0.30001549",
     "cloudinary": "^1.41.0",
     "clsx": "^2.0.0",
     "console-stamp": "^3.1.2",
