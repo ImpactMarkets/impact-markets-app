@@ -1,6 +1,6 @@
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 import * as React from 'react'
-import { useEffect } from 'react'
 
 import { AppShell } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
@@ -17,7 +17,7 @@ export function Layout({ children }: LayoutProps) {
   const [opened, { toggle, close }] = useDisclosure()
 
   // Hook to close the menu when a link is clicked
-  useEffect(() => {
+  React.useEffect(() => {
     router.events.on('routeChangeStart', close)
     return () => router.events.off('routeChangeStart', close)
   })
@@ -27,6 +27,9 @@ export function Layout({ children }: LayoutProps) {
       classNames={{ main: 'overflow-x-auto pt-[50px] md:pt-6 md:pl-[250px]' }}
       padding="md"
     >
+      <Head>
+        <link rel="canonical" href={`https://givewiki.org${router.asPath}`} />
+      </Head>
       <Header
         className="md:hidden h-[50px] max-h-[50px]"
         opened={opened}
