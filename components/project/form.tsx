@@ -109,19 +109,19 @@ export function ProjectForm({
       <Grid grow>
         <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
           <TextField
+            {...register('paymentUrl')}
+            label="Payment URL"
+            description="A link to a page where people can donate to the project. (Optional)"
+            placeholder="https://giveth.io/donate/glo-dollar"
+          />
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
+          <TextField
             {...register('fundingGoal', { valueAsNumber: true })}
             type="number"
             label="Quarterly Funding Goal (USD)"
             description="How much money do you aim to raise this quarter?"
             placeholder="0"
-          />
-        </Grid.Col>
-        <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
-          <TextField
-            {...register('paymentUrl')}
-            label="Payment URL"
-            description="A link to a page where people can donate to the project. (Optional)"
-            placeholder="https://giveth.io/donate/glo-dollar"
           />
         </Grid.Col>
       </Grid>
