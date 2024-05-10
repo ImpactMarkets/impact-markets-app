@@ -50,6 +50,7 @@ type FormData = {
   actionStart?: string
   actionEnd?: string
   paymentUrl: string
+  fundingGoal?: number
   tags: string
 }
 
@@ -103,6 +104,15 @@ export function ProjectForm({
         required
         className="my-6"
       />
+      <div className="mt-6">
+        <TextField
+          {...register('fundingGoal', { valueAsNumber: true })}
+          type="number"
+          label="Quarterly Funding Goal"
+          description="How much money (in USD) do you aim to raise this quarter?"
+          placeholder="$0"
+        />
+      </div>
       <div className="mt-6">
         <TextField
           {...register('paymentUrl')}

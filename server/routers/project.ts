@@ -152,6 +152,7 @@ export const projectRouter = router({
           actionStart: true,
           actionEnd: true,
           paymentUrl: true,
+          fundingGoal: true,
           tags: true,
           credits: true,
           author: {
@@ -308,6 +309,7 @@ export const projectRouter = router({
         actionStart: z.date().nullable(),
         actionEnd: z.date().nullable(),
         paymentUrl: z.string(),
+        fundingGoal: z.number().nullable(),
         tags: z.string(),
       }),
     )
@@ -321,6 +323,7 @@ export const projectRouter = router({
           actionStart: input.actionStart,
           actionEnd: input.actionEnd,
           paymentUrl: input.paymentUrl,
+          fundingGoal: input.fundingGoal,
           tags: input.tags,
           author: {
             connect: {
@@ -351,6 +354,7 @@ export const projectRouter = router({
           actionStart: z.date().nullable(),
           actionEnd: z.date().nullable(),
           paymentUrl: z.string(),
+          fundingGoal: z.number().nullable(),
           tags: z.string(),
         }),
       }),
@@ -366,6 +370,7 @@ export const projectRouter = router({
           actionStart: data.actionStart,
           actionEnd: data.actionEnd,
           paymentUrl: data.paymentUrl,
+          fundingGoal: data.fundingGoal,
           tags: data.tags,
         },
       })
