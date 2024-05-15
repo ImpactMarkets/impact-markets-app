@@ -117,8 +117,10 @@ export function ProjectForm({
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
           <TextField
-            {...register('fundingGoal', { valueAsNumber: true })}
-            type="number"
+            {...register('fundingGoal')}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
             label="Quarterly Funding Goal (USD)"
             description="How much money do you aim to raise this quarter?"
             placeholder="0"
