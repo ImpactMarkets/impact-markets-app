@@ -52,7 +52,7 @@ type FormData = {
   actionStart?: string
   actionEnd?: string
   paymentUrl: string
-  fundingGoal?: number
+  fundingGoal?: string
   tags: string
 }
 

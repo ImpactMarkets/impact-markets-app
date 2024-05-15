@@ -51,10 +51,7 @@ const EditProjectPage: NextPageWithAuthAndLayout = () => {
                     ? projectQuery.data.actionEnd.toISOString().slice(0, 10)
                     : undefined,
                   paymentUrl: projectQuery.data.paymentUrl,
-                  fundingGoal:
-                    projectQuery.data.fundingGoal !== null
-                      ? projectQuery.data.fundingGoal
-                      : 0,
+                  fundingGoal: projectQuery.data.fundingGoal?.toString() ?? '0',
                   tags: projectQuery.data.tags || '',
                 }}
                 backTo={`/project/${projectQuery.data.id}`}
@@ -72,10 +69,7 @@ const EditProjectPage: NextPageWithAuthAndLayout = () => {
                           ? new Date(values.actionEnd)
                           : null,
                         paymentUrl: values.paymentUrl,
-                        fundingGoal:
-                          values.fundingGoal !== undefined
-                            ? values.fundingGoal
-                            : 0,
+                        fundingGoal: values.fundingGoal ?? '0',
                         tags: values.tags,
                       },
                     },
