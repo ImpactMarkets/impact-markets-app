@@ -309,7 +309,7 @@ export const projectRouter = router({
         actionStart: z.date().nullable(),
         actionEnd: z.date().nullable(),
         paymentUrl: z.string(),
-        fundingGoal: z.string(),
+        fundingGoal: z.string().nullable(),
         tags: z.string(),
       }),
     )
@@ -354,7 +354,7 @@ export const projectRouter = router({
           actionStart: z.date().nullable(),
           actionEnd: z.date().nullable(),
           paymentUrl: z.string(),
-          fundingGoal: z.string(),
+          fundingGoal: z.string().nullable(),
           tags: z.string(),
         }),
       }),
