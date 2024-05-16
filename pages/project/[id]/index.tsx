@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 import { SuperSEO } from 'react-super-seo'
 
-import { LoadingOverlay, Progress, Tabs, Tooltip } from '@mantine/core'
+import { LoadingOverlay, Progress, Tabs } from '@mantine/core'
 import { CommentType } from '@prisma/client'
 import {
   IconCreditCard,
@@ -34,6 +34,7 @@ import { Tags } from '@/components/tags'
 import { PageLoader } from '@/components/utils'
 import { classNames } from '@/lib/classnames'
 import { markdownToPlainHtml } from '@/lib/editor'
+import { Tooltip } from '@/lib/mantine'
 import { num } from '@/lib/text'
 import { RouterOutput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
@@ -130,6 +131,18 @@ function ProjectPage({ projectId }: { projectId: string }) {
   }
   const projectQuery = trpc.project.detail.useQuery(projectQueryInput)
   const project = projectQuery.data
+
+  // progress bar funding percentages
+  const percentFunded =
+    project && project.fundingGoal && project.fundingGoal.gt(0)
+      ? Math.round(
+          project.quarterDonationTotal
+            .dividedBy(project.fundingGoal)
+            .times(100)
+            .toNumber(),
+        )
+      : 0
+  const percentNeeded = 100 - percentFunded
 
   // calculate projectBelongsToUser at the component level
   let projectBelongsToUser = false
@@ -260,21 +273,13 @@ function ProjectPage({ projectId }: { projectId: string }) {
                       root: 'w-full h-8 rounded mt-5',
                     }}
                   >
-                    <Progress.Section
-                      value={project.quarterDonationTotal
-                        .dividedBy(project.fundingGoal)
-                        .times(100)
-                        .toNumber()}
-                      color="#47d6ab"
-                    >
+                    <Progress.Section value={percentFunded} color="#47d6ab">
                       <Progress.Label>
-                        {`${Math.round(
-                          project.quarterDonationTotal
-                            .dividedBy(project.fundingGoal)
-                            .times(100)
-                            .toNumber(),
-                        )}% funded`}
+                        {`${percentFunded}% funded`}
                       </Progress.Label>
+                    </Progress.Section>
+                    <Progress.Section value={100} color="#AAAAAA">
+                      <Progress.Label>{`${percentNeeded}% needed this quarter`}</Progress.Label>
                     </Progress.Section>
                   </Progress.Root>
                 </Tooltip>
