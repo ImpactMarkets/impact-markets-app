@@ -275,11 +275,11 @@ function ProjectPage({ projectId }: { projectId: string }) {
                 )}
                 <div className="text-sm text-secondary whitespace-nowrap">
                   <IconMoneybag className="inline" />
-                  {project.fundingGoal !== null
-                    ? `Quarterly goal: $${num(project.fundingGoal)}`
-                    : ''}{' '}
-                  {/* TOTAL FUNDING ALL TIME */}
-                  {/* ${num(project.donationTotal, 0)} */}
+                  {project.fundingGoal !== null && project.fundingGoal.gt(0)
+                    ? `$${project.quarterDonationTotal} / $${num(
+                        project.fundingGoal,
+                      )}`
+                    : `$${num(project.donationTotal, 0)}`}{' '}
                 </div>
                 <div className="text-sm text-secondary whitespace-nowrap">
                   <IconWoman className="inline" />{' '}
