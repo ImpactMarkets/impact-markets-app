@@ -323,7 +323,7 @@ export const projectRouter = router({
           actionStart: input.actionStart,
           actionEnd: input.actionEnd,
           paymentUrl: input.paymentUrl,
-          fundingGoal: input.fundingGoal,
+          fundingGoal: input.fundingGoal !== '' ? input.fundingGoal : null,
           tags: input.tags,
           author: {
             connect: {
