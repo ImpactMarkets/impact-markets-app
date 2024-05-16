@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 import { SuperSEO } from 'react-super-seo'
 
-import { LoadingOverlay, Tabs } from '@mantine/core'
+import { LoadingOverlay, Progress, Tabs, Tooltip } from '@mantine/core'
 import { CommentType } from '@prisma/client'
 import {
   IconCreditCard,
@@ -247,6 +247,41 @@ function ProjectPage({ projectId }: { projectId: string }) {
                 belongsToUser={projectBelongsToUser}
               />
             </div>
+            {project.fundingGoal !== null && project.fundingGoal.gt(0) ? (
+              <div className="text-sm text-secondary whitespace-nowrap">
+                <Tooltip
+                  label={`$${num(project.quarterDonationTotal)} / $${
+                    project.fundingGoal
+                  } raised this quarter`}
+                >
+                  <Progress.Root
+                    classNames={{
+                      label: 'text-sm',
+                      root: 'w-full h-8 rounded mt-5',
+                    }}
+                  >
+                    <Progress.Section
+                      value={project.quarterDonationTotal
+                        .dividedBy(project.fundingGoal)
+                        .times(100)
+                        .toNumber()}
+                      color="#47d6ab"
+                    >
+                      <Progress.Label>
+                        {`${Math.round(
+                          project.quarterDonationTotal
+                            .dividedBy(project.fundingGoal)
+                            .times(100)
+                            .toNumber(),
+                        )}% funded`}
+                      </Progress.Label>
+                    </Progress.Section>
+                  </Progress.Root>
+                </Tooltip>
+              </div>
+            ) : (
+              ''
+            )}
             <div className="flex justify-between my-6">
               <AuthorWithDate
                 author={project.author}
@@ -274,12 +309,8 @@ function ProjectPage({ projectId }: { projectId: string }) {
                   </span>
                 )}
                 <div className="text-sm text-secondary whitespace-nowrap">
-                  <IconMoneybag className="inline" />
-                  {project.fundingGoal !== null && project.fundingGoal.gt(0)
-                    ? `$${project.quarterDonationTotal} / $${num(
-                        project.fundingGoal,
-                      )}`
-                    : `$${num(project.donationTotal, 0)}`}{' '}
+                  <IconMoneybag className="inline" />$
+                  {num(project.donationTotal, 0)}
                 </div>
                 <div className="text-sm text-secondary whitespace-nowrap">
                   <IconWoman className="inline" />{' '}
