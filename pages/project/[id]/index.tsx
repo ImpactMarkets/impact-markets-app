@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import * as React from 'react'
 import { SuperSEO } from 'react-super-seo'
 
-import { LoadingOverlay, Progress, Tabs } from '@mantine/core'
+import { LoadingOverlay, Tabs } from '@mantine/core'
 import { CommentType } from '@prisma/client'
 import {
   IconCreditCard,
@@ -20,6 +20,7 @@ import { buttonClasses } from '@/components/button'
 import { AddCommentForm } from '@/components/comment/addCommentForm'
 import { Comment } from '@/components/comment/comment'
 import { CommentButton } from '@/components/commentButton'
+import { FundingProgress } from '@/components/fundingProgress'
 import { Heading1 } from '@/components/heading1'
 import { HtmlView } from '@/components/htmlView'
 import { Layout } from '@/components/layout'
@@ -34,7 +35,6 @@ import { Tags } from '@/components/tags'
 import { PageLoader } from '@/components/utils'
 import { classNames } from '@/lib/classnames'
 import { markdownToPlainHtml } from '@/lib/editor'
-import { Tooltip } from '@/lib/mantine'
 import { num } from '@/lib/text'
 import { RouterOutput, trpc } from '@/lib/trpc'
 import type { NextPageWithAuthAndLayout } from '@/lib/types'
@@ -131,18 +131,6 @@ function ProjectPage({ projectId }: { projectId: string }) {
   }
   const projectQuery = trpc.project.detail.useQuery(projectQueryInput)
   const project = projectQuery.data
-
-  // progress bar funding percentages
-  const percentFunded =
-    project && project.fundingGoal && project.fundingGoal.gt(0)
-      ? Math.round(
-          project.quarterDonationTotal
-            .dividedBy(project.fundingGoal)
-            .times(100)
-            .toNumber(),
-        )
-      : 0
-  const percentNeeded = 100 - percentFunded
 
   // calculate projectBelongsToUser at the component level
   let projectBelongsToUser = false
@@ -260,30 +248,11 @@ function ProjectPage({ projectId }: { projectId: string }) {
                 belongsToUser={projectBelongsToUser}
               />
             </div>
-            {project.fundingGoal !== null && project.fundingGoal.gt(0) ? (
-              <div className="text-sm text-secondary whitespace-nowrap">
-                <Tooltip
-                  label={`$${num(project.quarterDonationTotal)} / $${
-                    project.fundingGoal
-                  } raised this quarter`}
-                >
-                  <Progress.Root
-                    classNames={{
-                      label: 'text-sm',
-                      root: 'w-full h-8 rounded mt-5',
-                    }}
-                  >
-                    <Progress.Section value={percentFunded} color="#47d6ab">
-                      <Progress.Label>
-                        {`${percentFunded}% funded`}
-                      </Progress.Label>
-                    </Progress.Section>
-                    <Progress.Section value={100} color="#AAAAAA">
-                      <Progress.Label>{`${percentNeeded}% needed this quarter`}</Progress.Label>
-                    </Progress.Section>
-                  </Progress.Root>
-                </Tooltip>
-              </div>
+            {project.fundingGoal && project.fundingGoal.gt(0) ? (
+              <FundingProgress
+                quarterDonationTotal={num(project.quarterDonationTotal)}
+                fundingGoal={num(project.fundingGoal)}
+              />
             ) : (
               ''
             )}

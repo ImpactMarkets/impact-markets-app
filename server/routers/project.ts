@@ -13,6 +13,28 @@ import { markdownToHtml, markdownToPlainHtml } from '@/lib/editor'
 import { protectedProcedure } from '../procedures'
 import { router } from '../router'
 
+async function getQuarterDonationTotal(
+  ctx: Context,
+  id: string,
+  startDate: Date,
+  endDate: Date,
+) {
+  const quarterResult: {
+    quarterDonationTotal: Prisma.Decimal
+  }[] = await ctx.prisma.$queryRaw`
+    SELECT
+        COALESCE(SUM(amount), 0) AS "quarterDonationTotal"
+    FROM
+        "Donation"
+    WHERE
+        "projectId" = ${id}
+        AND "state" = 'CONFIRMED'
+        AND "time" >= ${startDate.toISOString()}::timestamp
+        AND "time" <= ${endDate.toISOString()}::timestamp
+  `
+  return quarterResult[0]?.quarterDonationTotal ?? 0
+}
+
 const getOrderBy = (
   orderByKey: ProjectSortKey | undefined,
 ): Prisma.ProjectOrderByWithRelationAndSearchRelevanceInput => {
@@ -87,6 +109,7 @@ export const projectRouter = router({
           hidden: true,
           tags: true,
           credits: true,
+          fundingGoal: true,
           author: {
             select: {
               id: true,
@@ -128,8 +151,26 @@ export const projectRouter = router({
         where,
       })
 
+      // calculate quarterDonationTotal for each project
+      const { startDate, endDate } = getQuarterDates()
+      const projectsWithQuarterDonations = await Promise.all(
+        projects.map(async (project) => {
+          const { id } = project
+          const quarterDonationTotal = await getQuarterDonationTotal(
+            ctx,
+            id,
+            startDate,
+            endDate,
+          )
+          return {
+            ...project,
+            quarterDonationTotal,
+          }
+        }),
+      )
+
       return {
-        projects,
+        projects: projectsWithQuarterDonations,
         projectCount,
       }
     }),
@@ -262,23 +303,17 @@ export const projectRouter = router({
             AND "state" = 'CONFIRMED'
       `
       const { startDate, endDate } = getQuarterDates()
-      const quarterResult: {
-        quarterDonationTotal: Prisma.Decimal
-      }[] = await ctx.prisma.$queryRaw`
-        SELECT
-            COALESCE(SUM(amount), 0) AS "quarterDonationTotal"
-        FROM
-            "Donation"
-        WHERE
-            "projectId" = ${id}
-            AND "state" = 'CONFIRMED'
-            AND "time" >= ${startDate.toISOString()}::timestamp
-            AND "time" <= ${endDate.toISOString()}::timestamp
-      `
+      const quarterDonationTotal = await getQuarterDonationTotal(
+        ctx,
+        id,
+        startDate,
+        endDate,
+      )
+
       return {
         ...project,
         ...result[0],
-        quarterDonationTotal: quarterResult[0].quarterDonationTotal,
+        quarterDonationTotal,
       }
     }),
   search: protectedProcedure
