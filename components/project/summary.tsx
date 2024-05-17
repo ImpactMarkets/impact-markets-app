@@ -61,6 +61,11 @@ function Bottom({ project }: ProjectSummaryProps) {
         <FundingProgress
           quarterDonationTotal={project.quarterDonationTotal.toString()}
           fundingGoal={project.fundingGoal.toString()}
+          classNames={{
+            label: 'text-sm',
+            root: 'h-2 rounded mt-1',
+          }}
+          showLabels={false}
         />
       ) : (
         ''

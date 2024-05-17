@@ -7,11 +7,18 @@ import { Tooltip } from '@/lib/mantine'
 interface ProgressBarProps {
   quarterDonationTotal: string
   fundingGoal: string
+  classNames: {
+    label: string
+    root: string
+  }
+  showLabels: boolean
 }
 
 export const FundingProgress: React.FC<ProgressBarProps> = ({
   quarterDonationTotal,
   fundingGoal,
+  classNames,
+  showLabels = true,
 }) => {
   // sanitize input values
   const sanitizeNumString = (str: string) => {
@@ -36,14 +43,16 @@ export const FundingProgress: React.FC<ProgressBarProps> = ({
       <Tooltip
         label={`$${quarterDonationTotalNum} / $${fundingGoalNum} raised this quarter`}
       >
-        <Progress.Root
-          classNames={{ label: 'text-sm', root: 'w-full h-8 rounded mt-5' }}
-        >
+        <Progress.Root classNames={classNames}>
           <Progress.Section value={percentFunded} color="#47d6ab">
-            <Progress.Label>{`${percentFunded}% funded`}</Progress.Label>
+            {showLabels && (
+              <Progress.Label>{`${percentFunded}% funded`}</Progress.Label>
+            )}
           </Progress.Section>
           <Progress.Section value={percentNeeded} color="#AAAAAA">
-            <Progress.Label>{`${percentNeeded}% needed this quarter`}</Progress.Label>
+            {showLabels && (
+              <Progress.Label>{`${percentNeeded}% needed this quarter`}</Progress.Label>
+            )}
           </Progress.Section>
         </Progress.Root>
       </Tooltip>

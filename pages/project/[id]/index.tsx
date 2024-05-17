@@ -252,6 +252,11 @@ function ProjectPage({ projectId }: { projectId: string }) {
               <FundingProgress
                 quarterDonationTotal={num(project.quarterDonationTotal)}
                 fundingGoal={num(project.fundingGoal)}
+                classNames={{
+                  label: 'text-sm',
+                  root: 'w-full h-8 rounded mt-5',
+                }}
+                showLabels
               />
             ) : (
               ''
