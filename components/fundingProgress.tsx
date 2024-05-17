@@ -49,11 +49,13 @@ export const FundingProgress: React.FC<ProgressBarProps> = ({
               <Progress.Label>{`${percentFunded}% funded`}</Progress.Label>
             )}
           </Progress.Section>
-          <Progress.Section value={percentNeeded} color="#AAAAAA">
-            {showLabels && (
-              <Progress.Label>{`${percentNeeded}% needed this quarter`}</Progress.Label>
-            )}
-          </Progress.Section>
+          {percentFunded < 100 && (
+            <Progress.Section value={percentNeeded} color="#AAAAAA">
+              {showLabels && (
+                <Progress.Label>{`${percentNeeded}% needed this quarter`}</Progress.Label>
+              )}
+            </Progress.Section>
+          )}
         </Progress.Root>
       </Tooltip>
     </div>
