@@ -119,11 +119,16 @@ export function ProjectForm({
           <TextField
             {...register('fundingGoal')}
             type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
             label="Quarterly Funding Goal (USD)"
             description="How much money do you aim to raise this quarter?"
             placeholder="0"
+            onChange={(e) => {
+              const value = e.target.value.trim()
+              // remove non-numeric characters
+              const numericValue = value.replace(/[^0-9]/g, '')
+              // update the input value
+              setValue('fundingGoal', numericValue)
+            }}
           />
         </Grid.Col>
       </Grid>
