@@ -35,6 +35,7 @@ const NewProjectPage: NextPageWithAuthAndLayout = () => {
             title: '',
             content: '',
             paymentUrl: '',
+            fundingGoal: '',
             tags: '',
           }}
           backTo="/"
@@ -49,6 +50,7 @@ const NewProjectPage: NextPageWithAuthAndLayout = () => {
                   : null,
                 actionEnd: values.actionEnd ? new Date(values.actionEnd) : null,
                 paymentUrl: values.paymentUrl,
+                fundingGoal: values.fundingGoal ?? '0',
                 tags: values.tags,
               },
               {

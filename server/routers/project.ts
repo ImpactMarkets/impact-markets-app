@@ -6,11 +6,34 @@ import { Prisma, User } from '@prisma/client'
 import { EventStatus, EventType } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
 
+import { getQuarterDates } from '@/components/utils'
 import { PROJECT_SORT_KEYS, ProjectSortKey } from '@/lib/constants'
 import { markdownToHtml, markdownToPlainHtml } from '@/lib/editor'
 
 import { protectedProcedure } from '../procedures'
 import { router } from '../router'
+
+async function getQuarterDonationTotal(
+  ctx: Context,
+  id: string,
+  startDate: Date,
+  endDate: Date,
+) {
+  const quarterResult: {
+    quarterDonationTotal: Prisma.Decimal
+  }[] = await ctx.prisma.$queryRaw`
+    SELECT
+        COALESCE(SUM(amount), 0) AS "quarterDonationTotal"
+    FROM
+        "Donation"
+    WHERE
+        "projectId" = ${id}
+        AND "state" = 'CONFIRMED'
+        AND "time" >= ${startDate.toISOString()}::timestamp
+        AND "time" <= ${endDate.toISOString()}::timestamp
+  `
+  return quarterResult[0]?.quarterDonationTotal ?? 0
+}
 
 const getOrderBy = (
   orderByKey: ProjectSortKey | undefined,
@@ -86,6 +109,7 @@ export const projectRouter = router({
           hidden: true,
           tags: true,
           credits: true,
+          fundingGoal: true,
           author: {
             select: {
               id: true,
@@ -127,8 +151,26 @@ export const projectRouter = router({
         where,
       })
 
+      // calculate quarterDonationTotal for each project
+      const { startDate, endDate } = getQuarterDates()
+      const projectsWithQuarterDonations = await Promise.all(
+        projects.map(async (project) => {
+          const { id } = project
+          const quarterDonationTotal = await getQuarterDonationTotal(
+            ctx,
+            id,
+            startDate,
+            endDate,
+          )
+          return {
+            ...project,
+            quarterDonationTotal,
+          }
+        }),
+      )
+
       return {
-        projects,
+        projects: projectsWithQuarterDonations,
         projectCount,
       }
     }),
@@ -152,6 +194,7 @@ export const projectRouter = router({
           actionStart: true,
           actionEnd: true,
           paymentUrl: true,
+          fundingGoal: true,
           tags: true,
           credits: true,
           author: {
@@ -259,8 +302,19 @@ export const projectRouter = router({
             "projectId" = ${id}
             AND "state" = 'CONFIRMED'
       `
+      const { startDate, endDate } = getQuarterDates()
+      const quarterDonationTotal = await getQuarterDonationTotal(
+        ctx,
+        id,
+        startDate,
+        endDate,
+      )
 
-      return { ...project, ...result[0] }
+      return {
+        ...project,
+        ...result[0],
+        quarterDonationTotal,
+      }
     }),
   search: protectedProcedure
     .input(
@@ -308,6 +362,7 @@ export const projectRouter = router({
         actionStart: z.date().nullable(),
         actionEnd: z.date().nullable(),
         paymentUrl: z.string(),
+        fundingGoal: z.string(),
         tags: z.string(),
       }),
     )
@@ -321,6 +376,7 @@ export const projectRouter = router({
           actionStart: input.actionStart,
           actionEnd: input.actionEnd,
           paymentUrl: input.paymentUrl,
+          fundingGoal: input.fundingGoal ?? '0',
           tags: input.tags,
           author: {
             connect: {
@@ -351,6 +407,7 @@ export const projectRouter = router({
           actionStart: z.date().nullable(),
           actionEnd: z.date().nullable(),
           paymentUrl: z.string(),
+          fundingGoal: z.string(),
           tags: z.string(),
         }),
       }),
@@ -366,6 +423,7 @@ export const projectRouter = router({
           actionStart: data.actionStart,
           actionEnd: data.actionEnd,
           paymentUrl: data.paymentUrl,
+          fundingGoal: data.fundingGoal,
           tags: data.tags,
         },
       })

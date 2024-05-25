@@ -161,6 +161,7 @@ model Project {
   authorId       String
   actionStart    DateTime?
   actionEnd      DateTime?
+  fundingGoal    Decimal? @default("0")
   tags           String    @default("")
   paymentUrl     String    @default("")
   solvesBountyId String?

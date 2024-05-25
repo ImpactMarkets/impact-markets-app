@@ -40,3 +40,12 @@ export const notEmpty = <T,>(list: T[]) => {
   if (list.length == 0) throw new TypeError('List must not be empty')
   return list as [T, ...T[]]
 }
+
+export const getQuarterDates = (): { startDate: Date; endDate: Date } => {
+  const currentDate = new Date()
+  const quarter = Math.floor(currentDate.getMonth() / 3)
+  const year = currentDate.getFullYear()
+  const startDate = new Date(year, quarter * 3, 1)
+  const endDate = new Date(year, quarter * 3 + 3, 0)
+  return { startDate, endDate }
+}
