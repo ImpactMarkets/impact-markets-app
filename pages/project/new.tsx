@@ -50,7 +50,7 @@ const NewProjectPage: NextPageWithAuthAndLayout = () => {
                   : null,
                 actionEnd: values.actionEnd ? new Date(values.actionEnd) : null,
                 paymentUrl: values.paymentUrl,
-                fundingGoal: values.fundingGoal ?? '',
+                fundingGoal: values.fundingGoal ?? '0',
                 tags: values.tags,
               },
               {

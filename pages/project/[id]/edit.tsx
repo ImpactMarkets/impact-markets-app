@@ -69,7 +69,7 @@ const EditProjectPage: NextPageWithAuthAndLayout = () => {
                           ? new Date(values.actionEnd)
                           : null,
                         paymentUrl: values.paymentUrl,
-                        fundingGoal: values.fundingGoal ?? '',
+                        fundingGoal: values.fundingGoal ?? '0',
                         tags: values.tags,
                       },
                     },

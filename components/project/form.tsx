@@ -96,10 +96,8 @@ export function ProjectForm({
   }, [isSubmitSuccessful, reset, getValues])
 
   const handleFormSubmit: SubmitHandler<FormData> = (data) => {
-    // ensure fundingGoal is '0' if empty or contains only whitespace
-    if (!data.fundingGoal || data.fundingGoal.trim() === '') {
-      data.fundingGoal = '0'
-    }
+    // ensure fundingGoal is '0' if empty
+    !data.fundingGoal && (data.fundingGoal = '0')
     onSubmit(data)
   }
 
