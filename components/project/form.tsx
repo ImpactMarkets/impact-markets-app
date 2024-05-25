@@ -95,8 +95,16 @@ export function ProjectForm({
     }
   }, [isSubmitSuccessful, reset, getValues])
 
+  const handleFormSubmit: SubmitHandler<FormData> = (data) => {
+    // ensure fundingGoal is '0' if empty or contains only whitespace
+    if (!data.fundingGoal || data.fundingGoal.trim() === '') {
+      data.fundingGoal = '0'
+    }
+    onSubmit(data)
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(handleFormSubmit)}>
       <TextField
         {...register('title', { required: true })}
         label="Title"
