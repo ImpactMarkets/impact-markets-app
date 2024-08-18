@@ -20,6 +20,7 @@ import { buttonClasses } from '@/components/button'
 import { AddCommentForm } from '@/components/comment/addCommentForm'
 import { Comment } from '@/components/comment/comment'
 import { CommentButton } from '@/components/commentButton'
+import { FundingProgress } from '@/components/fundingProgress'
 import { Heading1 } from '@/components/heading1'
 import { HtmlView } from '@/components/htmlView'
 import { Layout } from '@/components/layout'
@@ -247,6 +248,19 @@ function ProjectPage({ projectId }: { projectId: string }) {
                 belongsToUser={projectBelongsToUser}
               />
             </div>
+            {project.fundingGoal && project.fundingGoal.gt(0) ? (
+              <FundingProgress
+                quarterDonationTotal={num(project.quarterDonationTotal)}
+                fundingGoal={num(project.fundingGoal)}
+                classNames={{
+                  label: 'text-sm',
+                  root: 'w-full h-8 rounded mt-5',
+                }}
+                showLabels
+              />
+            ) : (
+              ''
+            )}
             <div className="flex justify-between my-6">
               <AuthorWithDate
                 author={project.author}
@@ -274,7 +288,7 @@ function ProjectPage({ projectId }: { projectId: string }) {
                   </span>
                 )}
                 <div className="text-sm text-secondary whitespace-nowrap">
-                  <IconMoneybag className="inline" /> $
+                  <IconMoneybag className="inline" />$
                   {num(project.donationTotal, 0)}
                 </div>
                 <div className="text-sm text-secondary whitespace-nowrap">

@@ -7,6 +7,7 @@ import { markdownToPlainHtml } from '@/lib/editor'
 import { RouterOutput } from '@/lib/trpc'
 
 import { Author } from '../author'
+import { FundingProgress } from '../fundingProgress'
 import { Heading2 } from '../heading2'
 import { HtmlView } from '../htmlView'
 import { Scores } from '../scores'
@@ -38,6 +39,8 @@ function Right({ project }: ProjectSummaryProps) {
 }
 
 function Bottom({ project }: ProjectSummaryProps) {
+  console.log(project.fundingGoal)
+  console.log(project.quarterDonationTotal)
   const summary = React.useMemo(() => {
     let summary = project.content
     if (summary.length > 300) {
@@ -52,6 +55,21 @@ function Bottom({ project }: ProjectSummaryProps) {
         {project.title}
       </Heading2>
       <HtmlView html={summary} />
+      {project.fundingGoal &&
+      project.fundingGoal.toNumber() > 0 &&
+      project.quarterDonationTotal ? (
+        <FundingProgress
+          quarterDonationTotal={project.quarterDonationTotal.toString()}
+          fundingGoal={project.fundingGoal.toString()}
+          classNames={{
+            label: 'text-sm',
+            root: 'h-2 rounded mt-6',
+          }}
+          showLabels={false}
+        />
+      ) : (
+        ''
+      )}
     </Link>
   )
 }

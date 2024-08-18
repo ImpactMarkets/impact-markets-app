@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-      - run: npm install prettier@3.1 @trivago/prettier-plugin-sort-imports@4.3
+      - run: npm install prettier@3.3.3 @trivago/prettier-plugin-sort-imports@4.3
       - run: npx prettier --check '**/*.{ts,tsx,json,html,css}'
 
   test-e2e:
