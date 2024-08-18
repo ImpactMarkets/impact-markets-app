@@ -1,6 +1,8 @@
 import * as React from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
+import { Grid } from '@mantine/core'
+
 import { Button } from '@/components/button'
 import { ButtonLink } from '@/components/buttonLink'
 import { MarkdownIcon } from '@/components/icons'
@@ -50,6 +52,7 @@ type FormData = {
   actionStart?: string
   actionEnd?: string
   paymentUrl: string
+  fundingGoal?: string
   tags: string
 }
 
@@ -92,8 +95,14 @@ export function ProjectForm({
     }
   }, [isSubmitSuccessful, reset, getValues])
 
+  const handleFormSubmit: SubmitHandler<FormData> = (data) => {
+    // ensure fundingGoal is '0' if empty
+    !data.fundingGoal && (data.fundingGoal = '0')
+    onSubmit(data)
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(handleFormSubmit)}>
       <TextField
         {...register('title', { required: true })}
         label="Title"
@@ -103,14 +112,32 @@ export function ProjectForm({
         required
         className="my-6"
       />
-      <div className="mt-6">
-        <TextField
-          {...register('paymentUrl')}
-          label="Payment URL"
-          description="A link to a page where people can donate to the project. (Optional)"
-          placeholder="https://giveth.io/donate/glo-dollar"
-        />
-      </div>
+      <Grid grow>
+        <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
+          <TextField
+            {...register('paymentUrl')}
+            label="Payment URL"
+            description="A link to a page where people can donate to the project. (Optional)"
+            placeholder="https://giveth.io/donate/glo-dollar"
+          />
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 6, lg: 6 }}>
+          <TextField
+            {...register('fundingGoal')}
+            type="text"
+            label="Quarterly Funding Goal (USD)"
+            description="How much money do you aim to raise this quarter?"
+            placeholder="0"
+            onChange={(e) => {
+              const value = e.target.value.trim()
+              // remove non-numeric characters
+              const numericValue = value.replace(/[^0-9]/g, '')
+              // update the input value
+              setValue('fundingGoal', numericValue)
+            }}
+          />
+        </Grid.Col>
+      </Grid>
       <div className="mt-6">
         <MultiSelect
           {...register('tags')}

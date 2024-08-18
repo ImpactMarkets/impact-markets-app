@@ -12,7 +12,7 @@ import { router } from '../router'
 const getOrderBy = (
   orderByKey: CertificateSortKey | undefined,
 ):
-  | Prisma.Enumerable<Prisma.CertificateOrderByWithRelationAndSearchRelevanceInput>
+  | Prisma.Enumerable<Prisma.CertificateOrderByWithRelationInput>
   | undefined => {
   const orderOptions = {
     createdAt: { createdAt: Prisma.SortOrder.desc },
