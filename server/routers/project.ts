@@ -2,13 +2,11 @@ import { Context } from 'server/context'
 import slugify from 'slugify'
 import { z } from 'zod'
 
-import { Prisma, User } from '@prisma/client'
-import { EventStatus, EventType } from '@prisma/client'
-import { TRPCError } from '@trpc/server'
-
 import { getQuarterDates } from '@/components/utils'
 import { PROJECT_SORT_KEYS, ProjectSortKey } from '@/lib/constants'
 import { markdownToHtml, markdownToPlainHtml } from '@/lib/editor'
+import { EventStatus, EventType, Prisma, User } from '@prisma/client'
+import { TRPCError } from '@trpc/server'
 
 import { protectedProcedure } from '../procedures'
 import { router } from '../router'
@@ -37,25 +35,29 @@ async function getQuarterDonationTotal(
 
 const getOrderBy = (
   orderByKey: ProjectSortKey | undefined,
-): Prisma.ProjectOrderByWithRelationAndSearchRelevanceInput => {
+): Prisma.ProjectOrderByWithRelationInput[] => {
   const { desc } = Prisma.SortOrder
   const orderOptions = {
-    createdAt: { createdAt: desc },
-    credits: { credits: desc },
-    supportScore: {
-      supportScore: {
-        score: desc,
+    createdAt: [{ createdAt: desc }],
+    credits: [{ credits: desc }],
+    supportScore: [
+      {
+        supportScore: {
+          score: desc,
+        },
       },
-    },
-    likeCount: {
-      likedBy: {
-        _count: desc,
+    ],
+    likeCount: [
+      {
+        likedBy: {
+          _count: desc,
+        },
       },
-    },
+    ],
   }
   const orderBy = orderByKey && orderOptions[orderByKey]
   if (!orderBy) {
-    return { createdAt: desc }
+    return [{ createdAt: desc }]
   }
   return orderBy
 }
@@ -76,6 +78,7 @@ export const projectRouter = router({
         .optional(),
     )
     .query(async ({ input, ctx }) => {
+      const { asc, desc } = Prisma.SortOrder
       const take = input?.take ?? 60
       const skip = input?.skip
       const showHidden = input?.showHidden ?? true
@@ -99,7 +102,11 @@ export const projectRouter = router({
       const projects = await ctx.prisma.project.findMany({
         take,
         skip,
-        orderBy: [getOrderBy(input?.orderBy), { id: Prisma.SortOrder.asc }],
+        orderBy: [
+          { supportScore: { isFundraising: desc } },
+          ...getOrderBy(input?.orderBy),
+          { id: asc },
+        ],
         where,
         select: {
           id: true,

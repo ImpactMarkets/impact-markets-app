@@ -161,7 +161,7 @@ model Project {
   authorId       String
   actionStart    DateTime?
   actionEnd      DateTime?
-  fundingGoal    Decimal? @default("0")
+  fundingGoal    Decimal?  @default("0")
   tags           String    @default("")
   paymentUrl     String    @default("")
   solvesBountyId String?
@@ -393,9 +393,10 @@ view UserScore {
 }
 
 view SupportScore {
-  projectId String  @unique
-  count     Int
-  score     Decimal
+  projectId     String  @unique
+  count         Int
+  isFundraising Boolean
+  score         Decimal
 
   project Project @relation(fields: [projectId], references: [id])
 
