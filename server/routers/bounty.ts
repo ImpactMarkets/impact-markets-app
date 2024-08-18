@@ -2,10 +2,17 @@ import { Context } from 'server/context'
 import slugify from 'slugify'
 import { z } from 'zod'
 
+import {
+  BountyStatus,
+  EventStatus,
+  EventType,
+  Prisma,
+  User,
+} from '@prisma/client'
+import { TRPCError } from '@trpc/server'
+
 import { BOUNTY_SORT_KEYS, BountySortKey } from '@/lib/constants'
 import { markdownToHtml, markdownToPlainHtml } from '@/lib/editor'
-import { BountyStatus, EventStatus, EventType, Prisma, User } from '@prisma/client'
-import { TRPCError } from '@trpc/server'
 
 import { protectedProcedure } from '../procedures'
 import { router } from '../router'
