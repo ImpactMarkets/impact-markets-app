@@ -1,10 +1,9 @@
 import slugify from 'slugify'
 import { z } from 'zod'
 
+import { CERTIFICATE_SORT_KEYS, CertificateSortKey } from '@/lib/constants'
 import { Prisma } from '@prisma/client'
 import { TRPCError } from '@trpc/server'
-
-import { CERTIFICATE_SORT_KEYS, CertificateSortKey } from '@/lib/constants'
 
 import { protectedProcedure } from '../procedures'
 import { router } from '../router'
@@ -12,7 +11,7 @@ import { router } from '../router'
 const getOrderBy = (
   orderByKey: CertificateSortKey | undefined,
 ):
-  | Prisma.Enumerable<Prisma.CertificateOrderByWithRelationAndSearchRelevanceInput>
+  | Prisma.Enumerable<Prisma.CertificateOrderByWithRelationInput>
   | undefined => {
   const orderOptions = {
     createdAt: { createdAt: Prisma.SortOrder.desc },
