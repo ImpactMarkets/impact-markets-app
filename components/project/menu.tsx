@@ -45,7 +45,10 @@ export const Menu = ({ queryData, isUserAdmin, belongsToUser }: MenuProps) => {
   }
 
   function handleEdit() {
-    router.push(`${router.asPath}/edit`)
+    // extract the base path without query parameters
+    const basePath = router.asPath.split('?')[0]
+    // navigate to the edit route
+    router.push(`${basePath}/edit`)
   }
 
   if (!(belongsToUser || isUserAdmin)) {
