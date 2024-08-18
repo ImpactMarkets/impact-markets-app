@@ -1,10 +1,9 @@
 import Link from 'next/link'
 import * as React from 'react'
 
-import { Card } from '@mantine/core'
-
 import { markdownToPlainHtml } from '@/lib/editor'
 import { RouterOutput } from '@/lib/trpc'
+import { Card } from '@mantine/core'
 
 import { Author } from '../author'
 import { FundingProgress } from '../fundingProgress'
@@ -63,7 +62,7 @@ function Bottom({ project }: ProjectSummaryProps) {
           fundingGoal={project.fundingGoal.toString()}
           classNames={{
             label: 'text-sm',
-            root: 'h-2 rounded mt-1',
+            root: 'h-2 rounded mt-6',
           }}
           showLabels={false}
         />

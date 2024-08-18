@@ -1,8 +1,7 @@
 import React from 'react'
 
-import { Progress } from '@mantine/core'
-
 import { Tooltip } from '@/lib/mantine'
+import { Progress } from '@mantine/core'
 
 interface ProgressBarProps {
   quarterDonationTotal: string
@@ -46,13 +45,17 @@ export const FundingProgress: React.FC<ProgressBarProps> = ({
         <Progress.Root classNames={classNames}>
           <Progress.Section value={percentFunded} color="#47d6ab">
             {showLabels && (
-              <Progress.Label>{`${percentFunded}% funded`}</Progress.Label>
+              <Progress.Label>
+                {`${percentFunded}% funded ${percentFunded >= 50 ? 'this quarter' : ''}`}
+              </Progress.Label>
             )}
           </Progress.Section>
           {percentFunded < 100 && (
             <Progress.Section value={percentNeeded} color="#AAAAAA">
               {showLabels && (
-                <Progress.Label>{`${percentNeeded}% needed this quarter`}</Progress.Label>
+                <Progress.Label>
+                  {`${percentNeeded}% needed ${percentNeeded > 50 ? 'this quarter' : ''}`}
+                </Progress.Label>
               )}
             </Progress.Section>
           )}
