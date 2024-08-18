@@ -1,7 +1,8 @@
 import React from 'react'
 
-import { Tooltip } from '@/lib/mantine'
 import { Progress } from '@mantine/core'
+
+import { Tooltip } from '@/lib/mantine'
 
 interface ProgressBarProps {
   quarterDonationTotal: string

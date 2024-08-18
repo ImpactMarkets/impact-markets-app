@@ -2,11 +2,12 @@ import { Context } from 'server/context'
 import slugify from 'slugify'
 import { z } from 'zod'
 
+import { EventStatus, EventType, Prisma, User } from '@prisma/client'
+import { TRPCError } from '@trpc/server'
+
 import { getQuarterDates } from '@/components/utils'
 import { PROJECT_SORT_KEYS, ProjectSortKey } from '@/lib/constants'
 import { markdownToHtml, markdownToPlainHtml } from '@/lib/editor'
-import { EventStatus, EventType, Prisma, User } from '@prisma/client'
-import { TRPCError } from '@trpc/server'
 
 import { protectedProcedure } from '../procedures'
 import { router } from '../router'
