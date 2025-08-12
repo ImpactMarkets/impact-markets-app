@@ -2,10 +2,6 @@ import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 import * as React from 'react'
 
-import { Tabs } from '@mantine/core'
-import { Prisma } from '@prisma/client'
-import { IconTrophy } from '@tabler/icons-react'
-
 import { Author } from '@/components/author'
 import { Heading1 } from '@/components/heading1'
 import { Layout } from '@/components/layout'
@@ -13,8 +9,11 @@ import { PageLoader } from '@/components/utils'
 import { Tooltip } from '@/lib/mantine'
 import { num } from '@/lib/text'
 import { trpc } from '@/lib/trpc'
-import type { NextPageWithAuthAndLayout } from '@/lib/types'
+import { Tabs } from '@mantine/core'
+import { Prisma } from '@prisma/client'
+import { IconTrophy } from '@tabler/icons-react'
 
+import type { NextPageWithAuthAndLayout } from '@/lib/types'
 const RankingPage: NextPageWithAuthAndLayout = () => {
   const { data: session } = useSession()
   const isAdmin = session?.user.role === 'ADMIN'
@@ -106,6 +105,7 @@ const Ranking = ({
   if (rankingQuery.data) {
     const zero = new Prisma.Decimal(0)
     const one = new Prisma.Decimal(1)
+    const multiplier = new Prisma.Decimal(1000)
     return (
       <>
         {rankingQuery.data.length === 0 ? (
@@ -135,8 +135,8 @@ const Ranking = ({
                         {user.userScore == null
                           ? '0' // Should never happen
                           : user.userScore?.score === zero ||
-                              user.userScore?.score >= one
-                            ? num(user.userScore.score, 0)
+                              user.userScore?.score.mul(multiplier) >= one
+                            ? num(user.userScore.score.mul(multiplier), 0)
                             : '< 1'}
                       </td>
                       <td className="w-10 text-right">
