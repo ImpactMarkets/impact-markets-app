@@ -1,10 +1,9 @@
 import Link from 'next/link'
 import * as React from 'react'
 
-import { Card } from '@mantine/core'
-
 import { markdownToPlainHtml } from '@/lib/editor'
 import { RouterOutput } from '@/lib/trpc'
+import { Card } from '@mantine/core'
 
 import { Author } from '../author'
 import { FundingProgress } from '../fundingProgress'
@@ -39,8 +38,6 @@ function Right({ project }: ProjectSummaryProps) {
 }
 
 function Bottom({ project }: ProjectSummaryProps) {
-  console.log(project.fundingGoal)
-  console.log(project.quarterDonationTotal)
   const summary = React.useMemo(() => {
     let summary = project.content
     if (summary.length > 300) {

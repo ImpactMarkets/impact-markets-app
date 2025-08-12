@@ -14,8 +14,8 @@
     "lint": "next lint",
     "pretty": "prettier --write '**/*.{ts,tsx,json,html,css}'",
     "prepare": "husky install",
-    "deploy:staging": "ssh im-app 'cd /opt/im-app-staging && git pull && ./utils.sh deploy-staging'",
-    "deploy:prod": "ssh im-app 'cd /opt/im-app-prod && git pull && ./utils.sh deploy-prod'"
+    "deploy:staging": "ssh im-app 'cd /home/telofy/im-app-staging && git pull && ./utils.sh deploy-staging'",
+    "deploy:prod": "ssh im-app 'cd /home/telofy/im-app-prod && git pull && ./utils.sh deploy-prod'"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
